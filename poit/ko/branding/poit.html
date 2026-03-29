@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>POIT — 지도 위에 감정을 남기세요</title>
+<meta name="description" content="POIT은 지도 위에 포스트잇을 남기는 감정 지도 앱입니다. 지금 이 순간, 이 자리에서 느낀 것을 기록하세요.">
+<meta property="og:title" content="POIT — 지도 위에 감정을 남기세요">
+<meta property="og:description" content="당신이 지나친 그 골목, 혼자 앉아 커피를 마시던 그 카페. 그 순간의 감정, 그냥 흘려보내지 마세요.">
+<meta property="og:image" content="icon.png">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Nanum+Pen+Script&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --yellow: #FFF59D;
+  --yellow-deep: #FFE082;
+  --yellow-dark: #F9A825;
+  --blue: #90CAF9;
+  --green: #A5D6A7;
+  --pink: #F48FB1;
+  --purple: #CE93D8;
+  --ink: #1a1208;
+  --ink-soft: #3d2e10;
+  --paper: #FFFDE7;
+  --paper-mid: #FFF8E1;
+  --paper-warm: #FFF3CD;
+  --gray: #888;
+  --shadow: rgba(26,18,8,0.13);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Gowun Dodum', 'Apple SD Gothic Neo', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+/* ── 노이즈 텍스처 오버레이 ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.5;
+}
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px 60px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, #FFFDE7 0%, #FFF8E1 50%, #FFF3CD 100%);
+}
+
+/* 배경 포스트잇들 */
+.hero-bg-postit {
+  position: absolute;
+  border-radius: 4px;
+  opacity: 0;
+  animation: floatIn 1s ease forwards;
+  box-shadow: 3px 4px 12px var(--shadow);
+  font-family: 'Nanum Pen Script', cursive;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 10px 12px;
+  pointer-events: none;
+  user-select: none;
+}
+.hero-bg-postit::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 4px 4px 0 0;
+}
+
+.hp1 { background: var(--yellow);    top: 10%;  left:  6%; transform: rotate(-6deg); animation-delay: 0.3s; color: #5d4037; width: 110px; }
+.hp2 { background: var(--blue);      top: 18%;  right: 8%; transform: rotate(4deg);  animation-delay: 0.5s; color: #1a3a5c; width: 120px; }
+.hp3 { background: var(--pink);      top: 55%;  left:  4%; transform: rotate(-3deg); animation-delay: 0.7s; color: #5a1a2a; width: 100px; }
+.hp4 { background: var(--green);     top: 65%;  right: 5%; transform: rotate(5deg);  animation-delay: 0.9s; color: #1a4d1a; width: 115px; }
+.hp5 { background: var(--purple);    top: 38%;  left:  2%; transform: rotate(7deg);  animation-delay: 1.1s; color: #3a1a4d; width: 105px; }
+.hp6 { background: var(--yellow-deep); top: 28%; right: 3%; transform: rotate(-5deg); animation-delay: 1.3s; color: #5d4037; width: 118px; }
+.hp7 { background: var(--green);     bottom: 15%; left: 8%; transform: rotate(3deg); animation-delay: 1.5s; color: #1a4d1a; width: 108px; }
+.hp8 { background: var(--pink);      bottom: 20%; right: 7%; transform: rotate(-7deg);animation-delay: 1.7s; color: #5a1a2a; width: 112px; }
+
+@keyframes floatIn {
+  from { opacity: 0; transform: translateY(20px) rotate(var(--r, 0deg)); }
+  to   { opacity: 0.75; transform: translateY(0) rotate(var(--r, 0deg)); }
+}
+
+/* 핀 */
+.pin {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ff7043, #b71c1c);
+  box-shadow: 0 2px 6px rgba(183,28,28,0.5);
+  position: absolute;
+  top: -6px; left: 50%; transform: translateX(-50%);
+}
+
+.hero-icon {
+  width: 100px;
+  border-radius: 24px;
+  box-shadow: 0 16px 48px rgba(26,18,8,0.2), 0 4px 12px rgba(26,18,8,0.1);
+  animation: popIn 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes popIn {
+  from { opacity:0; transform: scale(0.7); }
+  to   { opacity:1; transform: scale(1); }
+}
+
+.hero-badge {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--yellow);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 6px 18px;
+  border-radius: 40px;
+  margin: 24px 0 16px;
+  animation: fadeUp 0.6s ease 0.5s both;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(48px, 9vw, 88px);
+  font-weight: 700;
+  line-height: 1.05;
+  text-align: center;
+  animation: fadeUp 0.7s ease 0.6s both;
+  position: relative;
+  z-index: 2;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--yellow-dark);
+  position: relative;
+}
+.hero h1 em::after {
+  content: '';
+  position: absolute;
+  bottom: 4px; left: 0; right: 0;
+  height: 3px;
+  background: var(--yellow-dark);
+  opacity: 0.4;
+  border-radius: 2px;
+}
+
+.hero-sub {
+  font-size: clamp(16px, 2.5vw, 20px);
+  color: var(--ink-soft);
+  max-width: 560px;
+  text-align: center;
+  margin: 20px auto 0;
+  animation: fadeUp 0.7s ease 0.8s both;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-cta {
+  margin-top: 40px;
+  animation: fadeUp 0.7s ease 1s both;
+  position: relative;
+  z-index: 2;
+}
+
+.btn-store {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--ink);
+  color: var(--yellow);
+  text-decoration: none;
+  padding: 16px 32px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 8px 24px rgba(26,18,8,0.25);
+}
+.btn-store:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(26,18,8,0.3);
+}
+.btn-store svg { width: 24px; height: 24px; fill: var(--yellow); }
+
+.scroll-hint {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: fadeUp 1s ease 1.5s both;
+  z-index: 2;
+}
+.scroll-hint span { font-size: 11px; letter-spacing: 2px; color: var(--gray); text-transform: uppercase; }
+.scroll-arrow {
+  width: 24px; height: 24px;
+  border-right: 2px solid var(--gray);
+  border-bottom: 2px solid var(--gray);
+  transform: rotate(45deg);
+  animation: bounce 1.5s ease infinite;
+}
+@keyframes bounce {
+  0%,100% { transform: rotate(45deg) translateY(0); }
+  50%      { transform: rotate(45deg) translateY(6px); }
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(24px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════
+   MARQUEE 슬로건 띠
+═══════════════════════════════════════ */
+.marquee-wrap {
+  background: var(--ink);
+  padding: 16px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.marquee-track {
+  display: inline-flex;
+  animation: marquee 22s linear infinite;
+}
+.marquee-item {
+  font-family: 'Nanum Pen Script', cursive;
+  font-size: 20px;
+  color: var(--yellow);
+  padding: 0 40px;
+}
+.marquee-dot {
+  color: var(--pink);
+  padding: 0 8px;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ═══════════════════════════════════════
+   SECTION COMMON
+═══════════════════════════════════════ */
+.section {
+  padding: 100px 24px;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+.section-label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 16px;
+  display: block;
+}
+.section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+.section h2 em {
+  font-style: italic;
+  color: var(--yellow-dark);
+}
+.section p {
+  font-size: 17px;
+  color: var(--ink-soft);
+  max-width: 680px;
+  line-height: 1.85;
+}
+
+/* ═══════════════════════════════════════
+   CONCEPT — 두 단락
+═══════════════════════════════════════ */
+.concept {
+  padding: 100px 24px;
+  background: var(--ink);
+  color: var(--paper);
+  position: relative;
+  overflow: hidden;
+}
+.concept::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(255,245,157,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 30%, rgba(206,147,216,0.07) 0%, transparent 60%);
+}
+.concept-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.concept-text .section-label { color: var(--yellow-deep); }
+.concept-text h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4vw, 50px);
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 24px;
+}
+.concept-text h2 em { font-style: italic; color: var(--yellow); }
+.concept-text p {
+  font-size: 17px;
+  color: rgba(255,253,231,0.75);
+  line-height: 1.85;
+  margin-bottom: 18px;
+}
+.concept-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+.quote-postit {
+  background: var(--yellow);
+  padding: 20px 22px;
+  border-radius: 4px;
+  box-shadow: 4px 6px 18px rgba(0,0,0,0.35);
+  max-width: 300px;
+  position: relative;
+  transition: transform 0.3s;
+}
+.quote-postit:hover { transform: rotate(0deg) scale(1.04); }
+.quote-postit:nth-child(1) { transform: rotate(-3deg); align-self: flex-start; }
+.quote-postit:nth-child(2) { transform: rotate(2deg);  align-self: center; background: var(--blue); }
+.quote-postit:nth-child(3) { transform: rotate(-1.5deg); align-self: flex-end; background: var(--pink); }
+.quote-postit .pin { position: absolute; top: -7px; left: 50%; }
+.quote-postit p {
+  font-family: 'Nanum Pen Script', cursive;
+  font-size: 17px;
+  color: var(--ink);
+  line-height: 1.6;
+  margin: 0;
+}
+.quote-postit .meta {
+  font-size: 11px;
+  color: rgba(0,0,0,0.45);
+  margin-top: 10px;
+  display: block;
+}
+
+/* ═══════════════════════════════════════
+   FEATURES GRID
+═══════════════════════════════════════ */
+.features-section {
+  padding: 100px 24px;
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-mid) 100%);
+}
+.features-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+.features-header { margin-bottom: 60px; }
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+.feat-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 36px 28px;
+  box-shadow: 0 4px 24px var(--shadow);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: default;
+}
+.feat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  border-radius: 20px 20px 0 0;
+}
+.feat-card.y::before { background: var(--yellow-dark); }
+.feat-card.b::before { background: #42a5f5; }
+.feat-card.g::before { background: #66bb6a; }
+.feat-card.p::before { background: #ab47bc; }
+.feat-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 48px rgba(26,18,8,0.12);
+}
+.feat-icon {
+  font-size: 36px;
+  margin-bottom: 18px;
+  display: block;
+}
+.feat-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+.feat-card p {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.8;
+}
+
+/* ═══════════════════════════════════════
+   ONBOARDING STEPS
+═══════════════════════════════════════ */
+.steps-section {
+  padding: 100px 24px;
+  background: var(--ink);
+  overflow: hidden;
+  position: relative;
+}
+.steps-section::after {
+  content: 'POIT';
+  position: absolute;
+  bottom: -40px; right: -20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 200px;
+  font-weight: 700;
+  color: rgba(255,253,231,0.03);
+  pointer-events: none;
+  user-select: none;
+}
+.steps-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.steps-inner .section-label { color: var(--yellow-deep); }
+.steps-inner h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4vw, 50px);
+  color: #fff;
+  margin-bottom: 60px;
+}
+.steps-inner h2 em { font-style: italic; color: var(--yellow); }
+.steps-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+  padding: 28px 0;
+  border-bottom: 1px solid rgba(255,253,231,0.08);
+  position: relative;
+}
+.step-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 52px;
+  font-weight: 700;
+  color: rgba(255,245,157,0.15);
+  line-height: 1;
+  min-width: 60px;
+  transition: color 0.3s;
+}
+.step-item:hover .step-num { color: var(--yellow); }
+.step-content h3 {
+  font-size: 20px;
+  color: #fff;
+  margin-bottom: 8px;
+  font-family: 'Playfair Display', serif;
+}
+.step-content p {
+  font-size: 15px;
+  color: rgba(255,253,231,0.55);
+  line-height: 1.75;
+}
+.step-tag {
+  display: inline-block;
+  background: var(--yellow);
+  color: var(--ink);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 30px;
+  margin-bottom: 8px;
+}
+
+/* ═══════════════════════════════════════
+   SCREENSHOTS
+═══════════════════════════════════════ */
+.screens-section {
+  padding: 100px 0;
+  background: var(--paper-mid);
+  overflow: hidden;
+}
+.screens-header {
+  max-width: 1120px;
+  margin: 0 auto 50px;
+  padding: 0 24px;
+}
+.screens-header .section-label { color: var(--gray); }
+.screens-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 44px);
+}
+.screens-track {
+  display: flex;
+  gap: 24px;
+  padding: 20px 40px 40px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.screens-track::-webkit-scrollbar { display: none; }
+.screen-item {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  position: relative;
+}
+.screen-item img {
+  height: 580px;
+  border-radius: 32px;
+  box-shadow: 0 24px 60px rgba(26,18,8,0.18);
+  display: block;
+  transition: transform 0.3s;
+}
+.screen-item:hover img { transform: translateY(-8px) scale(1.02); }
+.screen-caption {
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--gray);
+  letter-spacing: 1px;
+}
+
+/* ═══════════════════════════════════════
+   TESTIMONIAL / QUOTES
+═══════════════════════════════════════ */
+.voices-section {
+  padding: 100px 24px;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+.voices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 50px;
+}
+.voice-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px 24px;
+  box-shadow: 0 4px 20px var(--shadow);
+  position: relative;
+}
+.voice-card::before {
+  content: '"';
+  font-family: 'Playfair Display', serif;
+  font-size: 80px;
+  color: var(--yellow-deep);
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  line-height: 1;
+  opacity: 0.5;
+}
+.voice-text {
+  font-family: 'Nanum Pen Script', cursive;
+  font-size: 18px;
+  color: var(--ink);
+  line-height: 1.7;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+.voice-meta {
+  font-size: 12px;
+  color: var(--gray);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.voice-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+
+/* ═══════════════════════════════════════
+   COLOR LEGEND
+═══════════════════════════════════════ */
+.colors-section {
+  padding: 80px 24px;
+  background: var(--ink);
+}
+.colors-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  text-align: center;
+}
+.colors-inner .section-label { color: var(--yellow-deep); }
+.colors-inner h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 44px);
+  color: #fff;
+  margin-bottom: 48px;
+}
+.colors-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.color-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: default;
+}
+.color-swatch {
+  width: 72px; height: 72px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  transition: transform 0.25s, box-shadow 0.25s;
+  position: relative;
+}
+.color-swatch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, transparent 60%);
+}
+.color-chip:hover .color-swatch {
+  transform: translateY(-8px) rotate(-6deg) scale(1.08);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.color-name { font-size: 13px; color: rgba(255,253,231,0.6); }
+
+/* ═══════════════════════════════════════
+   CTA
+═══════════════════════════════════════ */
+.cta-section {
+  padding: 140px 24px;
+  background: linear-gradient(160deg, var(--paper-warm) 0%, var(--yellow-deep) 100%);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '📍';
+  font-size: 320px;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.04;
+  pointer-events: none;
+}
+.cta-section .section-label { color: var(--ink-soft); justify-content: center; display: flex; }
+.cta-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 7vw, 72px);
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+.cta-section h2 em { font-style: italic; }
+.cta-section p {
+  font-size: 18px;
+  color: var(--ink-soft);
+  max-width: 500px;
+  margin: 0 auto 48px;
+  position: relative;
+  z-index: 1;
+}
+.cta-btn-wrap { position: relative; z-index: 1; }
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer {
+  background: var(--ink);
+  padding: 48px 24px;
+  text-align: center;
+}
+footer p { font-size: 13px; color: rgba(255,253,231,0.35); line-height: 2; }
+footer a { color: var(--yellow); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+.footer-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  color: var(--yellow);
+  display: block;
+  margin-bottom: 16px;
+  letter-spacing: 2px;
+}
+
+/* ═══════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media (max-width: 768px) {
+  .concept-inner { grid-template-columns: 1fr; gap: 48px; }
+  .hp1,.hp2,.hp3,.hp4,.hp5,.hp6,.hp7,.hp8 { display: none; }
+  .screens-track { padding: 20px 20px 40px; }
+  .screen-item img { height: 480px; }
+  .steps-section::after { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══════════════════════════════════════ -->
+<section class="hero">
+
+  <!-- 배경 포스트잇들 -->
+  <div class="hero-bg-postit hp1"><div class="pin"></div>퇴근길 사람 미쳤다 진짜</div>
+  <div class="hero-bg-postit hp2"><div class="pin"></div>CGV 팝콘 가격 실화임?</div>
+  <div class="hero-bg-postit hp3"><div class="pin"></div>판교 다들 맥북임 ㅋㅋ</div>
+  <div class="hero-bg-postit hp4"><div class="pin"></div>선릉공원 잔디밭 점심 최고</div>
+  <div class="hero-bg-postit hp5"><div class="pin"></div>여기 국물 진짜 진하다</div>
+  <div class="hero-bg-postit hp6"><div class="pin"></div>면접 탈락 ㅋ 다음엔 붙겠지</div>
+  <div class="hero-bg-postit hp7"><div class="pin"></div>야경 예쁜 루프탑 발견</div>
+  <div class="hero-bg-postit hp8"><div class="pin"></div>방배동 카페 힐링된다</div>
+
+  <img src="icon.png" alt="POIT 앱 아이콘" class="hero-icon">
+
+  <span class="hero-badge">📍 감정 지도 앱</span>
+
+  <h1>지도 위에<br><em>감정을</em> 남기세요</h1>
+
+  <p class="hero-sub">
+    당신이 지나친 그 골목, 혼자 앉아 커피를 마시던 그 카페.<br>
+    그 순간의 감정, 그냥 흘려보내지 마세요.
+  </p>
+
+  <div class="hero-cta">
+    <a href="https://play.google.com/store/apps/details?id=com.joycestudios.poit" target="_blank" class="btn-store">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.18 23.76c.35.2.76.22 1.12.07L15.84 12 4.3.17C3.94.02 3.53.04 3.18.24 2.5.64 2.5 1.6 2.5 1.6v20.56s0 1.2.68 1.6z"/>
+        <path d="M19.5 9.5l-2.5-1.44L13.66 12l3.34 3.94 2.5-1.44c1-.58 1-.94 1-2s0-1.42-1-2z"/>
+        <path d="M4.3.17l10.4 10.4-2.86 2.86L4.3.17z" opacity=".6"/>
+        <path d="M4.3 23.83l7.54-7.54 2.86 2.86L4.3 23.83z" opacity=".6"/>
+      </svg>
+      Google Play에서 무료 다운로드
+    </a>
+  </div>
+
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ══ MARQUEE ════════════════════════════════════ -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">📍 지금 이 순간을 기록하세요</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">💛 감정이 쌓이는 장소, POITLAND</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">🗺️ 내 주변의 이야기를 발견하세요</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">🌸 작은 감정도 소중한 기록이 됩니다</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">📍 지금 이 순간을 기록하세요</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">💛 감정이 쌓이는 장소, POITLAND</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">🗺️ 내 주변의 이야기를 발견하세요</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">🌸 작은 감정도 소중한 기록이 됩니다</span><span class="marquee-dot">✦</span>
+  </div>
+</div>
+
+<!-- ══ CONCEPT ════════════════════════════════════ -->
+<section class="concept">
+  <div class="concept-inner">
+    <div class="concept-text reveal">
+      <span class="section-label">✦ POIT이란</span>
+      <h2>평범한 장소가<br><em>특별한 감정의 공간</em>으로</h2>
+      <p>강남역 10번 출구, 판교 테크노밸리 점심시간, 한강변 벤치. 누군가는 면접에서 떨어진 속상함을 남겼고, 누군가는 7천원짜리 순대국밥에 감동받은 기쁨을 붙여뒀습니다.</p>
+      <p>POIT에서는 모든 장소가 <strong>POITLAND</strong>가 됩니다. 평범한 골목이 수백 개의 감정이 붙어있는 특별한 공간으로 변해가는 것, 그게 POIT의 세계관입니다.</p>
+      <p style="font-family:'Nanum Pen Script',cursive;font-size:19px;color:rgba(255,245,157,0.85);margin-top:8px;">맛집 별점도 아니고, 길 안내도 아닙니다.<br>그냥 오늘 여기서, 내가 이런 걸 느꼈다는 것.</p>
+    </div>
+    <div class="concept-visual reveal reveal-delay-2">
+      <div class="quote-postit">
+        <div class="pin"></div>
+        <p>퇴근길 사람 미쳤다 진짜 ㅋㅋ 이 시간엔 항상 이러네</p>
+        <span class="meta">📍 강남역 10번 출구 · 어제 18:42</span>
+      </div>
+      <div class="quote-postit">
+        <div class="pin"></div>
+        <p>여기 순대국밥 7천원인데 진짜 맛있음 ㄷㄷ</p>
+        <span class="meta">📍 강남 순대국 골목 · 3일 전 12:15</span>
+      </div>
+      <div class="quote-postit">
+        <div class="pin"></div>
+        <p>면접 탈락 ㅋ 다음엔 붙겠지</p>
+        <span class="meta">📍 교보타워 앞 · 오늘 14:30</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURES ═══════════════════════════════════ -->
+<section class="features-section">
+  <div class="features-inner">
+    <div class="features-header reveal">
+      <span class="section-label">✦ 주요 기능</span>
+      <h2>POIT이 <em>특별한</em> 이유</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card y reveal reveal-delay-1">
+        <span class="feat-icon">📌</span>
+        <h3>POIT 작성</h3>
+        <p>지도 위 원하는 위치에 포스트잇을 남기세요. 최대 32자의 짧고 솔직한 한 마디면 충분합니다. 5가지 색깔 중 오늘 기분에 맞는 색을 골라보세요.</p>
+      </div>
+      <div class="feat-card b reveal reveal-delay-2">
+        <span class="feat-icon">🗺️</span>
+        <h3>감정 지도 탐색</h3>
+        <p>내 주변 1km 안에 어떤 포스트잇들이 붙어있는지 지도에서 바로 확인하세요. 마커를 탭하면 그 장소에 쌓인 감정들이 펼쳐집니다.</p>
+      </div>
+      <div class="feat-card g reveal reveal-delay-3">
+        <span class="feat-icon">🏡</span>
+        <h3>My POITLAND</h3>
+        <p>내가 남긴 모든 포스트잇을 타임라인으로 돌아보세요. 색깔별 필터링이나 지도 모드로 내 감정의 흔적을 한눈에 볼 수 있습니다.</p>
+      </div>
+      <div class="feat-card p reveal reveal-delay-4">
+        <span class="feat-icon">🔒</span>
+        <h3>공개 / 비공개</h3>
+        <p>세상과 나누고 싶은 감정은 공개로, 나만 간직하고 싶은 기록은 비공개로. 선택은 언제나 내 것입니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STEPS ══════════════════════════════════════ -->
+<section class="steps-section">
+  <div class="steps-inner">
+    <span class="section-label">✦ 시작하기</span>
+    <h2>딱 <em>세 걸음</em>이면 됩니다</h2>
+    <ol class="steps-list">
+      <li class="step-item reveal">
+        <span class="step-num">01</span>
+        <div class="step-content">
+          <span class="step-tag">위치 기반</span>
+          <h3>지금 있는 곳에서 지도를 열어요</h3>
+          <p>앱을 실행하면 내 주변에 남겨진 포스트잇들이 지도 위에 펼쳐집니다. 강남역, 판교, 홍대… 사람들의 솔직한 감정이 기다리고 있어요.</p>
+        </div>
+      </li>
+      <li class="step-item reveal">
+        <span class="step-num">02</span>
+        <div class="step-content">
+          <span class="step-tag">감정 기록</span>
+          <h3>+ POIT 버튼을 눌러 감정을 남겨요</h3>
+          <p>32자 이내의 짧은 한 마디. 지금 이 순간 느끼는 것 그대로 적어보세요. 거창하지 않아도, 완벽하지 않아도 됩니다.</p>
+        </div>
+      </li>
+      <li class="step-item reveal">
+        <span class="step-num">03</span>
+        <div class="step-content">
+          <span class="step-tag">연결</span>
+          <h3>다른 사람의 이야기도 읽어봐요</h3>
+          <p>같은 장소에서 누군가는 어떤 감정을 느꼈을까요? 공감하고, 기록하고, 이 거리를 함께 채워나가보세요.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ══ SCREENSHOTS ════════════════════════════════ -->
+<section class="screens-section">
+  <div class="screens-header reveal">
+    <span class="section-label">✦ 앱 미리보기</span>
+    <h2>감정은 <em>지도 위에 붙인다</em></h2>
+  </div>
+  <div class="screens-track">
+    <div class="screen-item">
+      <img src="screen1.png" alt="메인 지도 화면">
+      <span class="screen-caption">오늘, 여기에 누가 있었을까</span>
+    </div>
+    <div class="screen-item">
+      <img src="screen2.png" alt="POIT 작성 화면">
+      <span class="screen-caption">32자면 충분해요</span>
+    </div>
+    <div class="screen-item">
+      <img src="screen3.png" alt="POITLAND 상세">
+      <span class="screen-caption">이 골목엔 이야기가 쌓인다</span>
+    </div>
+    <div class="screen-item">
+      <img src="screen4.png" alt="근처 포스트잇 리스트">
+      <span class="screen-caption">지금 내 주변의 감정들</span>
+    </div>
+    <div class="screen-item">
+      <img src="screen5.png" alt="My POITLAND">
+      <span class="screen-caption">내가 지나온 모든 순간</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ VOICES ═════════════════════════════════════ -->
+<section class="voices-section">
+  <div class="reveal">
+    <span class="section-label">✦ 이런 분들께 딱 맞아요</span>
+    <h2>일상의 <em>작은 순간</em>들을 위해</h2>
+  </div>
+  <div class="voices-grid">
+    <div class="voice-card reveal reveal-delay-1">
+      <p class="voice-text">일상의 소소한 순간을 기록하고 싶은데 SNS는 너무 부담스러운 분</p>
+      <div class="voice-meta">
+        <div class="voice-dot" style="background:var(--yellow-dark)"></div>
+        일상 기록러
+      </div>
+    </div>
+    <div class="voice-card reveal reveal-delay-2">
+      <p class="voice-text">새로운 동네를 탐색할 때 진짜 사람들의 이야기가 궁금한 분</p>
+      <div class="voice-meta">
+        <div class="voice-dot" style="background:#42a5f5"></div>
+        동네 탐험가
+      </div>
+    </div>
+    <div class="voice-card reveal reveal-delay-3">
+      <p class="voice-text">내가 다녀온 장소들을 나만의 감정 지도로 모아두고 싶은 분</p>
+      <div class="voice-meta">
+        <div class="voice-dot" style="background:#66bb6a"></div>
+        추억 수집가
+      </div>
+    </div>
+    <div class="voice-card reveal reveal-delay-4">
+      <p class="voice-text">SNS엔 올리기엔 너무 사소하지만 어딘가엔 남기고 싶은 감정이 있는 분</p>
+      <div class="voice-meta">
+        <div class="voice-dot" style="background:var(--pink)"></div>
+        감정 기록자
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ COLORS ═════════════════════════════════════ -->
+<section class="colors-section">
+  <div class="colors-inner reveal">
+    <span class="section-label">✦ 포스트잇 색상</span>
+    <h2>오늘 기분은 어떤 색인가요?</h2>
+    <div class="colors-row">
+      <div class="color-chip">
+        <div class="color-swatch" style="background:#FFF59D"></div>
+        <span class="color-name">노랑</span>
+      </div>
+      <div class="color-chip">
+        <div class="color-swatch" style="background:#90CAF9"></div>
+        <span class="color-name">파랑</span>
+      </div>
+      <div class="color-chip">
+        <div class="color-swatch" style="background:#A5D6A7"></div>
+        <span class="color-name">초록</span>
+      </div>
+      <div class="color-chip">
+        <div class="color-swatch" style="background:#F48FB1"></div>
+        <span class="color-name">핑크</span>
+      </div>
+      <div class="color-chip">
+        <div class="color-swatch" style="background:#CE93D8"></div>
+        <span class="color-name">보라</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ════════════════════════════════════════ -->
+<section class="cta-section">
+  <span class="section-label">✦ 지금 시작하세요</span>
+  <h2 class="reveal">당신의 감정이<br>이 지도에<br><em>새로운 의미를 더합니다</em></h2>
+  <p class="reveal">무료입니다. 지금 바로 첫 번째 POIT을 남겨보세요.</p>
+  <div class="cta-btn-wrap reveal">
+    <a href="https://play.google.com/store/apps/details?id=com.joycestudios.poit" target="_blank" class="btn-store">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.18 23.76c.35.2.76.22 1.12.07L15.84 12 4.3.17C3.94.02 3.53.04 3.18.24 2.5.64 2.5 1.6 2.5 1.6v20.56s0 1.2.68 1.6z"/>
+        <path d="M19.5 9.5l-2.5-1.44L13.66 12l3.34 3.94 2.5-1.44c1-.58 1-.94 1-2s0-1.42-1-2z"/>
+        <path d="M4.3.17l10.4 10.4-2.86 2.86L4.3.17z" opacity=".6"/>
+        <path d="M4.3 23.83l7.54-7.54 2.86 2.86L4.3 23.83z" opacity=".6"/>
+      </svg>
+      Google Play에서 무료 다운로드
+    </a>
+  </div>
+</section>
+
+<!-- ══ FOOTER ═════════════════════════════════════ -->
+<footer>
+  <span class="footer-logo">POIT</span>
+  <p>
+    © 2026 Joyce Studios &nbsp;·&nbsp;
+    <a href="mailto:poit.support@gmail.com">poit.support@gmail.com</a>
+    &nbsp;·&nbsp;
+    <a href="https://play.google.com/store/apps/details?id=com.joycestudios.poit" target="_blank">Google Play</a>
+  </p>
+  <p style="margin-top:8px;">지도 위에 감정을 남기세요. 당신의 하루가 쌓여 세상이 조금 더 따뜻해집니다.</p>
+  <p style="margin-top:16px;">
+    <a href="http://billnjoyce.github.io/poit/ko/privacy.html" target="_blank" style="font-size:12px;color:rgba(255,253,231,0.35);text-decoration:none;border-bottom:1px solid rgba(255,253,231,0.2);padding-bottom:1px;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,245,157,0.7)'" onmouseout="this.style.color='rgba(255,253,231,0.35)'">이용 약관</a>
+  </p>
+</footer>
+
+<script>
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => io.observe(el));
+
+// 배경 포스트잇 hover float
+document.querySelectorAll('.hero-bg-postit').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    el.style.opacity = '1';
+    el.style.transform = el.style.transform.replace(/rotate\([^)]+\)/, 'rotate(0deg)');
+  });
+  el.addEventListener('mouseleave', () => {
+    el.style.opacity = '0.75';
+  });
+});
+
+// 색상 스워치 클릭 시 살짝 튕기는 효과
+document.querySelectorAll('.color-swatch').forEach(el => {
+  el.addEventListener('click', () => {
+    el.style.transition = 'transform 0.1s';
+    el.style.transform = 'scale(0.9)';
+    setTimeout(() => {
+      el.style.transform = '';
+      setTimeout(() => { el.style.transition = ''; }, 300);
+    }, 100);
+  });
+});
+</script>
+</body>
+</html>
