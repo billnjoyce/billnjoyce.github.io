@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Loan Calculator</title>
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  background:#fff;
+  color:#111;
+}
+
+/* CONTAINER */
+.container {
+  max-width:1100px;
+  margin:auto;
+  padding:0 20px;
+}
+
+/* HERO */
+.hero {
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+.hero img {
+  width:120px;
+  border-radius:28px;
+  margin-bottom:30px;
+}
+
+.hero h1 {
+  font-size:56px;
+  font-weight:700;
+}
+
+.hero p {
+  font-size:20px;
+  color:#555;
+  margin-top:15px;
+}
+
+/* APPSTORE BUTTON */
+.appstore-btn img {
+  height:60px;
+  margin-top:30px;
+  transition:0.3s;
+}
+
+.appstore-btn img:hover {
+  transform:scale(1.05);
+}
+
+/* SECTION */
+.section {
+  padding:120px 0;
+}
+
+.section h2 {
+  text-align:center;
+  font-size:40px;
+  margin-bottom:60px;
+}
+
+/* SCREENSHOT */
+.screenshot-wrapper {
+  display:flex;
+  gap:20px;
+  overflow-x:auto;
+}
+
+.screenshot-wrapper img {
+  height:500px;
+  border-radius:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.1);
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.screenshot-wrapper img:hover {
+  transform:scale(1.03);
+}
+
+/* MODAL */
+#modal {
+  display:none;
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.85);
+  justify-content:center;
+  align-items:center;
+  top:0;
+  left:0;
+  z-index:1000;
+}
+
+#modal img {
+  max-width:90%;
+  max-height:90%;
+  border-radius:12px;
+}
+
+/* FEATURES */
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:40px;
+}
+
+.card h3 {
+  font-size:20px;
+  margin-bottom:10px;
+}
+
+.card p {
+  color:#666;
+}
+
+/* CTA */
+.cta-section {
+  background:#111;
+  color:#fff;
+  padding:100px 20px;
+  text-align:center;
+}
+
+.cta-section h2 {
+  font-size:36px;
+  margin-bottom:20px;
+}
+
+.cta-section p {
+  color:#ccc;
+}
+
+/* FOOTER */
+.footer {
+  text-align:center;
+  padding:50px 20px;
+  font-size:14px;
+  color:#777;
+}
+
+.footer a {
+  color:#111;
+  text-decoration:none;
+  border-bottom:1px solid #ccc;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <img src="app-icon.png" alt="App Icon">
+
+  <h1>Car Loan Calculator</h1>
+  <p>Calculate monthly payments and total cost instantly.</p>
+
+  <a href="https://apps.apple.com/app/id1630939828" target="_blank" class="appstore-btn">
+    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg">
+  </a>
+</section>
+
+<!-- SCREENSHOTS -->
+<section class="section">
+  <div class="container">
+    <h2>App Preview</h2>
+
+    <div class="screenshot-wrapper">
+      <img src="1.png" onclick="openModal(this)">
+      <img src="2.png" onclick="openModal(this)">
+      <img src="3.png" onclick="openModal(this)">
+      <img src="4.png" onclick="openModal(this)">
+      <img src="5.png" onclick="openModal(this)">
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section">
+  <div class="container">
+    <h2>Everything You Need</h2>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Instant Calculation</h3>
+        <p>Quickly calculate your monthly car payments.</p>
+      </div>
+
+      <div class="card">
+        <h3>Total Cost Insight</h3>
+        <p>Understand full repayment and interest.</p>
+      </div>
+
+      <div class="card">
+        <h3>Excel Export</h3>
+        <p>Download your schedule easily.</p>
+      </div>
+
+      <div class="card">
+        <h3>Share Results</h3>
+        <p>Send via email or SNS instantly.</p>
+      </div>
+
+      <div class="card">
+        <h3>History Tracking</h3>
+        <p>Compare multiple scenarios.</p>
+      </div>
+
+      <div class="card">
+        <h3>Smart Decisions</h3>
+        <p>Make better financial choices.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Need Help or Have Questions?</h2>
+  <p>We're here to help you make smarter financial decisions.</p>
+
+  <a href="mailto:ibillkim@gmail.com?subject=Car Loan App Inquiry" style="display:inline-block; margin-top:20px; background:#fff; color:#111; padding:16px 32px; border-radius:40px; text-decoration:none;">
+    Contact Support
+  </a>
+
+  <br><br>
+
+  <a href="https://apps.apple.com/app/id1630939828" target="_blank" class="appstore-btn">
+    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg">
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>Support: ibillkim@gmail.com</p>
+
+  <p>
+    <a href="https://billnjoyce.github.io/carfund/en/privacy.html" target="_blank">
+      Terms of Service & Privacy Policy
+    </a>
+  </p>
+
+  <p>© 2024 Joyce Studios</p>
+</footer>
+
+<!-- MODAL -->
+<div id="modal" onclick="closeModal()">
+  <img id="modalImg">
+</div>
+
+<script>
+function openModal(img){
+  document.getElementById("modal").style.display="flex";
+  document.getElementById("modalImg").src=img.src;
+}
+
+function closeModal(){
+  document.getElementById("modal").style.display="none";
+}
+</script>
+
+</body>
+</html>
