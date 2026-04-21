@@ -51,6 +51,25 @@
       padding: 0 2.5rem;
       display: flex; align-items: center; justify-content: space-between;
       height: 60px;
+      transition: background 0.5s ease, border-color 0.5s ease;
+    }
+
+    /* ── 네비 테마 ── */
+    nav.nav-theme-poetry {
+      background: rgba(253,248,244,0.95);
+      border-bottom-color: var(--blush);
+    }
+    nav.nav-theme-dev {
+      background: rgba(10,14,26,0.96);
+      border-bottom-color: rgba(59,130,246,0.25);
+    }
+    nav.nav-theme-essay {
+      background: rgba(251,247,237,0.95);
+      border-bottom-color: rgba(212,169,106,0.35);
+    }
+    nav.nav-theme-success {
+      background: rgba(240,251,244,0.95);
+      border-bottom-color: rgba(122,184,138,0.35);
     }
 
     .brand-name {
@@ -62,7 +81,11 @@
       cursor: pointer;
       flex-shrink: 0;
       background: none; border: none;
+      transition: color 0.5s ease;
     }
+    nav.nav-theme-dev    .brand-name { color: #60a5fa; }
+    nav.nav-theme-essay  .brand-name { color: #d4a96a; }
+    nav.nav-theme-success .brand-name { color: #7ab88a; }
 
     .nav-right { display: flex; align-items: center; gap: 4px; }
 
@@ -83,6 +106,13 @@
 
     .nav-dropdown-btn:hover,
     .nav-dropdown-btn.active { color: var(--deep-rose); }
+    nav.nav-theme-dev .nav-dropdown-btn { color: rgba(148,163,184,0.8); }
+    nav.nav-theme-dev .nav-dropdown-btn:hover,
+    nav.nav-theme-dev .nav-dropdown-btn.active { color: #60a5fa; }
+    nav.nav-theme-essay .nav-dropdown-btn:hover,
+    nav.nav-theme-essay .nav-dropdown-btn.active { color: #d4a96a; }
+    nav.nav-theme-success .nav-dropdown-btn:hover,
+    nav.nav-theme-success .nav-dropdown-btn.active { color: #7ab88a; }
 
     .nav-dropdown-btn .arrow {
       font-size: 9px;
@@ -97,7 +127,11 @@
       position: absolute; bottom: 0;
       left: 16px; right: 16px;
       height: 1.5px; background: var(--rose);
+      transition: background 0.5s ease;
     }
+    nav.nav-theme-dev    .nav-dropdown-btn.active::after { background: #3b82f6; }
+    nav.nav-theme-essay  .nav-dropdown-btn.active::after { background: #d4a96a; }
+    nav.nav-theme-success .nav-dropdown-btn.active::after { background: #7ab88a; }
 
     .dropdown-menu {
       display: none;
@@ -109,6 +143,24 @@
       min-width: 210px;
       box-shadow: 0 8px 24px rgba(154,74,98,0.12);
       z-index: 300;
+      transition: background 0.4s, border-color 0.4s;
+    }
+    nav.nav-theme-dev .dropdown-menu {
+      background: #111827;
+      border-color: rgba(59,130,246,0.25);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    nav.nav-theme-dev .dropdown-item { color: #94a3b8; }
+    nav.nav-theme-dev .dropdown-item:hover { background: rgba(59,130,246,0.08); color: #60a5fa; }
+    nav.nav-theme-dev .dropdown-item.active-item { color: #60a5fa; }
+    nav.nav-theme-dev .item-label small { color: #475569; }
+    nav.nav-theme-essay .dropdown-menu {
+      background: #fffdf7;
+      border-color: rgba(212,169,106,0.3);
+    }
+    nav.nav-theme-success .dropdown-menu {
+      background: #f5fdf7;
+      border-color: rgba(122,184,138,0.3);
     }
 
     .dropdown-menu.open { display: block; }
@@ -439,6 +491,23 @@
     .bcc-blue  { background: linear-gradient(160deg, #eaeaf5, #dde0f5); }
     .bcc-green { background: linear-gradient(160deg, #eaf5ea, #ddf0e0); }
     .bcc-amber { background: linear-gradient(160deg, #f5f0ea, #f0e8d0); }
+    .bcc-dark  { background: linear-gradient(160deg, #0a0e1a, #111827); }
+    .bcc-dark .book-card-code {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      color: #60a5fa; text-align: center; line-height: 1.8;
+    }
+    .bcc-dark .book-card-num {
+      font-size: 28px; font-weight: 900; color: #3b82f6;
+      font-family: 'JetBrains Mono', monospace; line-height: 1;
+    }
+    .bcc-dark .book-card-title-cover {
+      font-size: 12px; font-weight: 700; color: #fff; line-height: 1.4;
+    }
+    .book-card.dev-card { border-color: rgba(59,130,246,.3); }
+    .book-card.dev-card:hover { border-color: #3b82f6; }
+    .book-card.dev-card .book-card-info { border-top: 0.5px solid rgba(59,130,246,.2); background: #0d1117; }
+    .book-card.dev-card .book-card-title { color: #e2e8f0; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+    .book-card.dev-card .book-card-genre { color: #60a5fa; }
 
     .book-card-info { padding: 14px; border-top: 0.5px solid var(--blush); }
     .book-card-title {
@@ -627,10 +696,9 @@
         개발 <span class="arrow">▾</span>
       </button>
       <div class="dropdown-menu" id="menu-dev">
-        <button class="dropdown-item" onclick="selectBook('dev1','dev')">
+        <button class="dropdown-item active-item" onclick="selectBook('dev1','dev')">
           <span class="item-dot dot-blue"></span>
-          <span class="item-label">개발<small>준비중</small></span>
-          <span class="item-soon">soon</span>
+          <span class="item-label">AI로 4시간에 앱 만들기<small>iOS · Android · Firebase</small></span>
         </button>
       </div>
     </div>
@@ -992,6 +1060,22 @@
           <div class="book-card-genre">시집 · 2026</div>
         </div>
       </div>
+      <div class="book-card dev-card" onclick="selectBook('dev1','dev')">
+        <div class="book-card-cover bcc-dark" style="flex-direction:column;gap:6px;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(59,130,246,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.07) 1px,transparent 1px);background-size:14px 14px;pointer-events:none;"></div>
+          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#3b82f6,#7c3aed,#06b6d4);"></div>
+          <div class="book-card-code" style="position:relative;z-index:1;">
+            <span style="color:#f97583;">@Observable</span><br>
+            <span style="color:#b392f0;">class</span> <span style="color:#79c0ff;">ViewModel</span>
+          </div>
+          <div class="book-card-num" style="position:relative;z-index:1;">4<span style="font-size:13px;color:#60a5fa;">h</span></div>
+          <div class="book-card-title-cover" style="position:relative;z-index:1;">AI로 앱 만들기</div>
+        </div>
+        <div class="book-card-info" style="background:#0d1117;">
+          <div class="book-card-title" style="color:#e2e8f0;font-family:'Noto Sans KR',sans-serif;font-weight:700;">AI로 4시간에 앱 만들기</div>
+          <div class="book-card-genre" style="color:#60a5fa;">개발 · iOS · Android · 2026</div>
+        </div>
+      </div>
       <!--div class="book-card" onclick="selectBook('poetry2','poetry')">
         <div class="book-card-cover bcc-rose" style="opacity:0.55;font-size:12px;">두 번째 시집</div>
         <div class="book-card-info">
@@ -1029,11 +1113,13 @@
 
 <!-- ===== PAGE: DEV 1 ===== -->
 <div id="page-dev1" class="page">
-  <div class="coming-soon-page">
-    <div class="cs-icon">✦</div>
-    <h2 class="cs-title">개발 책, 준비중입니다</h2>
-    <p class="cs-text">Bill Kim의 개발 관련 책이 곧 찾아올 예정입니다.<br>조금만 기다려 주세요.</p>
-  </div>
+  <iframe
+    id="iframe-dev1"
+    src="book_dev.html"
+    style="width:100%;border:none;display:block;min-height:100vh;"
+    scrolling="yes"
+    onload="resizeDevIframe(this)"
+  ></iframe>
 </div>
 
 <!-- ===== PAGE: ESSAY 1 ===== -->
@@ -1087,10 +1173,28 @@
     document.querySelectorAll('.nav-dropdown-btn').forEach(b => b.classList.remove('open'));
   }
 
+  // 카테고리별 네비 테마 매핑
+  const NAV_THEMES = {
+    poetry:  'nav-theme-poetry',
+    dev:     'nav-theme-dev',
+    essay:   'nav-theme-essay',
+    success: 'nav-theme-success',
+  };
+
+  function applyNavTheme(category) {
+    const nav = document.querySelector('nav');
+    // 기존 테마 제거
+    Object.values(NAV_THEMES).forEach(cls => nav.classList.remove(cls));
+    // 새 테마 적용
+    const theme = NAV_THEMES[category] || 'nav-theme-poetry';
+    nav.classList.add(theme);
+  }
+
   function selectBook(pageId, category) {
     closeAllDropdowns();
     showPage(pageId);
     scrollToTop();
+    applyNavTheme(category);
 
     document.querySelectorAll('.nav-dropdown-btn').forEach(b => b.classList.remove('active'));
     const activeBtn = document.getElementById('btn-' + category);
@@ -1102,6 +1206,17 @@
   document.addEventListener('click', function(e) {
     if (!e.target.closest('.nav-dropdown')) closeAllDropdowns();
   });
+
+  // 초기 테마: 시집(poetry)
+  applyNavTheme('poetry');
+
+  function resizeDevIframe(iframe) {
+    try {
+      iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
+    } catch(e) {
+      iframe.style.height = '100vh';
+    }
+  }
 </script>
 
 </body>
