@@ -63,7 +63,7 @@ body{
 .datenav{display:inline-flex;align-items:center;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:3px}
 .datenav button{width:34px;height:34px;border-radius:8px;border:none;background:none;color:var(--txt-2);cursor:pointer;font-size:16px;transition:.15s;display:grid;place-items:center}
 .datenav button:hover{background:var(--panel-3);color:var(--txt)}
-.datenav .cur{font-family:var(--mono);font-size:13px;font-weight:600;padding:0 12px;min-width:108px;text-align:center;cursor:pointer;color:var(--txt)}
+.datenav .cur{font-family:var(--mono);font-size:13px;font-weight:600;padding:0 12px;min-width:108px;text-align:center;cursor:pointer;color:var(--txt);direction:ltr;unicode-bidi:isolate;font-variant-numeric:lining-nums;-webkit-locale:"en"}
 .datenav .cur:hover{color:var(--accent)}
 
 .rangepick{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:3px;gap:2px}
@@ -255,6 +255,22 @@ body{
   .dhead .icon{width:52px;height:52px}
   .dhead .dt h2{font-size:20px}
 }
+/* 시간대(24h) 차트 */
+.hourly{display:flex;flex-direction:column;gap:12px}
+.hourbar-chips{display:flex;gap:7px;flex-wrap:wrap}
+.hourbar-chips .hchip{font-family:var(--body);font-size:12.5px;font-weight:600;color:var(--txt-2);
+  background:var(--panel-3);border:1px solid var(--line);padding:6px 13px;border-radius:9px;cursor:pointer;transition:.15s;
+  display:inline-flex;align-items:center;gap:6px}
+.hourbar-chips .hchip::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--c)}
+.hourbar-chips .hchip:hover:not(:disabled){color:var(--txt);border-color:var(--line-2)}
+.hourbar-chips .hchip.on{color:#fff;border-color:transparent;background:linear-gradient(135deg,var(--c),var(--c));box-shadow:0 4px 14px -6px var(--c)}
+.hourbar-chips .hchip:disabled{opacity:.32;cursor:not-allowed}
+.hourmeta{font-family:var(--mono);font-size:12px;color:var(--txt-3)}
+.hourmeta b{font-weight:700}
+.hourchart{position:relative}
+.hourchart .tip .tipdiv{height:1px;background:var(--line);margin:7px 0}
+.hoursvg{width:100%;height:240px;display:block;touch-action:pan-y}
+.hourempty{font-family:var(--mono);font-size:12.5px;color:var(--txt-3);padding:28px 4px;text-align:center}
 @media(max-width:420px){
   .kpis{grid-template-columns:repeat(2,1fr)}
   .rangepick button{padding:8px 9px}
@@ -288,7 +304,7 @@ body{
     </div>
     <div class="datenav">
       <button onclick="App.shiftDate(-1)" title="이전 날짜">‹</button>
-      <span class="cur" id="curDate" onclick="App.today()" title="오늘로">—</span>
+      <span class="cur" id="curDate" lang="en" dir="ltr" onclick="App.today()" title="오늘로">—</span>
       <button onclick="App.shiftDate(1)" title="다음 날짜">›</button>
     </div>
     <div class="rangepick" id="rangeSeg">
@@ -298,6 +314,7 @@ body{
       <button data-range="30" onclick="App.setRange(30,this)">30D</button>
       <button data-range="all" onclick="App.setRange('all',this)">전체</button>
     </div>
+    <button class="gear" onclick="App.refresh()" title="새로고침" style="margin-left:auto">⟳</button>
     <button class="gear" onclick="App.openSettings()" title="설정">⚙</button>
   </div>
 
@@ -325,6 +342,9 @@ body{
       </div>
     </div>
 
+    <div class="sec"><h2>시간대별 분포</h2><span class="hint" id="hourlyHint"></span></div>
+    <div class="panel"><div id="hourly" class="hourly"></div></div>
+
     <div class="sec"><h2>앱별 현황</h2><span class="hint" id="appsHint"></span></div>
     <div class="grid" id="appGrid"></div>
   </div>
@@ -337,24 +357,24 @@ body{
 <div class="modal" id="modal">
   <div class="sheet">
     <h3>데이터 소스</h3>
-    <p class="desc">기본은 내장된 <b>집계 데이터</b>(14개 앱, 빠름)로 동작합니다. 아래를 입력하고 "실시간 연결"을 켜면 Firebase에서 직접 읽습니다. (원본이 커서 모바일에선 느릴 수 있어요.)</p>
+    <p class="desc">이 대시보드는 <b>항상 Firebase에서 최신 데이터</b>를 직접 읽습니다. 아래 값은 접속 대상이며, 보통 그대로 두면 됩니다.</p>
     <div class="field">
       <label>API Key</label>
-      <input id="cfgApiKey" placeholder="AIza...">
+      <input id="cfgApiKey" placeholder="AIza..." value="AIzaSyDvQ-CLAZ11NXLGGJTnT6xMB37UEf6MQkY">
     </div>
     <div class="field">
       <label>Database URL</label>
-      <input id="cfgDbUrl" placeholder="https://carfund-f5102.firebaseio.com">
+      <input id="cfgDbUrl" placeholder="https://carfund-f5102.firebaseio.com" value="https://carfund-f5102.firebaseio.com">
     </div>
     <div class="field">
       <label>Root Path (보통 비움)</label>
-      <input id="cfgRoot" placeholder="(비움)">
+      <input id="cfgRoot" placeholder="(비움)" value="">
     </div>
     <div class="modalbtns">
-      <button class="btn" onclick="App.useEmbedded()">내장 데이터 사용</button>
-      <button class="btn primary" onclick="App.saveSettings()">실시간 연결</button>
+      <button class="btn" onclick="App.closeSettings()">닫기</button>
+      <button class="btn primary" onclick="App.saveSettings()">저장 후 다시 불러오기</button>
     </div>
-    <p class="note">실시간 연결은 익명 로그인으로 idToken을 받아 REST로 읽습니다. Firebase 콘솔에서 익명 로그인과 읽기 규칙(auth != null)이 켜져 있어야 합니다.</p>
+    <p class="note">익명 로그인으로 idToken을 받아 REST로 읽습니다. Firebase 콘솔에서 익명 로그인과 읽기 규칙(auth != null)이 켜져 있어야 합니다.</p>
   </div>
 </div>
 
@@ -394,6 +414,17 @@ function parseISO(s){
 }
 function shiftISO(iso,days){const d=parseISO(iso);if(isNaN(d))return iso;d.setDate(d.getDate()+days);return toISO(d)}
 function mmdd(iso){const [,m,d]=iso.split('-');return m+'.'+d}
+// 정상 ISO 날짜 키만 인정 (아랍 숫자 등 오염 키 제외). 형식 YYYY-MM-DD + 실제 달력 유효성.
+// 상한 연도는 하드코딩하지 않고, '오늘 +1년'까지 허용 (2568 등 비정상 미래 연도만 차단).
+const VALID_ISO=/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;   // ASCII 숫자만 매칭 (아랍 숫자는 자동 제외)
+function isValidDateKey(k){
+  if(typeof k!=='string'||!VALID_ISO.test(k)) return false;
+  const y=+k.slice(0,4), mo=+k.slice(5,7), da=+k.slice(8,10);
+  if(mo<1||mo>12||da<1||da>31) return false;
+  if(y<2000) return false;                         // 하한만 최소한으로
+  const maxY=new Date().getFullYear()+1;           // 오늘 기준 동적 상한
+  return y<=maxY;
+}
 function hashColor(id){let h=0;for(const c of id)h=(h*31+c.charCodeAt(0))&0xffffff;return ICON_COLORS[Math.abs(h)%ICON_COLORS.length]}
 
 /* Platform-aware counting — matches the real Firebase export structure:
@@ -405,13 +436,18 @@ function hashColor(id){let h=0;for(const c of id)h=(h*31+c.charCodeAt(0))&0xffff
 const KNOWN_PLATFORMS = ['ios','android','toss','web'];
 
 // count IDs across versions: versionNode = { version: { id: <anything> } }
+// 이미 집계된 형태({version: 3} 또는 노드 자체가 숫자)도 그 숫자값으로 정확히 합산한다.
 function countVersions(vnode){
   if(vnode==null) return 0;
+  if(typeof vnode==='number') return vnode;        // 이미 집계된 카운트
   if(typeof vnode!=='object') return 1;
   let c=0;
   for(const ver in vnode){
     const idnode=vnode[ver];
-    c += (idnode && typeof idnode==='object') ? Object.keys(idnode).length : 1;
+    if(idnode==null) continue;
+    if(typeof idnode==='number') c += idnode;       // {version: count}
+    else if(typeof idnode==='object') c += Object.keys(idnode).length; // {version:{deviceId:ts}}
+    else c += 1;
   }
   return c;
 }
@@ -419,7 +455,7 @@ function countVersions(vnode){
 // returns { platform: count } for a single date node
 function countByPlatform(node){
   if(node==null) return {};
-  if(typeof node==='number') return {ios:0,android:0}; // unexpected scalar
+  if(typeof node==='number') return {unknown:node}; // 날짜 노드가 바로 숫자인 경우
   if(typeof node!=='object') return {};
   const keys=Object.keys(node);
   const firstKey=keys[0];
@@ -435,6 +471,55 @@ function countByPlatform(node){
     out['unknown']=(out['unknown']||0)+countVersions(node);
   }
   return out;
+}
+
+// 한 날짜 노드에서 24시간(KST) 분포를 추출. 리프 타임스탬프(ms)가 있을 때만 동작.
+// 반환: { counts:[24], total:n, hasTs:bool, platform:{pf:[24]} }
+const KST_OFFSET_MS=9*3600*1000;
+function hourBucketsFor(node, platformFilter){
+  const counts=new Array(24).fill(0);
+  const byPf={};
+  let total=0, hasTs=false;
+  function leafTs(v){
+    // 타임스탬프로 인정: 12자리 이상 숫자(ms) 또는 그런 문자열
+    if(typeof v==='number' && v>1e11) return v;
+    if(typeof v==='string' && /^\d{12,}$/.test(v)) return +v;
+    return null;
+  }
+  // node = {platform:{ver:{id:ts}}} (플랫폼 계층) 또는 {ver:{id:ts}} (레거시)
+  function walkIds(idnode, pf){
+    if(idnode==null) return;
+    if(typeof idnode!=='object'){ return; }
+    for(const id in idnode){
+      const ts=leafTs(idnode[id]);
+      if(ts!=null){
+        hasTs=true;
+        const h=new Date(ts+KST_OFFSET_MS).getUTCHours();
+        counts[h]++; total++;
+        (byPf[pf]||(byPf[pf]=new Array(24).fill(0)))[h]++;
+      }
+    }
+  }
+  function walkVersions(vnode, pf){
+    if(vnode==null||typeof vnode!=='object') return;
+    for(const ver in vnode) walkIds(vnode[ver], pf);
+  }
+  if(node && typeof node==='object'){
+    const keys=Object.keys(node);
+    const hasPlatform = keys[0]!==undefined && KNOWN_PLATFORMS.includes(String(keys[0]).toLowerCase());
+    if(hasPlatform){
+      for(const pf in node){
+        const pfl=String(pf).toLowerCase();
+        if(!KNOWN_PLATFORMS.includes(pfl)) continue;
+        if(platformFilter && platformFilter!=='all' && pfl!==platformFilter) continue;
+        walkVersions(node[pf], pfl);
+      }
+    }else{
+      if(!platformFilter || platformFilter==='all' || platformFilter==='unknown')
+        walkVersions(node, 'unknown');
+    }
+  }
+  return {counts,total,hasTs,byPf};
 }
 
 /* ============================================================
@@ -456,6 +541,7 @@ class MockSource{
       out[m.key]={};
       const series=node[m.key]||{};
       for(const date in series){
+        if(!isValidDateKey(date)) continue;
         const v=series[date];
         // precounted mock stores {platform: count} already
         out[m.key][date]=(this.db.precounted && v && typeof v==='object' && typeof Object.values(v)[0]==='number')
@@ -467,29 +553,96 @@ class MockSource{
 }
 
 class FirebaseSource{
-  constructor(cfg){this.cfg=cfg;this.kind='firebase';this.token=null}
+  constructor(cfg){this.cfg=cfg;this.kind='firebase';this.token=null;this.authError=''}
   async init(){
-    // Anonymous sign-in -> idToken (Promise.race timeout; AbortSignal can throw DataCloneError in some webviews)
-    const url=`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${this.cfg.apiKey}`;
-    const timeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('연결 시간 초과 (네트워크/방화벽 확인)')),10000));
-    const req=fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({returnSecureToken:true})});
-    const res=await Promise.race([req,timeout]);
-    if(!res.ok){
-      let msg='';try{const j=await res.json();msg=j.error?.message||'';}catch(e){}
-      throw new Error('익명 로그인 실패 ('+res.status+')'+(msg?': '+msg:''));
+    // 익명 로그인 시도 → idToken 확보. 실패하더라도 즉시 throw하지 않고
+    // 토큰 없이(공개 읽기 규칙일 수 있음) 진행한다. 실제 읽기 가능 여부는 listApps에서 판단.
+    this.token=null; this.authError='';
+    try{
+      const url=`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${this.cfg.apiKey}`;
+      const timeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('연결 시간 초과 (네트워크/방화벽 확인)')),15000));
+      const req=fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({returnSecureToken:true})});
+      const res=await Promise.race([req,timeout]);
+      if(res.ok){
+        const data=await res.json();
+        this.token=data.idToken;
+      }else{
+        let msg='';try{const j=await res.json();msg=j.error?.message||'';}catch(e){}
+        let hint='';
+        if(/ADMIN_ONLY_OPERATION|OPERATION_NOT_ALLOWED/i.test(msg)) hint=' → Firebase 콘솔에서 익명 로그인을 켜세요 (Authentication → Sign-in method → 익명)';
+        else if(/CONFIGURATION_NOT_FOUND/i.test(msg)) hint=' → Authentication이 설정되어 있지 않습니다';
+        else if(/API_KEY|API key not valid/i.test(msg)) hint=' → API Key를 확인하세요';
+        this.authError='익명 로그인 실패('+res.status+')'+(msg?': '+msg:'')+hint;
+        console.warn('[init]',this.authError);
+      }
+    }catch(e){
+      this.authError=(e&&e.message)?e.message:String(e);
+      console.warn('[init] 로그인 예외 → 토큰 없이 진행:',this.authError);
     }
-    const data=await res.json();
-    this.token=data.idToken;
     return true;
   }
-  _u(path){return `${this.cfg.dbUrl}/${path}.json?auth=${this.token}`}
+  _u(path){
+    // 토큰이 있으면 auth 포함, 없으면 공개 읽기 시도. 캐시버스팅(_ts) 추가.
+    const auth=this.token?`auth=${this.token}&`:'';
+    return `${this.cfg.dbUrl}/${path}.json?${auth}_ts=${Date.now()}`;
+  }
   async listApps(){
-    const root=this.cfg.root?this.cfg.root+'/':'';
-    const res=await fetch(this._u(`${root}info`));
-    if(!res.ok) throw new Error('info 로드 실패('+res.status+')');
-    const info=await res.json();
-    if(!info) return [];
+    // info를 여러 후보 경로에서 찾는다. 찾은 root를 확정 저장해 이후 fetchApp도 동일 경로 사용.
+    const candidates = this.cfg.root!=null
+      ? [this.cfg.root, '', 'jsapps']      // 설정된 root 우선, 그다음 루트, jsapps
+      : ['', 'jsapps'];
+    // 중복 제거
+    const tried=[]; const roots=[];
+    for(const r of candidates){ const key=String(r); if(!tried.includes(key)){tried.push(key); roots.push(r);} }
+
+    let lastStatus=0, foundInfo=null, foundRoot=null;
+    for(const r of roots){
+      const prefix = r ? r+'/' : '';
+      let res;
+      try{ res=await fetch(this._u(`${prefix}info`),{cache:'no-store'}); }
+      catch(e){ continue; }
+      lastStatus=res.status;
+      if(res.status===401||res.status===403){
+        // 권한 문제는 경로를 바꿔도 동일하므로 즉시 명확히 안내
+        throw new Error('info 읽기 권한 없음('+res.status+')'+(this.token
+          ? ' → Realtime Database 규칙에서 ".read": "auth != null" 등을 확인하세요'
+          : ' → 익명 로그인이 안 됐고 공개 읽기도 막혀 있습니다.'+(this.authError?(' ('+this.authError+')'):'')));
+      }
+      if(!res.ok) continue;
+      let info; try{ info=await res.json(); }catch(e){ continue; }
+      if(info && (Array.isArray(info)?info.length:Object.keys(info).length)){
+        foundInfo=info; foundRoot=r; break;
+      }
+    }
+
+    if(!foundInfo){
+      // info를 못 찾으면: 루트(또는 후보 경로)를 얕게 읽어 앱 노드명으로 목록을 구성하는 폴백
+      const METRIC_KEYS=['dau','dau-dev','installs','installs-dev','updates','updates-dev','events','events-dev','sales','sales-dev'];
+      for(const r of roots){
+        const prefix = r ? r+'/' : '';
+        // shallow=true 로 최상위 키만 가볍게 받는다 (대용량 회피)
+        let res; try{ res=await fetch(this._u(`${prefix==='' ? '' : prefix.slice(0,-1)}`)+'&shallow=true',{cache:'no-store'}); }catch(e){ continue; }
+        if(!res.ok) continue;
+        let top; try{ top=await res.json(); }catch(e){ continue; }
+        if(!top || typeof top!=='object') continue;
+        // 앱 후보 = info/apps/platforms 같은 메타 키와 메트릭 키를 제외한 최상위 키
+        const skip=new Set(['info','apps','platforms','precounted',...METRIC_KEYS]);
+        const appIds=Object.keys(top).filter(k=>!skip.has(k));
+        if(appIds.length){
+          this.cfg.root=r;
+          console.warn('[listApps] info가 비어 루트 스캔으로 앱 목록 구성:', appIds);
+          return appIds.map((id,i)=>({appId:id,appName:id,description:'',iconImage:'',version:'',updateDate:'',iconColor:hashColor(id||String(i))}));
+        }
+      }
+      throw new Error('앱 목록(info)을 찾지 못했습니다. 시도한 경로: '
+        + roots.map(r=>'"'+(r||'(루트)')+'/info"').join(', ')
+        + (lastStatus?(' (마지막 응답 '+lastStatus+')'):''));
+    }
+
+    // 찾은 root를 확정 — fetchApp 등 이후 호출에서 동일 경로 사용
+    this.cfg.root = foundRoot;
+    const info=foundInfo;
     const arr=Array.isArray(info)?info:Object.values(info);
     return arr.filter(Boolean).map((a,i)=>{
       let version=a.version||'', updateDate=a.updateDate||a.updateDates||'';
@@ -501,19 +654,38 @@ class FirebaseSource{
         iconImage:a.iconImage||'',version,updateDate,iconColor:a.iconColor||hashColor(a.appId||String(i))};
     });
   }
-  /* Fetch the WHOLE app node once: {root}/{appId} (root is usually empty -> top-level appId).
-     Keys: dau, dau-dev, installs, installs-dev ... each => { date: { [platform]/version/id } } */
+  /* Fetch the WHOLE app node once: {root}/{appId}.
+     실서버 구조가 환경마다 다를 수 있어 아래 세 형태를 모두 지원한다:
+       (A) {appId}/{build}/{metric}/{date}/...     (예: appId/appstore/dau, appId/dev/dau)
+       (B) {appId}/{metric}{suffix}/{date}/...      (예: appId/dau, appId/dau-dev)
+       (C) {appId}/{metric}/{date}/...              (suffix 없는 기본)
+     각 metric에 대해 데이터가 가장 많이 잡히는 형태를 채택한다. */
   async fetchApp(appId,build){
     const suffix = build==='dev' ? '-dev' : '';
     const root=this.cfg.root?this.cfg.root+'/':'';
-    const res=await fetch(this._u(`${root}${appId}`));
+    const res=await fetch(this._u(`${root}${appId}`),{cache:'no-store'});
     if(!res.ok) throw new Error(appId+' 로드 실패('+res.status+')');
     const node=await res.json()||{};
+    const buildNode = (node && typeof node==='object' && node[build] && typeof node[build]==='object') ? node[build] : null;
     const out={};
+    out._hours={};   // _hours[metric][date] = {counts:[24], byPf:{pf:[24]}, hasTs}
     for(const m of METRICS){
+      // 후보 시리즈들을 모은다 (있는 것만)
+      const candidates=[];
+      if(buildNode && buildNode[m.key] && typeof buildNode[m.key]==='object') candidates.push(buildNode[m.key]);     // (A)
+      if(node[m.key+suffix] && typeof node[m.key+suffix]==='object') candidates.push(node[m.key+suffix]);            // (B)
+      if(!suffix && node[m.key] && typeof node[m.key]==='object') candidates.push(node[m.key]);                      // (C)
+      // 날짜 키가 가장 많은 후보를 선택 (가장 풍부한 데이터)
+      let series={};
+      for(const c of candidates){ if(Object.keys(c).length > Object.keys(series).length) series=c; }
       out[m.key]={};
-      const series=node[m.key+suffix]||{};
-      for(const date in series) out[m.key][date]=countByPlatform(series[date]);
+      out._hours[m.key]={};
+      for(const date in series){
+        if(!isValidDateKey(date)) continue;
+        out[m.key][date]=countByPlatform(series[date]);
+        const hb=hourBucketsFor(series[date]);
+        if(hb.hasTs) out._hours[m.key][date]={counts:hb.counts, byPf:hb.byPf, hasTs:true};
+      }
     }
     return out;
   }
@@ -530,45 +702,42 @@ const App={
   view:'home', curApp:null,
   platform:'all',    // 'all' = sum every platform; otherwise a specific platform key
   platforms:[],      // platform keys discovered in data (e.g. ios/android/toss/web)
+  hourMetric:'dau',  // 시간대 차트에서 선택된 지표
 
   // Default Firebase config — app connects to REAL data automatically on load.
   DEFAULT_CFG:{
     apiKey:'AIzaSyDvQ-CLAZ11NXLGGJTnT6xMB37UEf6MQkY',
     dbUrl:'https://carfund-f5102.firebaseio.com',
-    root:'jsapps'
+    root:''
   },
 
   async start(){
-    const saved=this._loadCfg();
-    // Default: use embedded pre-aggregated data (fast, accurate, 14 apps).
-    // Live Firebase is opt-in via settings (raw export is ~22MB, slow on mobile).
-    const useLive = saved && saved.live && saved.apiKey && saved.dbUrl;
-    this._status(useLive?'live':'mock', useLive?'실시간 연결 중…':'데이터 불러오는 중…');
+    // 항상 Firebase에서 최신 데이터를 읽는다.
+    // 저장된 설정이 있으면 기본값(DEFAULT_CFG) 위에 덮어써서 사용.
+    const saved=this._loadCfg()||{};
+    const cfg={...this.DEFAULT_CFG,...saved};
+    // 과거에 'jsapps' 루트로 저장된 설정 보정 — 실제 데이터는 루트 직하에 있음
+    if(cfg.root==='jsapps') cfg.root='';
+    this._status('live','실시간 연결 중…');
     try{
-      if(useLive){
-        this.src=new FirebaseSource(saved);
-        await this.src.init();
-      }else{
-        this.src=new MockSource();
-        await this.src.init();
-      }
+      this.src=new FirebaseSource(cfg);
+      await this.src.init();
       this.apps=await this.src.listApps();
       if(!this.apps.length) throw new Error('앱 목록(info)이 비어 있습니다.');
       await this._prefetchAll();
       this._autoDate();
-      this._status(useLive?'live':'mock', useLive?'실시간 · Firebase':'집계 데이터 · 14개 앱');
+      this._status('live','실시간 · Firebase');
       this.render();
     }catch(e){
-      console.error('[데이터 로드 실패]',e);
-      if(useLive){
-        // fall back to embedded data
-        try{
-          this.src=new MockSource();await this.src.init();
-          this.apps=await this.src.listApps();await this._prefetchAll();this._autoDate();
-          this._status('mock','집계 데이터 · 14개 앱 (실시간 연결 실패)');this.render();return;
-        }catch(e2){}
-      }
-      this._status('err','데이터를 불러오지 못했습니다');
+      const reason=(e&&e.message)?e.message:String(e);
+      console.error('[Firebase 로드 실패]',e);
+      // 실패 원인을 화면에 그대로 노출 (조용히 폴백하지 않음)
+      try{
+        this.src=new MockSource();await this.src.init();
+        this.apps=await this.src.listApps();await this._prefetchAll();this._autoDate();
+        this._status('mock','오프라인 데이터 · 연결 실패: '+reason);this.render();return;
+      }catch(e2){}
+      this._status('err','데이터를 불러오지 못했습니다: '+reason);
       this.renderError(e);
     }
   },
@@ -605,11 +774,35 @@ const App={
     await this.start();
   },
 
+  // 현재 화면을 유지한 채 서버에서 최신 데이터만 다시 받아온다.
+  async refresh(){
+    if(!this.src || this.src.kind!=='firebase'){return this.retry();}
+    this._status('live','최신 데이터 불러오는 중…');
+    try{
+      this.cache={};
+      await this.src.init();           // 토큰 갱신
+      this.apps=await this.src.listApps();
+      await this._prefetchAll();
+      this._autoDate();
+      this._status('live','실시간 · Firebase');
+      this.render();
+    }catch(e){
+      console.error('[새로고침 실패]',e);
+      this._status('err','새로고침에 실패했습니다');
+    }
+  },
+
   async _prefetchAll(){
-    // Parallel fetch of every app node for current build; cache results.
+    // 항상 서버에서 새로 받는다 (캐시를 비워 최신 데이터 보장).
     const jobs=this.apps.map(async a=>{
       const ck=a.appId+'|'+this.build;
-      if(!this.cache[ck]) this.cache[ck]=await this.src.fetchApp(a.appId,this.build);
+      try{
+        this.cache[ck]=await this.src.fetchApp(a.appId,this.build);
+      }catch(err){
+        // 앱 하나가 실패해도 전체가 깨지지 않도록 빈 데이터로 처리
+        console.warn('[앱 로드 실패]',a.appId,err);
+        this.cache[ck]=this.cache[ck]||{};
+      }
     });
     await Promise.all(jobs);
     this._discoverPlatforms();
@@ -638,12 +831,15 @@ const App={
   },
 
   _autoDate(){
-    // pick the most recent date that exists across cached data
+    // 현재 빌드의 캐시 전체에서 (모든 메트릭 통틀어) 가장 최근 '정상' 날짜로 이동
     let latest='';
     for(const a of this.apps){
       const s=this.cache[a.appId+'|'+this.build];
       if(!s) continue;
-      for(const d in (s.dau||{})) if(d>latest) latest=d;
+      for(const m of METRICS){
+        const series=s[m.key]||{};
+        for(const d in series){ if(isValidDateKey(d) && d>latest) latest=d; }
+      }
     }
     if(latest) this.date=latest;
   },
@@ -720,6 +916,44 @@ const App={
     return out;
   },
 
+  /* ---------- 시간대(24h, KST) 집계 ----------
+     캐시의 _hours[metric][date] = {counts:[24], byPf:{pf:[24]}, hasTs} 를 사용.
+     플랫폼 선택을 존중하고, hasTs 데이터가 하나도 없으면 null 반환. */
+  _hoursNode(appId,metric){return this.cache[appId+'|'+this.build]?._hours?.[metric]||{}},
+  // appId=null이면 전체 앱 합산. dates 배열의 모든 날짜를 합산.
+  hourly(appId,metric,dates){
+    const acc=new Array(24).fill(0);
+    const byPfHour={};   // {pf: [24]} — 전체(all) 선택 시 플랫폼별 분해
+    let any=false, total=0;
+    const appList = appId ? [{appId}] : this.apps;
+    const pf=this.platform;
+    for(const a of appList){
+      const hn=this._hoursNode(a.appId,metric);
+      for(const d of dates){
+        const rec=hn[d];
+        if(!rec||!rec.hasTs) continue;
+        any=true;
+        if(pf==='all'){
+          for(let h=0;h<24;h++){acc[h]+=rec.counts[h];total+=rec.counts[h];}
+          if(rec.byPf) for(const p in rec.byPf){
+            const arr=rec.byPf[p];const dst=byPfHour[p]||(byPfHour[p]=new Array(24).fill(0));
+            for(let h=0;h<24;h++) dst[h]+=arr[h];
+          }
+        }else{
+          const arr=rec.byPf&&rec.byPf[pf];
+          if(arr){const dst=byPfHour[pf]||(byPfHour[pf]=new Array(24).fill(0));
+            for(let h=0;h<24;h++){acc[h]+=arr[h];total+=arr[h];dst[h]+=arr[h];}}
+        }
+      }
+    }
+    return any ? {counts:acc,total,byPfHour} : null;
+  },
+  // 시간대 데이터가 일부라도 존재하는지(어떤 지표든) — 차트 노출 여부 판단
+  hasHourly(appId,dates){
+    for(const m of METRICS){ if(this.hourly(appId,m.key,dates)) return true; }
+    return false;
+  },
+
   /* ---------- MAU & stickiness (respect platform selection) ----------
      MAU = sum of DAU over the 30 days ending at `iso` (inclusive).
      Stickiness ≈ DAU(iso) / MAU(iso), shown as %. Approximation (no unique-user dedupe). */
@@ -754,7 +988,11 @@ const App={
 
   /* ---------- render router ---------- */
   render(){
-    $('#curDate').textContent=this.date.replace(/-/g,'.');
+    // 날짜 표시: 정상 ISO(YYYY-MM-DD)만 점(.)으로 변환, 아니면 원본/폴백 표시
+    let label = String(this.date||'');
+    const mm = label.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if(mm){ label = mm[1]+'.'+mm[2]+'.'+mm[3]; }
+    $('#curDate').textContent = label || '—';
     if(this.view==='detail'&&this.curApp){this.renderDetail(this.curApp)}
     else{this.renderHome()}
   },
@@ -806,8 +1044,10 @@ const App={
     $('#chartTitle').textContent='전체 추이';
     $('#chartHint').textContent=`${this.rangeLabel()} · ${pfTxt}`;
     $('#appsHint').textContent=`${this.apps.length}개 앱 · KPI 우수순`;
+    const hh=$('#hourlyHint'); if(hh) hh.textContent=`${this.rangeLabel()} · ${pfTxt} · KST`;
     this._renderLegend();
     this._renderMainChart(null);
+    this._renderHourly(null);
     this._renderAppGrid();
   },
 
@@ -867,7 +1107,7 @@ const App={
   },
   _sortedApps(dates){return [...this.apps].sort((a,b)=>this._appScore(b.appId,dates)-this._appScore(a.appId,dates))},
 
-  _pfColor(pf){const c={ios:'#5b8def',android:'#3ddc97',toss:'#5e8bff',web:'#ffb23e',unknown:'#5d6e87'};return c[pf]||'#9fb0c8'},
+  _pfColor(pf){const c={ios:'#4a9eff',android:'#3ddc97',toss:'#a974ff',web:'#ffa033',unknown:'#7a8aa0'};return c[pf]||'#9fb0c8'},
   _pfLabel(pf){const l={ios:'iOS',android:'Android',toss:'Toss',web:'Web',unknown:'기타'};return l[pf]||pf},
   _iconHtml(a){
     const init=(a.appName||'?').slice(0,2);
@@ -984,10 +1224,13 @@ const App={
         <div class="charthead"><div class="legend" id="legend"></div></div>
         <div class="chartwrap" style="height:340px"><svg id="mainChart" viewBox="0 0 900 340" preserveAspectRatio="none"></svg><div class="tip" id="tip"></div></div>
       </div>
+      <div class="sec"><h2>시간대별 분포</h2><span class="hint">${this.rangeLabel()} · ${pfTxt} · KST</span></div>
+      <div class="panel"><div id="hourly" class="hourly"></div></div>
       ${pfSection}`;
     this._renderLegend();
     this._renderEngagement(appId,dates);
     this._renderMainChart(appId);
+    this._renderHourly(appId);
   },
 
   /* ---------- CHARTS ---------- */
@@ -1078,41 +1321,159 @@ const App={
   _niceMax(v){const p=Math.pow(10,Math.floor(Math.log10(v)));const n=v/p;
     const m=n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10;return m*p},
 
+  // 시간대 지표 선택
+  setHourMetric(key){this.hourMetric=key;
+    if(this.view==='detail'&&this.curApp) this._renderHourly(this.curApp);
+    else this._renderHourly(null);
+  },
+
+  /* ---------- 시간대(24h) 차트 ---------- */
+  // host(#hourly) 안에 칩 + SVG 막대차트를 그린다. appId=null이면 전체.
+  _renderHourly(appId){
+    const root=this._scope();
+    const host=root.querySelector('#hourly');
+    if(!host) return;
+    const dates=this.rangeDates();
+    // 선택 지표가 비활성이거나 데이터 없으면 데이터 있는 지표로 자동 보정
+    let mk=this.hourMetric;
+    if(!this.hourly(appId,mk,dates)){
+      const alt=METRICS.find(m=>this.hourly(appId,m.key,dates));
+      if(alt) mk=this.hourMetric=alt.key;
+    }
+    const data=this.hourly(appId,mk,dates);
+    // 지표 선택 칩 (데이터 있는 지표만 활성)
+    const chips=METRICS.map(m=>{
+      const has=!!this.hourly(appId,m.key,dates);
+      const on=m.key===mk;
+      return `<button class="hchip ${on?'on':''}" ${has?'':'disabled'} style="--c:${m.raw}"
+        onclick="App.setHourMetric('${m.key}')">${m.label}</button>`;
+    }).join('');
+
+    if(!data){
+      host.innerHTML=`<div class="hourbar-chips">${chips}</div>
+        <div class="hourempty">이 기간에는 시간대 데이터가 없습니다. (집계 데이터에는 시각 정보가 없을 수 있어요)</div>`;
+      return;
+    }
+
+    const W=900,H=240,P={l:40,r:14,t:14,b:28};
+    const innerW=W-P.l-P.r, innerH=H-P.t-P.b;
+    const counts=data.counts;
+    let gmax=this._niceMax(Math.max(...counts,1));
+    const bw=innerW/24;
+    const color=(METRICS.find(m=>m.key===mk)||{}).raw||'#5e8bff';
+    const Y=v=>P.t+innerH-(v/gmax)*innerH;
+
+    let g='';
+    // y 그리드 + 라벨
+    const ticks=4;
+    for(let i=0;i<=ticks;i++){
+      const v=gmax/ticks*i, y=Y(v);
+      g+=`<line x1="${P.l}" y1="${y}" x2="${W-P.r}" y2="${y}" stroke="#1e293b" stroke-width="1"/>`;
+      g+=`<text x="${P.l-8}" y="${y+4}" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="11" fill="#5d6e87">${fmt(Math.round(v))}</text>`;
+    }
+    // 막대 (data-h로 시각 식별) + 시간 라벨
+    const peak=Math.max(...counts);
+    for(let h=0;h<24;h++){
+      const x=P.l+h*bw, val=counts[h];
+      const bh=(val/gmax)*innerH, y=P.t+innerH-bh;
+      const isPeak=val===peak&&val>0;
+      // 클릭/터치 히트영역을 위해 막대 전체 높이만큼 투명 rect도 추가
+      g+=`<rect class="hbar-hit" data-h="${h}" x="${(x).toFixed(1)}" y="${P.t}" width="${bw.toFixed(1)}" height="${innerH}" fill="transparent" style="cursor:pointer"></rect>`;
+      g+=`<rect class="hbar" data-h="${h}" x="${(x+1.5).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-3).toFixed(1)}" height="${Math.max(0,bh).toFixed(1)}"
+        rx="3" fill="${color}" fill-opacity="${isPeak?'1':'0.55'}" style="pointer-events:none;transition:fill-opacity .12s"></rect>`;
+      if(h%3===0) g+=`<text x="${(x+bw/2).toFixed(1)}" y="${H-10}" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#5d6e87">${String(h).padStart(2,'0')}</text>`;
+    }
+    const peakH=counts.indexOf(peak);
+    const meta = peak>0
+      ? `피크 <b style="color:${color}">${String(peakH).padStart(2,'0')}:00</b> · 합계 ${fmtFull(data.total)} · ${dates.length>1?this.rangeLabel()+' 누적':'당일'} · KST`
+      : `데이터 없음`;
+
+    host.innerHTML=`
+      <div class="hourbar-chips">${chips}</div>
+      <div class="hourmeta">${meta}</div>
+      <div class="hourchart">
+        <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" class="hoursvg">${g}</svg>
+        <div class="tip" id="hourtip"></div>
+      </div>`;
+
+    // ---- 터치/클릭/호버 툴팁 ----
+    const wrap=host.querySelector('.hourchart');
+    const svg=host.querySelector('.hoursvg');
+    const tip=host.querySelector('#hourtip');
+    const label=(METRICS.find(m=>m.key===mk)||{}).label||mk;
+    const bars=Array.from(svg.querySelectorAll('.hbar'));
+    const showAt=(h)=>{
+      const val=counts[h];
+      const pct=data.total>0?(val/data.total*100):0;
+      // 플랫폼별 분해 (값 큰 순) — 앱 상세와 동일한 플랫폼 색/라벨 사용
+      let pfRows='';
+      const pfh=data.byPfHour||{};
+      const entries=Object.keys(pfh).map(p=>[p,pfh[p][h]]).filter(e=>e[1]>0).sort((a,b)=>b[1]-a[1]);
+      if(entries.length){
+        pfRows=entries.map(([p,v])=>`<div class="tr"><span class="nm"><i style="background:${this._pfColor(p)}"></i>${this._pfLabel(p)}</span><span class="vv">${fmtFull(v)}</span></div>`).join('');
+      }
+      tip.innerHTML=`<div class="td">${String(h).padStart(2,'0')}:00 – ${String((h+1)%24).padStart(2,'0')}:00 KST</div>`
+        +`<div class="tr"><span class="nm"><i style="background:${color}"></i>${label}</span><span class="vv">${fmtFull(val)}</span></div>`
+        +`<div class="tr"><span class="nm">전체 대비</span><span class="vv">${pct.toFixed(1)}%</span></div>`
+        +(pfRows?`<div class="tipdiv"></div>${pfRows}`:'');
+      tip.style.opacity='1';
+      // 위치: 막대 중앙 위
+      const rect=svg.getBoundingClientRect();
+      const ratio=rect.width/W;
+      const cx=(P.l+h*bw+bw/2)*ratio;
+      const tipW=tip.offsetWidth||160;
+      tip.style.left=Math.min(rect.width-tipW-6,Math.max(6,cx-tipW/2))+'px';
+      tip.style.top='6px';
+      // 막대 강조
+      bars.forEach(b=>{const bh=+b.getAttribute('data-h');b.setAttribute('fill-opacity',bh===h?'1':'0.28');});
+    };
+    const hide=()=>{tip.style.opacity='0';
+      const pk=counts.indexOf(peak);
+      bars.forEach(b=>{const bh=+b.getAttribute('data-h');b.setAttribute('fill-opacity',(bh===pk&&peak>0)?'1':'0.55');});
+    };
+    const hForEvent=(clientX)=>{
+      const rect=svg.getBoundingClientRect();
+      const xInSvg=(clientX-rect.left)/rect.width*W;
+      let h=Math.floor((xInSvg-P.l)/bw);
+      return Math.max(0,Math.min(23,h));
+    };
+    // PC 호버
+    wrap.addEventListener('mousemove',e=>{ showAt(hForEvent(e.clientX)); });
+    wrap.addEventListener('mouseleave',hide);
+    // 모바일/터치 + 클릭: 탭/드래그한 시간 툴팁 표시
+    wrap.addEventListener('touchstart',e=>{
+      if(e.touches&&e.touches[0]){ showAt(hForEvent(e.touches[0].clientX)); }
+    },{passive:true});
+    wrap.addEventListener('touchmove',e=>{
+      if(e.touches&&e.touches[0]){ showAt(hForEvent(e.touches[0].clientX)); }
+    },{passive:true});
+    // 차트 밖을 탭하면 닫기
+    if(!this._hourTipDocBound){
+      this._hourTipDocBound=true;
+      document.addEventListener('click',ev=>{
+        const w=this._scope().querySelector('.hourchart');
+        const t=this._scope().querySelector('#hourtip');
+        if(w&&t&&!w.contains(ev.target)) t.style.opacity='0';
+      });
+    }
+  },
+
   /* ---------- settings ---------- */
   openSettings(){
     const c=this._loadCfg()||{};
-    $('#cfgApiKey').value=c.apiKey||'AIzaSyDvQ-CLAZ11NXLGGJTnT6xMB37UEf6MQkY';
-    $('#cfgDbUrl').value=c.dbUrl||'https://carfund-f5102.firebaseio.com';
-    $('#cfgRoot').value=c.root||'';
+    $('#cfgApiKey').value=c.apiKey||this.DEFAULT_CFG.apiKey;
+    $('#cfgDbUrl').value=c.dbUrl||this.DEFAULT_CFG.dbUrl;
+    $('#cfgRoot').value=(c.root!=null?c.root:this.DEFAULT_CFG.root);
     $('#modal').classList.add('show');
   },
   closeSettings(){$('#modal').classList.remove('show')},
   async saveSettings(){
-    const cfg={live:true,apiKey:$('#cfgApiKey').value.trim(),dbUrl:$('#cfgDbUrl').value.trim().replace(/\/$/,''),root:$('#cfgRoot').value.trim()};
+    const cfg={apiKey:$('#cfgApiKey').value.trim(),dbUrl:$('#cfgDbUrl').value.trim().replace(/\/$/,''),root:$('#cfgRoot').value.trim()};
     if(!cfg.apiKey||!cfg.dbUrl){alert('API Key와 Database URL을 입력하세요.');return;}
     this._saveCfg(cfg);this.closeSettings();this.cache={};
     this.view='home';this.curApp=null;
     $('#detail').classList.remove('show');$('#dashboard').classList.remove('hide');
-    this._status('live','실시간 연결 중…');
-    try{
-      this.src=new FirebaseSource(cfg);await this.src.init();
-      this.apps=await this.src.listApps();
-      if(!this.apps.length) throw new Error('앱 목록(info)이 비어 있습니다. 보안 규칙을 확인하세요.');
-      await this._prefetchAll();this._autoDate();
-      this._status('live','실시간 · Firebase');this.render();
-    }catch(e){
-      console.error('[Firebase 연결 실패]',e);
-      this._status('err','데이터를 불러오지 못했습니다');this.renderError(e);
-    }
-  },
-  async useEmbedded(){
-    this._saveCfg(null);this.closeSettings();this.cache={};
-    this.view='home';this.curApp=null;
-    $('#detail').classList.remove('show');$('#dashboard').classList.remove('hide');
-    this._status('mock','데이터 불러오는 중…');
-    this.src=new MockSource();await this.src.init();
-    this.apps=await this.src.listApps();await this._prefetchAll();this._autoDate();
-    this._status('mock','집계 데이터 · 14개 앱');this.render();
+    await this.start();
   },
   _loadCfg(){try{return JSON.parse(sessionStorage.getItem('jsapps_cfg'))}catch(e){return null}},
   _saveCfg(c){try{c?sessionStorage.setItem('jsapps_cfg',JSON.stringify(c)):sessionStorage.removeItem('jsapps_cfg')}catch(e){}},
