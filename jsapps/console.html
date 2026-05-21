@@ -553,7 +553,25 @@ class MockSource{
 }
 
 class FirebaseSource{
-  constructor(cfg){this.cfg=cfg;this.kind='firebase';this.token=null;this.authError=''}
+  constructor(cfg){this.cfg=cfg;this.kind='firebase';this.token=null;this.authError='';
+    this._q=[];this._active=0;this._MAX=6;}   // 동시 요청 최대 6개 (모바일 안정성)
+  // 동시성 제한 래퍼: fn(=()=>fetch...)을 큐에 넣고 순차적으로 풀어준다
+  _gate(fn){
+    return new Promise((resolve,reject)=>{
+      this._q.push({fn,resolve,reject});
+      this._pump();
+    });
+  }
+  _pump(){
+    while(this._active<this._MAX && this._q.length){
+      const {fn,resolve,reject}=this._q.shift();
+      this._active++;
+      Promise.resolve().then(fn).then(
+        v=>{this._active--;this._pump();resolve(v);},
+        e=>{this._active--;this._pump();reject(e);}
+      );
+    }
+  }
   async init(){
     // 익명 로그인 시도 → idToken 확보. 실패하더라도 즉시 throw하지 않고
     // 토큰 없이(공개 읽기 규칙일 수 있음) 진행한다. 실제 읽기 가능 여부는 listApps에서 판단.
@@ -582,10 +600,10 @@ class FirebaseSource{
     }
     return true;
   }
-  _u(path){
+  _u(path,extra){
     // 토큰이 있으면 auth 포함, 없으면 공개 읽기 시도. 캐시버스팅(_ts) 추가.
     const auth=this.token?`auth=${this.token}&`:'';
-    return `${this.cfg.dbUrl}/${path}.json?${auth}_ts=${Date.now()}`;
+    return `${this.cfg.dbUrl}/${path}.json?${auth}${extra?extra+'&':''}_ts=${Date.now()}`;
   }
   async listApps(){
     // info를 여러 후보 경로에서 찾는다. 찾은 root를 확정 저장해 이후 fetchApp도 동일 경로 사용.
@@ -654,39 +672,54 @@ class FirebaseSource{
         iconImage:a.iconImage||'',version,updateDate,iconColor:a.iconColor||hashColor(a.appId||String(i))};
     });
   }
-  /* Fetch the WHOLE app node once: {root}/{appId}.
-     실서버 구조가 환경마다 다를 수 있어 아래 세 형태를 모두 지원한다:
-       (A) {appId}/{build}/{metric}/{date}/...     (예: appId/appstore/dau, appId/dev/dau)
-       (B) {appId}/{metric}{suffix}/{date}/...      (예: appId/dau, appId/dau-dev)
-       (C) {appId}/{metric}/{date}/...              (suffix 없는 기본)
-     각 metric에 대해 데이터가 가장 많이 잡히는 형태를 채택한다. */
-  async fetchApp(appId,build){
-    const suffix = build==='dev' ? '-dev' : '';
+  /* 최적화된 로딩: 앱 노드 전체(수 MB)를 받지 않고,
+     현재 빌드에 필요한 메트릭만, 지정된 날짜 범위(startKey~endKey)만 서버에서 잘라 받는다.
+     Firebase REST: orderBy="$key"&startAt&endAt 로 키 범위 쿼리.
+     범위 쿼리가 막히면(규칙/인덱스) 해당 메트릭만 전체 폴백. */
+  async _fetchSeries(appId, metricKey, startKey, endKey){
     const root=this.cfg.root?this.cfg.root+'/':'';
-    const res=await fetch(this._u(`${root}${appId}`),{cache:'no-store'});
-    if(!res.ok) throw new Error(appId+' 로드 실패('+res.status+')');
-    const node=await res.json()||{};
-    const buildNode = (node && typeof node==='object' && node[build] && typeof node[build]==='object') ? node[build] : null;
+    const path=`${root}${appId}/${metricKey}`;
+    // 1) 범위 쿼리 시도 (동시성 제한 적용)
+    if(startKey && endKey){
+      const extra=`orderBy=%22%24key%22&startAt=%22${startKey}%22&endAt=%22${endKey}%22`;
+      try{
+        const res=await this._gate(()=>fetch(this._u(path,extra),{cache:'no-store'}));
+        if(res.ok){ const j=await res.json(); return j||{}; }
+      }catch(e){}
+    }
+    // 2) 폴백: 메트릭 노드 전체
+    try{
+      const res=await this._gate(()=>fetch(this._u(path),{cache:'no-store'}));
+      if(res.ok){ const j=await res.json(); return j||{}; }
+    }catch(e){}
+    return {};
+  }
+
+  async fetchApp(appId,build,opts){
+    const suffix = build==='dev' ? '-dev' : '';
+    const startKey = opts && opts.startKey;
+    const endKey = opts && opts.endKey;
     const out={};
-    out._hours={};   // _hours[metric][date] = {counts:[24], byPf:{pf:[24]}, hasTs}
-    for(const m of METRICS){
-      // 후보 시리즈들을 모은다 (있는 것만)
-      const candidates=[];
-      if(buildNode && buildNode[m.key] && typeof buildNode[m.key]==='object') candidates.push(buildNode[m.key]);     // (A)
-      if(node[m.key+suffix] && typeof node[m.key+suffix]==='object') candidates.push(node[m.key+suffix]);            // (B)
-      if(!suffix && node[m.key] && typeof node[m.key]==='object') candidates.push(node[m.key]);                      // (C)
-      // 날짜 키가 가장 많은 후보를 선택 (가장 풍부한 데이터)
-      let series={};
-      for(const c of candidates){ if(Object.keys(c).length > Object.keys(series).length) series=c; }
+    out._hours={};
+    // 현재 빌드에 해당하는 메트릭 키만 받는다 (예: appstore→dau, dev→dau-dev)
+    const jobs=METRICS.map(async m=>{
+      const metricKey = m.key + suffix;
+      const series = await this._fetchSeries(appId, metricKey, startKey, endKey);
       out[m.key]={};
       out._hours[m.key]={};
-      for(const date in series){
-        if(!isValidDateKey(date)) continue;
-        out[m.key][date]=countByPlatform(series[date]);
-        const hb=hourBucketsFor(series[date]);
-        if(hb.hasTs) out._hours[m.key][date]={counts:hb.counts, byPf:hb.byPf, hasTs:true};
+      if(series && typeof series==='object'){
+        for(const date in series){
+          if(!isValidDateKey(date)) continue;
+          // 범위가 지정된 경우, 폴백으로 전체를 받았더라도 범위 밖은 버린다
+          if(startKey && date<startKey) continue;
+          if(endKey && date>endKey) continue;
+          out[m.key][date]=countByPlatform(series[date]);
+          const hb=hourBucketsFor(series[date]);
+          if(hb.hasTs) out._hours[m.key][date]={counts:hb.counts, byPf:hb.byPf, hasTs:true};
+        }
       }
-    }
+    });
+    await Promise.all(jobs);
     return out;
   }
 }
@@ -792,19 +825,33 @@ const App={
     }
   },
 
-  async _prefetchAll(){
-    // 항상 서버에서 새로 받는다 (캐시를 비워 최신 데이터 보장).
+  // 초기/기본 로딩 범위 (일). 모바일 속도를 위해 최근 N일만 먼저 받는다.
+  // 35일이면 7D/14D/30D 보기를 모두 커버하면서 다운로드량을 최소화한다.
+  LOAD_WINDOW: 35,
+  _loadedRange:null,   // {start,end} 현재 캐시에 로드된 키 범위
+
+  // 필요한 로딩 범위 계산
+  _loadWindow(days){
+    const today=toISO(new Date());
+    const start=shiftISO(today, -(days-1));
+    return {startKey:start, endKey:today};
+  },
+
+  async _prefetchAll(opts){
+    // 항상 서버에서 새로 받는다. opts.startKey~endKey 범위만 받아 속도 최적화.
+    const win = opts || this._loadWindow(this.LOAD_WINDOW);
     const jobs=this.apps.map(async a=>{
       const ck=a.appId+'|'+this.build;
       try{
-        this.cache[ck]=await this.src.fetchApp(a.appId,this.build);
+        this.cache[ck]=await this.src.fetchApp(a.appId,this.build,win);
       }catch(err){
-        // 앱 하나가 실패해도 전체가 깨지지 않도록 빈 데이터로 처리
         console.warn('[앱 로드 실패]',a.appId,err);
         this.cache[ck]=this.cache[ck]||{};
       }
     });
     await Promise.all(jobs);
+    // 전체(범위 미지정) 로딩이면 '전부 로드됨'으로 기록
+    this._loadedRange={start:win.startKey||'2000-01-01', end:win.endKey||toISO(new Date())};
     this._discoverPlatforms();
   },
 
@@ -982,8 +1029,39 @@ const App={
       this.src.kind==='firebase'?'실시간 · Firebase':'집계 데이터 · 14개 앱');
     this.render();
   },
-  setRange(r,el){this.range=(r==='all'?'all':+r);[...el.parentNode.children].forEach(c=>c.classList.remove('on'));el.classList.add('on');this.render()},
-  shiftDate(d){this.date=shiftISO(this.date,d);this.render()},
+  async setRange(r,el){
+    this.range=(r==='all'?'all':+r);
+    [...el.parentNode.children].forEach(c=>c.classList.remove('on'));el.classList.add('on');
+    // '전체' 또는 현재 로드 범위보다 긴 기간을 고르면 데이터를 더 받아온다
+    await this._ensureLoadedForView();
+    this.render();
+  },
+  async shiftDate(d){
+    this.date=shiftISO(this.date,d);
+    await this._ensureLoadedForView();
+    this.render();
+  },
+
+  // 현재 보기(날짜·기간)에 필요한 데이터가 캐시에 있는지 확인하고, 없으면 추가 로딩
+  async _ensureLoadedForView(){
+    if(!this.src || this.src.kind!=='firebase') return;        // mock은 전체 보유
+    if(!this._loadedRange) return;
+    // 보기에 필요한 가장 이른 날짜
+    let needStart;
+    if(this.range==='all'){
+      needStart='2000-01-01';                                   // 전체: 사실상 무제한
+    }else{
+      needStart=shiftISO(this.date, -(this.range-1));
+    }
+    if(needStart >= this._loadedRange.start) return;            // 이미 충분
+    // 더 받아야 함 — 전체 보기는 범위 쿼리 없이 메트릭 전체를, 아니면 넓힌 윈도우를
+    const win = this.range==='all'
+      ? {startKey:null, endKey:null}                            // 범위 미지정 = 메트릭 전체
+      : {startKey:needStart, endKey:toISO(new Date())};
+    this._status('live','데이터 더 불러오는 중…');
+    await this._prefetchAll(win);
+    this._status('live','실시간 · Firebase');
+  },
   today(){this._autoDate();this.render()},
 
   /* ---------- render router ---------- */
