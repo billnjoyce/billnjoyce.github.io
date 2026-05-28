@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0A3D29">
+<title>숨은 환급금 찾기 · 이용약관 및 개인정보처리방침</title>
+<style>
+  :root{
+    --hot:#0EA66E; --hot-2:#0A8A5C;
+    --hot-soft:rgba(14,166,110,0.14); --hot-line:rgba(14,166,110,0.34);
+    --amber:#E8961E; --amber-soft:rgba(232,150,30,0.13); --amber-line:rgba(232,150,30,0.36);
+    --bg:#0E1A14; --bg-soft:#16241C; --bg-soft2:#1D2E24; --line:#2A3A30;
+    --ink:#ffffff; --ink-soft:#CFE0D6; --ink-faint:#8FA89A;
+    --radius:16px; --maxw:880px;
+    --font:'Pretendard',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI","Noto Sans KR",Roboto,sans-serif;
+  }
+  @font-face{font-family:'Pretendard';font-weight:800;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-ExtraBold.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Medium.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--bg);}
+  body{font-family:var(--font);color:var(--ink-soft);background:var(--bg);line-height:1.78;margin:0;font-size:16px;font-weight:400;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 28px) 20px 80px;}
+  header.doc{padding:8px 0 24px;border-bottom:3px solid var(--hot);margin-bottom:8px;}
+  .brand{display:inline-flex;align-items:center;gap:11px;margin-bottom:18px;}
+  .brand .mk{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--hot),var(--hot-2));display:grid;place-items:center;box-shadow:0 8px 20px rgba(14,166,110,0.4);}
+  .brand .nm{font-size:18px;font-weight:800;color:#fff;letter-spacing:-.5px;}
+  .brand .nm b{color:var(--hot);}
+  header.doc .kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--hot);background:var(--hot-soft);border:1px solid var(--hot-line);padding:5px 12px;border-radius:999px;margin-bottom:14px;}
+  header.doc h1{font-size:27px;line-height:1.35;margin:0 0 14px;letter-spacing:-.02em;color:#fff;font-weight:800;}
+  .meta{color:var(--ink-faint);font-size:13.5px;line-height:1.95;margin:0;}
+  .meta b{color:var(--ink-soft);}
+  .box{background:var(--bg-soft);border:1px solid var(--line);border-left:4px solid var(--hot);padding:16px 18px;border-radius:var(--radius);margin:20px 0;font-size:14.5px;color:var(--ink-soft);}
+  .box b{color:#fff;}
+  .notice{background:var(--hot-soft);border:1px solid var(--hot-line);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#7FE3B8;}
+  .warn{background:var(--amber-soft);border:1px solid var(--amber-line);border-left:4px solid var(--amber);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#FFD98A;}
+  .contact{background:var(--amber-soft);border:1px solid var(--amber-line);border-left:4px solid var(--amber);padding:16px 18px;border-radius:var(--radius);font-size:14.5px;line-height:1.95;color:var(--ink-soft);}
+  .contact b{color:#fff;}
+  nav.toc{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin:26px 0 10px;}
+  nav.toc h2{font-size:16px;margin:0 0 14px;color:#fff;border:0;padding:0;font-weight:800;}
+  nav.toc .toc-part{font-size:13px;font-weight:700;color:var(--hot);margin:16px 0 8px;letter-spacing:.02em;}
+  nav.toc .toc-part:first-of-type{margin-top:0;}
+  nav.toc ol{list-style:none;margin:0;padding:0;columns:2;column-gap:26px;}
+  nav.toc ol li{margin:0 0 6px;font-size:13.5px;break-inside:avoid;padding-left:0;}
+  nav.toc ol li::before{display:none;}
+  nav.toc a{color:var(--ink-faint);text-decoration:none;transition:color .15s;}
+  nav.toc a:hover{color:var(--hot);text-decoration:underline;}
+  .part{margin:54px 0 8px;padding:20px 22px;background:linear-gradient(135deg,var(--hot) 0%,var(--hot-2) 100%);color:#fff;border-radius:var(--radius);box-shadow:0 12px 30px rgba(14,166,110,0.28);}
+  .part .num{font-size:12px;font-weight:700;opacity:.9;letter-spacing:.1em;}
+  .part h2{color:#fff;border:0;margin:4px 0 0;padding:0;font-size:21px;font-weight:800;}
+  h2.chapter{font-size:18px;color:#fff;margin:40px 0 6px;padding-bottom:9px;border-bottom:1px solid var(--line);font-weight:800;letter-spacing:-.3px;}
+  h3{font-size:16px;color:#fff;margin:26px 0 6px;scroll-margin-top:16px;font-weight:700;letter-spacing:-.2px;}
+  h3 .anum{color:var(--hot);font-weight:800;margin-right:5px;}
+  p{margin:8px 0;color:var(--ink-soft);font-size:15px;}
+  article.terms p,article.terms li{font-size:14.5px;}
+  ul{margin:8px 0 12px;padding-left:4px;list-style:none;}
+  li{position:relative;padding-left:18px;margin-bottom:7px;color:var(--ink-soft);font-size:14.5px;}
+  li::before{content:'';position:absolute;left:3px;top:11px;width:5px;height:5px;border-radius:50%;background:var(--hot);opacity:.85;}
+  b,strong{color:#fff;font-weight:700;}
+  table.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;}
+  table.tbl th,table.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;}
+  table.tbl th{background:var(--bg-soft2);color:#fff;font-weight:700;white-space:nowrap;}
+  table.tbl td{color:var(--ink-soft);}
+  table.tbl tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .totop{display:inline-block;font-size:12.5px;color:var(--hot);text-decoration:none;margin-top:10px;}
+  footer.doc{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-faint);line-height:1.9;}
+  footer.doc b{color:var(--ink-soft);}
+  footer.doc p{color:var(--ink-faint);}
+  @media (max-width:640px){body{font-size:15.5px;}.wrap{padding:calc(env(safe-area-inset-top,0px) + 20px) 16px 64px;}header.doc h1{font-size:22px;}nav.toc ol{columns:1;}.part h2{font-size:18px;}h2.chapter{font-size:16.5px;}h3{font-size:15px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="doc">
+  <div class="brand">
+    <span class="mk">
+      <svg width="24" height="24" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="52" cy="52" r="30" stroke="#fff" stroke-width="9" fill="none"/>
+        <line x1="74" y1="74" x2="96" y2="96" stroke="#fff" stroke-width="11" stroke-linecap="round"/>
+        <path d="M40 44 L48 62 M64 44 L56 62 M52 62 V70 M42 56 H62 M42 63 H62" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <span class="nm">숨은 <b>환급금</b> 찾기</span>
+  </div>
+  <span class="kicker">LEGAL · 약관 및 개인정보처리방침</span>
+  <h1>숨은 환급금 찾기<br>이용약관 및 개인정보처리방침</h1>
+  <p class="meta">
+    <b>운영사</b> · Joyce Studios (이하 "회사")<br>
+    <b>최종 개정일</b> · 2026년 5월 28일<br>
+    <b>시행일</b> · 2026년 5월 28일
+  </p>
+</header>
+
+<div class="box">
+  본 문서는 Joyce Studios가 제공하는 "숨은 환급금 찾기"(미환급금·환급금 등 정보 제공 및 공식 조회처 연결) 서비스의 이용 조건을 규정하는 <b>제1부 서비스 이용약관</b>과, 이용자의 정보 처리에 관한 <b>제2부 개인정보처리방침</b>으로 구성됩니다. 본 서비스를 이용하시는 경우 본 문서의 내용에 동의한 것으로 봅니다.
+</div>
+
+<nav class="toc">
+  <h2>📑 목차</h2>
+  <div class="toc-part">제1부 · 서비스 이용약관</div>
+  <ol>
+    <li><a href="#a1">제1조 목적</a></li>
+    <li><a href="#a2">제2조 용어의 정의</a></li>
+    <li><a href="#a3">제3조 약관의 효력 및 변경</a></li>
+    <li><a href="#a4">제4조 약관 외 준칙</a></li>
+    <li><a href="#a5">제5조 운영 주체</a></li>
+    <li><a href="#a6">제6조 서비스의 성격(정보제공자 지위)</a></li>
+    <li><a href="#a7">제7조 서비스 제공 내용</a></li>
+    <li><a href="#a8">제8조 서비스 제공 시간</a></li>
+    <li><a href="#a9">제9조 서비스의 변경·중단</a></li>
+    <li><a href="#a10">제10조 서비스 이용계약의 성립</a></li>
+    <li><a href="#a11">제11조 회원 비가입(비로그인) 이용</a></li>
+    <li><a href="#a12">제12조 이용 제한 및 차단</a></li>
+    <li><a href="#a13">제13조 환급금 정보의 수집·제공</a></li>
+    <li><a href="#a14">제14조 공식 조회처 정보 연동</a></li>
+    <li><a href="#a15">제15조 환급금 정보의 한계</a></li>
+    <li><a href="#a16">제16조 환급 자격·금액의 판단 책임</a></li>
+    <li><a href="#a17">제17조 소멸시효·신청기간 정보</a></li>
+    <li><a href="#a18">제18조 정보의 정확성·최신성</a></li>
+    <li><a href="#a19">제19조 카드 탐색 및 선호 기능</a></li>
+    <li><a href="#a20">제20조 공식 조회처 연결(이동)</a></li>
+    <li><a href="#a21">제21조 조회·신청의 당사자</a></li>
+    <li><a href="#a22">제22조 환급·심사·자격확인 책임</a></li>
+    <li><a href="#a23">제23조 공식 조회처(소관 기관)의 책임</a></li>
+    <li><a href="#a24">제24조 인기 환급·랭킹의 성격</a></li>
+    <li><a href="#a25">제25조 광고의 게재</a></li>
+    <li><a href="#a26">제26조 인라인·전면·보상형 광고</a></li>
+    <li><a href="#a27">제27조 광고 사업자(AdMob 등) 고지</a></li>
+    <li><a href="#a28">제28조 하우스 광고 및 자사 앱 홍보</a></li>
+    <li><a href="#a29">제29조 미니게임 서비스의 성격</a></li>
+    <li><a href="#a30">제30조 포인트(RP)·레벨·등급</a></li>
+    <li><a href="#a31">제31조 닉네임 및 전국 랭킹</a></li>
+    <li><a href="#a32">제32조 출석·보상형 광고 보상</a></li>
+    <li><a href="#a33">제33조 찜(좋아요) 기능</a></li>
+    <li><a href="#a34">제34조 마감·소멸 임박 알림</a></li>
+    <li><a href="#a35">제35조 관심 분류 설정</a></li>
+    <li><a href="#a36">제36조 추천 카드의 성격</a></li>
+    <li><a href="#a37">제37조 로컬 저장 데이터의 관리</a></li>
+    <li><a href="#a38">제38조 이용자의 일반 의무</a></li>
+    <li><a href="#a39">제39조 금지행위</a></li>
+    <li><a href="#a40">제40조 데이터 수집·크롤링 금지</a></li>
+    <li><a href="#a41">제41조 자동화·역설계 금지</a></li>
+    <li><a href="#a42">제42조 데이터의 상업적 이용 제한</a></li>
+    <li><a href="#a43">제43조 지식재산권</a></li>
+    <li><a href="#a44">제44조 공공저작물·출처 표시</a></li>
+    <li><a href="#a45">제45조 이용자 입력 정보</a></li>
+    <li><a href="#a46">제46조 환급금 정보 면책</a></li>
+    <li><a href="#a47">제47조 자격·환급 결과 면책</a></li>
+    <li><a href="#a48">제48조 외부 조회·신청 면책</a></li>
+    <li><a href="#a49">제49조 서비스 장애 면책</a></li>
+    <li><a href="#a50">제50조 불가항력</a></li>
+    <li><a href="#a51">제51조 손해배상 및 책임의 제한</a></li>
+    <li><a href="#a52">제52조 미성년자 이용</a></li>
+    <li><a href="#a53">제53조 통지 및 공지 방법</a></li>
+    <li><a href="#a54">제54조 분쟁 해결 및 준거법</a></li>
+  </ol>
+  <div class="toc-part">제2부 · 개인정보처리방침</div>
+  <ol>
+    <li><a href="#p1">제1조 총칙 및 기본 방침</a></li>
+    <li><a href="#p2">제2조 수집하는 개인정보 항목</a></li>
+    <li><a href="#p3">제3조 자동 수집 정보 및 식별자</a></li>
+    <li><a href="#p4">제4조 개인정보 수집 방법</a></li>
+    <li><a href="#p5">제5조 개인정보의 이용 목적</a></li>
+    <li><a href="#p6">제6조 단말기 로컬 저장 정보</a></li>
+    <li><a href="#p7">제7조 Firebase 이용 고지</a></li>
+    <li><a href="#p8">제8조 광고 식별자 및 맞춤형 광고</a></li>
+    <li><a href="#p9">제9조 닉네임·랭킹 정보의 처리</a></li>
+    <li><a href="#p10">제10조 푸시 알림 처리</a></li>
+    <li><a href="#p11">제11조 개인정보의 제3자 제공</a></li>
+    <li><a href="#p12">제12조 개인정보 처리의 위탁</a></li>
+    <li><a href="#p13">제13조 개인정보의 국외 이전</a></li>
+    <li><a href="#p14">제14조 개인정보의 보유 및 파기</a></li>
+    <li><a href="#p15">제15조 이용자 및 법정대리인의 권리</a></li>
+    <li><a href="#p16">제16조 만 14세 미만 아동의 개인정보</a></li>
+    <li><a href="#p17">제17조 개인정보의 안전성 확보 조치</a></li>
+    <li><a href="#p18">제18조 쿠키 및 유사 기술</a></li>
+    <li><a href="#p19">제19조 개인정보 보호책임자 및 문의처</a></li>
+    <li><a href="#p20">제20조 방침의 변경 및 고지 의무</a></li>
+  </ol>
+</nav>
+
+<article class="terms">
+<div class="part" id="terms"><span class="num">PART 1</span><h2>제1부 · 서비스 이용약관</h2></div>
+
+<h2 class="chapter">제1장 총칙</h2>
+<h3 id="a1"><span class="anum">제1조</span>(목적)</h3>
+<p>본 약관은 Joyce Studios(이하 "회사")가 제공하는 "숨은 환급금 찾기"(이하 "서비스")의 이용과 관련하여, 회사와 이용자 간의 권리·의무 및 책임사항, 서비스 이용 조건과 절차 등 기본적인 사항을 규정함을 목적으로 합니다. 본 서비스는 환급금을 직접 조회·지급하지 않고, 정부·지방자치단체·공공기관·협회 등이 운영하는 미환급금·환급금 조회·신청처(이하 "공식 조회처")에 관한 정보를 한곳에 모아 카드 형태로 탐색할 수 있도록 제공하며, 해당 공식 조회처로 연결해 주는 정보제공 서비스입니다.</p>
+
+<h3 id="a2"><span class="anum">제2조</span>(용어의 정의)</h3>
+<p>본 약관에서 사용하는 용어의 정의는 다음과 같습니다.</p>
+<ul>
+  <li><b>"서비스"</b>란 회사가 제공하는 미환급금·환급금 등 정보의 카드형 탐색, 넘기기(스와이프)를 통한 탐색, 맞춤 추천, 찜(좋아요), 임박 알림, 분류별 조회, 미니게임(환급 요정 키우기) 및 공식 조회처로의 연결 등 일체의 서비스를 의미하며, 회사가 환급금을 직접 조회·지급하거나 신청을 대행하는 것을 포함하지 않습니다.</li>
+  <li><b>"이용자"</b>란 본 약관에 따라 서비스를 이용하는 모든 사용자를 의미합니다.</li>
+  <li><b>"환급금 정보"</b>란 정부·지자체·공공기관·협회 등이 제공하는 미환급금·과오납금·휴면예금·미수령금·포인트 등의 명칭, 대표·평균 금액, 조회 대상, 소멸시효·신청기간, 조회 방법, 공식 조회처 등 관련 일체의 정보를 의미합니다.</li>
+  <li><b>"공식 조회처"</b>(소관 기관)란 해당 환급금을 실제로 운영·조회·심사·지급하는 정부 부처, 지방자치단체, 공공기관, 협회, 금융기관 등을 의미합니다.</li>
+  <li><b>"카드"</b>란 개별 환급 항목의 정보(명칭·대표 금액·대상·조회 방법 등)를 담아 화면에 표시되는 단위를 의미합니다.</li>
+  <li><b>"넘기기(스와이프)"</b>란 이용자가 카드를 넘겨 다음 환급 항목을 탐색하거나 관심·비관심을 선택하는 동작을 의미합니다.</li>
+  <li><b>"연결(이동)"</b>이란 이용자가 선택한 환급 항목의 공식 조회처(외부 웹사이트 또는 앱)로 화면을 이동시켜 주는 것을 의미하며, 조회·신청의 성립·대행·중개를 의미하지 않습니다.</li>
+  <li><b>"찜(좋아요)"</b>이란 이용자가 관심 환급 항목으로 단말기에 저장한 항목을 의미합니다.</li>
+  <li><b>"선호 학습"</b>이란 이용자의 탐색 결과를 단말기에서 분석하여 추천 카드의 순서를 조정하는 기능을 의미합니다.</li>
+  <li><b>"미니게임"</b>이란 화면을 탭하여 포인트(RP)와 레벨·등급을 올리고, 출석·보상형 광고·전국 랭킹 등에 참여하는 "환급 요정 키우기" 기능을 의미합니다.</li>
+  <li><b>"환급 포인트(RP)"</b>란 미니게임 내에서 적립되는 게임 수치를 의미하며, 현금·환급금·환금성 자산이 아닙니다.</li>
+  <li><b>"닉네임"</b>이란 미니게임의 전국 랭킹 표시를 위해 이용자가 설정하는 표시명을 의미합니다.</li>
+</ul>
+
+<h3 id="a3"><span class="anum">제3조</span>(약관의 효력 및 변경)</h3>
+<ul>
+  <li>본 약관은 서비스 내 또는 본 페이지에 게시함으로써 효력이 발생합니다.</li>
+  <li>회사는 「약관의 규제에 관한 법률」, 「개인정보 보호법」 등 관련 법령을 위배하지 않는 범위에서 본 약관을 개정할 수 있습니다.</li>
+  <li>약관을 개정하는 경우 적용일자 및 개정사유를 명시하여 적용일 7일 전부터(이용자에게 불리하거나 중대한 변경의 경우 30일 전부터) 서비스 내 공지합니다.</li>
+  <li>이용자가 개정 약관의 적용일 이후에도 서비스를 계속 이용하는 경우 개정 약관에 동의한 것으로 봅니다.</li>
+</ul>
+
+<h3 id="a4"><span class="anum">제4조</span>(약관 외 준칙)</h3>
+<p>본 약관에 명시되지 않은 사항은 대한민국 법령, 「개인정보 보호법」, 「공공데이터의 제공 및 이용 활성화에 관한 법률」, 소비자 보호 관련 법령 및 일반 상관례에 따릅니다.</p>
+
+<h3 id="a5"><span class="anum">제5조</span>(운영 주체)</h3>
+<ul>
+  <li>서비스의 기획·운영·제공 주체는 회사(Joyce Studios)입니다.</li>
+  <li>본 서비스는 정부·지방자치단체·공공기관·협회·금융기관과 직접적인 제휴·보증·후원 관계에 있음을 표방하지 않으며, 각 기관의 명칭은 식별 목적으로만 사용됩니다.</li>
+  <li>본 서비스는 공식 정부 앱 또는 공공기관 앱이 아니며, 민간 사업자가 공개 정보를 기반으로 제공하는 정보 서비스입니다.</li>
+</ul>
+
+<h3 id="a6"><span class="anum">제6조</span>(서비스의 성격 — 정보제공자 지위)</h3>
+<div class="box">회사는 환급금을 직접 조회·지급하거나 신청을 대행·중개하지 않는 <b>정보제공자(환급금 정보 제공 및 공식 조회처 연결)</b>입니다. 회사는 환급금의 운영·조회·심사·지급 주체가 아니며, 정부·지자체·공공기관·협회 등이 공개·제공한 정보를 수집·가공하여 카드 형태로 제공하고 해당 공식 조회처로 연결해 줄 뿐, 개별 환급금의 자격 확인·조회·지급·신청 처리에 일절 관여하지 않습니다. 회사는 이용자의 이름·주민등록번호·계좌·소득 등 본인확인 또는 자격 판단을 위한 개인정보를 입력받지 않습니다.</div>
+
+<h2 class="chapter">제2장 서비스의 제공</h2>
+<h3 id="a7"><span class="anum">제7조</span>(서비스 제공 내용)</h3>
+<p>회사는 다음 각 호의 서비스를 제공합니다. 아래 서비스는 모두 정보의 제공 및 공식 조회처로의 연결을 내용으로 하며, 환급금의 직접 조회·지급·신청 대행·중개를 포함하지 않습니다.</p>
+<ul>
+  <li>통신·카드포인트·국세·지방세·4대보험·휴면예금·미수령 주식 등 환급 항목 정보의 카드형 탐색 및 넘기기(스와이프) 기반 탐색</li>
+  <li>환급 항목별 명칭·대표 금액·조회 대상·소멸시효·조회 방법·공식 조회처 정보 제공</li>
+  <li>지금 인기 환급 TOP(조회 기반 랭킹) 제공</li>
+  <li>소멸시효·신청기간 임박 안내 및 알림</li>
+  <li>세금·보험·카드·통신·금융 등 분류별 탐색 및 노출 우선순위 조정</li>
+  <li>관심 환급 항목 찜(좋아요) 및 조회 기능</li>
+  <li>환급 항목 상세 정보 확인 및 공식 조회처로의 연결(이동)</li>
+  <li>미니게임(환급 요정 키우기), 출석, 전국 랭킹 등 부가 기능</li>
+  <li>기타 회사가 정하는 환급금 정보 관련 부가 서비스</li>
+</ul>
+
+<h3 id="a8"><span class="anum">제8조</span>(서비스 제공 시간)</h3>
+<ul>
+  <li>서비스는 원칙적으로 연중무휴 1일 24시간 제공됩니다.</li>
+  <li>점검, 장애, 통신 두절, 외부 플랫폼 사정 등 기술적 사유로 서비스가 일시 중단될 수 있습니다.</li>
+  <li>회사는 안정적 운영을 위해 정기 또는 임시 점검을 실시할 수 있으며, 사전 또는 사후에 이를 공지합니다.</li>
+</ul>
+
+<h3 id="a9"><span class="anum">제9조</span>(서비스의 변경·중단)</h3>
+<p>회사는 운영상 또는 기술상 상당한 이유가 있는 경우 서비스의 전부 또는 일부를 변경하거나 중단할 수 있습니다. 무료로 제공되는 서비스의 변경·중단에 대하여 회사는 관련 법령에 특별한 규정이 없는 한 별도의 보상을 하지 않습니다.</p>
+
+<h3 id="a10"><span class="anum">제10조</span>(서비스 이용계약의 성립)</h3>
+<p>서비스 이용계약은 이용자가 본 약관에 동의하고 본 서비스(앱)에 진입하여 이용을 개시함으로써 성립합니다.</p>
+
+<h3 id="a11"><span class="anum">제11조</span>(회원 비가입·비로그인 이용)</h3>
+<p>본 서비스는 별도의 회원가입 및 로그인 절차 없이 이용할 수 있는 비회원(비로그인) 기반 서비스입니다. 회사는 이용자에게 별도의 계정을 발급하거나 이름·연락처·주민등록번호·계좌번호 등 회원 식별 정보 또는 소득·자산 등 자격 판단을 위한 개인정보를 요구하지 않습니다. 다만 미니게임의 전국 랭킹 참여를 원하는 경우에 한하여 이용자가 직접 설정하는 닉네임이 처리될 수 있습니다(제31조 참조).</p>
+
+<h3 id="a12"><span class="anum">제12조</span>(이용 제한 및 차단)</h3>
+<p>회사는 다음 각 호에 해당하는 경우 사전 통지 없이 이용자의 서비스 접근 또는 이용을 제한·차단할 수 있습니다.</p>
+<ul>
+  <li>관련 법령 또는 본 약관을 위반한 경우</li>
+  <li>서비스의 정상적 운영을 방해하거나 그러할 우려가 있는 경우</li>
+  <li>자동화 프로그램·봇·스크립트 등을 사용한 경우(미니게임의 포인트·랭킹 부정 적립 포함)</li>
+  <li>비정상적 트래픽 또는 과도한 요청을 발생시킨 경우</li>
+  <li>제39조 및 제40조의 금지행위에 해당하는 경우</li>
+</ul>
+
+<h2 class="chapter">제3장 환급금 정보 서비스</h2>
+<h3 id="a13"><span class="anum">제13조</span>(환급금 정보의 수집·제공)</h3>
+<p>회사는 정부·지자체·공공기관·협회 등이 공개적으로 제공하는 미환급금·환급금 조회처 및 관련 정보를 적법한 범위에서 수집·정리하여 카드 형태로 탐색할 수 있도록 제공합니다. 회사는 해당 정보의 원천 제공자가 아니며, 정보의 생성·등록·갱신·운영 주체는 각 공식 조회처입니다.</p>
+
+<h3 id="a14"><span class="anum">제14조</span>(공식 조회처 정보 연동)</h3>
+<ul>
+  <li>본 서비스의 환급 탐색·추천 기능은 각 공식 조회처가 공개한 정보 및 회사가 정리한 안내 데이터를 기반으로 동작합니다.</li>
+  <li>환급 항목 명칭·대표 금액·조회 대상·소멸시효·공식 조회처 등은 각 기관이 제공·공개한 정보로서, 그 정확성·최신성·적법성에 대한 책임은 해당 정보 제공 기관에 있습니다.</li>
+  <li>회사는 외부 기관의 정책 변경, 페이지 주소 변경, 제공 중단, 갱신 지연 등으로 인해 관련 기능 및 정보를 사전 통지 없이 변경·중단할 수 있습니다.</li>
+  <li>본 서비스는 정부·공공기관과 직접적인 보증·제휴·후원 관계에 있음을 표방하지 않으며, 각 기관의 명칭은 식별 목적으로만 사용됩니다.</li>
+</ul>
+
+<h3 id="a15"><span class="anum">제15조</span>(환급금 정보의 한계)</h3>
+<div class="notice">대표·평균 금액, 조회 대상, 소멸시효 등은 공식 조회처의 사정에 따라 수시로 변동될 수 있으며, 실제 조회 시점의 조건과 다를 수 있습니다.</div>
+<p>다음과 같은 요소에 따라 실제 환급 내용은 앱에 표시된 정보와 달라질 수 있습니다.</p>
+<ul>
+  <li>본인별 실제 미환급·과오납·휴면 자산의 존재 여부 및 금액</li>
+  <li>연도·제도 개편에 따른 조회처·요건 변경</li>
+  <li>소멸시효 경과 또는 조회·청구 기한 도과</li>
+  <li>본인확인·계좌 신고 등 공식 조회처가 정한 절차</li>
+  <li>기관별 조회·지급 가능 여부 및 처리 방식</li>
+  <li>공식 조회처의 정책 변경 또는 서비스 종료</li>
+</ul>
+
+<h3 id="a16"><span class="anum">제16조</span>(환급 자격·금액의 판단 책임)</h3>
+<p>앱에 표시되는 "대표/평균 금액", "1인 평균", 조회 대상 등은 공개 정보를 바탕으로 한 일반적 안내이며, 특정 이용자의 실제 환급 가능 여부나 금액을 보장하지 않습니다. 본 서비스는 비로그인 구조로 이용자의 주민등록번호·계좌·소득·자산 정보 등을 입력받아 자격을 조회·심사하지 않으므로, 최종적인 환급 가능 여부 및 금액은 반드시 공식 조회처에서 본인 인증 후 확인하여야 합니다.</p>
+
+<h3 id="a17"><span class="anum">제17조</span>(소멸시효·신청기간 정보)</h3>
+<p>임박 알림 및 "소멸시효 5년", "상시" 등 기간 표시는 회사가 정리한 정보를 기준으로 한 일반 안내입니다. 실제 조회·청구 가능 기간 및 소멸 시점은 공식 조회처의 공지가 우선하며, 회사는 알림의 적시성·완전성을 보장하지 않습니다.</p>
+
+<h3 id="a18"><span class="anum">제18조</span>(정보의 정확성·최신성)</h3>
+<p>회사는 정보의 정확성·최신성을 위해 합리적인 노력을 다하나, 데이터 갱신 주기, 외부 제공 기관의 정보 변경 시점 등으로 인해 일부 정보가 실제와 다르거나 지연될 수 있습니다. 이용자는 최종 의사결정 전 반드시 공식 조회처의 공식 정보를 확인하여야 합니다.</p>
+
+<h3 id="a19"><span class="anum">제19조</span>(카드 탐색 및 선호 기능)</h3>
+<ul>
+  <li>이용자는 환급 카드를 넘기며(슉슉) 가볍게 탐색할 수 있으며, 관심·비관심 선택 결과는 추천 순서 조정에 활용될 수 있습니다.</li>
+  <li>선호 학습 및 탐색 이력은 원칙적으로 단말기 내에서 처리되며, 추천의 정확성을 보장하지 않습니다.</li>
+</ul>
+
+<h3 id="a20"><span class="anum">제20조</span>(공식 조회처 연결 — 이동)</h3>
+<p>"조회하러 가기" 등 연결 기능은 이용자를 공식 조회처(외부 웹사이트 또는 앱)로 이동시켜 주는 것에 한합니다. 정부·공공기관 사이트의 보안 정책 및 본인인증 절차의 안정적 동작을 위해 해당 연결은 외부 웹브라우저로 이루어질 수 있습니다. 회사는 해당 외부 페이지의 운영·내용·가용성에 관여하지 않으며, 연결 자체가 조회·신청의 성립·대행·중개를 의미하지 않습니다.</p>
+
+<h3 id="a21"><span class="anum">제21조</span>(조회·신청의 당사자)</h3>
+<p>환급금의 조회·청구·심사·지급에 관한 법률관계는 이용자와 공식 조회처 사이에 직접 발생하며, 회사는 그 당사자가 아닙니다.</p>
+
+<h3 id="a22"><span class="anum">제22조</span>(환급·심사·자격확인 책임)</h3>
+<p>환급금의 자격 확인, 조회 결과, 지급 금액·시기, 서류 요건, 부정 수령 환수 등 일체의 사항은 공식 조회처의 권한과 책임에 속하며, 회사는 이에 대해 어떠한 보증이나 책임도 부담하지 않습니다.</p>
+
+<h3 id="a23"><span class="anum">제23조</span>(공식 조회처의 책임)</h3>
+<p>환급금 정보의 등록·갱신·정확성, 제도의 시행·변경·종료, 조회·신청 페이지의 운영 등은 해당 공식 조회처(소관 기관)의 책임입니다. 회사는 공식 조회처가 제공·공개한 정보를 정리·전달하는 정보제공자의 지위에 있습니다.</p>
+
+<h3 id="a24"><span class="anum">제24조</span>(인기 환급·랭킹의 성격)</h3>
+<p>"지금 인기 TOP" 등 랭킹은 앱 내 조회·관심 데이터 등을 기준으로 한 통계적 표시이며, 특정 환급 항목의 본인 해당 여부·조회 용이성·이용자 적합성을 보장하거나 광고·추천을 의미하지 않습니다.</p>
+
+<h2 class="chapter">제4장 광고</h2>
+<h3 id="a25"><span class="anum">제25조</span>(광고의 게재)</h3>
+<p>회사는 무료 서비스 운영을 위해 서비스 화면 내에 광고를 게재할 수 있습니다. 이용자는 서비스 이용 시 노출되는 광고 게재에 대해 동의하는 것으로 봅니다.</p>
+
+<h3 id="a26"><span class="anum">제26조</span>(인라인·전면·보상형 광고)</h3>
+<ul>
+  <li>회사는 배너(인라인), 전면(인터스티셜), 보상형(리워드) 등 다양한 형태의 광고를 제공할 수 있습니다.</li>
+  <li>미니게임의 일부 보상(환급 포인트 RP 등)은 보상형 광고 시청을 조건으로 제공될 수 있습니다.</li>
+  <li>광고의 형태·노출 빈도·위치는 운영 정책에 따라 변경될 수 있습니다.</li>
+</ul>
+
+<h3 id="a27"><span class="anum">제27조</span>(광고 사업자 고지)</h3>
+<p>회사는 Google AdMob 등 제3자 광고 네트워크를 통해 광고를 제공할 수 있으며, 광고 네트워크는 광고 식별자 및 기기·이용 환경 정보를 수집·이용하여 맞춤형 광고를 제공할 수 있습니다. 자세한 사항은 제2부 개인정보처리방침을 따릅니다.</p>
+
+<h3 id="a28"><span class="anum">제28조</span>(하우스 광고 및 자사 앱 홍보)</h3>
+<p>회사는 자사 또는 관계사의 다른 앱·서비스를 홍보하는 하우스 광고를 게재할 수 있습니다. 이는 정보 제공 및 홍보 목적이며 이용자의 설치·이용을 강제하지 않습니다.</p>
+
+<h2 class="chapter">제5장 미니게임 서비스</h2>
+<h3 id="a29"><span class="anum">제29조</span>(미니게임 서비스의 성격)</h3>
+<div class="box">"환급 요정 키우기"는 화면 탭으로 환급 포인트(RP)를 모아 레벨·등급을 올리고 출석·랭킹에 참여하는 <b>오락·습관화 목적의 부가 기능</b>입니다. 미니게임의 RP·레벨·등급·순위는 게임 내 수치일 뿐, <b>현금·환급금·환금성 자산이 아니며, 실제 환급금과 무관</b>합니다. 미니게임 이용은 본 서비스의 환급금 정보 이용과 독립적이며, 미니게임을 이용하지 않아도 환급금 정보는 동일하게 이용할 수 있습니다.</div>
+
+<h3 id="a30"><span class="anum">제30조</span>(포인트(RP)·레벨·등급)</h3>
+<ul>
+  <li>이용자는 화면 탭, 출석, 보상형 광고 시청 등을 통해 환급 포인트(RP)를 적립하고 레벨(최대 99) 및 등급(10단계)을 올릴 수 있습니다.</li>
+  <li>RP·레벨·등급은 현금으로 교환·환급·양도되지 않으며, 어떠한 경제적 가치도 보장하지 않습니다.</li>
+  <li>RP·레벨·등급 등 게임 데이터는 원칙적으로 이용자의 단말기에 저장되며, 랭킹 참여 시 일부 정보가 회사 서버(Firebase)에 저장될 수 있습니다(제31조).</li>
+  <li>회사는 운영상·기술상 필요에 따라 게임 규칙(보상량·레벨 곡선·광고 쿨타임 등)을 변경할 수 있으며, 부정 적립이 확인된 데이터는 조정·초기화할 수 있습니다.</li>
+</ul>
+
+<h3 id="a31"><span class="anum">제31조</span>(닉네임 및 전국 랭킹)</h3>
+<ul>
+  <li>이용자가 전국 랭킹 참여를 원하는 경우, 5자 이상 12자 이하의 닉네임을 직접 설정할 수 있으며, 중복되지 않는 닉네임만 사용할 수 있습니다.</li>
+  <li>닉네임은 이용자가 임의로 정하는 표시명으로, 실명·연락처 등 개인 식별정보 입력을 요구하지 않습니다. 이용자는 타인을 사칭하거나 개인정보·비속어·권리침해 소지가 있는 닉네임을 사용하여서는 안 됩니다.</li>
+  <li>랭킹 표시를 위해 닉네임, 익명 식별자(UUID), 레벨·누적 RP 등 게임 수치가 회사 서버에 저장·표시될 수 있으며, 이는 다른 이용자에게 공개됩니다.</li>
+  <li>회사는 부적절한 닉네임 또는 부정 적립이 확인된 기록을 사전 통지 없이 수정·삭제·랭킹 제외할 수 있습니다.</li>
+</ul>
+
+<h3 id="a32"><span class="anum">제32조</span>(출석·보상형 광고 보상)</h3>
+<ul>
+  <li>회사는 10일 단위 출석 보상, 보상형 광고 시청 보상 등 RP 보상을 제공할 수 있습니다.</li>
+  <li>보상형 광고는 일정 쿨타임(예: 3분)을 두고 제공될 수 있으며, 광고 노출·가용 여부는 광고 네트워크의 사정에 따릅니다.</li>
+  <li>보상의 종류·수량·조건은 운영 정책에 따라 변경될 수 있으며, 보상은 RP 등 게임 수치에 한합니다.</li>
+</ul>
+
+<h2 class="chapter">제6장 부가 기능 및 이용자 데이터</h2>
+<h3 id="a33"><span class="anum">제33조</span>(찜(좋아요) 기능)</h3>
+<p>이용자는 관심 있는 환급 항목을 찜(좋아요)하여 단말기에 저장하고 다시 조회할 수 있습니다. 찜 목록은 회사 서버가 아닌 이용자의 단말기에 저장됩니다.</p>
+
+<h3 id="a34"><span class="anum">제34조</span>(마감·소멸 임박 알림)</h3>
+<ul>
+  <li>이용자가 알림 수신에 동의한 경우, 회사는 소멸시효·신청기간 임박 등에 관한 푸시 알림을 제공할 수 있습니다.</li>
+  <li>알림은 정리된 정보를 기준으로 한 안내이며, 소멸 시점·조회 가능 여부에 대한 책임은 공식 조회처에 있습니다.</li>
+  <li>이용자는 단말기 또는 앱 설정을 통해 알림 수신을 언제든지 해제할 수 있습니다.</li>
+</ul>
+
+<h3 id="a35"><span class="anum">제35조</span>(관심 분류 설정)</h3>
+<p>이용자는 관심 분류(세금·보험·카드·통신·금융 등)를 설정하여 노출되는 환급 항목의 우선순위를 조정할 수 있습니다. 해당 설정은 원칙적으로 단말기에 저장됩니다.</p>
+
+<h3 id="a36"><span class="anum">제36조</span>(추천 카드의 성격)</h3>
+<p>추천·정렬되는 카드는 이용자의 탐색 패턴 및 통계를 기반으로 한 참고용 제안이며, 특정 환급 항목의 본인 해당 가능성이나 적합성을 보장하지 않습니다.</p>
+
+<h3 id="a37"><span class="anum">제37조</span>(로컬 저장 데이터의 관리)</h3>
+<p>찜 목록, 관심 설정, 선호 학습, 본 환급 항목 이력, 미니게임 진행 데이터(RP·레벨·출석 등), 캐시 등은 이용자의 단말기 로컬 저장소에 저장됩니다. 이용자는 앱 설정 또는 단말기의 앱 데이터 삭제를 통해 이를 언제든지 삭제할 수 있습니다. 다만 랭킹 참여를 위해 서버에 저장된 닉네임·게임 수치는 제15조(제2부) 및 제19조(제2부)의 절차에 따라 처리됩니다.</p>
+
+<h2 class="chapter">제7장 이용자의 의무 및 금지행위</h2>
+<h3 id="a38"><span class="anum">제38조</span>(이용자의 일반 의무)</h3>
+<p>이용자는 관련 법령, 본 약관, 서비스 이용안내 및 회사가 공지하는 사항을 준수하여야 하며, 회사의 업무를 방해하는 행위를 하여서는 안 됩니다.</p>
+
+<h3 id="a39"><span class="anum">제39조</span>(금지행위)</h3>
+<p>이용자는 다음 각 호의 행위를 하여서는 안 됩니다.</p>
+<ul>
+  <li>서비스의 정상적 운영을 방해하는 행위</li>
+  <li>허위 정보의 유포 또는 타인의 권리 침해</li>
+  <li>관련 법령을 위반하거나 공서양속에 반하는 행위</li>
+  <li>회사 또는 제3자의 지식재산권을 침해하는 행위</li>
+  <li>환급금 정보를 악용하여 부정 수령 등 불법 행위를 시도하는 행위</li>
+  <li>미니게임의 포인트·레벨·랭킹을 부정한 방법으로 적립·조작하는 행위</li>
+  <li>타인 사칭·권리침해·비속어 등 부적절한 닉네임을 사용하는 행위</li>
+</ul>
+
+<h3 id="a40"><span class="anum">제40조</span>(데이터 수집·크롤링 금지)</h3>
+<p>이용자는 회사의 사전 서면 동의 없이 크롤링·스크래핑·자동 수집 등 어떠한 방법으로도 서비스 내 환급금 정보 및 데이터를 대량으로 수집·복제·저장·전송하여서는 안 됩니다.</p>
+
+<h3 id="a41"><span class="anum">제41조</span>(자동화·역설계 금지)</h3>
+<p>이용자는 봇·매크로·자동화 스크립트의 사용(미니게임 자동 탭·자동 광고 시청 포함), 서비스의 역설계(리버스 엔지니어링)·디컴파일·소스 추출 등의 행위를 하여서는 안 됩니다.</p>
+
+<h3 id="a42"><span class="anum">제42조</span>(데이터의 상업적 이용 제한)</h3>
+<p>이용자는 회사가 제공하는 환급금 정보 및 가공 데이터를 회사의 동의 없이 영리 목적으로 재판매·재배포·2차 가공·서비스화하여서는 안 됩니다. 다만 공공데이터·공공저작물 원자료에 대한 권리·이용조건은 각 공공기관 및 공공데이터 이용약관에 따릅니다.</p>
+
+<h2 class="chapter">제8장 지식재산권</h2>
+<h3 id="a43"><span class="anum">제43조</span>(지식재산권)</h3>
+<p>서비스의 디자인, UI, 캐릭터(환급 요정 등), 가공·편집된 콘텐츠, 데이터베이스, 소프트웨어 등에 대한 지식재산권은 회사에 귀속됩니다. 다만 환급금 정보의 원자료에 관한 권리는 각 공식 조회처 및 공공데이터 제공자에게 있습니다.</p>
+
+<h3 id="a44"><span class="anum">제44조</span>(공공저작물·출처 표시)</h3>
+<p>본 서비스가 활용하는 공공데이터·공공저작물은 「공공데이터의 제공 및 이용 활성화에 관한 법률」 및 각 기관이 정한 이용조건(출처 표시 등)에 따라 이용되며, 그 저작권 등 권리는 해당 공공기관에 귀속됩니다.</p>
+
+<h3 id="a45"><span class="anum">제45조</span>(이용자 입력 정보)</h3>
+<p>이용자가 설정한 관심 분류·찜·닉네임 등의 정보는 서비스 제공 목적 범위 내에서 이용되며, 닉네임 등 랭킹 관련 정보를 제외하고는 원칙적으로 단말기에 저장됩니다.</p>
+
+<h2 class="chapter">제9장 면책 및 책임의 제한</h2>
+<h3 id="a46"><span class="anum">제46조</span>(환급금 정보 면책)</h3>
+<div class="warn">회사가 제공하는 환급 항목 명칭·대표 금액·대상·소멸시효 등 정보는 외부 공개 정보를 기반으로 한 참고 정보이며, 회사는 그 정확성·최신성·완전성을 보증하지 않습니다. 최종 확인은 반드시 공식 조회처에서 본인 인증 후 이루어져야 합니다.</div>
+
+<h3 id="a47"><span class="anum">제47조</span>(자격·환급 결과 면책)</h3>
+<p>회사는 이용자의 실제 환급 가능 여부, 조회 결과, 지급 금액·시기 등에 대해 어떠한 책임도 부담하지 않습니다. 이는 전적으로 공식 조회처의 조회·심사·결정에 따릅니다.</p>
+
+<h3 id="a48"><span class="anum">제48조</span>(외부 조회·신청 면책)</h3>
+<p>회사는 이용자가 연결된 외부 공식 조회처에서 수행하는 조회·인증·신청·제출 및 그 결과에 관여하지 않으며, 외부 사이트의 내용·운영·보안에 대해 책임지지 않습니다.</p>
+
+<h3 id="a49"><span class="anum">제49조</span>(서비스 장애 면책)</h3>
+<p>회사는 천재지변, 통신 장애, 외부 플랫폼·광고 네트워크의 사정, 점검 등 회사의 합리적 통제를 벗어난 사유로 인한 서비스 중단·지연에 대해 책임을 부담하지 않습니다.</p>
+
+<h3 id="a50"><span class="anum">제50조</span>(불가항력)</h3>
+<p>회사는 전쟁, 천재지변, 국가 정책·법령의 변경, 외부 데이터 제공 중단 등 불가항력으로 인하여 서비스를 제공할 수 없는 경우 그에 대한 책임이 면제됩니다.</p>
+
+<h3 id="a51"><span class="anum">제51조</span>(손해배상 및 책임의 제한)</h3>
+<p>본 서비스는 무료로 제공되는 정보제공 서비스로서, 회사는 관련 법령이 허용하는 최대 범위에서 책임을 제한합니다. 회사의 고의 또는 중대한 과실이 없는 한, 정보의 이용 또는 이용 불가, 미니게임 데이터의 손실 등으로 인하여 발생한 손해에 대해 책임을 부담하지 않습니다.</p>
+
+<h2 class="chapter">제10장 기타</h2>
+<h3 id="a52"><span class="anum">제52조</span>(미성년자 이용)</h3>
+<p>본 서비스는 회원가입 없이 이용 가능한 정보 서비스이나, 미성년자가 이용하는 경우 법정대리인의 지도·감독이 필요합니다. 미니게임 내 보상형 광고 시청 등도 동일합니다.</p>
+
+<h3 id="a53"><span class="anum">제53조</span>(통지 및 공지 방법)</h3>
+<p>회사가 이용자에게 통지할 사항이 있는 경우, 서비스 내 공지 또는 본 페이지 게시로 갈음할 수 있습니다.</p>
+
+<h3 id="a54"><span class="anum">제54조</span>(분쟁 해결 및 준거법)</h3>
+<ul>
+  <li>회사와 이용자는 분쟁 발생 시 상호 신의에 따라 원만히 해결하도록 노력합니다.</li>
+  <li>본 약관은 대한민국 법률에 따라 해석되며, 분쟁에 관한 소송은 민사소송법상의 관할법원에 제기합니다.</li>
+</ul>
+<a class="totop" href="#terms">↑ 제1부 처음으로</a>
+</article>
+
+<article class="terms">
+<div class="part" id="privacy"><span class="num">PART 2</span><h2>제2부 · 개인정보처리방침</h2></div>
+
+<div class="box">Joyce Studios(이하 "회사")는 「개인정보 보호법」 등 관련 법령을 준수하며, "숨은 환급금 찾기" 서비스 이용자의 개인정보를 보호하기 위해 본 개인정보처리방침을 수립·공개합니다. 본 서비스는 회원가입·로그인이 없는 비식별 기반 서비스로, 이름·연락처·주민등록번호·계좌·소득·자산 등 직접적인 개인 식별정보나 자격 조회용 정보를 수집하지 않습니다.</div>
+
+<h3 id="p1"><span class="anum">제1조</span>(총칙 및 기본 방침)</h3>
+<p>회사는 서비스 제공에 필요한 최소한의 정보만을 처리하며, 수집한 정보를 본 방침에 명시된 목적 외로 이용하지 않습니다. 본 서비스는 별도의 회원 식별정보 없이 익명·비식별 통계 중심으로 운영되며, 미니게임 랭킹 참여 시에 한하여 이용자가 직접 설정한 닉네임이 처리됩니다.</p>
+
+<h3 id="p2"><span class="anum">제2조</span>(수집하는 개인정보 항목)</h3>
+<p>회사는 이름, 주민등록번호, 전화번호, 이메일 주소, 계좌번호, 소득·자산 정보 등 이용자를 직접 식별하거나 환급 자격을 조회할 수 있는 개인정보를 수집하지 않습니다. 다만 서비스 운영·통계 및 미니게임 랭킹을 위해 다음과 같은 비식별·간접 정보가 처리될 수 있습니다.</p>
+<div class="tbl-scroll"><table class="tbl">
+  <tr><th>구분</th><th>항목</th><th>비고</th></tr>
+  <tr><td>앱 식별값</td><td>앱이 무작위로 생성한 익명 식별자(UUID)</td><td>특정 개인을 식별하지 않음, 단말 로컬 생성</td></tr>
+  <tr><td>이용 정보</td><td>환급 항목 조회, 넘기기(스와이프), 찜, 조회처 이동 클릭 이벤트</td><td>통계·전환 측정 목적</td></tr>
+  <tr><td>기기/환경</td><td>플랫폼 구분, 앱 버전</td><td>통계(DAU·설치·업데이트) 목적</td></tr>
+  <tr><td>미니게임</td><td>닉네임, 레벨, 누적 RP, 익명 식별자</td><td>전국 랭킹 참여 시에 한해 서버 저장·공개</td></tr>
+  <tr><td>알림</td><td>푸시 토큰(알림 동의 시)</td><td>소멸·마감 임박 등 알림 발송 목적</td></tr>
+  <tr><td>로컬 저장</td><td>찜 목록, 관심 설정, 선호 학습, 본 환급 항목 이력, 미니게임 진행값</td><td>단말기에만 저장(랭킹용 제외 시 서버 미전송)</td></tr>
+</table></div>
+
+<h3 id="p3"><span class="anum">제3조</span>(자동 수집 정보 및 식별자)</h3>
+<ul>
+  <li>회사는 통계 분석을 위해 앱이 단말기에서 무작위로 생성하는 익명 식별자(UUID)를 사용합니다. 이 식별자는 이용자의 이름·연락처 등과 연결되지 않습니다.</li>
+  <li>접속 일자, 앱 버전, 플랫폼 구분, 이벤트(조회·스와이프·찜·조회처 클릭) 등의 정보가 자동으로 수집되어 통계 목적으로 처리될 수 있습니다.</li>
+  <li>이용자가 앱 데이터를 삭제하면 단말기에 저장된 식별자 및 로컬 데이터는 초기화됩니다.</li>
+</ul>
+
+<h3 id="p4"><span class="anum">제4조</span>(개인정보 수집 방법)</h3>
+<p>정보는 이용자가 서비스를 이용하는 과정에서 자동으로 생성·수집되거나, 이용자가 카드 탐색·설정·닉네임 설정 등을 수행하는 과정에서 처리됩니다. 회사는 별도의 가입 양식이나 본인확인·자격조회 절차를 통해 정보를 수집하지 않습니다.</p>
+
+<h3 id="p5"><span class="anum">제5조</span>(개인정보의 이용 목적)</h3>
+<ul>
+  <li>환급 항목 탐색·추천 등 서비스의 제공 및 운영</li>
+  <li>이용 통계 분석(DAU·설치·업데이트·이벤트·전환 측정) 및 서비스 품질 개선</li>
+  <li>선호 학습·추천 알고리즘 등 기능 고도화</li>
+  <li>미니게임 운영 및 전국 랭킹 표시(닉네임·레벨·RP)</li>
+  <li>소멸·마감 임박 등 알림 발송(동의한 경우)</li>
+  <li>광고 노출 및 부정 이용 방지</li>
+  <li>법령상 의무 이행 및 분쟁 대응</li>
+</ul>
+
+<h3 id="p6"><span class="anum">제6조</span>(단말기 로컬 저장 정보)</h3>
+<p>찜 목록, 관심 분류 설정, 선호 학습 데이터, 본 환급 항목 이력, 미니게임 진행값(RP·레벨·출석 등), 방문 기록, 캐시 등은 회사 서버가 아닌 이용자의 단말기 로컬 저장소(localStorage 등)에 저장됩니다. 이용자는 앱 설정 또는 단말기의 앱 데이터 삭제를 통해 이를 언제든지 삭제할 수 있습니다.</p>
+
+<h3 id="p7"><span class="anum">제7조</span>(Firebase 이용 고지)</h3>
+<ul>
+  <li>회사는 통계 분석, 원격 설정 및 미니게임 랭킹 저장을 위해 Google이 제공하는 Firebase(Realtime Database, Cloud Functions, Cloud Messaging 등)를 이용합니다.</li>
+  <li>Firebase에는 익명 식별자(UUID), 접속 일자, 앱 버전, 플랫폼 구분, 이용 이벤트, 랭킹용 닉네임·레벨·RP 등 비식별 정보가 저장될 수 있습니다.</li>
+  <li>Firebase는 Google LLC가 운영하며, 해당 데이터의 처리에는 Google의 개인정보 처리 정책이 함께 적용됩니다.</li>
+  <li>광고 식별자 및 운영 설정은 Firebase를 통해 원격으로 전달·갱신될 수 있습니다.</li>
+</ul>
+
+<h3 id="p8"><span class="anum">제8조</span>(광고 식별자 및 맞춤형 광고)</h3>
+<ul>
+  <li>서비스는 인앱 광고 모듈을 통해 광고를 노출하며, 해당 모듈은 Google AdMob 등 제3자 광고 네트워크를 매개로 동작할 수 있습니다.</li>
+  <li>광고 제공 과정에서 광고 네트워크는 광고 식별자(예: 광고 ID) 및 기기·이용 환경 정보를 수집·이용하여 맞춤형 광고를 제공할 수 있습니다.</li>
+  <li>이용자는 단말기의 설정(광고 ID 재설정·맞춤 광고 제한 등)을 통해 맞춤형 광고 수신을 제어할 수 있습니다.</li>
+  <li>광고 식별자의 수집·이용에 관한 구체적 사항은 해당 광고 네트워크(예: Google)의 정책을 따릅니다.</li>
+</ul>
+
+<h3 id="p9"><span class="anum">제9조</span>(닉네임·랭킹 정보의 처리)</h3>
+<div class="notice">미니게임의 전국 랭킹은 이용자가 직접 설정한 닉네임과 게임 수치만을 사용하며, 실명·연락처 등 개인 식별정보는 포함되지 않습니다.</div>
+<ul>
+  <li>이용자가 전국 랭킹 참여를 위해 닉네임을 설정하면, 닉네임·익명 식별자(UUID)·레벨·누적 RP가 회사 서버(Firebase)에 저장되며 랭킹 화면에서 다른 이용자에게 공개됩니다.</li>
+  <li>닉네임은 이용자가 임의로 정하는 표시명이며, 회사는 닉네임에 실명·연락처 등 개인정보를 입력하지 않도록 권고합니다. 이용자가 닉네임에 개인정보를 포함한 경우의 책임은 이용자에게 있습니다.</li>
+  <li>이용자는 제19조의 연락처를 통해 닉네임·랭킹 기록의 삭제를 요청할 수 있으며, 회사는 부적절하거나 부정 적립된 기록을 사전 통지 없이 삭제·랭킹 제외할 수 있습니다.</li>
+</ul>
+
+<h3 id="p10"><span class="anum">제10조</span>(푸시 알림 처리)</h3>
+<p>이용자가 알림 수신에 동의한 경우, 소멸·마감 임박 등의 알림 발송을 위해 단말기의 푸시 토큰이 처리될 수 있습니다. 푸시 토큰은 알림 발송 목적으로만 이용되며, 이용자는 단말기·앱 설정에서 알림을 해제하여 처리를 중단시킬 수 있습니다.</p>
+
+<h3 id="p11"><span class="anum">제11조</span>(개인정보의 제3자 제공)</h3>
+<p>회사는 이용자의 정보를 제3자에게 제공하지 않습니다. 다만 법령에 특별한 규정이 있거나 수사기관의 적법한 요청이 있는 경우에는 예외로 합니다.</p>
+
+<h3 id="p12"><span class="anum">제12조</span>(개인정보 처리의 위탁)</h3>
+<p>회사는 안정적인 서비스 제공을 위해 다음과 같이 정보 처리 업무를 위탁(또는 외부 서비스 이용)할 수 있습니다.</p>
+<div class="tbl-scroll"><table class="tbl">
+  <tr><th>수탁자 / 서비스</th><th>위탁 업무 내용</th></tr>
+  <tr><td>Google (Firebase)</td><td>통계 분석, 데이터 저장, 클라우드 함수 실행, 원격 설정, 푸시 알림, 미니게임 랭킹 저장</td></tr>
+  <tr><td>Google (AdMob) / 광고 네트워크</td><td>광고 노출 및 광고 성과 측정</td></tr>
+</table></div>
+
+<h3 id="p13"><span class="anum">제13조</span>(개인정보의 국외 이전)</h3>
+<p>Firebase·AdMob 등 일부 외부 서비스는 국외에 소재한 서버를 이용할 수 있으며, 이로 인해 통계·광고·랭킹 관련 비식별 정보가 국외로 이전·처리될 수 있습니다. 해당 정보의 처리는 각 사업자의 정책 및 관련 법령에 따릅니다.</p>
+
+<h3 id="p14"><span class="anum">제14조</span>(개인정보의 보유 및 파기)</h3>
+<ul>
+  <li>단말기에 저장된 로컬 데이터(찜·설정·이력·미니게임 진행값 등)는 이용자가 삭제하거나 앱 데이터를 초기화할 때까지 보관되며, 랭킹용을 제외하고는 회사 서버로 전송되지 않습니다.</li>
+  <li>랭킹용 닉네임·게임 수치는 이용자의 삭제 요청 시 또는 보관 목적 달성 시까지 보관 후 파기합니다.</li>
+  <li>통계 목적의 비식별 정보는 수집 목적 달성에 필요한 기간 동안 보관 후 파기하거나, 통계 형태로 비식별 처리하여 보관할 수 있습니다.</li>
+  <li>관련 법령에 보존 의무가 있는 경우 해당 기간 동안 보관합니다.</li>
+</ul>
+
+<h3 id="p15"><span class="anum">제15조</span>(이용자 및 법정대리인의 권리)</h3>
+<p>이용자는 자신의 정보에 대한 열람·정정·삭제·처리정지를 요구할 수 있습니다. 본 서비스는 비로그인 구조로 서버 측에 개인 식별정보를 저장하지 않으므로, 이용자는 단말기의 앱 데이터 삭제를 통해 로컬 정보를 직접 삭제할 수 있으며, 랭킹용 닉네임·기록의 삭제 등 그 밖의 요청은 제19조의 연락처로 할 수 있습니다.</p>
+
+<h3 id="p16"><span class="anum">제16조</span>(만 14세 미만 아동의 개인정보)</h3>
+<p>회사는 만 14세 미만 아동을 주된 대상으로 하지 않으며, 회원가입 없이 운영되므로 별도로 아동의 식별정보를 수집하지 않습니다. 만 14세 미만 아동이 서비스를 이용하는 경우 법정대리인의 지도·감독이 필요합니다.</p>
+
+<h3 id="p17"><span class="anum">제17조</span>(개인정보의 안전성 확보 조치)</h3>
+<ul>
+  <li>외부 연동 시 인증키를 클라이언트에 노출하지 않고 서버(Cloud Functions)에서 처리하여 보안을 강화합니다.</li>
+  <li>전송 구간 암호화(HTTPS) 및 접근 제한·최소 수집 원칙을 적용합니다.</li>
+  <li>비식별·익명화 처리를 통해 이용자 식별 위험을 최소화하며, 랭킹 정보는 닉네임·게임 수치로 한정합니다.</li>
+</ul>
+
+<h3 id="p18"><span class="anum">제18조</span>(쿠키 및 유사 기술)</h3>
+<p>본 서비스는 단말기 로컬 저장소(localStorage 등) 및 유사 기술을 이용하여 이용자 설정·이력·캐시·미니게임 진행값을 저장합니다. 이용자는 단말기 설정 또는 앱 데이터 삭제를 통해 이를 제어·삭제할 수 있습니다.</p>
+
+<h3 id="p19"><span class="anum">제19조</span>(개인정보 보호책임자 및 문의처)</h3>
+<div class="contact">
+  <b>운영사</b> · Joyce Studios<br>
+  <b>개인정보 보호책임자</b> · Joyce Studios 운영팀<br>
+  <b>이메일</b> · ibillkim@gmail.com<br>
+  <b>문의 응답</b> · 영업일 기준 7일 이내
+</div>
+
+<h3 id="p20"><span class="anum">제20조</span>(방침의 변경 및 고지 의무)</h3>
+<p>본 개인정보처리방침은 법령·정책 또는 서비스 변경에 따라 개정될 수 있으며, 개정 시 시행일 및 변경 내용을 서비스 내 또는 본 페이지에 공지합니다. 중요한 변경의 경우 시행일 7일 전부터 고지합니다.</p>
+
+<a class="totop" href="#privacy">↑ 제2부 처음으로</a>
+</article>
+
+<footer class="doc">
+  <p>본 문서는 「숨은 환급금 찾기」 서비스의 이용약관 및 개인정보처리방침입니다.<br>
+  운영사 : Joyce Studios · 문의 : ibillkim@gmail.com<br>
+  최종 개정일 : 2026년 5월 28일 · 시행일 : 2026년 5월 28일</p>
+  <p style="margin-top:10px;">※ 본 문서에 언급된 정부·지방자치단체·공공기관·협회·금융기관, Google, Firebase, AdMob 등은 각 기관·사의 명칭 또는 서비스명이며, 식별 목적으로만 사용되었습니다. 본 서비스는 위 각 기관·사와의 공식 제휴·보증·후원 관계를 표방하지 않으며, 환급금을 직접 조회·지급하거나 신청을 대행하지 않는 정보제공 서비스입니다. 미니게임의 포인트(RP)·레벨·등급·순위는 게임 내 수치이며 현금·환급금·환금성이 없습니다.</p>
+</footer>
+
+</div>
+</body>
+</html>
