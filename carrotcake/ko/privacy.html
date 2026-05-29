@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1B130C">
+<title>당근 케이크 만들기 · 이용약관 및 개인정보처리방침</title>
+<style>
+  :root{
+    --carrot:#FF7E2E; --carrot-2:#FF9D4D;
+    --carrot-soft:rgba(255,126,46,0.13); --carrot-line:rgba(255,126,46,0.30);
+    --gold:#FFC24B; --gold-soft:rgba(255,194,75,0.12); --gold-line:rgba(255,194,75,0.34);
+    --leaf:#5BBE7E; --leaf-soft:rgba(91,190,126,0.13); --leaf-line:rgba(91,190,126,0.32);
+    --bg:#1B130C; --bg-soft:#251A11; --bg-soft2:#2F2116; --line:#3A2A1B;
+    --ink:#ffffff; --ink-soft:#EBDDCB; --ink-faint:#B49C84;
+    --radius:16px; --maxw:880px;
+    --font:'Pretendard',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI","Noto Sans KR",Roboto,sans-serif;
+  }
+  @font-face{font-family:'Pretendard';font-weight:800;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-ExtraBold.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Medium.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--bg);}
+  body{font-family:var(--font);color:var(--ink-soft);background:var(--bg);line-height:1.78;margin:0;font-size:16px;font-weight:400;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 28px) 20px 80px;}
+  header.doc{padding:8px 0 24px;border-bottom:3px solid var(--carrot);margin-bottom:8px;}
+  .brand{display:inline-flex;align-items:center;gap:11px;margin-bottom:18px;}
+  .brand .mk{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--carrot-2),var(--carrot));display:grid;place-items:center;box-shadow:0 8px 20px rgba(255,126,46,0.42);}
+  .brand .nm{font-size:18px;font-weight:800;color:#fff;letter-spacing:-.5px;}
+  .brand .nm b{color:var(--carrot);}
+  header.doc .kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--carrot);background:var(--carrot-soft);border:1px solid var(--carrot-line);padding:5px 12px;border-radius:999px;margin-bottom:14px;}
+  header.doc h1{font-size:27px;line-height:1.35;margin:0 0 14px;letter-spacing:-.02em;color:#fff;font-weight:800;}
+  .meta{color:var(--ink-faint);font-size:13.5px;line-height:1.95;margin:0;}
+  .meta b{color:var(--ink-soft);}
+  .box{background:var(--bg-soft);border:1px solid var(--line);border-left:4px solid var(--carrot);padding:16px 18px;border-radius:var(--radius);margin:20px 0;font-size:14.5px;color:var(--ink-soft);}
+  .box b{color:#fff;}
+  .notice{background:var(--carrot-soft);border:1px solid var(--carrot-line);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#FFC39A;}
+  .warn{background:var(--gold-soft);border:1px solid var(--gold-line);border-left:4px solid var(--gold);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#FFD98A;}
+  .contact{background:var(--leaf-soft);border:1px solid var(--leaf-line);border-left:4px solid var(--leaf);padding:16px 18px;border-radius:var(--radius);font-size:14.5px;line-height:1.95;color:var(--ink-soft);}
+  .contact b{color:#fff;}
+  nav.toc{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin:26px 0 10px;}
+  nav.toc h2{font-size:16px;margin:0 0 14px;color:#fff;border:0;padding:0;font-weight:800;}
+  nav.toc .toc-part{font-size:13px;font-weight:700;color:var(--carrot);margin:16px 0 8px;letter-spacing:.02em;}
+  nav.toc .toc-part:first-of-type{margin-top:0;}
+  nav.toc ol{list-style:none;margin:0;padding:0;columns:2;column-gap:26px;}
+  nav.toc ol li{margin:0 0 6px;font-size:13.5px;break-inside:avoid;padding-left:0;}
+  nav.toc ol li::before{display:none;}
+  nav.toc a{color:var(--ink-faint);text-decoration:none;transition:color .15s;}
+  nav.toc a:hover{color:var(--carrot);text-decoration:underline;}
+  .part{margin:54px 0 8px;padding:20px 22px;background:linear-gradient(135deg,var(--carrot-2) 0%,var(--carrot) 100%);color:#fff;border-radius:var(--radius);box-shadow:0 12px 30px rgba(255,126,46,0.30);}
+  .part .num{font-size:12px;font-weight:700;opacity:.9;letter-spacing:.1em;}
+  .part h2{color:#fff;border:0;margin:4px 0 0;padding:0;font-size:21px;font-weight:800;}
+  h2.chapter{font-size:18px;color:#fff;margin:40px 0 6px;padding-bottom:9px;border-bottom:1px solid var(--line);font-weight:800;letter-spacing:-.3px;}
+  h3{font-size:16px;color:#fff;margin:26px 0 6px;scroll-margin-top:16px;font-weight:700;letter-spacing:-.2px;}
+  h3 .anum{color:var(--carrot);font-weight:800;margin-right:5px;}
+  p{margin:8px 0;color:var(--ink-soft);font-size:15px;}
+  article.terms p,article.terms li{font-size:14.5px;}
+  ul{margin:8px 0 12px;padding-left:4px;list-style:none;}
+  li{position:relative;padding-left:18px;margin-bottom:7px;color:var(--ink-soft);font-size:14.5px;}
+  li::before{content:'';position:absolute;left:3px;top:11px;width:5px;height:5px;border-radius:50%;background:var(--carrot);opacity:.9;}
+  b,strong{color:#fff;font-weight:700;}
+  table.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;}
+  table.tbl th,table.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;}
+  table.tbl th{background:var(--bg-soft2);color:#fff;font-weight:700;white-space:nowrap;}
+  table.tbl td{color:var(--ink-soft);}
+  table.tbl tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .totop{display:inline-block;font-size:12.5px;color:var(--carrot);text-decoration:none;margin-top:10px;}
+  footer.doc{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-faint);line-height:1.9;}
+  footer.doc b{color:var(--ink-soft);}
+  footer.doc p{color:var(--ink-faint);}
+  @media (max-width:640px){body{font-size:15.5px;}.wrap{padding:calc(env(safe-area-inset-top,0px) + 20px) 16px 64px;}header.doc h1{font-size:22px;}nav.toc ol{columns:1;}.part h2{font-size:18px;}h2.chapter{font-size:16.5px;}h3{font-size:15px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="doc">
+  <div class="brand">
+    <span class="mk">
+      <svg width="23" height="23" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M60 40 L62 16" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+        <path d="M60 40 L46 22" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+        <path d="M60 40 L76 22" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+        <path d="M44 44 Q60 38 76 44 L62 104 Q60 108 58 104 Z" fill="#fff"/>
+        <circle cx="56" cy="58" r="2.6" fill="#FF7E2E"/>
+        <circle cx="66" cy="64" r="2.6" fill="#FF7E2E"/>
+        <circle cx="59" cy="74" r="2.6" fill="#FF7E2E"/>
+      </svg>
+    </span>
+    <span class="nm">당근 <b>케이크</b> 만들기</span>
+  </div>
+  <span class="kicker">LEGAL · 약관 및 개인정보처리방침</span>
+  <h1>당근 케이크 만들기<br>이용약관 및 개인정보처리방침</h1>
+  <p class="meta">
+    <b>운영사</b> · Joyce Studios (이하 "회사")<br>
+    <b>최종 개정일</b> · 2026년 5월 29일<br>
+    <b>시행일</b> · 2026년 5월 29일
+  </p>
+</header>
+
+<div class="box">
+  본 문서는 Joyce Studios가 앱인토스(Apps in Toss) 플랫폼을 통해 제공하는 방치형 키우기 게임 "당근 케이크 만들기" 서비스의 이용 조건을 규정하는 <b>제1부 서비스 이용약관</b>과, 이용자의 정보 처리에 관한 <b>제2부 개인정보처리방침</b>으로 구성됩니다. 본 게임은 <b>토스 로그인</b> 또는 <b>게스트(비로그인) 이용</b> 중 하나를 선택하여 플레이할 수 있으며, 본 서비스를 이용하시는 경우 본 문서의 내용에 동의한 것으로 봅니다.
+</div>
+
+<nav class="toc">
+  <h2>📑 목차</h2>
+  <div class="toc-part">제1부 · 서비스 이용약관</div>
+  <ol>
+    <li><a href="#a1">제1조 목적</a></li>
+    <li><a href="#a2">제2조 용어의 정의</a></li>
+    <li><a href="#a3">제3조 약관의 효력 및 변경</a></li>
+    <li><a href="#a4">제4조 약관 외 준칙</a></li>
+    <li><a href="#a5">제5조 플랫폼 및 운영 주체</a></li>
+    <li><a href="#a6">제6조 서비스의 성격</a></li>
+    <li><a href="#a7">제7조 서비스 제공 내용</a></li>
+    <li><a href="#a8">제8조 서비스 제공 시간</a></li>
+    <li><a href="#a9">제9조 서비스의 변경·중단</a></li>
+    <li><a href="#a10">제10조 이용계약의 성립</a></li>
+    <li><a href="#a11">제11조 토스 로그인</a></li>
+    <li><a href="#a12">제12조 게스트(비로그인) 이용</a></li>
+    <li><a href="#a13">제13조 계정 연동 및 데이터 이전</a></li>
+    <li><a href="#a14">제14조 닉네임</a></li>
+    <li><a href="#a15">제15조 이용 제한 및 차단</a></li>
+    <li><a href="#a16">제16조 게임의 진행(심기·키우기·수확·굽기)</a></li>
+    <li><a href="#a17">제17조 방치형(오프라인) 보상</a></li>
+    <li><a href="#a18">제18조 레벨 및 등급</a></li>
+    <li><a href="#a19">제19조 스킬(액티브·패시브)</a></li>
+    <li><a href="#a20">제20조 아이템 수집</a></li>
+    <li><a href="#a21">제21조 게임 내 재화(코인·마나·LP)</a></li>
+    <li><a href="#a22">제22조 게임 재화의 성격(비환금성)</a></li>
+    <li><a href="#a23">제23조 게임 데이터의 저장 및 동기화</a></li>
+    <li><a href="#a24">제24조 게임 밸런스 및 수치 변경</a></li>
+    <li><a href="#a25">제25조 주간 랭킹</a></li>
+    <li><a href="#a26">제26조 랭킹 산정 및 정산</a></li>
+    <li><a href="#a27">제27조 랭킹 보상</a></li>
+    <li><a href="#a28">제28조 부정행위 및 랭킹 제재</a></li>
+    <li><a href="#a29">제29조 광고의 게재</a></li>
+    <li><a href="#a30">제30조 보상형·전면·배너 광고</a></li>
+    <li><a href="#a31">제31조 광고 사업자 고지</a></li>
+    <li><a href="#a32">제32조 하우스 광고 및 자사 앱 홍보</a></li>
+    <li><a href="#a33">제33조 이용자의 일반 의무</a></li>
+    <li><a href="#a34">제34조 금지행위</a></li>
+    <li><a href="#a35">제35조 자동화·매크로·역설계 금지</a></li>
+    <li><a href="#a36">제36조 유료 결제 및 환불</a></li>
+    <li><a href="#a37">제37조 지식재산권</a></li>
+    <li><a href="#a38">제38조 이용자 콘텐츠(닉네임 등)</a></li>
+    <li><a href="#a39">제39조 게임 데이터 면책</a></li>
+    <li><a href="#a40">제40조 방치형 보상·수치 면책</a></li>
+    <li><a href="#a41">제41조 서비스 장애 면책</a></li>
+    <li><a href="#a42">제42조 불가항력</a></li>
+    <li><a href="#a43">제43조 손해배상 및 책임의 제한</a></li>
+    <li><a href="#a44">제44조 미성년자 이용</a></li>
+    <li><a href="#a45">제45조 통지 및 공지 방법</a></li>
+    <li><a href="#a46">제46조 분쟁 해결 및 준거법</a></li>
+  </ol>
+  <div class="toc-part">제2부 · 개인정보처리방침</div>
+  <ol>
+    <li><a href="#p1">제1조 총칙 및 기본 방침</a></li>
+    <li><a href="#p2">제2조 수집하는 개인정보 항목</a></li>
+    <li><a href="#p3">제3조 개인정보 수집 방법</a></li>
+    <li><a href="#p4">제4조 자동 수집 정보 및 식별자</a></li>
+    <li><a href="#p5">제5조 토스 로그인 연동 처리</a></li>
+    <li><a href="#p6">제6조 게스트 이용 시 정보 처리</a></li>
+    <li><a href="#p7">제7조 개인정보의 이용 목적</a></li>
+    <li><a href="#p8">제8조 게임 데이터·랭킹 정보의 처리</a></li>
+    <li><a href="#p9">제9조 단말기 로컬 저장 정보</a></li>
+    <li><a href="#p10">제10조 Firebase 이용 고지</a></li>
+    <li><a href="#p11">제11조 광고 식별자 및 맞춤형 광고</a></li>
+    <li><a href="#p12">제12조 앱인토스 플랫폼 연동</a></li>
+    <li><a href="#p13">제13조 개인정보의 제3자 제공</a></li>
+    <li><a href="#p14">제14조 개인정보 처리의 위탁</a></li>
+    <li><a href="#p15">제15조 개인정보의 국외 이전</a></li>
+    <li><a href="#p16">제16조 개인정보의 보유 및 파기</a></li>
+    <li><a href="#p17">제17조 이용자 및 법정대리인의 권리</a></li>
+    <li><a href="#p18">제18조 만 14세 미만 아동의 개인정보</a></li>
+    <li><a href="#p19">제19조 개인정보의 안전성 확보 조치</a></li>
+    <li><a href="#p20">제20조 쿠키 및 유사 기술</a></li>
+    <li><a href="#p21">제21조 개인정보 보호책임자 및 문의처</a></li>
+    <li><a href="#p22">제22조 방침의 변경 및 고지 의무</a></li>
+  </ol>
+</nav>
+
+<article class="terms">
+<div class="part" id="terms"><span class="num">PART 1</span><h2>제1부 · 서비스 이용약관</h2></div>
+
+<h2 class="chapter">제1장 총칙</h2>
+<h3 id="a1"><span class="anum">제1조</span>(목적)</h3>
+<p>본 약관은 Joyce Studios(이하 "회사")가 앱인토스 플랫폼을 통해 제공하는 방치형 키우기 게임 "당근 케이크 만들기"(이하 "서비스" 또는 "게임")의 이용과 관련하여, 회사와 이용자 간의 권리·의무 및 책임사항, 서비스 이용 조건과 절차 등 기본적인 사항을 규정함을 목적으로 합니다. 본 서비스는 당근을 심고 키우고 수확하여 케이크를 굽는 과정을 반복하며 레벨과 등급을 성장시키는 캐주얼 방치형 게임 콘텐츠를 제공합니다.</p>
+
+<h3 id="a2"><span class="anum">제2조</span>(용어의 정의)</h3>
+<p>본 약관에서 사용하는 용어의 정의는 다음과 같습니다.</p>
+<ul>
+  <li><b>"서비스"</b>란 회사가 제공하는 방치형 키우기 게임 "당근 케이크 만들기" 및 이에 부수하는 일체의 게임 콘텐츠·기능(성장, 스킬, 아이템, 방치형 보상, 랭킹 등)을 의미합니다.</li>
+  <li><b>"이용자"</b>란 본 약관에 따라 서비스를 이용하는 모든 사용자를 의미하며, 토스 로그인 이용자와 게스트 이용자를 포함합니다.</li>
+  <li><b>"플랫폼"</b>이란 서비스가 미니앱 형태로 제공·구동되는 앱인토스(Apps in Toss) 환경을 의미합니다.</li>
+  <li><b>"토스 로그인"</b>이란 이용자가 토스 계정을 통해 본인을 인증하고 게임 데이터를 계정에 연동하여 이용하는 방식을 의미합니다.</li>
+  <li><b>"게스트 이용(비로그인)"</b>이란 별도의 로그인 없이 단말기 기준으로 게임을 진행하는 방식을 의미합니다.</li>
+  <li><b>"게임 데이터"</b>란 레벨, 등급, 보유 코인·마나·LP, 스킬, 아이템, 누적 케이크 수, 진행 단계, 설정값 등 이용자의 게임 진행과 관련된 일체의 데이터를 의미합니다.</li>
+  <li><b>"레벨"</b>이란 게임 진행에 따라 1~999 범위에서 상승하는 성장 수치를 의미합니다.</li>
+  <li><b>"등급"</b>이란 레벨 구간에 따라 부여되는 칭호·단계(예: 씨앗 새싹 ~ 당근 케이크 신화 등 50개 등급)를 의미합니다.</li>
+  <li><b>"스킬"</b>이란 게임 진행을 돕는 기능으로, 직접 발동하는 액티브 스킬과 자동 적용되는 패시브 스킬을 포함합니다.</li>
+  <li><b>"아이템"</b>이란 게임 내에서 수집·사용되는 콘텐츠 요소를 의미합니다.</li>
+  <li><b>"게임 재화"</b>란 코인, 마나, LP, 포인트 등 게임 내에서만 사용·적립되는 가상의 수치를 의미하며, 현금적 가치나 환금성이 없습니다.</li>
+  <li><b>"방치형 보상"</b>이란 이용자가 게임을 실행하지 않은 시간 동안 자동으로 누적되어 지급되는 오프라인 보상을 의미합니다.</li>
+  <li><b>"랭킹"</b>이란 일정 기간의 성장량 등을 기준으로 이용자 간 순위를 산정·표시하는 기능을 의미합니다.</li>
+  <li><b>"닉네임"</b>이란 랭킹 등에서 이용자를 표시하기 위해 사용하는 표시 이름을 의미합니다.</li>
+</ul>
+
+<h3 id="a3"><span class="anum">제3조</span>(약관의 효력 및 변경)</h3>
+<ul>
+  <li>본 약관은 서비스 내 또는 본 페이지에 게시함으로써 효력이 발생합니다.</li>
+  <li>회사는 「약관의 규제에 관한 법률」, 「게임산업진흥에 관한 법률」, 「콘텐츠산업 진흥법」 등 관련 법령을 위배하지 않는 범위에서 본 약관을 개정할 수 있습니다.</li>
+  <li>약관을 개정하는 경우 적용일자 및 개정사유를 명시하여 적용일 7일 전부터(이용자에게 불리하거나 중대한 변경의 경우 30일 전부터) 서비스 내 또는 본 페이지에 공지합니다.</li>
+  <li>이용자가 개정 약관의 적용일 이후에도 서비스를 계속 이용하는 경우 개정 약관에 동의한 것으로 봅니다.</li>
+</ul>
+
+<h3 id="a4"><span class="anum">제4조</span>(약관 외 준칙)</h3>
+<p>본 약관에 명시되지 않은 사항은 대한민국 법령, 게임·콘텐츠 관련 법령, 「개인정보 보호법」, 소비자 보호 관련 법령, 플랫폼 운영사(토스)의 정책 및 일반 상관례에 따릅니다.</p>
+
+<h3 id="a5"><span class="anum">제5조</span>(플랫폼 및 운영 주체)</h3>
+<ul>
+  <li>서비스는 앱인토스(Apps in Toss) 플랫폼 상에서 구동되는 미니앱이며, 서비스의 기획·운영·제공 주체는 회사(Joyce Studios)입니다.</li>
+  <li>앱인토스 플랫폼 자체의 운영·정책·로그인·결제·계정 환경은 플랫폼 운영사가 관리하며, 본 약관은 회사가 제공하는 게임 부분에 한하여 적용됩니다.</li>
+  <li>플랫폼 운영사의 정책과 본 약관이 충돌하는 경우, 해당 범위에서는 플랫폼 운영사의 정책이 우선할 수 있습니다.</li>
+</ul>
+
+<h3 id="a6"><span class="anum">제6조</span>(서비스의 성격)</h3>
+<div class="box">본 서비스는 회사가 제공하는 <b>오락 목적의 방치형 게임 콘텐츠</b>입니다. 게임 내 레벨·등급·코인·마나·LP·아이템·순위 등은 모두 게임의 재미를 위한 가상의 수치이며, <b>현금적 가치나 환금성이 없고 현실의 재산권을 구성하지 않습니다.</b> 회사는 게임 콘텐츠의 제공자로서 게임의 운영·업데이트·밸런스 조정 등에 관한 권한을 가집니다.</div>
+
+<h2 class="chapter">제2장 계정 및 이용계약</h2>
+<h3 id="a7"><span class="anum">제7조</span>(서비스 제공 내용)</h3>
+<p>회사는 다음 각 호의 게임 콘텐츠 및 부가 기능을 제공합니다.</p>
+<ul>
+  <li>심기 → 키우기 → 수확 → 굽기의 4단계 루프 기반 방치형 키우기 게임 플레이</li>
+  <li>탭(터치)을 통한 진행 가속 및 미실행 시 자동 진행(방치형·오프라인 보상)</li>
+  <li>1~999레벨, 50개 등급의 성장 시스템</li>
+  <li>액티브·패시브 스킬 및 아이템 수집·사용</li>
+  <li>당근밭·오븐 등 시설 확장 및 게임 내 재화(코인·마나·LP) 운용</li>
+  <li>주간 랭킹 등 이용자 간 경쟁 및 보상 기능</li>
+  <li>토스 로그인을 통한 게임 데이터 연동 및 게스트 이용</li>
+  <li>기타 회사가 정하는 게임 관련 부가 서비스</li>
+</ul>
+
+<h3 id="a8"><span class="anum">제8조</span>(서비스 제공 시간)</h3>
+<ul>
+  <li>서비스는 원칙적으로 연중무휴 1일 24시간 제공됩니다.</li>
+  <li>점검, 장애, 통신 두절, 외부 API·플랫폼 사정 등 기술적 사유로 서비스가 일시 중단될 수 있습니다.</li>
+  <li>회사는 안정적 운영을 위해 정기 또는 임시 점검을 실시할 수 있으며, 사전 또는 사후에 이를 공지합니다.</li>
+</ul>
+
+<h3 id="a9"><span class="anum">제9조</span>(서비스의 변경·중단)</h3>
+<p>회사는 운영상 또는 기술상 상당한 이유가 있는 경우 서비스의 전부 또는 일부(특정 콘텐츠·기능·이벤트 포함)를 변경하거나 중단할 수 있습니다. 무료로 제공되는 서비스의 변경·중단에 대하여 회사는 관련 법령에 특별한 규정이 없는 한 별도의 보상을 하지 않습니다.</p>
+
+<h3 id="a10"><span class="anum">제10조</span>(이용계약의 성립)</h3>
+<p>서비스 이용계약은 이용자가 본 약관에 동의하고 앱인토스 플랫폼 내에서 본 서비스(미니앱)에 진입하여 토스 로그인 또는 게스트 이용으로 게임을 개시함으로써 성립합니다.</p>
+
+<h3 id="a11"><span class="anum">제11조</span>(토스 로그인)</h3>
+<ul>
+  <li>이용자는 토스 로그인을 통해 본인을 인증하고 게임 데이터를 계정 단위로 연동하여 이용할 수 있습니다.</li>
+  <li>토스 로그인 시 회사는 토스로부터 이용자를 구분하기 위한 회원 식별값(고유 식별자) 등 게임 운영에 필요한 최소한의 정보를 제공받으며, 그 구체적 항목·범위는 플랫폼(토스)의 정책 및 이용자의 동의 범위에 따릅니다.</li>
+  <li>토스 로그인을 이용하면 게임 데이터를 회사 서버에 연동·보관할 수 있어, 단말기 변경·재설치 시에도 동일 계정으로 진행 상황을 이어서 이용할 수 있습니다.</li>
+  <li>토스 계정의 가입·인증·관리·탈퇴 등은 토스의 정책에 따르며, 회사는 토스 계정 자체를 관리하지 않습니다.</li>
+</ul>
+
+<h3 id="a12"><span class="anum">제12조</span>(게스트(비로그인) 이용)</h3>
+<div class="warn">게스트 이용 시 게임 데이터는 주로 단말기를 기준으로 관리되므로, 앱 삭제·데이터 초기화·단말기 변경·플랫폼 캐시 삭제 등의 경우 진행 상황이 <b>복구되지 않을 수 있습니다.</b> 진행 상황의 안전한 보관을 원하시는 경우 토스 로그인 이용을 권장합니다.</div>
+<ul>
+  <li>이용자는 토스 로그인 없이 게스트 상태로 게임을 진행할 수 있습니다.</li>
+  <li>게스트 이용 시 진행 식별을 위해 단말기에서 생성된 익명 식별자(UUID)가 사용될 수 있으며, 이는 특정 개인을 식별하지 않습니다.</li>
+  <li>게스트 데이터의 보관·복구·이전 가능 여부 및 범위는 기술적 한계에 따라 제한될 수 있습니다.</li>
+</ul>
+
+<h3 id="a13"><span class="anum">제13조</span>(계정 연동 및 데이터 이전)</h3>
+<ul>
+  <li>게스트로 진행하던 이용자가 토스 로그인으로 전환하는 경우, 회사가 정하는 정책·방식에 따라 게임 데이터의 연동 또는 이전이 이루어질 수 있습니다.</li>
+  <li>이미 토스 계정에 데이터가 존재하는 상태에서 게스트 데이터를 연동하는 경우, 데이터의 병합·덮어쓰기 규칙은 회사가 정한 기준에 따르며 일부 데이터가 유지되지 않을 수 있습니다.</li>
+  <li>회사는 연동·이전 과정에서 발생할 수 있는 데이터 차이에 대해 사전에 합리적인 범위에서 안내하도록 노력합니다.</li>
+</ul>
+
+<h3 id="a14"><span class="anum">제14조</span>(닉네임)</h3>
+<ul>
+  <li>이용자는 랭킹 등에서 표시되는 닉네임을 설정할 수 있으며, 닉네임은 회사 서버에 저장되어 랭킹 화면 등 다른 이용자에게 공개될 수 있습니다.</li>
+  <li>이용자는 타인의 권리를 침해하거나, 욕설·비속어·혐오·차별·음란·광고성 표현 등 부적절한 닉네임을 사용해서는 안 됩니다.</li>
+  <li>회사는 부적절한 닉네임에 대해 사전 통지 없이 변경·비공개·사용 제한 등의 조치를 취할 수 있습니다.</li>
+</ul>
+
+<h3 id="a15"><span class="anum">제15조</span>(이용 제한 및 차단)</h3>
+<p>회사는 다음 각 호에 해당하는 경우 사전 통지 없이 이용자의 서비스 접근 또는 이용을 제한·차단하거나 게임 데이터·랭킹 기록을 조정·삭제할 수 있습니다.</p>
+<ul>
+  <li>관련 법령 또는 본 약관을 위반한 경우</li>
+  <li>서비스의 정상적 운영을 방해하거나 그러할 우려가 있는 경우</li>
+  <li>자동화 프로그램·매크로·봇·스크립트, 메모리·데이터 변조 등을 사용한 경우</li>
+  <li>비정상적 트래픽·요청 또는 비정상적 수치·기록을 발생시킨 경우</li>
+  <li>제34조 및 제35조의 금지행위에 해당하는 경우</li>
+</ul>
+
+<h2 class="chapter">제3장 게임 콘텐츠 및 게임 재화</h2>
+<h3 id="a16"><span class="anum">제16조</span>(게임의 진행 — 심기·키우기·수확·굽기)</h3>
+<p>본 게임은 당근을 심고(심기), 키우고(키우기), 수확하여(수확), 케이크를 굽는(굽기) 4단계 루프를 반복하며 진행됩니다. 이용자는 화면을 탭하여 진행을 가속할 수 있고, 탭하지 않아도 게임은 자동으로 진행됩니다. 각 단계의 속도·보상량·연출 등은 레벨·등급·스킬·아이템·시설 등에 따라 달라질 수 있습니다.</p>
+
+<h3 id="a17"><span class="anum">제17조</span>(방치형(오프라인) 보상)</h3>
+<ul>
+  <li>이용자가 게임을 실행하지 않은 동안에도 일정 규칙에 따라 보상(케이크·재화 등)이 자동으로 누적될 수 있습니다.</li>
+  <li>오프라인 보상의 누적 한도·시간·산정 방식은 회사가 정하며, 게임 밸런스에 따라 변경될 수 있습니다.</li>
+  <li>오프라인 보상 계산은 단말기·서버의 시간 정보를 기준으로 하며, 기기 시간 임의 조작 등 비정상적 방법으로 보상을 취득하는 행위는 금지됩니다.</li>
+</ul>
+
+<h3 id="a18"><span class="anum">제18조</span>(레벨 및 등급)</h3>
+<p>이용자는 게임 진행을 통해 1~999레벨까지 성장할 수 있으며, 레벨 구간에 따라 50개 등급의 칭호가 부여됩니다. 레벨·등급은 게임 내 성장 지표일 뿐 현실의 권리·재산을 구성하지 않으며, 회사는 게임 운영상 필요에 따라 성장 곡선·등급 기준 등을 조정할 수 있습니다.</p>
+
+<h3 id="a19"><span class="anum">제19조</span>(스킬 — 액티브·패시브)</h3>
+<p>게임에는 직접 발동하는 액티브 스킬과 자동으로 적용되는 패시브 스킬이 제공됩니다. 스킬의 효과·발동 조건·소모 재화(마나 등)·쿨타임 등은 회사가 정하며, 밸런스 조정에 따라 변경될 수 있습니다.</p>
+
+<h3 id="a20"><span class="anum">제20조</span>(아이템 수집)</h3>
+<p>이용자는 게임 진행을 통해 다양한 아이템을 획득·수집·사용할 수 있습니다. 아이템은 게임 내에서만 효력을 가지는 가상의 콘텐츠로, 현금적 가치나 환금성이 없으며, 회사는 운영상 필요에 따라 아이템의 효과·획득 방식 등을 변경할 수 있습니다.</p>
+
+<h3 id="a21"><span class="anum">제21조</span>(게임 내 재화 — 코인·마나·LP)</h3>
+<ul>
+  <li>코인·마나·LP·포인트 등 게임 재화는 게임 진행·보상·스킬 발동·시설 확장 등에 사용되는 가상의 수치입니다.</li>
+  <li>게임 재화는 회사가 정한 방식에 따라 적립·차감·소멸되며, 이용자 간 양도·거래·현금 교환의 대상이 되지 않습니다.</li>
+  <li>회사는 게임 밸런스 및 운영상 필요에 따라 재화의 획득량·사용처·가치를 조정할 수 있습니다.</li>
+</ul>
+
+<h3 id="a22"><span class="anum">제22조</span>(게임 재화의 성격 — 비환금성)</h3>
+<div class="notice">레벨·등급·코인·마나·LP·아이템·순위 등 본 게임의 모든 수치와 콘텐츠는 게임 내에서만 의미를 가지는 가상의 요소이며, <b>현금·재산적 가치가 없고 환전·환금·현금화의 대상이 되지 않습니다.</b></div>
+
+<h3 id="a23"><span class="anum">제23조</span>(게임 데이터의 저장 및 동기화)</h3>
+<ul>
+  <li>게스트 이용 시 게임 데이터는 주로 단말기 로컬 저장소에 저장됩니다.</li>
+  <li>토스 로그인 이용 시 또는 랭킹 등 일부 기능 제공을 위해, 게임 데이터의 일부(레벨·성장량·닉네임 등)가 회사 서버에 저장·동기화될 수 있습니다.</li>
+  <li>네트워크 오류·동기화 충돌·기기 변경 등으로 일부 데이터가 일치하지 않거나 손실될 수 있으며, 회사는 합리적 범위에서 이를 방지·복구하도록 노력합니다.</li>
+</ul>
+
+<h3 id="a24"><span class="anum">제24조</span>(게임 밸런스 및 수치 변경)</h3>
+<p>회사는 게임의 재미와 공정성, 안정적 운영을 위해 레벨·등급·재화·스킬·아이템·보상·확률 등 각종 수치와 규칙을 업데이트하거나 조정할 수 있습니다. 이러한 조정은 무료 콘텐츠의 특성상 사전 보상 의무를 발생시키지 않으며, 회사는 중요한 변경의 경우 합리적인 범위에서 이를 공지합니다.</p>
+
+<h2 class="chapter">제4장 랭킹 및 경쟁</h2>
+<h3 id="a25"><span class="anum">제25조</span>(주간 랭킹)</h3>
+<p>회사는 일정 기간(주간) 동안의 성장량 등을 기준으로 이용자 간 순위를 산정하여 랭킹으로 제공합니다. 랭킹 화면에는 이용자의 닉네임, 순위, 성장량 등 회사가 정한 정보가 표시되며, 이는 다른 이용자에게 공개될 수 있습니다.</p>
+
+<h3 id="a26"><span class="anum">제26조</span>(랭킹 산정 및 정산)</h3>
+<ul>
+  <li>주간 랭킹은 매주 월요일 9시(회사가 정한 정산 시각)를 기준으로 집계·초기화될 수 있습니다.</li>
+  <li>랭킹 산정 기준(성장량·점수 등)·반영 시점·정산 시각은 회사가 정하며, 운영상 필요에 따라 변경될 수 있습니다.</li>
+  <li>네트워크 지연·동기화 시점 차이 등으로 화면에 표시되는 순위와 실제 정산 결과가 일시적으로 다를 수 있습니다.</li>
+</ul>
+
+<h3 id="a27"><span class="anum">제27조</span>(랭킹 보상)</h3>
+<p>회사는 랭킹 결과에 따라 게임 내 보상(보너스 LP·재화·아이템 등)을 지급할 수 있습니다. 보상의 종류·수량·지급 시점·지급 방식은 회사가 정하며, 보상은 모두 게임 내 가상 재화로서 현금적 가치나 환금성이 없습니다.</p>
+
+<h3 id="a28"><span class="anum">제28조</span>(부정행위 및 랭킹 제재)</h3>
+<p>다음 각 호에 해당하는 경우 회사는 해당 이용자의 랭킹 기록 무효·제외, 보상 회수, 이용 제한 등의 조치를 취할 수 있습니다.</p>
+<ul>
+  <li>매크로·자동화 도구, 메모리·데이터·시간 변조 등을 통한 비정상적 기록 달성</li>
+  <li>버그·오류를 악용하여 부당한 이익을 취득하는 행위</li>
+  <li>타인의 계정·기기를 부정하게 이용하거나 다중 계정으로 순위를 조작하는 행위</li>
+  <li>기타 공정한 경쟁을 해치는 일체의 행위</li>
+</ul>
+
+<h2 class="chapter">제5장 광고</h2>
+<h3 id="a29"><span class="anum">제29조</span>(광고의 게재)</h3>
+<p>회사는 무료 서비스 제공 및 운영을 위해 게임 내 또는 플랫폼이 제공하는 방식으로 광고를 게재할 수 있습니다. 이용자는 서비스 이용 과정에서 광고가 노출될 수 있음에 동의합니다.</p>
+
+<h3 id="a30"><span class="anum">제30조</span>(보상형·전면·배너 광고)</h3>
+<ul>
+  <li>회사는 배너 광고, 전면(전체화면) 광고, 보상형 광고 등 다양한 형태의 광고를 제공할 수 있습니다.</li>
+  <li>보상형 광고는 이용자가 자발적으로 시청을 선택하는 경우 게임 내 재화·보상 등을 지급하는 방식으로 제공될 수 있습니다.</li>
+  <li>보상형 광고의 보상 종류·수량·시청 조건은 회사가 정하며, 광고 네트워크 사정에 따라 광고가 제공되지 않거나 보상이 지급되지 않을 수 있습니다.</li>
+</ul>
+
+<h3 id="a31"><span class="anum">제31조</span>(광고 사업자 고지)</h3>
+<p>광고는 앱인토스 공식 인앱 광고 모듈 및 Google AdMob 등 제3자 광고 네트워크를 매개로 제공될 수 있습니다. 광고 제공 과정에서 광고 네트워크는 광고 식별자 및 기기·이용 환경 정보를 수집·이용할 수 있으며, 그 구체적 사항은 해당 광고 사업자 및 플랫폼(토스)의 정책을 따릅니다.</p>
+
+<h3 id="a32"><span class="anum">제32조</span>(하우스 광고 및 자사 앱 홍보)</h3>
+<p>회사는 자사가 제공하는 다른 앱·서비스·이벤트를 알리기 위한 하우스 광고(자체 홍보)를 게임 내에 노출할 수 있습니다. 이 경우에도 본 약관 및 관련 법령이 적용됩니다.</p>
+
+<h2 class="chapter">제6장 이용자의 의무</h2>
+<h3 id="a33"><span class="anum">제33조</span>(이용자의 일반 의무)</h3>
+<ul>
+  <li>이용자는 관련 법령, 본 약관, 플랫폼 정책 및 회사가 공지하는 사항을 준수해야 합니다.</li>
+  <li>이용자는 서비스의 정상적 운영을 방해하는 행위를 해서는 안 됩니다.</li>
+  <li>이용자는 자신의 토스 계정 및 단말기 관리에 대한 책임을 부담합니다.</li>
+</ul>
+
+<h3 id="a34"><span class="anum">제34조</span>(금지행위)</h3>
+<p>이용자는 다음 각 호의 행위를 해서는 안 됩니다.</p>
+<ul>
+  <li>법령·공서양속에 반하거나 타인의 권리를 침해하는 행위</li>
+  <li>게임 데이터·재화·기록을 변조·위조하거나 비정상적으로 취득하는 행위</li>
+  <li>버그·오류를 악용하거나 이를 타인에게 유포하는 행위</li>
+  <li>서버·네트워크에 과도한 부하를 유발하거나 정상 운영을 방해하는 행위</li>
+  <li>회사 또는 제3자를 사칭하거나 부적절한 닉네임을 사용하는 행위</li>
+  <li>게임 내 재화·계정 등을 현금 또는 재산상 이익과 교환하거나 거래하려는 행위</li>
+</ul>
+
+<h3 id="a35"><span class="anum">제35조</span>(자동화·매크로·역설계 금지)</h3>
+<ul>
+  <li>이용자는 자동 진행·연속 탭·보상 취득 등을 위한 매크로·봇·자동화 프로그램을 사용해서는 안 됩니다.</li>
+  <li>이용자는 서비스의 클라이언트·데이터·통신을 무단으로 분석·복제·역설계(리버스 엔지니어링)하거나 변조해서는 안 됩니다.</li>
+  <li>이용자는 회사의 사전 서면 동의 없이 서비스를 상업적으로 이용하거나 데이터를 무단 수집(크롤링 등)해서는 안 됩니다.</li>
+</ul>
+
+<h3 id="a36"><span class="anum">제36조</span>(유료 결제 및 환불)</h3>
+<p>본 서비스는 기본적으로 무료로 제공됩니다. 다만 회사가 광고 제거·부가 콘텐츠 등 유료 상품을 제공하는 경우, 해당 결제·취소·환불은 앱인토스 플랫폼(토스) 및 관련 법령(「전자상거래 등에서의 소비자보호에 관한 법률」, 「콘텐츠 이용자 보호지침」 등)이 정하는 절차와 정책에 따릅니다. 이미 사용·소비되었거나 그 성질상 환불이 제한되는 게임 재화·콘텐츠에 대해서는 관련 법령이 허용하는 범위에서 환불이 제한될 수 있습니다.</p>
+
+<h2 class="chapter">제7장 지식재산권</h2>
+<h3 id="a37"><span class="anum">제37조</span>(지식재산권)</h3>
+<p>서비스 및 게임을 구성하는 그래픽·캐릭터·이펙트·UI·코드·텍스트·기획 등 일체의 콘텐츠에 대한 저작권 및 지식재산권은 회사 또는 정당한 권리자에게 귀속됩니다. 이용자는 회사의 사전 동의 없이 이를 복제·배포·전송·전시·2차적 저작물 작성 등의 방법으로 이용할 수 없습니다.</p>
+
+<h3 id="a38"><span class="anum">제38조</span>(이용자 콘텐츠 — 닉네임 등)</h3>
+<p>이용자가 입력·설정하는 닉네임 등 콘텐츠에 대한 책임은 이용자에게 있으며, 이용자는 해당 콘텐츠가 타인의 권리를 침해하지 않음을 보증합니다. 회사는 랭킹 등 서비스 제공·운영·홍보에 필요한 범위에서 해당 콘텐츠(닉네임 등)를 이용·표시할 수 있습니다.</p>
+
+<h2 class="chapter">제8장 면책 및 책임</h2>
+<h3 id="a39"><span class="anum">제39조</span>(게임 데이터 면책)</h3>
+<div class="warn">단말기 고장·분실, 앱 삭제·초기화, 기기 변경, 네트워크 오류, 플랫폼 캐시 삭제, 동기화 충돌 등으로 게임 데이터가 손실·초기화될 수 있으며, 특히 <b>게스트 이용 시 데이터가 복구되지 않을 수 있습니다.</b> 회사는 회사의 고의 또는 중대한 과실이 없는 한 이러한 데이터 손실에 대하여 책임을 부담하지 않습니다.</div>
+
+<h3 id="a40"><span class="anum">제40조</span>(방치형 보상·수치 면책)</h3>
+<p>방치형(오프라인) 보상, 레벨·등급·재화 등 각종 수치는 게임 밸런스·업데이트·점검·오류 수정 등에 따라 조정될 수 있습니다. 회사는 게임 콘텐츠의 특성상 이러한 변경·조정으로 인해 이용자에게 발생한 가상 수치상의 손익에 대하여, 회사의 고의 또는 중대한 과실이 없는 한 책임을 부담하지 않습니다.</p>
+
+<h3 id="a41"><span class="anum">제41조</span>(서비스 장애 면책)</h3>
+<p>회사는 외부 API(플랫폼·광고·통계 서비스 등)의 정책 변경·장애·종료, 통신사·단말기·운영체제 환경 등 회사가 직접 관리하지 않는 사유로 발생한 서비스 장애·중단에 대하여, 회사의 고의 또는 중대한 과실이 없는 한 책임을 부담하지 않습니다.</p>
+
+<h3 id="a42"><span class="anum">제42조</span>(불가항력)</h3>
+<p>천재지변, 전쟁, 정전, 통신망 장애, 플랫폼·외부 서비스의 중단 등 회사의 합리적 통제를 벗어난 사유로 서비스를 제공할 수 없는 경우, 회사는 그 책임이 면제됩니다.</p>
+
+<h3 id="a43"><span class="anum">제43조</span>(손해배상 및 책임의 제한)</h3>
+<ul>
+  <li>회사는 무료로 제공되는 서비스와 관련하여 관련 법령이 허용하는 범위에서 책임을 제한할 수 있습니다.</li>
+  <li>회사는 이용자가 게임 내 가상 수치·재화에 대해 가지는 기대이익이나, 데이터 손실로 인한 간접·특별·결과적 손해에 대하여 책임을 부담하지 않습니다.</li>
+  <li>이용자가 본 약관 또는 법령을 위반하여 회사 또는 제3자에게 손해를 입힌 경우, 이용자는 그에 대한 책임을 부담합니다.</li>
+</ul>
+
+<h3 id="a44"><span class="anum">제44조</span>(미성년자 이용)</h3>
+<p>본 게임은 전체 이용가(만 4세 이상 권장) 콘텐츠입니다. 미성년자가 서비스를 이용하는 경우 법정대리인의 지도·감독이 필요하며, 유료 결제가 제공되는 경우 미성년자의 결제는 법정대리인의 동의를 받아야 합니다. 법정대리인의 동의 없는 미성년자의 결제는 관련 법령에 따라 취소될 수 있습니다.</p>
+
+<h2 class="chapter">제9장 기타</h2>
+<h3 id="a45"><span class="anum">제45조</span>(통지 및 공지 방법)</h3>
+<p>회사는 서비스 내 공지, 본 페이지 게시, 또는 플랫폼이 제공하는 방법을 통해 이용자에게 통지·공지할 수 있습니다. 비로그인·익명 기반의 특성상 개별 통지가 어려운 경우, 서비스 내 공지로써 개별 통지를 갈음할 수 있습니다.</p>
+
+<h3 id="a46"><span class="anum">제46조</span>(분쟁 해결 및 준거법)</h3>
+<ul>
+  <li>회사와 이용자는 분쟁 발생 시 상호 신의에 따라 원만히 해결하도록 노력합니다.</li>
+  <li>본 약관은 대한민국 법률에 따라 해석되며, 분쟁에 관한 소송은 민사소송법상의 관할법원에 제기합니다.</li>
+</ul>
+<a class="totop" href="#terms">↑ 제1부 처음으로</a>
+</article>
+
+<article class="terms">
+<div class="part" id="privacy"><span class="num">PART 2</span><h2>제2부 · 개인정보처리방침</h2></div>
+
+<div class="box">Joyce Studios(이하 "회사")는 「개인정보 보호법」 등 관련 법령을 준수하며, 방치형 게임 "당근 케이크 만들기" 서비스 이용자의 개인정보를 보호하기 위해 본 개인정보처리방침을 수립·공개합니다. 본 서비스는 <b>토스 로그인</b> 또는 <b>게스트(비로그인) 이용</b>으로 플레이할 수 있으며, 회사는 게임 운영·랭킹 제공에 필요한 최소한의 정보만을 처리합니다.</div>
+
+<h3 id="p1"><span class="anum">제1조</span>(총칙 및 기본 방침)</h3>
+<p>회사는 서비스 제공에 필요한 최소한의 정보만을 처리하며, 수집한 정보를 본 방침에 명시된 목적 외로 이용하지 않습니다. 본 서비스는 이름·주민등록번호·연락처 등 이용자를 직접 식별하는 정보를 회사가 직접 수집·보관하지 않으며, 토스로부터 제공받는 회원 식별값(고유 식별자) 및 게임 진행 정보 중심으로 운영됩니다.</p>
+
+<h3 id="p2"><span class="anum">제2조</span>(수집하는 개인정보 항목)</h3>
+<p>회사는 이름, 주민등록번호, 전화번호, 이메일 주소 등 이용자를 직접 식별할 수 있는 개인정보를 수집하지 않습니다. 다만 서비스 운영·랭킹·통계를 위해 다음과 같은 정보가 처리될 수 있습니다.</p>
+<div class="tbl-scroll"><table class="tbl">
+  <tr><th>구분</th><th>항목</th><th>비고</th></tr>
+  <tr><td>로그인 식별값</td><td>토스 로그인 시 토스로부터 제공받는 회원 식별값(고유 식별자)</td><td>이용자 구분·데이터 연동 목적, 직접 식별정보 아님</td></tr>
+  <tr><td>게스트 식별값</td><td>단말기에서 무작위 생성한 익명 식별자(UUID)</td><td>특정 개인을 식별하지 않음, 단말 기준 생성</td></tr>
+  <tr><td>이용자 입력</td><td>닉네임</td><td>랭킹 표시 목적, 다른 이용자에게 공개될 수 있음</td></tr>
+  <tr><td>게임 데이터</td><td>레벨·등급·성장량·누적 케이크 수·보유 재화·스킬·아이템·진행 상태</td><td>저장·동기화·랭킹 산정 목적</td></tr>
+  <tr><td>이용 정보</td><td>접속·플레이 이벤트, 광고 시청, 기능 이용 기록</td><td>통계·운영·부정 이용 방지 목적</td></tr>
+  <tr><td>기기/환경</td><td>플랫폼 구분, 앱 버전, 접속 일자</td><td>통계(DAU·설치·업데이트) 목적</td></tr>
+  <tr><td>광고 식별자</td><td>광고 ID 등 광고 네트워크가 처리하는 식별자</td><td>광고 제공·성과 측정 목적(광고 사업자 처리)</td></tr>
+  <tr><td>로컬 저장</td><td>게임 진행 데이터, 설정값, 캐시 등</td><td>단말기에 저장(게스트는 주로 로컬 저장)</td></tr>
+</table></div>
+
+<h3 id="p3"><span class="anum">제3조</span>(개인정보 수집 방법)</h3>
+<p>정보는 이용자가 토스 로그인으로 인증하는 과정, 게임을 진행하거나 닉네임·설정을 입력하는 과정, 광고를 시청하는 과정 등에서 자동으로 생성·수집되거나 이용자의 행위를 통해 처리됩니다. 회사는 별도의 회원가입 양식이나 본인확인 절차를 통해 직접 식별정보를 수집하지 않습니다.</p>
+
+<h3 id="p4"><span class="anum">제4조</span>(자동 수집 정보 및 식별자)</h3>
+<ul>
+  <li>회사는 이용자 구분 및 통계를 위해 토스 회원 식별값 또는 단말기에서 생성된 익명 식별자(UUID)를 사용합니다. 이 식별자들은 이용자의 이름·연락처 등과 직접 연결되지 않습니다.</li>
+  <li>접속 일자, 앱 버전, 플랫폼 구분, 플레이·광고 시청 등의 이벤트 정보가 자동으로 수집되어 통계·운영 목적으로 처리될 수 있습니다.</li>
+  <li>게스트 이용자가 앱 데이터를 삭제하면 단말기에 저장된 식별자 및 로컬 데이터는 초기화됩니다.</li>
+</ul>
+
+<h3 id="p5"><span class="anum">제5조</span>(토스 로그인 연동 처리)</h3>
+<ul>
+  <li>이용자가 토스 로그인을 선택하는 경우, 회사는 토스로부터 이용자를 구분하기 위한 회원 식별값(고유 식별자)을 제공받아 게임 데이터의 연동·보관 및 랭킹 제공에 이용합니다.</li>
+  <li>회사가 토스로부터 제공받는 정보의 구체적 항목·범위는 플랫폼(토스)의 정책 및 이용자가 동의한 범위에 따르며, 회사는 게임 운영에 필요한 최소한의 정보만을 처리합니다.</li>
+  <li>토스 계정 자체의 관리·인증·탈퇴 등 및 그 과정에서 처리되는 정보는 토스의 개인정보 처리 정책에 따릅니다.</li>
+</ul>
+
+<h3 id="p6"><span class="anum">제6조</span>(게스트 이용 시 정보 처리)</h3>
+<p>게스트(비로그인) 이용 시 회사는 토스 회원 식별값을 제공받지 않으며, 진행 식별을 위해 단말기에서 생성된 익명 식별자(UUID)와 로컬 저장 데이터를 이용합니다. 게스트 데이터는 주로 단말기에 저장되며, 랭킹 등 일부 기능 이용 시 닉네임·성장량 등 최소한의 정보가 서버로 전송될 수 있습니다.</p>
+
+<h3 id="p7"><span class="anum">제7조</span>(개인정보의 이용 목적)</h3>
+<ul>
+  <li>게임 콘텐츠의 제공·운영 및 게임 데이터의 저장·동기화</li>
+  <li>주간 랭킹 등 경쟁 기능의 제공 및 순위·닉네임 표시</li>
+  <li>이용 통계 분석(DAU·설치·업데이트·이벤트) 및 서비스 품질 개선</li>
+  <li>광고 노출·보상 지급 및 부정 이용 방지</li>
+  <li>법령상 의무 이행 및 분쟁 대응</li>
+</ul>
+
+<h3 id="p8"><span class="anum">제8조</span>(게임 데이터·랭킹 정보의 처리)</h3>
+<ul>
+  <li>토스 로그인 이용 시 또는 랭킹 기능 제공을 위해, 게임 데이터의 일부(레벨·성장량·닉네임 등)가 회사 서버에 저장·동기화될 수 있습니다.</li>
+  <li>랭킹 화면에는 닉네임·순위·성장량 등이 표시되어 다른 이용자에게 공개될 수 있으며, 이용자는 닉네임 설정 시 이를 고려해야 합니다.</li>
+  <li>서버에 저장되는 게임 데이터는 이용자를 직접 식별하는 정보가 아닌 식별값과 연계되어 처리됩니다.</li>
+</ul>
+
+<h3 id="p9"><span class="anum">제9조</span>(단말기 로컬 저장 정보)</h3>
+<p>게임 진행 데이터, 설정값, 캐시 등은 회사 서버 외에 이용자의 단말기 로컬 저장소(localStorage 등)에도 저장될 수 있습니다. 특히 게스트 이용자의 게임 데이터는 주로 단말기에 저장됩니다. 이용자는 앱 설정 또는 단말기의 앱 데이터 삭제를 통해 로컬 데이터를 언제든지 삭제할 수 있습니다.</p>
+
+<h3 id="p10"><span class="anum">제10조</span>(Firebase 이용 고지)</h3>
+<ul>
+  <li>회사는 데이터 저장, 통계 분석, 원격 설정 등을 위해 Google이 제공하는 Firebase(Realtime Database, Cloud Functions, Remote Config 등)를 이용할 수 있습니다.</li>
+  <li>Firebase에는 식별값(토스 회원 식별값 또는 익명 UUID), 게임 데이터, 닉네임, 접속 일자, 앱 버전, 플랫폼 구분, 이용 이벤트 등이 저장될 수 있습니다.</li>
+  <li>Firebase는 Google LLC가 운영하며, 해당 데이터의 처리에는 Google의 개인정보 처리 정책이 함께 적용됩니다.</li>
+  <li>광고 노출 설정·이벤트 수치 등 운영 설정은 Firebase를 통해 원격으로 전달·갱신될 수 있습니다.</li>
+</ul>
+
+<h3 id="p11"><span class="anum">제11조</span>(광고 식별자 및 맞춤형 광고)</h3>
+<ul>
+  <li>서비스는 앱인토스 공식 인앱 광고 모듈을 통해 광고를 노출하며, 해당 모듈은 Google AdMob 등 제3자 광고 네트워크를 매개로 동작할 수 있습니다.</li>
+  <li>광고 제공 과정에서 광고 네트워크는 광고 식별자(예: 광고 ID) 및 기기·이용 환경 정보를 수집·이용하여 맞춤형 광고를 제공할 수 있습니다.</li>
+  <li>이용자는 단말기의 설정(광고 ID 재설정·맞춤 광고 제한 등)을 통해 맞춤형 광고 수신을 제어할 수 있습니다.</li>
+  <li>광고 식별자의 수집·이용에 관한 구체적 사항은 해당 광고 네트워크(예: Google) 및 플랫폼(토스)의 정책을 따릅니다.</li>
+</ul>
+
+<h3 id="p12"><span class="anum">제12조</span>(앱인토스 플랫폼 연동)</h3>
+<p>본 서비스는 앱인토스 플랫폼 상에서 구동되며, 토스 로그인·광고 노출·외부 링크 열기·미니앱 간 이동 등 일부 기능은 플랫폼이 제공하는 기능을 통해 수행됩니다. 플랫폼 환경에서 처리되는 정보에 대해서는 플랫폼 운영사(토스)의 개인정보 처리 정책이 함께 적용됩니다.</p>
+
+<h3 id="p13"><span class="anum">제13조</span>(개인정보의 제3자 제공)</h3>
+<p>회사는 이용자의 정보를 제3자에게 제공하지 않습니다. 다만 법령에 특별한 규정이 있거나 수사기관의 적법한 요청이 있는 경우에는 예외로 합니다. 랭킹 화면에서 닉네임·순위 등이 다른 이용자에게 표시되는 것은 서비스 본래 기능의 제공에 해당합니다.</p>
+
+<h3 id="p14"><span class="anum">제14조</span>(개인정보 처리의 위탁)</h3>
+<p>회사는 안정적인 서비스 제공을 위해 다음과 같이 정보 처리 업무를 위탁(또는 외부 서비스 이용)할 수 있습니다.</p>
+<div class="tbl-scroll"><table class="tbl">
+  <tr><th>수탁자 / 서비스</th><th>위탁 업무 내용</th></tr>
+  <tr><td>Google (Firebase)</td><td>게임 데이터 저장, 통계 분석, 클라우드 함수 실행, 원격 설정</td></tr>
+  <tr><td>Google (AdMob) / 광고 네트워크</td><td>광고 노출 및 광고 성과 측정</td></tr>
+  <tr><td>토스(앱인토스 플랫폼)</td><td>로그인 인증, 미니앱 구동 환경 및 광고·링크 기능 제공</td></tr>
+</table></div>
+
+<h3 id="p15"><span class="anum">제15조</span>(개인정보의 국외 이전)</h3>
+<p>Firebase·AdMob 등 일부 외부 서비스는 국외에 소재한 서버를 이용할 수 있으며, 이로 인해 게임 데이터·통계·광고 관련 정보가 국외로 이전·처리될 수 있습니다. 해당 정보의 처리는 각 사업자의 정책 및 관련 법령에 따릅니다.</p>
+
+<h3 id="p16"><span class="anum">제16조</span>(개인정보의 보유 및 파기)</h3>
+<ul>
+  <li>토스 로그인 이용자의 게임 데이터(레벨·성장량·닉네임 등)는 서비스 제공 목적 달성 시까지 또는 이용자의 삭제 요청 시까지 보관 후 파기합니다.</li>
+  <li>단말기에 저장된 로컬 데이터는 이용자가 삭제하거나 앱 데이터를 초기화할 때까지 보관됩니다.</li>
+  <li>통계 목적의 정보는 수집 목적 달성에 필요한 기간 동안 보관 후 파기하거나, 비식별·통계 형태로 처리하여 보관할 수 있습니다.</li>
+  <li>관련 법령에 보존 의무가 있는 경우 해당 기간 동안 보관합니다.</li>
+</ul>
+
+<h3 id="p17"><span class="anum">제17조</span>(이용자 및 법정대리인의 권리)</h3>
+<p>이용자는 자신의 정보에 대한 열람·정정·삭제·처리정지를 요구할 수 있습니다. 게스트 이용자는 단말기의 앱 데이터 삭제를 통해 로컬 정보를 직접 삭제할 수 있으며, 토스 로그인 이용자의 서버 저장 데이터(게임 데이터·닉네임 등)의 삭제 등 그 밖의 요청은 제21조의 연락처로 할 수 있습니다. 회사는 본인 확인 등 합리적 절차를 거쳐 지체 없이 처리합니다.</p>
+
+<h3 id="p18"><span class="anum">제18조</span>(만 14세 미만 아동의 개인정보)</h3>
+<p>본 게임은 전체 이용가 콘텐츠이나, 회사는 만 14세 미만 아동의 개인정보를 직접 수집하는 것을 목적으로 하지 않습니다. 만 14세 미만 아동이 서비스를 이용하는 경우 법정대리인의 지도·감독이 필요하며, 토스 로그인 등 계정 이용은 토스의 연령·계정 정책을 따릅니다.</p>
+
+<h3 id="p19"><span class="anum">제19조</span>(개인정보의 안전성 확보 조치)</h3>
+<ul>
+  <li>외부 API·서버 연동 시 인증키를 클라이언트에 노출하지 않고 서버(Cloud Functions 등)에서 처리하여 보안을 강화합니다.</li>
+  <li>전송 구간 암호화(HTTPS) 및 접근 제한·최소 수집 원칙을 적용합니다.</li>
+  <li>직접 식별정보를 수집하지 않고 식별값 기반으로 처리하여 이용자 식별 위험을 최소화합니다.</li>
+</ul>
+
+<h3 id="p20"><span class="anum">제20조</span>(쿠키 및 유사 기술)</h3>
+<p>본 서비스는 단말기 로컬 저장소(localStorage 등) 및 유사 기술을 이용하여 게임 진행·설정·캐시를 저장합니다. 이용자는 단말기 설정 또는 앱 데이터 삭제를 통해 이를 제어·삭제할 수 있습니다.</p>
+
+<h3 id="p21"><span class="anum">제21조</span>(개인정보 보호책임자 및 문의처)</h3>
+<div class="contact">
+  <b>운영사</b> · Joyce Studios<br>
+  <b>개인정보 보호책임자</b> · Joyce Studios 운영팀<br>
+  <b>이메일</b> · ibillkim@gmail.com<br>
+  <b>문의 응답</b> · 영업일 기준 7일 이내
+</div>
+
+<h3 id="p22"><span class="anum">제22조</span>(방침의 변경 및 고지 의무)</h3>
+<p>본 개인정보처리방침은 법령·정책 또는 서비스 변경에 따라 개정될 수 있으며, 개정 시 시행일 및 변경 내용을 서비스 내 또는 본 페이지에 공지합니다. 중요한 변경의 경우 시행일 7일 전부터 고지합니다.</p>
+
+<a class="totop" href="#privacy">↑ 제2부 처음으로</a>
+</article>
+
+<footer class="doc">
+  <p>본 문서는 「당근 케이크 만들기」 서비스의 이용약관 및 개인정보처리방침입니다.<br>
+  운영사 : Joyce Studios · 문의 : ibillkim@gmail.com<br>
+  최종 개정일 : 2026년 5월 29일 · 시행일 : 2026년 5월 29일</p>
+  <p style="margin-top:10px;">※ 본 문서에 언급된 토스, 앱인토스(Apps in Toss), Google, Firebase, AdMob 등은 각 사의 상표 또는 서비스명이며, 식별 목적으로만 사용되었습니다. 본 서비스는 위 각 사와의 공식 제휴·보증·후원 관계를 표방하지 않습니다.</p>
+</footer>
+
+</div>
+</body>
+</html>
