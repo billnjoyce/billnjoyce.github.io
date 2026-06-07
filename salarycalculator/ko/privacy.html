@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F4F5FA">
+<title>연봉 계산기 · 이용약관 및 개인정보처리방침</title>
+<style>
+  :root{
+    --brand:#2B3A8F; --brand-2:#4C5FD5; --brand-dark:#222C66;
+    --brand-soft:rgba(43,58,143,0.10); --brand-line:rgba(43,58,143,0.26);
+    --accent:#E5484D; --accent-soft:rgba(229,72,77,0.10); --accent-line:rgba(229,72,77,0.30);
+    --gold:#B9862F; --gold-soft:rgba(185,134,47,0.12); --gold-line:rgba(185,134,47,0.34);
+    --bg:#F4F5FA; --bg-soft:#FFFFFF; --bg-soft2:#ECEEF6; --line:#E2E5F0;
+    --ink:#1A2238; --ink-soft:#46506E; --ink-faint:#7B83A0;
+    --radius:16px; --maxw:880px;
+    --font:'Pretendard',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI","Noto Sans KR",Roboto,sans-serif;
+  }
+  @font-face{font-family:'Pretendard';font-weight:800;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-ExtraBold.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Medium.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--bg);}
+  body{font-family:var(--font);color:var(--ink-soft);background:var(--bg);line-height:1.78;margin:0;font-size:16px;font-weight:400;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 28px) 20px 80px;}
+  header.doc{padding:8px 0 24px;border-bottom:3px solid var(--brand);margin-bottom:8px;}
+  .brand{display:inline-flex;align-items:center;gap:11px;margin-bottom:18px;}
+  .brand .mk{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--brand-dark),var(--brand-2));display:grid;place-items:center;box-shadow:0 8px 20px rgba(43,58,143,0.35);}
+  .brand .nm{font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.5px;}
+  .brand .nm b{color:var(--brand);}
+  header.doc .kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--brand);background:var(--brand-soft);border:1px solid var(--brand-line);padding:5px 12px;border-radius:999px;margin-bottom:14px;}
+  header.doc h1{font-size:27px;line-height:1.35;margin:0 0 14px;letter-spacing:-.02em;color:var(--ink);font-weight:800;}
+  .meta{color:var(--ink-faint);font-size:13.5px;line-height:1.95;margin:0;}
+  .meta b{color:var(--ink-soft);}
+  .box{background:var(--bg-soft);border:1px solid var(--line);border-left:4px solid var(--brand);padding:16px 18px;border-radius:var(--radius);margin:20px 0;font-size:14.5px;color:var(--ink-soft);box-shadow:0 2px 10px rgba(30,40,90,0.05);}
+  .box b{color:var(--ink);}
+  .notice{background:var(--accent-soft);border:1px solid var(--accent-line);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#B03A3E;}
+  .warn{background:var(--gold-soft);border:1px solid var(--gold-line);border-left:4px solid var(--gold);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#7E5C1E;}
+  .contact{background:var(--gold-soft);border:1px solid var(--gold-line);border-left:4px solid var(--gold);padding:16px 18px;border-radius:var(--radius);font-size:14.5px;line-height:1.95;color:var(--ink-soft);}
+  .contact b{color:var(--ink);}
+  nav.toc{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin:26px 0 10px;box-shadow:0 2px 10px rgba(30,40,90,0.05);}
+  nav.toc h2{font-size:16px;margin:0 0 14px;color:var(--ink);border:0;padding:0;font-weight:800;}
+  nav.toc .toc-part{font-size:13px;font-weight:700;color:var(--brand);margin:16px 0 8px;letter-spacing:.02em;}
+  nav.toc .toc-part:first-of-type{margin-top:0;}
+  nav.toc ol{list-style:none;margin:0;padding:0;columns:2;column-gap:26px;}
+  nav.toc ol li{margin:0 0 6px;font-size:13.5px;break-inside:avoid;padding-left:0;}
+  nav.toc ol li::before{display:none;}
+  nav.toc a{color:var(--ink-faint);text-decoration:none;transition:color .15s;}
+  nav.toc a:hover{color:var(--brand);text-decoration:underline;}
+  .part{margin:54px 0 8px;padding:20px 22px;background:linear-gradient(135deg,var(--brand-dark) 0%,var(--brand-2) 100%);color:#fff;border-radius:var(--radius);box-shadow:0 12px 30px rgba(43,58,143,0.26);}
+  .part .num{font-size:12px;font-weight:700;opacity:.9;letter-spacing:.1em;}
+  .part h2{color:#fff;border:0;margin:4px 0 0;padding:0;font-size:21px;font-weight:800;}
+  h2.chapter{font-size:18px;color:var(--ink);margin:40px 0 6px;padding-bottom:9px;border-bottom:1px solid var(--line);font-weight:800;letter-spacing:-.3px;}
+  h3{font-size:16px;color:var(--ink);margin:26px 0 6px;scroll-margin-top:16px;font-weight:700;letter-spacing:-.2px;}
+  h3 .anum{color:var(--brand);font-weight:800;margin-right:5px;}
+  p{margin:8px 0;color:var(--ink-soft);font-size:15px;}
+  article.terms p,article.terms li{font-size:14.5px;}
+  ul{margin:8px 0 12px;padding-left:4px;list-style:none;}
+  li{position:relative;padding-left:18px;margin-bottom:7px;color:var(--ink-soft);font-size:14.5px;}
+  li::before{content:'';position:absolute;left:3px;top:11px;width:5px;height:5px;border-radius:50%;background:var(--brand);opacity:.85;}
+  b,strong{color:var(--ink);font-weight:700;}
+  table.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;background:var(--bg-soft);}
+  table.tbl th,table.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;}
+  table.tbl th{background:var(--bg-soft2);color:var(--ink);font-weight:700;white-space:nowrap;}
+  table.tbl td{color:var(--ink-soft);}
+  table.tbl tr:nth-child(even) td{background:rgba(43,58,143,0.025);}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .totop{display:inline-block;font-size:12.5px;color:var(--brand);text-decoration:none;margin-top:10px;}
+  footer.doc{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-faint);line-height:1.9;}
+  footer.doc b{color:var(--ink-soft);}
+  footer.doc p{color:var(--ink-faint);}
+  @media (max-width:640px){body{font-size:15.5px;}.wrap{padding:calc(env(safe-area-inset-top,0px) + 20px) 16px 64px;}header.doc h1{font-size:22px;}nav.toc ol{columns:1;}.part h2{font-size:18px;}h2.chapter{font-size:16.5px;}h3{font-size:15px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="doc">
+  <div class="brand">
+    <span class="mk">
+      <svg width="24" height="24" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="60,8 105,34 105,86 60,112 15,86 15,34" fill="#F5B53F"/>
+        <polygon points="60,18 96,39 96,81 60,102 24,81 24,39" fill="#1C2452"/>
+        <text x="60" y="71" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="44" font-weight="800" fill="#FFD564">₩</text>
+      </svg>
+    </span>
+    <span class="nm">연봉 <b>계산기</b></span>
+  </div>
+  <span class="kicker">LEGAL · 약관 및 개인정보처리방침</span>
+  <h1>연봉 계산기<br>이용약관 및 개인정보처리방침</h1>
+  <p class="meta">
+    <b>운영사</b> · Joyce Studios (이하 "회사")<br>
+    <b>최종 개정일</b> · 2026년 6월 7일<br>
+    <b>시행일</b> · 2026년 6월 7일
+  </p>
+</header>
+
+<div class="box">
+  본 문서는 Joyce Studios가 앱인토스 플랫폼을 통해 제공하는 "연봉 계산기" 서비스의 이용 조건을 규정하는 <b>제1부 서비스 이용약관</b>과, 이용자의 정보 처리에 관한 <b>제2부 개인정보처리방침</b>으로 구성됩니다. 본 서비스를 이용하시는 경우 본 문서의 내용에 동의한 것으로 봅니다.
+</div>
+
+<nav class="toc">
+  <h2>📑 목차</h2>
+  <div class="toc-part">제1부 · 서비스 이용약관</div>
+  <ol>
+    <li><a href="#a1">제1조 목적</a></li>
+    <li><a href="#a2">제2조 용어의 정의</a></li>
+    <li><a href="#a3">제3조 약관의 효력 및 변경</a></li>
+    <li><a href="#a4">제4조 약관 외 준칙</a></li>
+    <li><a href="#a5">제5조 플랫폼 및 운영 주체</a></li>
+    <li><a href="#a6">제6조 서비스의 성격(정보제공 도구)</a></li>
+    <li><a href="#a7">제7조 서비스 제공 내용</a></li>
+    <li><a href="#a8">제8조 서비스 제공 시간</a></li>
+    <li><a href="#a9">제9조 서비스의 변경·중단</a></li>
+    <li><a href="#a10">제10조 서비스 이용계약의 성립</a></li>
+    <li><a href="#a11">제11조 회원 비가입·비로그인 이용</a></li>
+    <li><a href="#a12">제12조 이용 제한 및 차단</a></li>
+    <li><a href="#a13">제13조 실수령액 계산 기준</a></li>
+    <li><a href="#a14">제14조 적용 요율 및 산식의 출처</a></li>
+    <li><a href="#a15">제15조 계산 결과의 성격(추정치)</a></li>
+    <li><a href="#a16">제16조 실제 급여와의 차이 요인</a></li>
+    <li><a href="#a17">제17조 요율·산식의 갱신</a></li>
+    <li><a href="#a18">제18조 입력값의 처리</a></li>
+    <li><a href="#a19">제19조 연봉 실수령액표</a></li>
+    <li><a href="#a20">제20조 랭킹 통계의 출처</a></li>
+    <li><a href="#a21">제21조 랭킹 산출 방식(추정 모델)</a></li>
+    <li><a href="#a22">제22조 또래(연령대) 비교</a></li>
+    <li><a href="#a23">제23조 티어의 성격</a></li>
+    <li><a href="#a24">제24조 통계 데이터의 갱신</a></li>
+    <li><a href="#a25">제25조 포인트의 성격</a></li>
+    <li><a href="#a26">제26조 내일의 선물(출석 보상)</a></li>
+    <li><a href="#a27">제27조 행운 룰렛</a></li>
+    <li><a href="#a28">제28조 친구 초대</a></li>
+    <li><a href="#a29">제29조 포인트의 소멸·회수</a></li>
+    <li><a href="#a30">제30조 인앱 광고의 게재</a></li>
+    <li><a href="#a31">제31조 보상형 광고</a></li>
+    <li><a href="#a32">제32조 자사 서비스 소개(크로스 프로모션)</a></li>
+    <li><a href="#a33">제33조 광고 관련 책임</a></li>
+    <li><a href="#a34">제34조 결과 공유 기능</a></li>
+    <li><a href="#a35">제35조 공유 콘텐츠에 대한 책임</a></li>
+    <li><a href="#a36">제36조 이용자의 의무</a></li>
+    <li><a href="#a37">제37조 금지행위</a></li>
+    <li><a href="#a38">제38조 자동화·역설계 금지</a></li>
+    <li><a href="#a39">제39조 데이터의 상업적 이용 제한</a></li>
+    <li><a href="#a40">제40조 지식재산권</a></li>
+    <li><a href="#a41">제41조 계산 결과 면책</a></li>
+    <li><a href="#a42">제42조 세무·재무 의사결정 면책</a></li>
+    <li><a href="#a43">제43조 랭킹·통계 면책</a></li>
+    <li><a href="#a44">제44조 서비스 장애 면책</a></li>
+    <li><a href="#a45">제45조 불가항력</a></li>
+    <li><a href="#a46">제46조 손해배상 및 책임의 제한</a></li>
+    <li><a href="#a47">제47조 미성년자 이용</a></li>
+    <li><a href="#a48">제48조 통지</a></li>
+    <li><a href="#a49">제49조 분쟁 해결 및 준거법</a></li>
+    <li><a href="#a50">제50조 기타</a></li>
+  </ol>
+  <div class="toc-part">제2부 · 개인정보처리방침</div>
+  <ol>
+    <li><a href="#p1">제1조 총칙 및 기본 방침</a></li>
+    <li><a href="#p2">제2조 수집하는 개인정보 항목</a></li>
+    <li><a href="#p3">제3조 자동 수집 정보 및 식별자</a></li>
+    <li><a href="#p4">제4조 정보 수집 방법</a></li>
+    <li><a href="#p5">제5조 정보의 이용 목적</a></li>
+    <li><a href="#p6">제6조 단말기 로컬 저장 정보</a></li>
+    <li><a href="#p7">제7조 Firebase 이용 고지</a></li>
+    <li><a href="#p8">제8조 광고 식별자 및 맞춤형 광고</a></li>
+    <li><a href="#p9">제9조 급여·연봉 입력값의 처리</a></li>
+    <li><a href="#p10">제10조 앱인토스 플랫폼 연동</a></li>
+    <li><a href="#p11">제11조 개인정보의 제3자 제공</a></li>
+    <li><a href="#p12">제12조 개인정보 처리의 위탁</a></li>
+    <li><a href="#p13">제13조 개인정보의 국외 이전</a></li>
+    <li><a href="#p14">제14조 정보의 보유 및 파기</a></li>
+    <li><a href="#p15">제15조 이용자 및 법정대리인의 권리</a></li>
+    <li><a href="#p16">제16조 만 14세 미만 아동</a></li>
+    <li><a href="#p17">제17조 안전성 확보 조치</a></li>
+    <li><a href="#p18">제18조 쿠키 및 유사 기술</a></li>
+    <li><a href="#p19">제19조 보호책임자 및 문의처</a></li>
+    <li><a href="#p20">제20조 방침의 변경 및 고지</a></li>
+  </ol>
+</nav>
+
+<!-- ═══════════════ 제1부 ═══════════════ -->
+<section class="part" id="terms">
+  <div class="num">PART 1</div>
+  <h2>서비스 이용약관</h2>
+</section>
+<article class="terms">
+
+<h2 class="chapter">제1장 총칙</h2>
+
+<h3 id="a1"><span class="anum">제1조</span>(목적)</h3>
+<p>본 약관은 Joyce Studios(이하 "회사")가 앱인토스(Apps in Toss) 플랫폼을 통해 제공하는 급여 실수령액 계산 및 연봉 통계 비교 서비스 "연봉 계산기"(이하 "서비스")의 이용과 관련하여 회사와 이용자 간의 권리·의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.</p>
+
+<h3 id="a2"><span class="anum">제2조</span>(용어의 정의)</h3>
+<ul>
+  <li><b>"서비스"</b>란 이용자가 입력한 연봉·월급을 기준으로 4대보험·소득세 공제 후 실수령액을 계산하고, 공개 통계 기반의 연봉 분포 비교 정보를 제공하는 "연봉 계산기" 미니앱 일체를 말합니다.</li>
+  <li><b>"이용자"</b>란 본 약관에 따라 서비스를 이용하는 자를 말합니다.</li>
+  <li><b>"계산 결과"</b>란 이용자가 입력한 금액과 옵션에 대해 서비스가 산출하는 월·연 실수령액, 공제 내역 등의 추정 정보를 말합니다.</li>
+  <li><b>"랭킹" 또는 "상위 %"</b>란 공개 통계를 기반으로 산출한, 입력 연봉이 전체 또는 연령대별 근로소득자 분포에서 차지하는 추정 위치를 말합니다.</li>
+  <li><b>"티어"</b>란 랭킹 구간을 게임 등급(아이언~챌린저 등)의 형태로 표현한 오락적 시각화 명칭을 말합니다.</li>
+  <li><b>"포인트"</b>란 출석·룰렛·초대 등 서비스 내 활동으로 적립되는 게이미피케이션 수치로서, 현금성·환금성이 없는 것을 말합니다.</li>
+</ul>
+
+<h3 id="a3"><span class="anum">제3조</span>(약관의 효력 및 변경)</h3>
+<ul>
+  <li>본 약관은 서비스 내 또는 본 페이지에 게시함으로써 효력이 발생합니다.</li>
+  <li>회사는 관련 법령을 위배하지 않는 범위에서 본 약관을 개정할 수 있으며, 개정 시 적용일자 및 개정 사유를 명시하여 적용일 7일 전부터(이용자에게 불리한 변경은 30일 전부터) 공지합니다.</li>
+  <li>이용자가 개정 약관 적용일 이후에도 서비스를 계속 이용하는 경우 개정 약관에 동의한 것으로 봅니다. 동의하지 않는 경우 이용을 중단할 수 있습니다.</li>
+</ul>
+
+<h3 id="a4"><span class="anum">제4조</span>(약관 외 준칙)</h3>
+<p>본 약관에서 정하지 아니한 사항은 정보통신망 이용촉진 및 정보보호 등에 관한 법률, 개인정보 보호법, 콘텐츠산업 진흥법 등 관계 법령 및 상관례에 따릅니다. 앱인토스 플랫폼 자체의 이용에 관하여는 토스(비바리퍼블리카)의 약관 및 정책이 별도로 적용될 수 있습니다.</p>
+
+<h3 id="a5"><span class="anum">제5조</span>(플랫폼 및 운영 주체)</h3>
+<ul>
+  <li>본 서비스는 토스 앱 내 "앱인토스" 플랫폼에서 실행되는 미니앱 형태로 제공됩니다.</li>
+  <li>서비스의 기획·운영 주체는 회사이며, 토스(비바리퍼블리카)는 실행 환경(플랫폼)을 제공할 뿐 본 서비스의 내용에 대한 책임 주체가 아닙니다.</li>
+  <li>본 서비스는 토스, 국세청, 국민연금공단, 국민건강보험공단, 통계청 등 어떠한 기관·기업과의 공식 제휴·보증·후원 관계도 표방하지 않습니다.</li>
+</ul>
+
+<h3 id="a6"><span class="anum">제6조</span>(서비스의 성격 — 정보제공 도구)</h3>
+<div class="notice">연봉 계산기는 참고용 <b>계산·통계 정보제공 도구</b>입니다. 회사는 세무사·노무사·재무설계사 등 전문 자격사가 아니며, 본 서비스는 세무·노무·법률·투자 자문을 제공하지 않습니다.</div>
+<p>서비스가 제공하는 계산 결과와 랭킹 정보는 공개된 요율·산식·통계를 일반적인 조건에 적용해 산출한 추정 정보입니다. 이용자의 구체적 상황(회사의 급여 규정, 수당 구성, 연말정산 등)에 대한 판단을 대체하지 않습니다.</p>
+
+<h3 id="a7"><span class="anum">제7조</span>(서비스 제공 내용)</h3>
+<ul>
+  <li>연봉·월급 입력 기반 월·연 실수령액 및 공제 내역(국민연금·건강보험·장기요양·고용보험·소득세·지방소득세) 계산</li>
+  <li>부양가족 수, 8~20세 자녀 수, 월 비과세액, 퇴직금 포함 여부 등 상세 옵션 설정</li>
+  <li>공개 통계 기반 전국 및 연령대별 연봉 분포 비교(상위 %·티어) 정보 제공</li>
+  <li>연봉 구간별 실수령액표 제공</li>
+  <li>계산 결과의 공유 기능</li>
+  <li>출석 보상·행운 룰렛·친구 초대 등 포인트 콘텐츠</li>
+  <li>인앱 광고 및 자사 서비스 소개 게재</li>
+</ul>
+
+<h3 id="a8"><span class="anum">제8조</span>(서비스 제공 시간)</h3>
+<p>서비스는 연중무휴 1일 24시간 제공함을 원칙으로 합니다. 다만 시스템 점검·교체, 클라우드 인프라 장애, 통신 두절 등 운영상·기술상 필요가 있는 경우 서비스 제공이 일시 중단될 수 있습니다.</p>
+
+<h3 id="a9"><span class="anum">제9조</span>(서비스의 변경·중단)</h3>
+<p>회사는 운영상·기술상 필요에 따라 서비스의 전부 또는 일부를 변경·중단할 수 있습니다. 무료로 제공되는 서비스의 변경·중단에 대하여 회사는 관련 법령에 특별한 규정이 없는 한 별도의 보상을 하지 않습니다.</p>
+
+<h3 id="a10"><span class="anum">제10조</span>(서비스 이용계약의 성립)</h3>
+<p>이용계약은 이용자가 토스 앱 내에서 본 서비스를 실행하고 본 약관에 동의함(서비스 이용 개시 포함)으로써 성립합니다.</p>
+
+<h3 id="a11"><span class="anum">제11조</span>(회원 비가입·비로그인 이용)</h3>
+<p>본 서비스는 별도의 회원가입·로그인 절차 없이 이용할 수 있습니다. 회사는 이름·연락처 등 이용자를 식별할 수 있는 개인정보를 입력받지 않으며, 입력한 금액·옵션·계산 기록·포인트 등 이용자별 데이터는 이용자의 단말기에만 저장됩니다.</p>
+
+<h3 id="a12"><span class="anum">제12조</span>(이용 제한 및 차단)</h3>
+<p>회사는 이용자가 본 약관의 금지행위(제37조 내지 제39조)를 위반하거나 서비스의 정상적인 운영을 방해하는 경우, 사전 통지 없이 서비스 이용을 제한·차단할 수 있습니다.</p>
+
+<h2 class="chapter">제2장 실수령액 계산</h2>
+
+<h3 id="a13"><span class="anum">제13조</span>(실수령액 계산 기준)</h3>
+<p>서비스는 이용자가 입력한 세전 연봉(또는 월급)에서 비과세액을 차감한 과세 급여를 기준으로, 아래 항목을 순차 공제하여 실수령액을 산출합니다.</p>
+<div class="tbl-scroll"><table class="tbl">
+  <tr><th>공제 항목</th><th>적용 기준(기본값)</th></tr>
+  <tr><td>국민연금</td><td>근로자 부담 요율 및 기준소득월액 상·하한 적용</td></tr>
+  <tr><td>건강보험</td><td>근로자 부담 요율 및 보수월액 상한 적용</td></tr>
+  <tr><td>장기요양보험</td><td>건강보험료에 고시 비율을 곱하여 산정</td></tr>
+  <tr><td>고용보험</td><td>실업급여분 근로자 부담 요율 적용</td></tr>
+  <tr><td>소득세</td><td>국세청 근로소득 간이세액표 작성 산식(원천징수 100% 기준)을 구현하여 산정</td></tr>
+  <tr><td>지방소득세</td><td>소득세의 10%</td></tr>
+</table></div>
+<p>부양가족 수(본인 포함), 8세 이상 20세 이하 자녀 수, 월 비과세액(식대 등), 연봉의 퇴직금 포함 여부(포함 시 13분할)는 이용자가 직접 설정할 수 있으며, 설정값에 따라 결과가 달라집니다.</p>
+
+<h3 id="a14"><span class="anum">제14조</span>(적용 요율 및 산식의 출처)</h3>
+<p>서비스가 적용하는 보험 요율, 기준소득월액 상·하한, 소득세 산식 등은 보건복지부·국민연금공단·국민건강보험공단·고용노동부·국세청 등이 공개적으로 고시·공표한 자료를 기반으로 합니다. 회사는 해당 자료의 원천 제공자가 아니며, 고시·공표 내용의 정확성과 최신성은 각 기관에 의해 결정됩니다.</p>
+
+<h3 id="a15"><span class="anum">제15조</span>(계산 결과의 성격 — 추정치)</h3>
+<div class="warn">계산 결과는 일반적인 조건을 가정한 <b>참고용 추정치</b>이며, 실제 급여명세서의 금액 및 연말정산 결과와 다를 수 있습니다.</div>
+<ul>
+  <li>소득세는 간이세액표 산식에 따른 매월 원천징수 추정액으로, 연말정산을 통해 최종 세액이 확정되며 환급 또는 추가 납부가 발생할 수 있습니다.</li>
+  <li>계산 결과는 어떠한 경우에도 실제 지급액을 보증하지 않습니다.</li>
+</ul>
+
+<h3 id="a16"><span class="anum">제16조</span>(실제 급여와의 차이 요인)</h3>
+<p>다음과 같은 요인으로 실제 수령액은 계산 결과와 달라질 수 있습니다.</p>
+<ul>
+  <li>회사(사업장)의 원천징수 비율 선택(80%·100%·120%)</li>
+  <li>상여금·성과급·수당의 지급 시기와 구성, 포괄임금 여부</li>
+  <li>비과세 항목의 종류와 한도(식대, 자가운전보조금, 연구활동비 등) 적용 차이</li>
+  <li>국민연금 기준소득월액의 사업장 신고값과 입력값의 차이</li>
+  <li>건강보험 보수월액 정산(연 1회), 중도 입·퇴사, 휴직 등</li>
+  <li>노조비, 사우회비, 대출 상환 등 회사별 기타 공제 항목</li>
+</ul>
+
+<h3 id="a17"><span class="anum">제17조</span>(요율·산식의 갱신)</h3>
+<p>회사는 관계 기관의 고시 변경(예: 보험 요율 인상, 기준소득월액 상·하한 조정, 간이세액표 개정)을 서비스에 반영하기 위해 노력합니다. 다만 고시 시점과 서비스 반영 시점 사이에 차이가 발생할 수 있으며, 회사는 특정 시점의 완전한 일치를 보증하지 않습니다. 적용 기준 연도는 결과 화면 및 설정에서 확인할 수 있습니다.</p>
+
+<h3 id="a18"><span class="anum">제18조</span>(입력값의 처리)</h3>
+<p>이용자가 입력한 연봉·월급 등 금액과 옵션은 이용자의 단말기 내에서 계산되며, 회사 서버로 원문이 전송·저장되지 않습니다. 계산 기록은 단말기에만 보관되고 이용자가 설정 메뉴에서 직접 삭제할 수 있습니다. (상세한 정보 처리 내용은 제2부 개인정보처리방침을 따릅니다.)</p>
+
+<h3 id="a19"><span class="anum">제19조</span>(연봉 실수령액표)</h3>
+<p>서비스는 대표 연봉 구간에 대해 동일한 계산 기준을 일괄 적용한 실수령액표를 제공합니다. 표의 각 금액은 이용자가 설정한 옵션(부양가족 등)에 따라 달라지며, 제15조 및 제16조의 추정치 성격이 동일하게 적용됩니다.</p>
+
+<h2 class="chapter">제3장 연봉 랭킹·티어</h2>
+
+<h3 id="a20"><span class="anum">제20조</span>(랭킹 통계의 출처)</h3>
+<p>연봉 랭킹(상위 %)은 국세청 근로소득 연말정산 통계(백분위·천분위 자료 포함), 통계청 임금근로일자리 소득 통계 등 공개적으로 공표된 통계 자료를 기반으로 합니다. 회사는 해당 통계의 작성 주체가 아니며, 통계의 기준 시점·모집단·작성 방식은 각 기관의 공표 내용을 따릅니다.</p>
+
+<h3 id="a21"><span class="anum">제21조</span>(랭킹 산출 방식 — 추정 모델)</h3>
+<ul>
+  <li>랭킹은 공표 통계의 구간별 수치를 앵커(기준점)로 하여 구간 사이 값을 보간(추정)하는 모델로 산출됩니다.</li>
+  <li>통계의 공표 주기 특성상 최신 연도와 1년 이상의 시차가 있을 수 있습니다.</li>
+  <li>따라서 표시되는 상위 %는 정밀한 실측값이 아닌 <b>통계 기반 추정값</b>이며, 실제 분포와 차이가 있을 수 있습니다.</li>
+</ul>
+
+<h3 id="a22"><span class="anum">제22조</span>(또래(연령대) 비교)</h3>
+<p>연령대별 비교는 연령대별 소득 통계를 기반으로 한 별도의 추정 모델을 적용합니다. 연령대 통계는 모집단(임금근로자 범위 등)이 전체 근로소득자 통계와 다를 수 있어, 전체 기준 상위 %와 연령대 기준 상위 %는 서로 다른 기준의 추정값입니다.</p>
+
+<h3 id="a23"><span class="anum">제23조</span>(티어의 성격)</h3>
+<p>아이언·브론즈·실버·골드·플래티넘·에메랄드·다이아몬드·마스터·그랜드마스터·챌린저 등의 티어 명칭과 등급 구간은 랭킹 추정값을 재미있게 표현하기 위한 본 서비스 고유의 오락적 시각화이며, 공식적·사회적 평가 기준이 아닙니다. 티어는 통계 갱신 또는 등급 구간 조정에 따라 변경될 수 있습니다.</p>
+
+<h3 id="a24"><span class="anum">제24조</span>(통계 데이터의 갱신)</h3>
+<p>회사는 관계 기관의 신규 통계 공표 시 데이터를 갱신하기 위해 노력하며, 갱신 시 동일한 입력값에 대한 랭킹·티어 결과가 달라질 수 있습니다. 적용 중인 통계의 출처·기준은 결과 화면 하단에 표시됩니다.</p>
+
+<h2 class="chapter">제4장 포인트 콘텐츠</h2>
+
+<h3 id="a25"><span class="anum">제25조</span>(포인트의 성격)</h3>
+<div class="notice">포인트(P)는 서비스 이용 재미를 위한 <b>게이미피케이션 수치</b>입니다. 현금·금전적 가치가 없으며, 현금·상품·재화로 교환·환급·이전되지 않습니다.</div>
+<ul>
+  <li>포인트는 이용자의 단말기에만 저장되며, 단말기 변경·앱 데이터 삭제 시 복구되지 않습니다.</li>
+  <li>회사는 포인트의 적립 기준·수치·콘텐츠를 사전 고지 없이 변경하거나 종료할 수 있습니다.</li>
+</ul>
+
+<h3 id="a26"><span class="anum">제26조</span>(내일의 선물 — 출석 보상)</h3>
+<p>"내일의 선물"은 서비스에 접속한 다음 날 수령할 수 있는 출석 보상 콘텐츠로, 연속 접속 일수에 따라 적립 포인트가 달라질 수 있습니다. 수령 가능 기간 내 미수령분은 소멸될 수 있으며, 일자 판정은 단말기 시각을 기준으로 합니다.</p>
+
+<h3 id="a27"><span class="anum">제27조</span>(행운 룰렛)</h3>
+<ul>
+  <li>행운 룰렛은 보상형 광고 시청을 조건으로 1일 제한된 횟수만 참여할 수 있는 무작위 포인트 적립 콘텐츠입니다.</li>
+  <li>당첨 포인트는 사전에 정해진 확률 분포에 따라 무작위로 결정됩니다.</li>
+  <li>광고 미지원 환경, 광고 미수신, 네트워크 장애 등으로 참여가 불가능할 수 있으며, 이는 하자 또는 보상 사유가 되지 않습니다.</li>
+</ul>
+
+<h3 id="a28"><span class="anum">제28조</span>(친구 초대)</h3>
+<p>친구 초대는 초대 메시지를 공유하면 포인트가 적립되는 콘텐츠로, 일일 및 누적 적립 한도가 적용됩니다. 공유 취소·실패 시 포인트는 적립되지 않으며, 수신자에게 무차별적으로 메시지를 발송하는 행위(스팸)는 금지됩니다.</p>
+
+<h3 id="a29"><span class="anum">제29조</span>(포인트의 소멸·회수)</h3>
+<p>비정상적인 방법(단말기 시각 조작, 저장소 조작, 자동화 도구 등)으로 적립된 포인트는 사전 통지 없이 회수·초기화될 수 있습니다. 서비스 종료 시 포인트는 별도 보상 없이 소멸합니다.</p>
+
+<h2 class="chapter">제5장 광고</h2>
+
+<h3 id="a30"><span class="anum">제30조</span>(인앱 광고의 게재)</h3>
+<ul>
+  <li>본 서비스는 무료로 제공되며, 운영 재원을 위해 화면 내 배너 광고, 콘텐츠 사이 네이티브형 광고, 화면 전환 시 전면 광고 등이 게재될 수 있습니다.</li>
+  <li>광고는 앱인토스 플랫폼이 제공하는 공식 광고 시스템(토스 애즈 등)을 통해 송출됩니다.</li>
+  <li>광고의 종류·위치·빈도는 운영 정책에 따라 변경될 수 있습니다.</li>
+</ul>
+
+<h3 id="a31"><span class="anum">제31조</span>(보상형 광고)</h3>
+<p>일부 콘텐츠(행운 룰렛 등)는 이용자가 자발적으로 보상형 광고를 시청하는 것을 조건으로 제공됩니다. 광고 시청 도중 이탈하거나 시청이 정상 완료되지 않은 경우 보상이 지급되지 않을 수 있습니다.</p>
+
+<h3 id="a32"><span class="anum">제32조</span>(자사 서비스 소개 — 크로스 프로모션)</h3>
+<p>서비스 내 일부 영역에는 회사가 운영하는 다른 미니앱·서비스를 소개하는 카드가 게재될 수 있습니다. 해당 카드는 회사 자체 서비스의 안내로서, 탭 시 해당 서비스로 이동합니다.</p>
+
+<h3 id="a33"><span class="anum">제33조</span>(광고 관련 책임)</h3>
+<p>제3자 광고의 내용, 광고를 통해 연결되는 외부 페이지, 광고주와 이용자 간 거래에 대한 책임은 해당 광고주에게 있으며, 회사는 광고 송출 시스템이 정한 범위를 넘는 책임을 지지 않습니다.</p>
+
+<h2 class="chapter">제6장 공유 기능</h2>
+
+<h3 id="a34"><span class="anum">제34조</span>(결과 공유 기능)</h3>
+<p>이용자는 계산 결과(실수령액·상위 %·티어 등)를 텍스트 형태로 외부 메신저 등에 공유할 수 있습니다. 공유 텍스트에는 서비스 소개 문구와 서비스 접속 링크가 포함될 수 있습니다.</p>
+
+<h3 id="a35"><span class="anum">제35조</span>(공유 콘텐츠에 대한 책임)</h3>
+<p>공유 행위 및 공유된 내용의 활용(공개 게시 등)으로 발생하는 결과에 대한 책임은 공유를 실행한 이용자에게 있습니다. 자신의 급여 정보 공개에 따른 영향은 이용자가 스스로 판단해야 합니다.</p>
+
+<h2 class="chapter">제7장 이용자의 의무와 금지행위</h2>
+
+<h3 id="a36"><span class="anum">제36조</span>(이용자의 의무)</h3>
+<ul>
+  <li>이용자는 본 약관, 관계 법령, 회사가 서비스 내에 게시한 안내사항을 준수해야 합니다.</li>
+  <li>이용자는 서비스의 정상적인 운영을 방해하는 행위를 해서는 안 됩니다.</li>
+</ul>
+
+<h3 id="a37"><span class="anum">제37조</span>(금지행위)</h3>
+<ul>
+  <li>비정상적인 방법으로 포인트·보상을 취득하거나 광고 노출·시청을 조작하는 행위</li>
+  <li>서비스의 소스코드, 데이터, 화면 구성을 무단 복제·배포·전송하는 행위</li>
+  <li>서비스 또는 관련 인프라에 부하를 유발하는 반복적·자동화된 접근</li>
+  <li>회사 또는 제3자의 권리(지식재산권·명예 등)를 침해하는 행위</li>
+  <li>계산 결과·랭킹을 위·변조하여 제3자를 기망하는 데 사용하는 행위</li>
+  <li>기타 관계 법령에 위반되는 행위</li>
+</ul>
+
+<h3 id="a38"><span class="anum">제38조</span>(자동화·역설계 금지)</h3>
+<p>회사의 사전 서면 동의 없이 크롤러·스크래퍼·봇 등 자동화 수단으로 서비스에 접근하거나, 서비스를 역설계·디컴파일·분해하는 행위, 서비스의 산식·데이터셋을 추출하여 별도 서비스에 이용하는 행위를 금지합니다.</p>
+
+<h3 id="a39"><span class="anum">제39조</span>(데이터의 상업적 이용 제한)</h3>
+<p>서비스가 제공하는 계산 결과, 실수령액표, 랭킹·티어 데이터는 이용자의 개인적·비상업적 참고 용도로만 이용할 수 있습니다. 회사의 사전 동의 없는 대량 수집, 재가공 판매, 상업적 재배포는 금지됩니다.</p>
+
+<h3 id="a40"><span class="anum">제40조</span>(지식재산권)</h3>
+<p>서비스를 구성하는 소프트웨어, 화면 디자인, 티어 체계·명칭의 구성, 문구, 로고 등에 대한 지식재산권은 회사 또는 정당한 권리자에게 귀속됩니다. 공공기관이 공표한 요율·통계 원자료 자체에 대한 권리는 각 기관에 귀속됩니다.</p>
+
+<h2 class="chapter">제8장 면책 및 책임</h2>
+
+<h3 id="a41"><span class="anum">제41조</span>(계산 결과 면책)</h3>
+<div class="warn">회사는 계산 결과가 이용자의 실제 급여·세액과 일치함을 보증하지 않으며, 계산 결과의 오차·지연 반영으로 인한 손해에 대해 고의 또는 중대한 과실이 없는 한 책임을 지지 않습니다.</div>
+<ul>
+  <li>요율·산식의 고시 변경이 서비스에 반영되기 전까지의 차이</li>
+  <li>이용자의 입력 오류 또는 옵션 설정 차이로 인한 결과 차이</li>
+  <li>제16조 각 호의 사유로 인한 실제 급여와의 차이</li>
+</ul>
+
+<h3 id="a42"><span class="anum">제42조</span>(세무·재무 의사결정 면책)</h3>
+<p>이용자가 계산 결과 또는 랭킹 정보를 근거로 행한 이직·연봉 협상·대출·투자·세무 신고 등 일체의 의사결정과 그 결과에 대한 책임은 이용자 본인에게 있습니다. 구체적 사안에 대하여는 세무사·노무사 등 전문가 또는 관할 기관(국세청 126, 국민연금공단 1355, 국민건강보험공단 1577-1000, 고용노동부 1350 등)에 확인하시기 바랍니다.</p>
+
+<h3 id="a43"><span class="anum">제43조</span>(랭킹·통계 면책)</h3>
+<p>랭킹·티어는 공표 통계 기반의 추정값으로, 회사는 그 정밀성·완전성·최신성을 보증하지 않습니다. 통계의 시차, 모집단 차이, 보간 모델의 한계로 인한 차이에 대해 회사는 책임을 지지 않습니다.</p>
+
+<h3 id="a44"><span class="anum">제44조</span>(서비스 장애 면책)</h3>
+<p>회사는 클라우드 인프라 장애, 플랫폼(토스 앱) 장애, 통신사 장애, 단말기 환경 문제 등 회사가 직접 통제할 수 없는 사유로 발생한 서비스 중단·오류에 대해 고의 또는 중대한 과실이 없는 한 책임을 지지 않습니다.</p>
+
+<h3 id="a45"><span class="anum">제45조</span>(불가항력)</h3>
+<p>천재지변, 전쟁, 정전, 국가 비상사태, 법령·정부 정책의 변경 등 불가항력적 사유로 서비스를 제공할 수 없는 경우 회사는 그 책임이 면제됩니다.</p>
+
+<h3 id="a46"><span class="anum">제46조</span>(손해배상 및 책임의 제한)</h3>
+<ul>
+  <li>회사 또는 이용자가 본 약관을 위반하여 상대방에게 손해를 입힌 경우 그 손해를 배상할 책임이 있습니다.</li>
+  <li>본 서비스는 무료로 제공되는 서비스로서, 관련 법령상 허용되는 최대 한도 내에서 회사의 배상 책임은 통상손해로 제한되며, 특별한 사정으로 인한 손해는 회사가 그 사정을 알았거나 알 수 있었을 경우에 한합니다.</li>
+</ul>
+
+<h3 id="a47"><span class="anum">제47조</span>(미성년자 이용)</h3>
+<p>본 서비스는 급여·통계 정보를 다루는 전체 이용가 서비스입니다. 다만 만 14세 미만 아동의 이용에 관하여는 제2부 제16조를 따릅니다.</p>
+
+<h3 id="a48"><span class="anum">제48조</span>(통지)</h3>
+<p>회사는 이용자 전체에 대한 통지를 서비스 내 화면 게시 또는 본 페이지 게시로 갈음할 수 있습니다.</p>
+
+<h3 id="a49"><span class="anum">제49조</span>(분쟁 해결 및 준거법)</h3>
+<ul>
+  <li>회사와 이용자 간 분쟁은 상호 협의로 해결함을 원칙으로 합니다.</li>
+  <li>협의가 이루어지지 않는 경우 민사소송법상의 관할 법원에 소를 제기할 수 있으며, 본 약관에는 대한민국 법령이 적용됩니다.</li>
+</ul>
+
+<h3 id="a50"><span class="anum">제50조</span>(기타)</h3>
+<p>본 약관의 일부 조항이 무효로 판단되더라도 나머지 조항의 효력에는 영향을 미치지 않습니다.</p>
+
+<a class="totop" href="#terms">↑ 제1부 처음으로</a>
+</article>
+
+<!-- ═══════════════ 제2부 ═══════════════ -->
+<section class="part" id="privacy">
+  <div class="num">PART 2</div>
+  <h2>개인정보처리방침</h2>
+</section>
+<article class="terms">
+
+<h3 id="p1"><span class="anum">제1조</span>(총칙 및 기본 방침)</h3>
+<p>Joyce Studios(이하 "회사")는 「개인정보 보호법」 등 관계 법령을 준수하며, "연봉 계산기" 서비스를 <b>개인정보 최소 수집</b> 원칙으로 설계·운영합니다. 본 방침은 회사가 어떤 정보를 어떻게 처리하는지 알리기 위해 마련되었습니다.</p>
+<div class="box">
+  <b>한눈에 보기</b> — 본 서비스는 회원가입이 없고, 이름·연락처·생년월일 등 이용자를 식별하는 개인정보를 수집하지 않습니다. 입력한 연봉·월급 금액은 <b>단말기 안에서만</b> 계산·저장되며 회사 서버로 전송되지 않습니다. 서버에는 무작위 생성 익명 식별자 기반의 <b>이용 통계(설치·접속 수 등)</b>만 기록됩니다.
+</div>
+
+<h3 id="p2"><span class="anum">제2조</span>(수집하는 개인정보 항목)</h3>
+<ul>
+  <li>회사는 이름, 연락처, 이메일, 생년월일, 주소, 계좌·카드 정보 등 이용자를 직접 식별할 수 있는 개인정보를 <b>수집하지 않습니다.</b></li>
+  <li>회원가입·로그인 절차가 없으므로 계정 정보도 존재하지 않습니다.</li>
+  <li>다만 서비스 운영을 위해 제3조의 익명 정보가 자동 생성·기록될 수 있습니다.</li>
+</ul>
+
+<h3 id="p3"><span class="anum">제3조</span>(자동 수집 정보 및 식별자)</h3>
+<div class="tbl-scroll"><table class="tbl">
+  <tr><th>항목</th><th>설명</th><th>저장 위치</th></tr>
+  <tr><td>익명 설치 식별자(UUID)</td><td>설치 단위로 무작위 생성되는 문자열. 이용자의 신원과 연결되지 않음</td><td>단말기 + 통계 서버</td></tr>
+  <tr><td>이용 통계 기록</td><td>설치·일일 접속(DAU)·업데이트 발생 여부, 앱 버전, 플랫폼 구분, 기록 시각</td><td>통계 서버</td></tr>
+  <tr><td>이용 행태 이벤트</td><td>계산 실행·공유·룰렛 등 주요 기능의 사용 발생 여부(입력 금액 원문 미포함)</td><td>통계 서버</td></tr>
+</table></div>
+<p>위 정보는 특정 개인을 알아볼 수 없는 형태로 처리되며, 다른 정보와 결합하여 개인을 식별하는 용도로 사용하지 않습니다.</p>
+
+<h3 id="p4"><span class="anum">제4조</span>(정보 수집 방법)</h3>
+<ul>
+  <li>서비스 실행 시 자동 생성·기록 (익명 식별자, 이용 통계)</li>
+  <li>이용자가 화면에 직접 입력 (연봉·월급 금액, 옵션 — 단말기 내 저장)</li>
+  <li>이메일 문의 시 이용자가 임의로 제공하는 정보 (문의 응대 목적에 한함)</li>
+</ul>
+
+<h3 id="p5"><span class="anum">제5조</span>(정보의 이용 목적)</h3>
+<ul>
+  <li>서비스 제공 및 기능 동작 (실수령액 계산, 랭킹 표시, 포인트 콘텐츠)</li>
+  <li>서비스 이용 규모 파악 및 품질 개선 (설치·접속 통계 분석)</li>
+  <li>오류·장애 대응 및 안정성 확보</li>
+  <li>광고 게재 빈도의 운영 정책 관리</li>
+</ul>
+
+<h3 id="p6"><span class="anum">제6조</span>(단말기 로컬 저장 정보)</h3>
+<p>아래 정보는 이용자의 단말기(localStorage)에만 저장되며 회사 서버로 전송되지 않습니다. 토스 앱에서 본 미니앱의 데이터를 삭제하거나 서비스 내 "계산 기록 초기화"를 실행하면 삭제됩니다.</p>
+<ul>
+  <li>계산 입력값과 옵션 (연봉·월급, 부양가족 수, 자녀 수, 비과세액, 퇴직금 포함 여부, 연령대)</li>
+  <li>최근 계산 기록 및 최고 티어 기록</li>
+  <li>포인트, 출석·룰렛·초대 진행 상태</li>
+  <li>온보딩 완료 여부, 광고 노출 빈도 관리값</li>
+</ul>
+
+<h3 id="p7"><span class="anum">제7조</span>(Firebase 이용 고지)</h3>
+<p>회사는 이용 통계 기록 및 서비스 설정(요율·통계 데이터, 광고 단위 식별자 등)의 배포를 위해 Google LLC의 클라우드 서비스인 <b>Firebase(Realtime Database 등)</b>를 이용합니다. Firebase에는 제3조의 익명 정보와 서비스 설정값만 저장되며, 이용자의 신원 정보나 입력 금액 원문은 저장되지 않습니다.</p>
+
+<h3 id="p8"><span class="anum">제8조</span>(광고 식별자 및 맞춤형 광고)</h3>
+<ul>
+  <li>서비스 내 광고는 앱인토스 플랫폼의 공식 광고 시스템(토스 애즈 등)을 통해 송출됩니다.</li>
+  <li>광고 송출 과정에서 광고 시스템 운영사가 광고 식별자 등으로 광고 성과 측정·맞춤형 광고를 수행할 수 있으며, 이에 관한 처리는 해당 운영사(비바리퍼블리카 등)의 개인정보처리방침 및 광고 정책을 따릅니다.</li>
+  <li>회사는 광고 시스템으로부터 이용자를 식별할 수 있는 정보를 제공받지 않습니다.</li>
+</ul>
+
+<h3 id="p9"><span class="anum">제9조</span>(급여·연봉 입력값의 처리)</h3>
+<div class="box"><b>입력한 금액은 단말기를 떠나지 않습니다.</b> 실수령액 계산과 랭킹 산출은 모두 단말기 내부에서 수행되며, 연봉·월급 금액의 원문이 회사 서버 또는 제3자에게 전송·저장되지 않습니다.</div>
+<p>서비스 개선을 위한 이용 행태 이벤트에 계산 실행 사실이 기록될 수 있으나, 이는 익명 식별자 기준의 통계 목적이며 개인 식별에 사용되지 않습니다.</p>
+
+<h3 id="p10"><span class="anum">제10조</span>(앱인토스 플랫폼 연동)</h3>
+<p>본 서비스는 토스 앱 내에서 실행되므로, 토스 앱 자체의 구동·공유 시트·클립보드 등 플랫폼 기능 이용에 관한 정보 처리는 비바리퍼블리카의 개인정보처리방침이 적용됩니다. 회사는 플랫폼으로부터 이용자의 토스 계정 정보를 제공받지 않습니다.</p>
+
+<h3 id="p11"><span class="anum">제11조</span>(개인정보의 제3자 제공)</h3>
+<p>회사는 이용자의 정보를 제3자에게 제공하지 않습니다. 다만 법령에 근거한 수사기관 등의 적법한 요청이 있는 경우는 예외로 합니다.</p>
+
+<h3 id="p12"><span class="anum">제12조</span>(개인정보 처리의 위탁)</h3>
+<div class="tbl-scroll"><table class="tbl">
+  <tr><th>수탁자</th><th>위탁 업무</th><th>보유·이용 기간</th></tr>
+  <tr><td>Google LLC (Firebase)</td><td>이용 통계 데이터의 저장·관리, 서비스 설정 배포 인프라</td><td>위탁 계약 종료 또는 서비스 종료 시까지</td></tr>
+</table></div>
+
+<h3 id="p13"><span class="anum">제13조</span>(개인정보의 국외 이전)</h3>
+<p>Firebase 인프라 특성상 제3조의 익명 통계 정보가 Google LLC가 운영하는 국외 소재 서버(미국 등)에 저장될 수 있습니다. 이전되는 정보는 익명 식별자 및 이용 통계에 한하며, 이전 일시·방법은 서비스 이용 시 네트워크를 통한 전송입니다. Google의 정보보호 조치는 Google 개인정보처리방침(policies.google.com/privacy)을 따릅니다.</p>
+
+<h3 id="p14"><span class="anum">제14조</span>(정보의 보유 및 파기)</h3>
+<ul>
+  <li>단말기 로컬 정보: 이용자가 삭제하거나 미니앱 데이터를 초기화할 때까지 단말기에 보관됩니다.</li>
+  <li>익명 이용 통계: 서비스 운영 기간 동안 보유하며, 서비스 종료 또는 보유 목적 달성 시 지체 없이 파기합니다.</li>
+  <li>이메일 문의 기록: 문의 처리 완료 후 3년 이내 파기합니다.</li>
+  <li>전자적 파일 형태의 정보는 복구할 수 없는 기술적 방법으로 삭제합니다.</li>
+</ul>
+
+<h3 id="p15"><span class="anum">제15조</span>(이용자 및 법정대리인의 권리)</h3>
+<ul>
+  <li>이용자는 설정 메뉴의 "계산 기록 초기화" 또는 토스 앱의 미니앱 데이터 삭제를 통해 단말기 저장 정보를 직접 삭제할 수 있습니다.</li>
+  <li>익명 식별자는 특정 개인과 연결되지 않으나, 이용자가 원할 경우 제19조의 문의처를 통해 처리 관련 사항을 문의할 수 있습니다.</li>
+  <li>법정대리인은 아동의 정보에 관하여 동일한 권리를 행사할 수 있습니다.</li>
+</ul>
+
+<h3 id="p16"><span class="anum">제16조</span>(만 14세 미만 아동)</h3>
+<p>본 서비스는 만 14세 미만 아동을 대상으로 하지 않으며, 아동의 개인정보를 인지하고 수집하지 않습니다. 회사가 아동의 개인정보가 수집된 사실을 알게 된 경우 지체 없이 삭제합니다.</p>
+
+<h3 id="p17"><span class="anum">제17조</span>(안전성 확보 조치)</h3>
+<ul>
+  <li>개인 식별 정보의 원천적 미수집 (수집 최소화 설계)</li>
+  <li>전송 구간 암호화(HTTPS/TLS) 적용</li>
+  <li>통계 데이터 접근 권한의 최소화 및 인증 관리</li>
+  <li>클라우드 제공사(Google)의 물리적·기술적 보호조치 활용</li>
+</ul>
+
+<h3 id="p18"><span class="anum">제18조</span>(쿠키 및 유사 기술)</h3>
+<p>본 서비스는 웹 쿠키 대신 단말기 저장소(localStorage)를 사용하여 제6조의 정보를 저장합니다. 이는 서비스 동작에 필요한 범위로 한정되며, 외부 추적 목적의 쿠키·트래커를 직접 설치하지 않습니다. 광고 송출 과정의 식별자 처리는 제8조를 따릅니다.</p>
+
+<h3 id="p19"><span class="anum">제19조</span>(보호책임자 및 문의처)</h3>
+<div class="contact">
+  <b>개인정보 보호책임자</b> · Joyce Studios 운영팀<br>
+  <b>이메일</b> · ibillkim@gmail.com<br>
+  문의 접수 시 지체 없이 확인하여 성실히 답변드리며, 개인정보 침해 관련 상담은 개인정보침해신고센터(privacy.kisa.or.kr, 국번 없이 118), 개인정보 분쟁조정위원회(kopico.go.kr, 1833-6972)에서도 받으실 수 있습니다.
+</div>
+
+<h3 id="p20"><span class="anum">제20조</span>(방침의 변경 및 고지)</h3>
+<p>본 방침의 내용이 추가·삭제·수정되는 경우 시행 7일 전부터(중요한 변경은 30일 전부터) 본 페이지 또는 서비스 내 화면을 통해 고지합니다. 본 방침은 2026년 6월 7일부터 적용됩니다.</p>
+
+<a class="totop" href="#privacy">↑ 제2부 처음으로</a>
+</article>
+
+<footer class="doc">
+  <p>
+    <b>연봉 계산기</b> · 앱인토스 미니앱<br>
+    운영 · Joyce Studios &nbsp;|&nbsp; 문의 · ibillkim@gmail.com<br>
+    본 서비스의 계산 결과와 랭킹은 공개 요율·통계 기반의 참고용 추정 정보이며, 세무·노무·재무 자문이 아닙니다.<br>
+    © 2026 Joyce Studios. All rights reserved.
+  </p>
+</footer>
+
+</div>
+</body>
+</html>
