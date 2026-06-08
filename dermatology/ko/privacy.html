@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0F1B22">
+<title>시술보감 · 이용약관 및 개인정보처리방침</title>
+<style>
+  :root{
+    --brand:#1FB6A6; --brand-2:#3E7DE0;
+    --brand-soft:rgba(31,182,166,0.14); --brand-line:rgba(31,182,166,0.32);
+    --amber:#FFB23E; --amber-soft:rgba(255,178,62,0.12); --amber-line:rgba(255,178,62,0.32);
+    --bg:#0F1B22; --bg-soft:#162631; --bg-soft2:#1B2E3B; --line:#26404F;
+    --ink:#ffffff; --ink-soft:#C3D6DF; --ink-faint:#8FA6B2;
+    --radius:16px; --maxw:880px;
+    --font:'Pretendard',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI","Noto Sans KR",Roboto,sans-serif;
+  }
+  @font-face{font-family:'Pretendard';font-weight:800;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-ExtraBold.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Medium.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--bg);}
+  body{font-family:var(--font);color:var(--ink-soft);background:var(--bg);line-height:1.78;margin:0;font-size:16px;font-weight:400;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 28px) 20px 80px;}
+  header.doc{padding:8px 0 24px;border-bottom:3px solid var(--brand);margin-bottom:8px;}
+  .brand{display:inline-flex;align-items:center;gap:11px;margin-bottom:18px;}
+  .brand .mk{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;box-shadow:0 8px 20px rgba(31,182,166,0.4);}
+  .brand .nm{font-size:18px;font-weight:800;color:#fff;letter-spacing:-.5px;}
+  .brand .nm b{color:var(--brand);}
+  header.doc .kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--brand);background:var(--brand-soft);border:1px solid var(--brand-line);padding:5px 12px;border-radius:999px;margin-bottom:14px;}
+  header.doc h1{font-size:27px;line-height:1.35;margin:0 0 14px;letter-spacing:-.02em;color:#fff;font-weight:800;}
+  .meta{color:var(--ink-faint);font-size:13.5px;line-height:1.95;margin:0;}
+  .meta b{color:var(--ink-soft);}
+  .box{background:var(--bg-soft);border:1px solid var(--line);border-left:4px solid var(--brand);padding:16px 18px;border-radius:var(--radius);margin:20px 0;font-size:14.5px;color:var(--ink-soft);}
+  .box b{color:#fff;}
+  .notice{background:var(--brand-soft);border:1px solid var(--brand-line);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#9EE5DA;}
+  .warn{background:var(--amber-soft);border:1px solid var(--amber-line);border-left:4px solid var(--amber);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#FFCF8A;}
+  .contact{background:var(--amber-soft);border:1px solid var(--amber-line);border-left:4px solid var(--amber);padding:16px 18px;border-radius:var(--radius);font-size:14.5px;line-height:1.95;color:var(--ink-soft);}
+  .contact b{color:#fff;}
+  nav.toc{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin:26px 0 10px;}
+  nav.toc h2{font-size:16px;margin:0 0 14px;color:#fff;border:0;padding:0;font-weight:800;}
+  nav.toc .toc-part{font-size:13px;font-weight:700;color:var(--brand);margin:16px 0 8px;letter-spacing:.02em;}
+  nav.toc .toc-part:first-of-type{margin-top:0;}
+  nav.toc ol{list-style:none;margin:0;padding:0;columns:2;column-gap:26px;}
+  nav.toc ol li{margin:0 0 6px;font-size:13.5px;break-inside:avoid;padding-left:0;}
+  nav.toc ol li::before{display:none;}
+  nav.toc a{color:var(--ink-faint);text-decoration:none;transition:color .15s;}
+  nav.toc a:hover{color:var(--brand);text-decoration:underline;}
+  .part{margin:54px 0 8px;padding:20px 22px;background:linear-gradient(135deg,var(--brand) 0%,var(--brand-2) 100%);color:#fff;border-radius:var(--radius);box-shadow:0 12px 30px rgba(31,182,166,0.28);}
+  .part .num{font-size:12px;font-weight:700;opacity:.9;letter-spacing:.1em;}
+  .part h2{color:#fff;border:0;margin:4px 0 0;padding:0;font-size:21px;font-weight:800;}
+  h2.chapter{font-size:18px;color:#fff;margin:40px 0 6px;padding-bottom:9px;border-bottom:1px solid var(--line);font-weight:800;letter-spacing:-.3px;}
+  h3{font-size:16px;color:#fff;margin:26px 0 6px;scroll-margin-top:16px;font-weight:700;letter-spacing:-.2px;}
+  h3 .anum{color:var(--brand);font-weight:800;margin-right:5px;}
+  p{margin:8px 0;color:var(--ink-soft);font-size:15px;}
+  article.terms p,article.terms li{font-size:14.5px;}
+  ul{margin:8px 0 12px;padding-left:4px;list-style:none;}
+  li{position:relative;padding-left:18px;margin-bottom:7px;color:var(--ink-soft);font-size:14.5px;}
+  li::before{content:'';position:absolute;left:3px;top:11px;width:5px;height:5px;border-radius:50%;background:var(--brand);opacity:.85;}
+  b,strong{color:#fff;font-weight:700;}
+  table.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;}
+  table.tbl th,table.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;}
+  table.tbl th{background:var(--bg-soft2);color:#fff;font-weight:700;white-space:nowrap;}
+  table.tbl td{color:var(--ink-soft);}
+  table.tbl tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .totop{display:inline-block;font-size:12.5px;color:var(--brand);text-decoration:none;margin-top:10px;}
+  footer.doc{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-faint);line-height:1.9;}
+  footer.doc b{color:var(--ink-soft);}
+  footer.doc p{color:var(--ink-faint);}
+  @media (max-width:640px){body{font-size:15.5px;}.wrap{padding:calc(env(safe-area-inset-top,0px) + 20px) 16px 64px;}header.doc h1{font-size:22px;}nav.toc ol{columns:1;}.part h2{font-size:18px;}h2.chapter{font-size:16.5px;}h3{font-size:15px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="doc">
+  <div class="brand">
+    <span class="mk">
+      <svg width="26" height="26" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="60" r="42" fill="#fff"/>
+        <circle cx="60" cy="60" r="26" fill="#1FB6A6"/>
+        <circle cx="52" cy="52" r="9" fill="#fff" opacity="0.75"/>
+      </svg>
+    </span>
+    <span class="nm">시술<b>보감</b></span>
+  </div>
+  <span class="kicker">LEGAL · 약관 및 개인정보처리방침</span>
+  <h1>시술보감<br>이용약관 및 개인정보처리방침</h1>
+  <p class="meta">
+    <b>운영사</b> · Joyce Studios (이하 "회사")<br>
+    <b>최종 개정일</b> · 2026년 5월 26일<br>
+    <b>시행일</b> · 2026년 5월 26일
+  </p>
+</header>
+
+<div class="box">
+  본 문서는 Joyce Studios가 앱인토스(Apps in Toss) 플랫폼을 통해 제공하는 <b>"시술보감"</b> 서비스의 이용 조건을 규정하는 <b>제1부 서비스 이용약관</b>과, 이용자의 정보 처리에 관한 <b>제2부 개인정보처리방침</b>으로 구성됩니다. 본 서비스를 이용하시는 경우 본 문서의 내용에 동의한 것으로 봅니다.
+</div>
+
+<div class="warn">
+  <b>중요:</b> 시술보감은 피부·미용 시술에 관한 <b>일반 정보를 제공하는 정보 서비스</b>이며, 의료행위·의학적 진단·처방·치료를 제공하지 않습니다. 본 앱에서 제공하는 정보는 의료진의 진단·상담을 대체할 수 없으며, 시술 결정은 반드시 의료기관에서 전문의와 상담 후 이루어져야 합니다.
+</div>
+
+<nav class="toc">
+  <h2>📑 목차</h2>
+  <div class="toc-part">제1부 · 서비스 이용약관</div>
+  <ol>
+    <li><a href="#a1">제1조 목적</a></li>
+    <li><a href="#a2">제2조 용어의 정의</a></li>
+    <li><a href="#a3">제3조 약관의 효력 및 변경</a></li>
+    <li><a href="#a4">제4조 약관 외 준칙</a></li>
+    <li><a href="#a5">제5조 플랫폼 및 운영 주체</a></li>
+    <li><a href="#a6">제6조 서비스의 성격(정보제공자 지위)</a></li>
+    <li><a href="#a7">제7조 의료행위가 아님</a></li>
+    <li><a href="#a8">제8조 서비스 제공 내용</a></li>
+    <li><a href="#a9">제9조 서비스 제공 시간</a></li>
+    <li><a href="#a10">제10조 서비스의 변경·중단</a></li>
+    <li><a href="#a11">제11조 서비스 이용계약의 성립</a></li>
+    <li><a href="#a12">제12조 회원 비가입(비로그인) 이용</a></li>
+    <li><a href="#a13">제13조 이용 제한 및 차단</a></li>
+    <li><a href="#a14">제14조 시술 정보의 수집·제공</a></li>
+    <li><a href="#a15">제15조 가격 정보의 한계</a></li>
+    <li><a href="#a16">제16조 통증·효과·만족도 지표의 성격</a></li>
+    <li><a href="#a17">제17조 부위·고민 검색 및 추천</a></li>
+    <li><a href="#a18">제18조 인기 시술 랭킹</a></li>
+    <li><a href="#a19">제19조 시술의 적합성 및 부작용</a></li>
+    <li><a href="#a20">제20조 외부 링크</a></li>
+    <li><a href="#a21">제21조 의료기관·시술자와의 관계</a></li>
+    <li><a href="#a22">제22조 광고의 게재</a></li>
+    <li><a href="#a23">제23조 하단 시트 배너 및 인앱 배너</a></li>
+    <li><a href="#a24">제24조 인라인·전면·보상형 광고</a></li>
+    <li><a href="#a25">제25조 광고 사업자 고지</a></li>
+    <li><a href="#a26">제26조 하우스 광고 및 자사 앱 홍보</a></li>
+    <li><a href="#a27">제27조 찜 및 최근 본 시술</a></li>
+    <li><a href="#a28">제28조 내 시술 기록 기능</a></li>
+    <li><a href="#a29">제29조 시술 기록의 정확성</a></li>
+    <li><a href="#a30">제30조 시술권(선불 패키지) 관리</a></li>
+    <li><a href="#a31">제31조 재시술 주기 알림</a></li>
+    <li><a href="#a32">제32조 통계 및 AI 분석 기능</a></li>
+    <li><a href="#a33">제33조 데이터 저장 위치 및 동기화</a></li>
+    <li><a href="#a34">제34조 인앱 웹뷰</a></li>
+    <li><a href="#a35">제35조 검색·조회 통계</a></li>
+    <li><a href="#a36">제36조 이용자의 의무</a></li>
+    <li><a href="#a37">제37조 금지 행위</a></li>
+    <li><a href="#a38">제38조 지적재산권</a></li>
+    <li><a href="#a39">제39조 회사의 면책</a></li>
+    <li><a href="#a40">제40조 의료 정보 관련 면책</a></li>
+    <li><a href="#a41">제41조 손해배상의 제한</a></li>
+    <li><a href="#a42">제42조 분쟁 해결 및 준거법</a></li>
+  </ol>
+  <div class="toc-part">제2부 · 개인정보처리방침</div>
+  <ol>
+    <li><a href="#p1">제1조 총칙 및 기본 방침</a></li>
+    <li><a href="#p2">제2조 수집하는 개인정보 항목</a></li>
+    <li><a href="#p3">제3조 자동 수집 정보 및 식별자</a></li>
+    <li><a href="#p4">제4조 개인정보 수집 방법</a></li>
+    <li><a href="#p5">제5조 개인정보의 이용 목적</a></li>
+    <li><a href="#p6">제6조 시술 기록·시술권의 처리</a></li>
+    <li><a href="#p7">제7조 단말기 로컬 저장 정보</a></li>
+    <li><a href="#p8">제8조 Firebase 이용 고지</a></li>
+    <li><a href="#p9">제9조 광고 식별자 및 맞춤형 광고</a></li>
+    <li><a href="#p10">제10조 앱인토스 플랫폼 연동</a></li>
+    <li><a href="#p11">제11조 인앱 웹뷰의 정보 처리</a></li>
+    <li><a href="#p12">제12조 민감정보 비수집 원칙</a></li>
+    <li><a href="#p13">제13조 개인정보의 제3자 제공</a></li>
+    <li><a href="#p14">제14조 개인정보 처리의 위탁</a></li>
+    <li><a href="#p15">제15조 개인정보의 국외 이전</a></li>
+    <li><a href="#p16">제16조 개인정보의 보유 및 파기</a></li>
+    <li><a href="#p17">제17조 이용자 및 법정대리인의 권리</a></li>
+    <li><a href="#p18">제18조 만 14세 미만 아동의 개인정보</a></li>
+    <li><a href="#p19">제19조 개인정보의 안전성 확보 조치</a></li>
+    <li><a href="#p20">제20조 쿠키 및 유사 기술</a></li>
+    <li><a href="#p21">제21조 개인정보 보호책임자 및 문의처</a></li>
+    <li><a href="#p22">제22조 방침의 변경 및 고지 의무</a></li>
+  </ol>
+</nav>
+
+<article class="terms" id="terms">
+<div class="part"><span class="num">PART 1</span><h2>제1부 · 서비스 이용약관</h2></div>
+
+<h3 id="a1"><span class="anum">제1조</span>(목적)</h3>
+<p>본 약관은 Joyce Studios(이하 "회사")가 앱인토스(Apps in Toss) 플랫폼을 통해 제공하는 미니앱 "시술보감"(이하 "서비스")의 이용에 관하여 회사와 이용자 간의 권리·의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.</p>
+
+<h3 id="a2"><span class="anum">제2조</span>(용어의 정의)</h3>
+<ul>
+  <li><b>서비스</b> : 회사가 제공하는 시술 정보 백과 및 개인 시술 기록 관리 미니앱 "시술보감"을 의미합니다.</li>
+  <li><b>이용자</b> : 본 약관에 따라 서비스를 이용하는 자를 의미합니다.</li>
+  <li><b>플랫폼</b> : 본 서비스가 구동되는 앱인토스(Apps in Toss) 환경을 의미합니다.</li>
+  <li><b>시술 정보</b> : 본 서비스가 제공하는 피부·미용 시술의 명칭, 분류, 가격대, 통증·효과 지표, 회복 기간, 주의사항 등 일반 정보를 의미합니다.</li>
+  <li><b>시술 기록</b> : 이용자가 받은 시술을 본인이 직접 입력하여 단말기 식별자 단위로 관리되는 개인 기록을 의미합니다.</li>
+  <li><b>시술권</b> : 의료기관에 미리 결제한 선불 패키지(예: 100만 원 패키지)의 잔액·사용 내역을 관리하는 기능 단위를 의미합니다.</li>
+</ul>
+
+<h3 id="a3"><span class="anum">제3조</span>(약관의 효력 및 변경)</h3>
+<ul>
+  <li>본 약관은 서비스 화면 또는 회사가 정한 위치에 게시함으로써 효력이 발생합니다.</li>
+  <li>회사는 관련 법령을 위배하지 않는 범위에서 본 약관을 개정할 수 있으며, 개정 시 시행일 및 개정 사유를 명시하여 시행일 7일 전부터 공지합니다. 이용자에게 불리한 변경의 경우 30일 전부터 공지합니다.</li>
+  <li>이용자가 개정 약관 시행일 이후에도 서비스를 계속 이용하는 경우 개정 약관에 동의한 것으로 봅니다.</li>
+</ul>
+
+<h3 id="a4"><span class="anum">제4조</span>(약관 외 준칙)</h3>
+<p>본 약관에 명시되지 않은 사항은 관련 법령(전기통신사업법, 정보통신망법, 개인정보 보호법, 의료법 등) 및 플랫폼의 정책, 회사가 정한 운영 정책에 따릅니다.</p>
+
+<h3 id="a5"><span class="anum">제5조</span>(플랫폼 및 운영 주체)</h3>
+<ul>
+  <li>본 서비스는 토스(주식회사 비바리퍼블리카)가 운영하는 앱인토스 플랫폼 상에서 미니앱 형태로 제공됩니다.</li>
+  <li>플랫폼의 안정성·접근 방식·로그인 환경·인앱 광고 모듈 등은 토스의 정책 및 기술 환경에 따릅니다.</li>
+  <li>서비스의 콘텐츠 및 기능에 대한 운영 책임은 회사에 있으며, 플랫폼 자체의 운영·점검·정책에 대한 책임은 토스에 있습니다.</li>
+</ul>
+
+<h3 id="a6"><span class="anum">제6조</span>(서비스의 성격 - 정보제공자 지위)</h3>
+<ul>
+  <li>회사는 시술 정보 및 개인 기록 관리 도구를 제공하는 <b>정보 서비스 제공자</b>이며, 의료기관·시술자·의료서비스 제공자가 아닙니다.</li>
+  <li>회사는 시술을 직접 시행하지 않으며, 의료 행위·진료·진단·처방·치료를 제공하지 않습니다.</li>
+  <li>회사는 특정 의료기관·시술자·시술 상품을 보증·추천·중개하지 않습니다.</li>
+</ul>
+
+<h3 id="a7"><span class="anum">제7조</span>(의료행위가 아님)</h3>
+<div class="warn"><b>본 서비스가 제공하는 정보는 의료법상 의료광고·의료행위·의학적 진단·처방에 해당하지 않습니다.</b> 모든 정보는 일반적인 교육·참고 목적으로 제공되며, 시술의 시행 여부, 적합성, 효과, 부작용 가능성은 반드시 의료기관에서 전문의와 직접 상담 후 결정하여야 합니다.</div>
+
+<h3 id="a8"><span class="anum">제8조</span>(서비스 제공 내용)</h3>
+<p>회사는 다음과 같은 기능을 제공합니다.</p>
+<ul>
+  <li>피부·미용 시술 정보 백과(이름·분류·가격대·통증·효과·회복·주의사항 등)</li>
+  <li>부위·고민·키워드 기반 시술 검색 및 관련 시술 추천</li>
+  <li>인기 시술 랭킹 및 카테고리별 탐색</li>
+  <li>찜(즐겨찾기) 및 최근 본 시술 목록</li>
+  <li>내 시술 기록(시술명·일자·장소·가격·만족도·통증·메모 등) 관리</li>
+  <li>시술권(선불 패키지) 등록·차감·잔액 관리</li>
+  <li>재시술 권장 주기 알림 및 다음 시술 시기 안내</li>
+  <li>지출·만족도·카테고리별 통계 및 AI 기반 분석 인사이트</li>
+  <li>인앱 광고(하단 시트 배너·메인 배너·전면·보상형 등) 노출</li>
+</ul>
+
+<h3 id="a9"><span class="anum">제9조</span>(서비스 제공 시간)</h3>
+<p>서비스는 연중무휴 24시간 제공함을 원칙으로 하나, 시스템 점검·통신 장애·플랫폼 정책 변경·외부 서비스 장애 등으로 일시 중단되거나 제한될 수 있습니다.</p>
+
+<h3 id="a10"><span class="anum">제10조</span>(서비스의 변경·중단)</h3>
+<ul>
+  <li>회사는 운영상·기술상 필요에 따라 서비스의 전부 또는 일부 기능을 변경·중단할 수 있으며, 중요한 변경 사항은 사전 공지를 원칙으로 합니다.</li>
+  <li>다만, 긴급한 시스템 점검·보안 사유·법적 의무 이행 등 부득이한 경우에는 사후 공지할 수 있습니다.</li>
+  <li>서비스 종료 시 회사는 합리적인 기간 전에 종료 사실 및 데이터 처리 방침을 공지합니다.</li>
+</ul>
+
+<h3 id="a11"><span class="anum">제11조</span>(서비스 이용계약의 성립)</h3>
+<p>이용계약은 이용자가 앱인토스 환경에서 본 서비스를 실행하고 본 약관에 동의함으로써 성립합니다. 본 서비스는 별도의 회원가입 절차 없이 비로그인 방식으로 이용할 수 있습니다.</p>
+
+<h3 id="a12"><span class="anum">제12조</span>(회원 비가입 - 비로그인 이용)</h3>
+<ul>
+  <li>본 서비스는 별도의 회원가입·로그인 없이 이용 가능합니다.</li>
+  <li>이용자 식별은 앱이 단말기에서 무작위로 생성한 익명 식별자(UUID)로 이루어지며, 이는 이용자의 이름·연락처 등과 연결되지 않습니다.</li>
+  <li>앱 데이터 삭제 또는 단말기 변경 시 익명 식별자는 초기화되며, 이에 따라 단말기 기준으로 저장된 기록(시술 기록·시술권 등)에 접근할 수 없게 될 수 있습니다.</li>
+</ul>
+
+<h3 id="a13"><span class="anum">제13조</span>(이용 제한 및 차단)</h3>
+<ul>
+  <li>회사는 다음 각 호에 해당하는 행위가 확인되는 경우 사전 통지 없이 서비스 이용을 제한·차단할 수 있습니다.
+    <ul>
+      <li>자동화된 방법으로 시술 정보·검색 결과·이미지 등을 무단 수집하는 행위</li>
+      <li>서비스를 도용·복제·역설계하거나 회사의 권리를 침해하는 행위</li>
+      <li>광고 클릭 조작·부정 이용·시스템 부하 유발 등 정상적인 운영을 방해하는 행위</li>
+      <li>법령·공서양속에 반하는 행위</li>
+    </ul>
+  </li>
+  <li>이용 제한에 대한 이의는 제21조의 연락처로 제기할 수 있습니다.</li>
+</ul>
+
+<h3 id="a14"><span class="anum">제14조</span>(시술 정보의 수집·제공)</h3>
+<ul>
+  <li>회사는 공개된 의료·미용 정보, 학술 자료, 시장에서 통용되는 가격 자료 등을 토대로 시술 정보를 정리하여 제공합니다.</li>
+  <li>모든 시술 정보는 회사의 편집·재구성을 거친 일반 정보이며, 특정 의료기관·시술자의 광고·홍보 목적이 아닙니다.</li>
+  <li>회사는 정보의 정확성·최신성을 유지하기 위해 노력하나, 그 완전성·정확성·시의성을 보증하지 않습니다.</li>
+</ul>
+
+<h3 id="a15"><span class="anum">제15조</span>(가격 정보의 한계)</h3>
+<div class="notice">
+  <b>표시된 가격은 시장에서 통용되는 대략적인 참고 범위</b>이며, 실제 비용은 의료기관·지역·개인의 상태·이벤트·시즌·할인 등에 따라 크게 달라질 수 있습니다. 회사는 표시 가격으로 시술이 제공됨을 보증하지 않으며, 가격 차이로 인한 손해에 대해 책임을 지지 않습니다.
+</div>
+
+<h3 id="a16"><span class="anum">제16조</span>(통증·효과·만족도 지표의 성격)</h3>
+<ul>
+  <li>본 서비스가 표시하는 통증·효과·난이도 등의 지표는 일반적 통념과 자료를 토대로 한 <b>참고용 지표</b>이며, 의학적·통계적 검증을 거친 절대적 수치가 아닙니다.</li>
+  <li>실제 통증·효과·회복 정도는 개인의 피부 상태·연령·민감도·시술 환경에 따라 다를 수 있습니다.</li>
+</ul>
+
+<h3 id="a17"><span class="anum">제17조</span>(부위·고민 검색 및 추천)</h3>
+<ul>
+  <li>"턱살", "기미" 등 부위·고민 키워드 검색 시 회사가 정의한 동의어·연관어 사전을 통해 관련 시술을 함께 노출합니다.</li>
+  <li>검색 결과의 순서·노출은 알고리즘에 의해 결정되며, 특정 시술의 우월성·효과 보증을 의미하지 않습니다.</li>
+  <li>추천 결과는 이용자의 시술 선택에 대한 참고 정보이며, 의학적 처방을 의미하지 않습니다.</li>
+</ul>
+
+<h3 id="a18"><span class="anum">제18조</span>(인기 시술 랭킹)</h3>
+<ul>
+  <li>인기 랭킹은 서비스 내 조회수·검색 빈도 등 이용 통계를 종합하여 1일 1회 갱신됩니다.</li>
+  <li>랭킹은 이용자의 관심도를 반영한 참고 지표이며, 시술의 안전성·효과·적합성을 보증하지 않습니다.</li>
+  <li>회사는 운영상 필요에 따라 랭킹 산정 기준을 변경할 수 있습니다.</li>
+</ul>
+
+<h3 id="a19"><span class="anum">제19조</span>(시술의 적합성 및 부작용)</h3>
+<div class="warn">
+  본 서비스는 시술의 일반적인 효과와 함께 가능한 부작용·주의사항을 함께 안내합니다. 그러나 모든 부작용을 포괄하지 않으며, 개인별 적합성은 반드시 시술 전 의료기관에서 의료진과 상담하여 확인하여야 합니다. 알레르기·기저질환·복용 약물·임신 여부 등은 시술 적합성에 영향을 미칠 수 있습니다.
+</div>
+
+<h3 id="a20"><span class="anum">제20조</span>(외부 링크)</h3>
+<ul>
+  <li>본 서비스는 광고·이벤트·이용약관 원문 등을 위해 외부 사이트로 연결되는 링크 또는 인앱 웹뷰를 포함할 수 있습니다.</li>
+  <li>외부 사이트의 콘텐츠·정확성·정책에 대한 책임은 해당 사이트 운영자에게 있으며, 회사는 이에 대해 책임지지 않습니다.</li>
+</ul>
+
+<h3 id="a21"><span class="anum">제21조</span>(의료기관·시술자와의 관계)</h3>
+<ul>
+  <li>회사는 어떠한 의료기관·시술자와도 시술 중개·예약·계약을 대행하지 않습니다.</li>
+  <li>이용자가 시술을 받기로 결정한 경우, 시술 계약은 이용자와 해당 의료기관 사이에 직접 체결되며, 시술의 시행·결과·부작용·환불·분쟁 등에 대한 책임은 해당 의료기관에 있습니다.</li>
+  <li>회사는 의료기관·시술자의 선택, 비용 협상, 시술 결과에 대해 어떠한 책임도 부담하지 않습니다.</li>
+</ul>
+
+<h3 id="a22"><span class="anum">제22조</span>(광고의 게재)</h3>
+<ul>
+  <li>회사는 서비스 운영을 위해 본 서비스 내에 광고를 게재할 수 있습니다.</li>
+  <li>광고는 앱인토스가 제공하는 공식 인앱 광고 모듈 및 회사가 직접 운영하는 광고 영역(하단 시트 배너·메인 배너 등)을 통해 노출됩니다.</li>
+</ul>
+
+<h3 id="a23"><span class="anum">제23조</span>(하단 시트 배너 및 인앱 배너)</h3>
+<ul>
+  <li>회사는 앱 실행 시 화면 하단에서 표시되는 <b>시트 형태의 배너</b>와, 홈 화면 등에 표시되는 <b>인앱 배너</b>를 운영할 수 있습니다.</li>
+  <li>배너 광고에는 광고임을 알 수 있는 표시(예: "AD")가 함께 노출되며, 이용자는 "오늘 하루 안 보기" 등의 옵션으로 노출을 일시 제어할 수 있습니다.</li>
+  <li>배너 광고의 콘텐츠·이미지·이동 링크는 광고주가 제공한 것으로, 회사는 그 정확성·유효성을 보증하지 않습니다.</li>
+</ul>
+
+<h3 id="a24"><span class="anum">제24조</span>(인라인·전면·보상형 광고)</h3>
+<ul>
+  <li>회사는 시술 목록 사이에 자연스럽게 노출되는 <b>인라인 네이티브 광고</b>, 시술 상세 화면 진입 시 일정 빈도로 노출되는 <b>전면 광고</b>, 부가 기능 이용 시 노출 가능한 <b>보상형 광고</b>를 게재할 수 있습니다.</li>
+  <li>각 광고 형식은 앱인토스 광고 모듈의 정책에 따라 동작하며, 일정 시간 동안 닫기 버튼이 노출되지 않을 수 있습니다.</li>
+</ul>
+
+<h3 id="a25"><span class="anum">제25조</span>(광고 사업자 고지)</h3>
+<p>서비스는 광고 노출을 위해 앱인토스(토스), Google AdMob 등 제3자 광고 네트워크의 모듈을 사용할 수 있습니다. 광고 ID, 기기·이용 환경 정보 등이 광고 사업자에 의해 수집·이용될 수 있으며, 자세한 사항은 해당 사업자의 정책을 따릅니다.</p>
+
+<h3 id="a26"><span class="anum">제26조</span>(하우스 광고 및 자사 앱 홍보)</h3>
+<p>회사는 자사 또는 계열 미니앱을 소개하기 위한 <b>하우스 광고 배너</b>를 노출할 수 있습니다. 하우스 광고는 외부 광고주 광고와 별도로 운영되며, 동일한 광고 영역에 함께 표시될 수 있습니다.</p>
+
+<h3 id="a27"><span class="anum">제27조</span>(찜 및 최근 본 시술)</h3>
+<ul>
+  <li>이용자는 시술을 찜(즐겨찾기) 등록하거나 최근 본 시술 이력으로 자동 저장할 수 있습니다.</li>
+  <li>찜 목록·최근 본 시술은 단말기 로컬에 저장되며, 단말기 변경·앱 데이터 삭제 시 사라질 수 있습니다.</li>
+  <li>회사는 해당 데이터의 영속성을 보장하지 않습니다.</li>
+</ul>
+
+<h3 id="a28"><span class="anum">제28조</span>(내 시술 기록 기능)</h3>
+<ul>
+  <li>이용자는 본인이 받은 시술의 정보(시술명·일자·장소·가격·결제 방식·만족도·통증·메모 등)를 직접 입력하여 기록할 수 있습니다.</li>
+  <li>시술 기록은 익명 식별자(UUID)를 기준으로 회사의 서버에 저장되어 같은 단말기에서 다시 조회할 수 있도록 동기화됩니다.</li>
+  <li>기록된 정보는 본인만 조회·수정·삭제할 수 있으며, 회사는 본 기록의 내용에 대해 검증·보증하지 않습니다.</li>
+</ul>
+
+<h3 id="a29"><span class="anum">제29조</span>(시술 기록의 정확성)</h3>
+<ul>
+  <li>시술 기록의 정확성·신뢰성은 이용자 본인의 입력에 따릅니다.</li>
+  <li>회사는 통계·분석·재시술 주기 알림 등 부가 기능을 제공할 때 이용자가 입력한 정보를 기초로 하며, 입력 오류·누락에 따른 결과의 부정확성에 대해 책임지지 않습니다.</li>
+</ul>
+
+<h3 id="a30"><span class="anum">제30조</span>(시술권 - 선불 패키지 관리)</h3>
+<ul>
+  <li>이용자는 의료기관에 미리 결제한 선불 패키지(시술권)의 총액·구매처·구매일 등을 입력하여 잔액을 관리할 수 있습니다.</li>
+  <li>시술 기록에서 결제 방식을 "시술권 차감"으로 선택하면 해당 금액이 시술권 잔액에서 차감됩니다.</li>
+  <li>본 기능은 이용자의 자가 관리 도구이며, 실제 의료기관에서 보유한 잔액·유효기간과 차이가 발생할 수 있습니다. 실제 잔액·유효기간은 의료기관에 직접 확인하여야 합니다.</li>
+</ul>
+
+<h3 id="a31"><span class="anum">제31조</span>(재시술 주기 알림)</h3>
+<ul>
+  <li>각 시술에는 회사가 정의한 권장 재시술 주기(일 단위)가 안내되며, 이용자는 시술 기록 시 권장 주기를 자동 입력하거나 직접 변경할 수 있습니다.</li>
+  <li>권장 시기가 2주 이내로 다가오거나 경과한 경우 홈 화면에 안내가 노출됩니다.</li>
+  <li>권장 주기는 일반적인 임상 기준을 참고한 <b>참고 정보</b>이며, 개인별 적합 주기는 의료진의 판단을 따라야 합니다.</li>
+</ul>
+
+<h3 id="a32"><span class="anum">제32조</span>(통계 및 AI 분석 기능)</h3>
+<ul>
+  <li>본 서비스는 이용자가 입력한 시술 기록을 토대로 지출·만족도·통증·카테고리·월별 분포 등의 통계를 제공합니다.</li>
+  <li>"AI 시술 분석" 기능은 입력된 기록을 기반으로 한 <b>규칙 기반(rule-based) 인사이트</b>이며, 외부 AI 서비스에 이용자 데이터를 전송하지 않습니다.</li>
+  <li>분석 결과는 참고용이며, 의학적 조언·진단·치료 권유로 해석되어서는 안 됩니다.</li>
+</ul>
+
+<h3 id="a33"><span class="anum">제33조</span>(데이터 저장 위치 및 동기화)</h3>
+<div class="tbl-scroll"><table class="tbl">
+  <tr><th>데이터</th><th>저장 위치</th><th>동기화</th></tr>
+  <tr><td>시술 기록</td><td>회사 서버(Firebase) + 단말기 캐시</td><td>익명 UUID 기준으로 동일 단말기에서 동기화</td></tr>
+  <tr><td>시술권 정보</td><td>회사 서버(Firebase) + 단말기 캐시</td><td>익명 UUID 기준으로 동일 단말기에서 동기화</td></tr>
+  <tr><td>찜·최근 본 시술</td><td>단말기 로컬 저장소</td><td>서버 미저장</td></tr>
+  <tr><td>설정·캐시</td><td>단말기 로컬 저장소</td><td>서버 미저장</td></tr>
+  <tr><td>이용 통계(조회·검색)</td><td>회사 서버(Firebase)</td><td>비식별 집계</td></tr>
+</table></div>
+<p>회사는 본 서비스의 운영 종료, 플랫폼 정책 변경, 보안 사고 등으로 서버에 저장된 데이터가 손실될 가능성에 대비하여 합리적인 수준의 백업을 유지하나, 데이터의 영구 보존을 보증하지 않습니다.</p>
+
+<h3 id="a34"><span class="anum">제34조</span>(인앱 웹뷰)</h3>
+<p>본 서비스는 이용약관·개인정보처리방침·광고 페이지 등을 외부 브라우저 대신 앱 내부 웹뷰(iframe)로 표시할 수 있습니다. 인앱 웹뷰로 표시되는 페이지의 콘텐츠·정확성에 대한 책임은 해당 페이지 운영자에게 있습니다.</p>
+
+<h3 id="a35"><span class="anum">제35조</span>(검색·조회 통계)</h3>
+<ul>
+  <li>회사는 인기 시술 랭킹·검색 키워드 추천 등 기능 운영을 위해 조회수·검색 키워드 등 비식별 통계를 수집합니다.</li>
+  <li>수집된 정보는 개인을 식별하지 않으며, 서비스 품질 개선·기능 고도화에 활용됩니다.</li>
+</ul>
+
+<h3 id="a36"><span class="anum">제36조</span>(이용자의 의무)</h3>
+<ul>
+  <li>이용자는 본 약관, 관련 법령, 회사의 운영 정책을 준수하여야 합니다.</li>
+  <li>이용자는 본 서비스의 정보를 자신의 시술 결정의 유일한 근거로 삼아서는 안 되며, 반드시 의료진의 상담을 거쳐야 합니다.</li>
+  <li>이용자는 자신이 입력한 시술 기록·시술권 정보 등의 정확성에 대한 책임을 부담합니다.</li>
+</ul>
+
+<h3 id="a37"><span class="anum">제37조</span>(금지 행위)</h3>
+<p>이용자는 다음 각 호에 해당하는 행위를 하여서는 안 됩니다.</p>
+<ul>
+  <li>서비스의 시술 정보·이미지·텍스트 등을 무단으로 복제·배포·상업적 이용하는 행위</li>
+  <li>자동화 도구(크롤러·봇 등)로 데이터를 무단 수집하는 행위</li>
+  <li>광고를 부정 클릭하거나 광고 노출 시스템을 우회·교란하는 행위</li>
+  <li>회사·플랫폼·제3자의 권리를 침해하는 행위</li>
+  <li>허위·과장된 시술 후기·정보를 유포하여 타인의 선택을 오도하는 행위</li>
+  <li>법령·공서양속에 반하거나 회사의 정상 운영을 방해하는 행위</li>
+</ul>
+
+<h3 id="a38"><span class="anum">제38조</span>(지적재산권)</h3>
+<ul>
+  <li>본 서비스 및 그 안의 콘텐츠(시술 정보 편집물·이미지·아이콘·UI·텍스트·로고 등)의 지적재산권은 회사 또는 정당한 권리자에게 귀속됩니다.</li>
+  <li>이용자는 회사의 사전 서면 동의 없이 위 콘텐츠를 복제·배포·전송·출판·공중송신·2차 가공할 수 없습니다.</li>
+  <li>이용자가 본인의 시술 기록·메모 등을 서비스에 입력한 경우, 해당 콘텐츠의 권리는 이용자에게 있으며, 회사는 서비스 제공 목적 범위 내에서만 이를 이용합니다.</li>
+</ul>
+
+<h3 id="a39"><span class="anum">제39조</span>(회사의 면책)</h3>
+<ul>
+  <li>회사는 천재지변·전쟁·통신장애·플랫폼 장애·해킹 등 불가항력으로 인한 서비스 제공 불능에 대해 책임지지 않습니다.</li>
+  <li>회사는 이용자가 서비스 정보를 토대로 한 시술 선택·결과·부작용·비용·분쟁 등에 대해 책임지지 않습니다.</li>
+  <li>회사는 시술권 잔액의 실제 사용 가능성, 의료기관과의 계약 이행에 대해 책임지지 않습니다.</li>
+  <li>회사는 광고주의 콘텐츠·이벤트·할인 조건 이행에 대해 책임지지 않습니다.</li>
+  <li>회사는 외부 링크 및 인앱 웹뷰로 연결되는 외부 페이지의 내용에 대해 책임지지 않습니다.</li>
+</ul>
+
+<h3 id="a40"><span class="anum">제40조</span>(의료 정보 관련 면책)</h3>
+<div class="warn">
+  <b>본 서비스의 모든 정보는 의료행위가 아니며, 의료진의 진단·처방·상담을 대체할 수 없습니다.</b> 회사는 본 서비스의 정보에 의존한 결정으로 인하여 발생한 신체적·정신적·재산적 손해에 대해 일체 책임을 부담하지 않습니다. 시술 결정·시술 시행·시술 후 관리는 반드시 의료기관에서 전문의의 상담을 거쳐 이루어져야 합니다.
+</div>
+
+<h3 id="a41"><span class="anum">제41조</span>(손해배상의 제한)</h3>
+<p>관련 법령이 허용하는 최대 범위 내에서 회사의 손해배상 책임은 회사의 고의 또는 중대한 과실로 인한 손해에 한하며, 그 금액은 이용자가 본 서비스 이용과 관련하여 회사에 직접 지급한 금액(무료 서비스인 경우 0원)을 초과하지 않습니다.</p>
+
+<h3 id="a42"><span class="anum">제42조</span>(분쟁 해결 및 준거법)</h3>
+<ul>
+  <li>회사와 이용자는 분쟁 발생 시 상호 신의에 따라 원만히 해결하도록 노력합니다.</li>
+  <li>본 약관은 대한민국 법률에 따라 해석되며, 분쟁에 관한 소송은 민사소송법상의 관할법원에 제기합니다.</li>
+</ul>
+<a class="totop" href="#terms">↑ 제1부 처음으로</a>
+</article>
+
+<article class="terms">
+<div class="part" id="privacy"><span class="num">PART 2</span><h2>제2부 · 개인정보처리방침</h2></div>
+
+<div class="box">Joyce Studios(이하 "회사")는 「개인정보 보호법」 등 관련 법령을 준수하며, "시술보감" 서비스 이용자의 개인정보를 보호하기 위해 본 개인정보처리방침을 수립·공개합니다. 본 서비스는 회원가입·로그인이 없는 <b>비식별 기반 서비스</b>로, 이름·연락처 등 직접적인 개인 식별정보를 수집하지 않습니다.</div>
+
+<h3 id="p1"><span class="anum">제1조</span>(총칙 및 기본 방침)</h3>
+<p>회사는 서비스 제공에 필요한 최소한의 정보만을 처리하며, 수집한 정보를 본 방침에 명시된 목적 외로 이용하지 않습니다. 본 서비스는 별도의 회원 식별정보 없이 익명·비식별 기반으로 운영됩니다.</p>
+
+<h3 id="p2"><span class="anum">제2조</span>(수집하는 개인정보 항목)</h3>
+<p>회사는 이름, 주민등록번호, 전화번호, 이메일 주소 등 이용자를 직접 식별할 수 있는 개인정보를 수집하지 않습니다. 다만 서비스 운영·기록 관리·통계를 위해 다음과 같은 정보가 처리될 수 있습니다.</p>
+<div class="tbl-scroll"><table class="tbl">
+  <tr><th>구분</th><th>항목</th><th>비고</th></tr>
+  <tr><td>앱 식별값</td><td>앱이 무작위로 생성한 익명 식별자(UUID)</td><td>특정 개인을 식별하지 않음, 단말 로컬 생성</td></tr>
+  <tr><td>이용자 입력</td><td>시술명·일자·장소·가격·만족도·통증·메모, 시술권 정보(이름·구매처·금액·구매일)</td><td>이용자가 직접 입력, 익명 UUID와 함께 서버 저장</td></tr>
+  <tr><td>이용 정보</td><td>시술 조회·검색 키워드·기능 사용 이벤트</td><td>비식별 집계, 통계 목적</td></tr>
+  <tr><td>기기/환경</td><td>플랫폼 구분, 앱 버전</td><td>통계(DAU·설치·업데이트) 목적</td></tr>
+  <tr><td>로컬 저장</td><td>찜 목록, 최근 본 시술, 연속 방문, 검색 기록, 캐시</td><td>단말기에만 저장(서버 미전송)</td></tr>
+</table></div>
+
+<h3 id="p3"><span class="anum">제3조</span>(자동 수집 정보 및 식별자)</h3>
+<ul>
+  <li>회사는 통계 분석을 위해 앱이 단말기에서 무작위로 생성하는 익명 식별자(UUID)를 사용합니다. 이 식별자는 이용자의 이름·연락처 등과 연결되지 않습니다.</li>
+  <li>접속 일자, 앱 버전, 플랫폼 구분, 이벤트(조회·검색·기록 입력) 등의 정보가 자동으로 수집되어 통계 목적으로 처리될 수 있습니다.</li>
+  <li>이용자가 앱 데이터를 삭제하면 단말기에 저장된 식별자 및 로컬 데이터는 초기화되며, 서버 측 익명 UUID와의 연결도 더 이상 유지되지 않습니다.</li>
+</ul>
+
+<h3 id="p4"><span class="anum">제4조</span>(개인정보 수집 방법)</h3>
+<p>정보는 (1) 이용자가 시술 기록·시술권 등을 직접 입력하는 과정, (2) 서비스를 이용하는 과정에서 자동으로 생성·수집되는 과정, 두 가지 방식으로 처리됩니다. 회사는 별도의 가입 양식이나 본인확인 절차를 통해 정보를 수집하지 않습니다.</p>
+
+<h3 id="p5"><span class="anum">제5조</span>(개인정보의 이용 목적)</h3>
+<ul>
+  <li>시술 정보 백과·검색·추천 등 서비스의 제공 및 운영</li>
+  <li>이용자가 입력한 시술 기록·시술권의 저장·동기화·통계 분석</li>
+  <li>재시술 권장 시기 알림 기능 제공</li>
+  <li>이용 통계 분석(DAU·설치·업데이트·이벤트·전환 측정) 및 서비스 품질 개선</li>
+  <li>인기 랭킹·관련 시술 추천 등 기능 고도화</li>
+  <li>광고 노출 및 부정 이용 방지</li>
+  <li>법령상 의무 이행 및 분쟁 대응</li>
+</ul>
+
+<h3 id="p6"><span class="anum">제6조</span>(시술 기록·시술권의 처리)</h3>
+<ul>
+  <li>이용자가 입력한 시술 기록·시술권 정보는 익명 식별자(UUID)와 함께 회사의 서버(Firebase Realtime Database)에 저장되어, 동일한 단말기에서 다시 조회할 수 있도록 동기화됩니다.</li>
+  <li>저장된 정보에는 시술명·일자·장소(병원명)·가격·만족도·통증·메모·시술권 정보 등이 포함될 수 있으며, 이 중 일부는 이용자가 직접 식별 가능한 정보를 입력할 가능성이 있습니다(예: 본인이 다닌 병원명).</li>
+  <li>해당 정보는 익명 UUID에 결합되어 저장되며, 회사는 이를 본인 외에 다른 이용자나 제3자에게 공개하지 않습니다.</li>
+  <li>이용자는 앱 내 기록 삭제·앱 데이터 초기화를 통해 본인의 기록을 언제든지 삭제할 수 있습니다.</li>
+</ul>
+
+<h3 id="p7"><span class="anum">제7조</span>(단말기 로컬 저장 정보)</h3>
+<p>찜 목록, 최근 본 시술, 연속 방문 기록, 검색 기록, 캐시 등은 회사 서버가 아닌 이용자의 단말기 로컬 저장소(localStorage 등)에 저장됩니다. 이용자는 앱 설정 또는 단말기의 앱 데이터 삭제를 통해 이를 언제든지 삭제할 수 있습니다.</p>
+
+<h3 id="p8"><span class="anum">제8조</span>(Firebase 이용 고지)</h3>
+<ul>
+  <li>회사는 서비스 운영·통계 분석·원격 설정·데이터 저장을 위해 Google이 제공하는 Firebase(Realtime Database 등)를 이용합니다.</li>
+  <li>Firebase에는 익명 식별자(UUID), 이용자가 입력한 시술 기록·시술권 정보, 접속 일자, 앱 버전, 플랫폼 구분, 이용 이벤트 등이 저장될 수 있습니다.</li>
+  <li>Firebase는 Google LLC가 운영하며, 해당 데이터의 처리에는 Google의 개인정보 처리 정책이 함께 적용됩니다.</li>
+  <li>광고 ID 및 광고 노출 설정, 시술 데이터 갱신 등 운영 설정은 Firebase를 통해 원격으로 전달·갱신될 수 있습니다.</li>
+</ul>
+
+<h3 id="p9"><span class="anum">제9조</span>(광고 식별자 및 맞춤형 광고)</h3>
+<ul>
+  <li>서비스는 앱인토스 공식 인앱 광고 모듈을 통해 광고를 노출하며, 해당 모듈은 Google AdMob 등 제3자 광고 네트워크를 매개로 동작할 수 있습니다.</li>
+  <li>광고 제공 과정에서 광고 네트워크는 광고 식별자(예: 광고 ID) 및 기기·이용 환경 정보를 수집·이용하여 맞춤형 광고를 제공할 수 있습니다.</li>
+  <li>이용자는 단말기의 설정(광고 ID 재설정·맞춤 광고 제한 등)을 통해 맞춤형 광고 수신을 제어할 수 있습니다.</li>
+  <li>광고 식별자의 수집·이용에 관한 구체적 사항은 해당 광고 네트워크 및 플랫폼(토스)의 정책을 따릅니다.</li>
+</ul>
+
+<h3 id="p10"><span class="anum">제10조</span>(앱인토스 플랫폼 연동)</h3>
+<p>본 서비스는 앱인토스 플랫폼 상에서 구동되며, 외부 링크 열기·광고 노출·미니앱 간 이동 등 일부 기능은 플랫폼이 제공하는 기능을 통해 수행됩니다. 플랫폼 환경에서 처리되는 정보에 대해서는 플랫폼 운영사(토스)의 개인정보 처리 정책이 함께 적용됩니다.</p>
+
+<h3 id="p11"><span class="anum">제11조</span>(인앱 웹뷰의 정보 처리)</h3>
+<p>본 서비스는 약관·광고 페이지 등 외부 콘텐츠를 앱 내부 웹뷰(iframe)로 표시할 수 있습니다. 인앱 웹뷰에서 처리되는 정보(쿠키·세션 등)는 해당 외부 페이지 운영자의 정책에 따릅니다. 회사는 인앱 웹뷰를 통해 이용자의 식별 정보를 별도로 수집하지 않습니다.</p>
+
+<h3 id="p12"><span class="anum">제12조</span>(민감정보 비수집 원칙)</h3>
+<div class="notice">
+  본 서비스는 「개인정보 보호법」 제23조에서 정한 민감정보(건강·의료·유전·생체인식 등 정보)를 <b>직접 수집하지 않습니다.</b> 다만 이용자가 시술 기록의 메모란 등에 본인의 건강 상태·시술 부위·증상 등을 자발적으로 입력할 수 있으며, 이는 이용자 본인의 자율적 선택에 따른 것입니다. 회사는 해당 정보를 본인 외에 공개하거나 분석·마케팅 등 다른 목적에 활용하지 않습니다.
+</div>
+
+<h3 id="p13"><span class="anum">제13조</span>(개인정보의 제3자 제공)</h3>
+<p>회사는 이용자의 정보를 제3자에게 제공하지 않습니다. 다만 법령에 특별한 규정이 있거나 수사기관의 적법한 요청이 있는 경우에는 예외로 합니다.</p>
+
+<h3 id="p14"><span class="anum">제14조</span>(개인정보 처리의 위탁)</h3>
+<p>회사는 안정적인 서비스 제공을 위해 다음과 같이 정보 처리 업무를 위탁(또는 외부 서비스 이용)할 수 있습니다.</p>
+<div class="tbl-scroll"><table class="tbl">
+  <tr><th>수탁자 / 서비스</th><th>위탁 업무 내용</th></tr>
+  <tr><td>Google (Firebase)</td><td>시술 기록·시술권 등 데이터 저장, 통계 분석, 원격 설정</td></tr>
+  <tr><td>Google (AdMob) / 광고 네트워크</td><td>광고 노출 및 광고 성과 측정</td></tr>
+  <tr><td>토스(앱인토스 플랫폼)</td><td>미니앱 구동 환경 및 광고·링크 기능 제공</td></tr>
+</table></div>
+
+<h3 id="p15"><span class="anum">제15조</span>(개인정보의 국외 이전)</h3>
+<p>Firebase·AdMob 등 일부 외부 서비스는 국외에 소재한 서버를 이용할 수 있으며, 이로 인해 시술 기록·통계·광고 관련 정보가 국외로 이전·처리될 수 있습니다. 해당 정보의 처리는 각 사업자의 정책 및 관련 법령에 따릅니다.</p>
+
+<h3 id="p16"><span class="anum">제16조</span>(개인정보의 보유 및 파기)</h3>
+<ul>
+  <li>단말기에 저장된 로컬 데이터(찜·최근 본 시술 등)는 이용자가 삭제하거나 앱 데이터를 초기화할 때까지 보관됩니다.</li>
+  <li>서버에 저장된 시술 기록·시술권 정보는 이용자가 앱 내에서 삭제하기 전까지 보관되며, 이용자의 요청 시 즉시 파기됩니다.</li>
+  <li>통계 목적의 비식별 정보는 수집 목적 달성에 필요한 기간 동안 보관 후 파기하거나, 통계 형태로 비식별 처리하여 보관할 수 있습니다.</li>
+  <li>관련 법령에 보존 의무가 있는 경우 해당 기간 동안 보관합니다.</li>
+</ul>
+
+<h3 id="p17"><span class="anum">제17조</span>(이용자 및 법정대리인의 권리)</h3>
+<p>이용자는 자신의 정보에 대한 열람·정정·삭제·처리정지를 요구할 수 있습니다. 본 서비스는 비로그인 구조로 운영되므로, 이용자는 다음과 같은 방법으로 권리를 행사할 수 있습니다.</p>
+<ul>
+  <li>앱 내 "내 시술 기록"·"시술권 관리" 화면에서 기록을 직접 수정·삭제</li>
+  <li>단말기의 앱 데이터 삭제를 통해 로컬 정보 및 익명 식별자를 일괄 초기화</li>
+  <li>그 밖의 요청은 제21조의 연락처로 문의</li>
+</ul>
+
+<h3 id="p18"><span class="anum">제18조</span>(만 14세 미만 아동의 개인정보)</h3>
+<p>본 서비스는 만 19세 이상의 성인을 주된 대상으로 하며, 회원가입 없이 운영되므로 별도로 아동의 식별정보를 수집하지 않습니다. 만 14세 미만 아동이 서비스를 이용하는 경우 법정대리인의 지도·감독이 필요합니다.</p>
+
+<h3 id="p19"><span class="anum">제19조</span>(개인정보의 안전성 확보 조치)</h3>
+<ul>
+  <li>외부 API 연동 시 인증키를 클라이언트에 노출하지 않고 서버에서 처리하여 보안을 강화합니다.</li>
+  <li>전송 구간 암호화(HTTPS) 및 접근 제한·최소 수집 원칙을 적용합니다.</li>
+  <li>비식별·익명화 처리를 통해 이용자 식별 위험을 최소화합니다.</li>
+  <li>시술 기록·시술권 등 이용자 입력 정보는 익명 UUID를 기준으로 분리 저장되며, 직접 식별정보와 결합하지 않습니다.</li>
+</ul>
+
+<h3 id="p20"><span class="anum">제20조</span>(쿠키 및 유사 기술)</h3>
+<p>본 서비스는 단말기 로컬 저장소(localStorage 등) 및 유사 기술을 이용하여 이용자 설정·이력·캐시를 저장합니다. 이용자는 단말기 설정 또는 앱 데이터 삭제를 통해 이를 제어·삭제할 수 있습니다.</p>
+
+<h3 id="p21"><span class="anum">제21조</span>(개인정보 보호책임자 및 문의처)</h3>
+<div class="contact">
+  <b>운영사</b> · Joyce Studios<br>
+  <b>개인정보 보호책임자</b> · Joyce Studios 운영팀<br>
+  <b>이메일</b> · ibillkim@gmail.com<br>
+  <b>문의 응답</b> · 영업일 기준 7일 이내
+</div>
+
+<h3 id="p22"><span class="anum">제22조</span>(방침의 변경 및 고지 의무)</h3>
+<p>본 개인정보처리방침은 법령·정책 또는 서비스 변경에 따라 개정될 수 있으며, 개정 시 시행일 및 변경 내용을 서비스 내 또는 본 페이지에 공지합니다. 중요한 변경의 경우 시행일 7일 전부터 고지합니다.</p>
+
+<a class="totop" href="#privacy">↑ 제2부 처음으로</a>
+</article>
+
+<footer class="doc">
+  <p>본 문서는 「시술보감」 서비스의 이용약관 및 개인정보처리방침입니다.<br>
+  운영사 : Joyce Studios · 문의 : ibillkim@gmail.com<br>
+  최종 개정일 : 2026년 5월 26일 · 시행일 : 2026년 5월 26일</p>
+  <p style="margin-top:10px;">※ 본 문서에 언급된 토스, 앱인토스(Apps in Toss), Google, Firebase, AdMob 등은 각 사의 상표 또는 서비스명이며, 식별 목적으로만 사용되었습니다. 본 서비스는 위 각 사와의 공식 제휴·보증·후원 관계를 표방하지 않습니다.</p>
+  <p style="margin-top:10px;">※ 본 서비스의 시술 정보는 일반적인 참고 자료이며, 의료행위가 아닙니다. 시술 결정은 반드시 의료기관에서 전문의와 상담 후 이루어져야 합니다.</p>
+</footer>
+
+</div>
+</body>
+</html>
