@@ -1,252 +1,568 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<title>세모 서비스 이용약관</title>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>세모(SEMO) · 서비스 이용약관 및 개인정보처리방침</title>
+<meta name="description" content="세모(SEMO) 세차 정모 서비스의 이용약관 및 개인정보처리방침입니다.">
 <style>
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    line-height: 1.7;
-    margin: 40px;
-    color: #222;
-    background: #fff;
+  :root{
+    --brand:#2563EB; --brand-2:#3B82F6; --brand-dark:#1D4ED8;
+    --brand-soft:rgba(37,99,235,0.08); --brand-line:rgba(37,99,235,0.22);
+    --accent:#06B6D4; --accent-soft:rgba(6,182,212,0.10); --accent-line:rgba(6,182,212,0.30);
+    --gold:#0E9488; --gold-soft:rgba(14,148,136,0.10); --gold-line:rgba(14,148,136,0.30);
+    --warn:#D97706; --warn-soft:rgba(217,119,6,0.09); --warn-line:rgba(217,119,6,0.28);
+    --bg:#F6F9FE; --bg-soft:#FFFFFF; --bg-soft2:#EEF4FE; --line:#E3EBF6;
+    --ink:#0F172A; --ink-soft:#3E4A5C; --ink-faint:#7A879B;
+    --radius:16px; --maxw:880px;
+    --font:'Pretendard',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI","Noto Sans KR",Roboto,sans-serif;
   }
-
-  h1 {
-    font-size: 30px;
-    margin-bottom: 10px;
-  }
-
-  h2 {
-    margin-top: 32px;
-    font-size: 22px;
-  }
-
-  p {
-    margin-bottom: 12px;
-  }
-
-  ul {
-    margin-left: 20px;
-  }
-
-  .box {
-    background: #f7f9fc;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 24px;
-  }
+  @font-face{font-family:'Pretendard';font-weight:800;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-ExtraBold.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Medium.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--bg);}
+  body{font-family:var(--font);color:var(--ink-soft);background:var(--bg);line-height:1.78;margin:0;font-size:16px;font-weight:400;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 28px) 20px 80px;}
+  header.doc{padding:8px 0 24px;border-bottom:3px solid var(--brand);margin-bottom:8px;}
+  .brand{display:inline-flex;align-items:center;gap:11px;margin-bottom:18px;}
+  .brand .mk{width:42px;height:42px;border-radius:13px;overflow:hidden;display:grid;place-items:center;box-shadow:0 8px 20px rgba(37,99,235,0.32);}
+  .brand .nm{font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.5px;}
+  .brand .nm b{color:var(--brand);}
+  header.doc .kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--brand);background:var(--brand-soft);border:1px solid var(--brand-line);padding:5px 12px;border-radius:999px;margin-bottom:14px;}
+  header.doc h1{font-size:27px;line-height:1.35;margin:0 0 14px;letter-spacing:-.02em;color:var(--ink);font-weight:800;}
+  .meta{color:var(--ink-faint);font-size:13.5px;line-height:1.95;margin:0;}
+  .meta b{color:var(--ink-soft);}
+  .box{background:var(--bg-soft);border:1px solid var(--line);border-left:4px solid var(--brand);padding:16px 18px;border-radius:var(--radius);margin:20px 0;font-size:14.5px;color:var(--ink-soft);box-shadow:0 2px 10px rgba(15,30,60,0.04);}
+  .box b{color:var(--ink);}
+  .notice{background:var(--brand-soft);border:1px solid var(--brand-line);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#1E40AF;}
+  .warn{background:var(--warn-soft);border:1px solid var(--warn-line);border-left:4px solid var(--warn);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#92400E;}
+  .contact{background:var(--gold-soft);border:1px solid var(--gold-line);border-left:4px solid var(--gold);padding:16px 18px;border-radius:var(--radius);font-size:14.5px;line-height:1.95;color:var(--ink-soft);}
+  .contact b{color:var(--ink);}
+  nav.toc{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin:26px 0 10px;box-shadow:0 2px 10px rgba(15,30,60,0.04);}
+  nav.toc h2{font-size:16px;margin:0 0 14px;color:var(--ink);border:0;padding:0;font-weight:800;}
+  nav.toc .toc-part{font-size:13px;font-weight:700;color:var(--brand);margin:16px 0 8px;letter-spacing:.02em;}
+  nav.toc .toc-part:first-of-type{margin-top:0;}
+  nav.toc ol{list-style:none;margin:0;padding:0;columns:2;column-gap:26px;}
+  nav.toc ol li{margin:0 0 6px;font-size:13.5px;break-inside:avoid;padding-left:0;}
+  nav.toc ol li::before{display:none;}
+  nav.toc a{color:var(--ink-faint);text-decoration:none;transition:color .15s;}
+  nav.toc a:hover{color:var(--brand);text-decoration:underline;}
+  .part{margin:54px 0 8px;padding:20px 22px;background:linear-gradient(135deg,var(--brand-dark) 0%,var(--brand-2) 100%);color:#fff;border-radius:var(--radius);box-shadow:0 12px 30px rgba(37,99,235,0.26);}
+  .part .num{font-size:12px;font-weight:700;opacity:.9;letter-spacing:.1em;}
+  .part h2{color:#fff;border:0;margin:4px 0 0;padding:0;font-size:21px;font-weight:800;}
+  h2.chapter{font-size:18px;color:var(--ink);margin:40px 0 6px;padding-bottom:9px;border-bottom:1px solid var(--line);font-weight:800;letter-spacing:-.3px;}
+  h3{font-size:16px;color:var(--ink);margin:26px 0 6px;scroll-margin-top:16px;font-weight:700;letter-spacing:-.2px;}
+  h3 .anum{color:var(--brand);font-weight:800;margin-right:5px;}
+  p{margin:8px 0;color:var(--ink-soft);font-size:15px;}
+  article.terms p,article.terms li{font-size:14.5px;}
+  ul{margin:8px 0 12px;padding-left:4px;list-style:none;}
+  ol.lower{margin:8px 0 12px;padding-left:22px;}
+  ol.lower li{padding-left:4px;}
+  ol.lower li::before{display:none;}
+  li{position:relative;padding-left:18px;margin-bottom:7px;color:var(--ink-soft);font-size:14.5px;}
+  ul li::before{content:'';position:absolute;left:3px;top:11px;width:5px;height:5px;border-radius:50%;background:var(--brand);opacity:.85;}
+  b,strong{color:var(--ink);font-weight:700;}
+  table.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;background:var(--bg-soft);}
+  table.tbl th,table.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;}
+  table.tbl th{background:var(--bg-soft2);color:var(--ink);font-weight:700;white-space:nowrap;}
+  table.tbl td{color:var(--ink-soft);}
+  table.tbl tr:nth-child(even) td{background:rgba(37,99,235,0.025);}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .totop{display:inline-block;font-size:12.5px;color:var(--brand);text-decoration:none;margin-top:10px;}
+  footer.doc{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-faint);line-height:1.9;}
+  footer.doc b{color:var(--ink-soft);}
+  footer.doc p{color:var(--ink-faint);}
+  @media (max-width:640px){body{font-size:15.5px;}.wrap{padding:calc(env(safe-area-inset-top,0px) + 20px) 16px 64px;}header.doc h1{font-size:22px;}nav.toc ol{columns:1;}.part h2{font-size:18px;}h2.chapter{font-size:16.5px;}h3{font-size:15px;}}
 </style>
 </head>
-
 <body>
+<div class="wrap" id="top">
 
-<h1>세모 서비스 이용약관</h1>
+<header class="doc">
+  <div class="brand">
+    <span class="mk" aria-hidden="true">
+      <img src="data:image/png;base64,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" alt="세모 아이콘" style="width:100%;height:100%;border-radius:13px;display:block;">
+    </span>
+    <span class="nm"><b>세모</b> SEMO</span>
+  </div>
+  <h1>세모(SEMO) 서비스 이용약관 및 개인정보처리방침</h1>
+  <p class="meta">
+    <b>서비스명</b> 세모(SEMO) — 세차 정모 플랫폼<br>
+    <b>운영자</b> JoyceStudios(조이스스튜디오스)<br>
+    <b>문의</b> ibillkim@gmail.com<br>
+    <b>시행일</b> 2026년 6월 9일 · <b>최종 개정일</b> 2026년 6월 9일
+  </p>
+  <div class="box">
+    본 문서는 세모(이하 “서비스”)의 <b>서비스 이용약관</b>과 <b>개인정보처리방침</b>을 하나로 모은 것입니다.
+    서비스를 이용하시는 경우 본 약관에 동의한 것으로 간주됩니다. 세모는 세차를 함께할 사람을 모으는
+    <b>모임(정모) 중개·정보 제공 플랫폼</b>이며, 세차 행위나 오프라인 만남의 당사자가 아닙니다.
+  </div>
+</header>
 
-<div class="box">
-<p>
-본 이용약관(이하 “약관”)은 Joyce Studios(이하 “회사”)가 제공하는 
-위치 기반 세차 정모 플랫폼 서비스 “세모”(이하 “서비스” 또는 “앱”)의 이용과 관련하여 
-회사와 사용자 간의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.
-</p>
+<nav class="toc" aria-label="목차">
+  <h2>📑 목차</h2>
+  <div class="toc-part">제1부 · 서비스 이용약관</div>
+  <ol>
+    <li><a href="#t1">제1조 목적</a></li>
+    <li><a href="#t2">제2조 용어의 정의</a></li>
+    <li><a href="#t3">제3조 약관의 효력 및 변경</a></li>
+    <li><a href="#t4">제4조 약관 외 준칙</a></li>
+    <li><a href="#t5">제5조 플랫폼 및 운영 주체</a></li>
+    <li><a href="#t6">제6조 서비스의 성격(중개·정보제공)</a></li>
+    <li><a href="#t7">제7조 서비스 제공 내용</a></li>
+    <li><a href="#t8">제8조 서비스 제공 시간</a></li>
+    <li><a href="#t9">제9조 서비스의 변경·중단</a></li>
+    <li><a href="#t10">제10조 이용계약의 성립</a></li>
+    <li><a href="#t11">제11조 게스트·비로그인 이용</a></li>
+    <li><a href="#t12">제12조 이용 제한·차단</a></li>
+    <li><a href="#t13">제13조 세차장 정보의 수집·제공</a></li>
+    <li><a href="#t14">제14조 네이버 OPEN API 연동</a></li>
+    <li><a href="#t15">제15조 지도 서비스</a></li>
+    <li><a href="#t16">제16조 세차 적합도·날씨 정보</a></li>
+    <li><a href="#t17">제17조 외부 정보의 정확성 한계</a></li>
+    <li><a href="#t18">제18조 길찾기 외부 앱 연동</a></li>
+    <li><a href="#t19">제19조 정모의 생성</a></li>
+    <li><a href="#t20">제20조 정모의 참여</a></li>
+    <li><a href="#t21">제21조 공개·비공개 정모와 초대코드</a></li>
+    <li><a href="#t22">제22조 방장의 권한과 책임</a></li>
+    <li><a href="#t23">제23조 오프라인 만남에 대한 주의</a></li>
+    <li><a href="#t24">제24조 정모의 취소·삭제</a></li>
+    <li><a href="#t25">제25조 댓글 및 게시물</a></li>
+    <li><a href="#t26">제26조 닉네임·프로필</a></li>
+    <li><a href="#t27">제27조 신뢰도 점수</a></li>
+    <li><a href="#t28">제28조 알림(푸시·인앱·리마인더)</a></li>
+    <li><a href="#t29">제29조 게시물의 관리 및 이용허락</a></li>
+    <li><a href="#t30">제30조 광고의 게재</a></li>
+    <li><a href="#t31">제31조 광고 형태</a></li>
+    <li><a href="#t32">제32조 광고 사업자 고지</a></li>
+    <li><a href="#t33">제33조 하우스 광고·자사 앱 홍보</a></li>
+    <li><a href="#t34">제34조 이용자의 의무</a></li>
+    <li><a href="#t35">제35조 부정 이용·어뷰징</a></li>
+    <li><a href="#t36">제36조 자동화·봇 금지</a></li>
+    <li><a href="#t37">제37조 지적재산권</a></li>
+    <li><a href="#t38">제38조 회사의 면책(모임·오프라인)</a></li>
+    <li><a href="#t39">제39조 외부 콘텐츠 면책</a></li>
+    <li><a href="#t40">제40조 손해배상·책임의 제한</a></li>
+    <li><a href="#t41">제41조 미성년자 이용</a></li>
+    <li><a href="#t42">제42조 통지·분쟁해결·준거법</a></li>
+  </ol>
+  <div class="toc-part">제2부 · 개인정보처리방침</div>
+  <ol>
+    <li><a href="#p1">제1조 총칙 및 기본 방침</a></li>
+    <li><a href="#p2">제2조 수집하는 개인정보 항목</a></li>
+    <li><a href="#p3">제3조 자동 수집 정보·식별자</a></li>
+    <li><a href="#p4">제4조 위치정보의 처리</a></li>
+    <li><a href="#p5">제5조 수집 방법</a></li>
+    <li><a href="#p6">제6조 이용 목적</a></li>
+    <li><a href="#p7">제7조 단말기 로컬 저장 정보</a></li>
+    <li><a href="#p8">제8조 Firebase 이용 고지</a></li>
+    <li><a href="#p9">제9조 광고 식별자·맞춤형 광고</a></li>
+    <li><a href="#p10">제10조 네이버 OPEN API 처리</a></li>
+    <li><a href="#p11">제11조 날씨 API 연동 처리</a></li>
+    <li><a href="#p12">제12조 프로필 이미지의 처리</a></li>
+    <li><a href="#p13">제13조 제3자 제공</a></li>
+    <li><a href="#p14">제14조 처리 위탁</a></li>
+    <li><a href="#p15">제15조 국외 이전</a></li>
+    <li><a href="#p16">제16조 보유 및 파기</a></li>
+    <li><a href="#p17">제17조 이용자의 권리</a></li>
+    <li><a href="#p18">제18조 만 14세 미만 아동</a></li>
+    <li><a href="#p19">제19조 안전성 확보 조치</a></li>
+    <li><a href="#p20">제20조 식별자·유사기술</a></li>
+    <li><a href="#p21">제21조 보호책임자 및 문의처</a></li>
+    <li><a href="#p22">제22조 방침의 변경 및 고지</a></li>
+  </ol>
+</nav>
 
-<p>
-세모는 사용자의 현재 위치를 기반으로 주변 세차장 정보와 세차 정모 기능을 제공하여, 
-세차를 좋아하는 사람들이 쉽고 빠르게 함께 세차할 수 있도록 돕는 위치 기반 커뮤니티 서비스입니다.
-</p>
+<!-- ====================== 이용약관 ====================== -->
+<article class="terms">
+<div class="part"><div class="num">PART 1</div><h2>서비스 이용약관</h2></div>
 
-<p>
-본 서비스는 사용자 간의 자율적인 모임 생성 및 참여를 지원하는 플랫폼이며, 
-회사는 사용자 간 오프라인 활동 및 모임에 직접 개입하지 않습니다.
-</p>
+<h2 class="chapter">제1장 총칙</h2>
 
-<p>
-사용자는 본 약관에 동의함으로써 서비스를 이용할 수 있으며, 
-서비스 이용 시 관련 법령 및 본 약관을 준수할 의무가 있습니다.
-</p>
+<h3 id="t1"><span class="anum">제1조</span>(목적)</h3>
+<p>본 약관은 JoyceStudios(조이스스튜디오스, 이하 “회사”)가 제공하는 모바일 애플리케이션 <b>세모(SEMO)</b>(이하 “서비스”)의 이용과 관련하여 회사와 이용자 간의 권리·의무 및 책임사항, 서비스 이용조건 및 절차 등 기본적인 사항을 규정함을 목적으로 합니다.</p>
+
+<h3 id="t2"><span class="anum">제2조</span>(용어의 정의)</h3>
+<ul>
+  <li><b>서비스</b>: 이용자가 자신의 주변에서 함께 세차할 사람을 모으는 모임(정모)을 탐색·생성·참여하고, 주변 세차장 정보와 세차 날씨 정보를 제공받는 세모 애플리케이션 및 관련 제반 서비스를 말합니다.</li>
+  <li><b>이용자</b>: 본 약관에 따라 서비스를 이용하는 자로, 소셜 로그인 이용자, 게스트(익명) 이용자, 비로그인 둘러보기 이용자를 포함합니다.</li>
+  <li><b>정모</b>: 이용자가 특정 세차장과 일시를 정하여 함께 세차할 사람을 모집하는 모임을 말합니다.</li>
+  <li><b>방장</b>: 정모를 생성하여 운영하는 이용자를, <b>참여자</b>는 해당 정모에 참여한 이용자를 말합니다.</li>
+  <li><b>세차장 정보</b>: 제3자 오픈 API 등을 통해 제공되는 주변 세차장의 명칭·위치·연락처 등 정보를 말합니다.</li>
+  <li><b>세차 적합도</b>: 날씨·대기 정보를 바탕으로 세차에 적합한 정도를 회사가 추정하여 표시하는 참고 지표를 말합니다.</li>
+  <li><b>콘텐츠</b>: 이용자가 서비스에 게시·전송하는 정모 정보, 댓글, 닉네임, 프로필 이미지 등 일체의 정보를 말합니다.</li>
+</ul>
+
+<h3 id="t3"><span class="anum">제3조</span>(약관의 효력 및 변경)</h3>
+<ul>
+  <li>본 약관은 서비스 화면에 게시하거나 기타의 방법으로 이용자에게 공지함으로써 효력이 발생합니다.</li>
+  <li>회사는 관련 법령을 위배하지 않는 범위에서 본 약관을 개정할 수 있으며, 개정 시 적용일자 및 개정사유를 명시하여 적용일 이전부터 서비스 내에 공지합니다.</li>
+  <li>이용자에게 불리하거나 중대한 변경의 경우 적용일 30일 전부터 공지하며, 이용자가 적용일 이후에도 서비스를 계속 이용하는 경우 변경된 약관에 동의한 것으로 봅니다.</li>
+</ul>
+
+<h3 id="t4"><span class="anum">제4조</span>(약관 외 준칙)</h3>
+<p>본 약관에 명시되지 않은 사항은 「전자상거래 등에서의 소비자보호에 관한 법률」, 「약관의 규제에 관한 법률」, 「정보통신망 이용촉진 및 정보보호 등에 관한 법률」, 「개인정보 보호법」, 「위치정보의 보호 및 이용 등에 관한 법률」 등 관련 법령 및 상관례에 따릅니다.</p>
+<a class="totop" href="#top">↑ 목차로</a>
+
+<h2 class="chapter">제2장 서비스의 성격 및 제공</h2>
+
+<h3 id="t5"><span class="anum">제5조</span>(플랫폼 및 운영 주체)</h3>
+<p>서비스는 JoyceStudios가 개발·운영하며, Apple App Store 및 Google Play를 통해 배포됩니다. 회사의 식별 정보는 본 문서 하단 및 각 스토어 페이지에 표기됩니다.</p>
+
+<h3 id="t6"><span class="anum">제6조</span>(서비스의 성격 — 중개·정보제공 지위)</h3>
+<div class="warn"><b>중요</b> 세모는 이용자 간 세차 모임을 연결해 주는 <b>중개 및 정보 제공 플랫폼</b>입니다. 회사는 정모의 주최자나 참여자가 아니며, 세차장 운영자도 아닙니다. 정모의 진행, 오프라인에서의 만남, 세차 행위 및 그 결과에 대한 책임은 해당 정모의 방장과 참여자에게 있습니다.</p></div>
+
+<h3 id="t7"><span class="anum">제7조</span>(서비스 제공 내용)</h3>
+<ul>
+  <li>위치 기반의 주변 정모 탐색(거리·일정 정렬) 및 정모 생성·참여</li>
+  <li>주변 세차장 검색, 지도 표시, 평점·거리 등 정보 제공 및 외부 길찾기 앱 연결</li>
+  <li>날씨·대기 정보 기반의 세차 적합도 및 예보 제공</li>
+  <li>정모 내 댓글, 참여자 표시, 푸시·인앱 알림, 정모 시작 리마인더</li>
+  <li>기타 회사가 추가로 개발하거나 제휴를 통해 제공하는 일체의 서비스</li>
+</ul>
+
+<h3 id="t8"><span class="anum">제8조</span>(서비스 제공 시간)</h3>
+<p>서비스는 연중무휴, 1일 24시간 제공함을 원칙으로 합니다. 다만 시스템 점검, 증설·교체, 장애, 통신두절, 제3자 서비스(클라우드·API·광고 등)의 문제 등 상당한 이유가 있는 경우 서비스의 전부 또는 일부가 제한될 수 있습니다.</p>
+
+<h3 id="t9"><span class="anum">제9조</span>(서비스의 변경·중단)</h3>
+<ul>
+  <li>회사는 운영상·기술상 필요에 따라 서비스의 전부 또는 일부를 변경·중단할 수 있습니다.</li>
+  <li>중대한 변경·중단 시 사전에 서비스 내 공지하며, 부득이한 경우 사후에 통지할 수 있습니다.</li>
+  <li>회사는 무료로 제공되는 서비스의 변경·중단으로 인하여 발생하는 손해에 대하여 관련 법령에 특별한 규정이 없는 한 책임을 지지 않습니다.</li>
+</ul>
+<a class="totop" href="#top">↑ 목차로</a>
+
+<h2 class="chapter">제3장 이용계약과 이용자 지위</h2>
+
+<h3 id="t10"><span class="anum">제10조</span>(이용계약의 성립)</h3>
+<ul>
+  <li>이용계약은 이용자가 본 약관에 동의하고 서비스를 이용함으로써 성립합니다.</li>
+  <li>정모 생성·참여, 댓글 작성 등 일부 기능은 소셜 로그인(Google, Apple) 또는 게스트(익명) 로그인을 통한 식별이 필요할 수 있습니다.</li>
+  <li>회사는 실명·연락처 등 별도의 회원 가입 절차를 요구하지 않으며, 인증 식별자와 닉네임·프로필 중심으로 이용자를 식별합니다.</li>
+</ul>
+
+<h3 id="t11"><span class="anum">제11조</span>(게스트·비로그인 이용)</h3>
+<ul>
+  <li>이용자는 로그인 없이 정모와 세차장, 세차 날씨 등을 둘러볼 수 있습니다(플랫폼별 제공 범위 상이).</li>
+  <li>게스트(익명) 로그인 이용자는 별도의 개인정보 제공 없이 익명 식별자로 기능을 이용할 수 있으나, 앱 삭제·데이터 초기화 시 해당 식별자와 연결된 활동 내역이 복구되지 않을 수 있습니다.</li>
+</ul>
+
+<h3 id="t12"><span class="anum">제12조</span>(이용 제한 및 차단)</h3>
+<p>회사 또는 방장은 다음의 경우 이용자의 정모 참여 제한, 정모에서의 강퇴(차단), 게시물 삭제, 서비스 이용 제한 등의 조치를 취할 수 있습니다.</p>
+<ul>
+  <li>본 약관 또는 관련 법령을 위반한 경우</li>
+  <li>타인에게 피해를 주거나 미풍양속을 해치는 행위를 한 경우</li>
+  <li>정모의 정상적 운영을 방해하거나 다른 이용자의 안전을 위협하는 경우</li>
+  <li>부정 이용·어뷰징·자동화 도구 사용이 확인된 경우</li>
+</ul>
+<a class="totop" href="#top">↑ 목차로</a>
+
+<h2 class="chapter">제4장 세차장·날씨 정보</h2>
+
+<h3 id="t13"><span class="anum">제13조</span>(세차장 정보의 수집·제공)</h3>
+<p>서비스에 표시되는 세차장 정보는 제3자 오픈 API 및 공개된 정보를 기반으로 수집·가공되어 제공됩니다. 회사는 정보를 최신으로 유지하기 위해 노력하나, 실제 영업 여부·요금·시설 등 현장 정보와 다를 수 있습니다.</p>
+
+<h3 id="t14"><span class="anum">제14조</span>(네이버 OPEN API 연동)</h3>
+<ul>
+  <li>주변 세차장 검색은 네이버 지역검색 등 외부 OPEN API를 통해 제공될 수 있습니다.</li>
+  <li>해당 정보의 저작권 및 권리는 원 제공자에게 있으며, 이용자는 해당 제공자의 정책을 함께 준수해야 합니다.</li>
+  <li>외부 API의 정책 변경·중단 시 관련 기능이 제한될 수 있습니다.</li>
+</ul>
+
+<h3 id="t15"><span class="anum">제15조</span>(지도 서비스)</h3>
+<p>서비스는 지도 표시를 위해 운영체제 또는 제3자 지도 서비스(예: Apple 지도, 네이버 지도 등)를 이용합니다. 지도·마커·경로 표시는 해당 지도 제공자의 데이터와 정책에 따릅니다.</p>
+
+<h3 id="t16"><span class="anum">제16조</span>(세차 적합도·날씨 정보)</h3>
+<ul>
+  <li>세차 적합도(최적·좋음·보통·나쁨·불가 등)는 외부 날씨 제공자(예: OpenWeatherMap)의 데이터를 바탕으로 회사가 산정한 <b>참고용 추정 지표</b>입니다.</li>
+  <li>기상은 수시로 변동하므로 실제 날씨와 다를 수 있으며, 이용자의 세차 시점 판단은 본인의 책임으로 합니다.</li>
+</ul>
+
+<h3 id="t17"><span class="anum">제17조</span>(외부 정보의 정확성 한계)</h3>
+<div class="notice">세차장 정보, 지도, 날씨·세차 적합도 등 외부에서 제공되는 정보는 참고용이며, 회사는 그 정확성·완전성·최신성을 보증하지 않습니다. 중요한 결정(방문·예약 등)은 반드시 해당 시설·기관에 직접 확인하시기 바랍니다.</div>
+
+<h3 id="t18"><span class="anum">제18조</span>(길찾기 외부 앱 연동)</h3>
+<p>서비스는 이용자의 편의를 위해 외부 길찾기 앱(예: 네이버 지도, 카카오맵, T맵, 구글 지도, Apple 지도 등)으로의 연결을 제공할 수 있습니다. 연결 이후의 경로 안내·이용은 해당 앱의 약관과 정책에 따릅니다.</p>
+<a class="totop" href="#top">↑ 목차로</a>
+
+<h2 class="chapter">제5장 정모(모임) 기능</h2>
+
+<h3 id="t19"><span class="anum">제19조</span>(정모의 생성)</h3>
+<ul>
+  <li>이용자는 세차장, 일시, 참여 인원, 공개 범위, 정모명(선택) 등을 설정하여 정모를 생성할 수 있습니다.</li>
+  <li>방장은 정모 정보를 사실에 기반하여 정확히 입력해야 하며, 허위·과장 정보로 인한 책임은 방장에게 있습니다.</li>
+</ul>
+
+<h3 id="t20"><span class="anum">제20조</span>(정모의 참여)</h3>
+<ul>
+  <li>이용자는 모집 중인 정모에 참여할 수 있으며, 정원이 마감되거나 방장이 모집을 종료한 경우 참여가 제한됩니다.</li>
+  <li>참여자는 정모의 일정·장소를 준수하고, 다른 참여자를 존중해야 합니다.</li>
+</ul>
+
+<h3 id="t21"><span class="anum">제21조</span>(공개·비공개 정모와 초대코드)</h3>
+<ul>
+  <li>정모는 공개 또는 비공개로 설정할 수 있으며, 비공개 정모는 초대코드를 아는 이용자만 참여할 수 있습니다.</li>
+  <li>이용자는 초대코드를 정모의 목적에 맞게 관리해야 하며, 무분별한 유포로 인한 결과에 대해 회사는 책임지지 않습니다.</li>
+</ul>
+
+<h3 id="t22"><span class="anum">제22조</span>(방장의 권한과 책임)</h3>
+<ul>
+  <li>방장은 정모의 정보 수정, 참여자 강퇴(차단), 정모 취소 등의 권한을 가집니다.</li>
+  <li>방장은 권한을 신의성실하게 행사해야 하며, 부당한 차별·괴롭힘 목적의 강퇴 등은 금지됩니다.</li>
+</ul>
+
+<h3 id="t23"><span class="anum">제23조</span>(오프라인 만남에 대한 주의)</h3>
+<div class="warn"><b>안전 유의</b> 정모는 오프라인에서 낯선 이용자와의 만남을 수반할 수 있습니다. 이용자는 공개된 장소 이용, 개인정보 과다 제공 금지, 금전 거래 주의 등 스스로의 안전에 유의해야 합니다. 회사는 오프라인 만남에서 발생하는 사고·분쟁·손해의 당사자가 아니며 이에 대한 책임을 지지 않습니다. 위급 상황 시 즉시 관계기관(112·119 등)에 도움을 요청하시기 바랍니다.</div>
+
+<h3 id="t24"><span class="anum">제24조</span>(정모의 취소·삭제)</h3>
+<ul>
+  <li>방장은 정모를 취소할 수 있으며, 취소 시 참여자에게 알림이 발송될 수 있습니다.</li>
+  <li>회사는 본 약관·법령 위반, 신고 누적, 안전 우려 등이 있는 정모를 사전 통지 없이 비공개·삭제할 수 있습니다.</li>
+</ul>
+<a class="totop" href="#top">↑ 목차로</a>
+
+<h2 class="chapter">제6장 이용자 콘텐츠·활동</h2>
+
+<h3 id="t25"><span class="anum">제25조</span>(댓글 및 게시물)</h3>
+<ul>
+  <li>이용자는 정모 내 댓글 등으로 다른 이용자와 소통할 수 있습니다.</li>
+  <li>욕설·비방·차별·음란·광고성 스팸·개인정보 노출·불법정보 등의 게시물은 금지되며, 회사는 이를 사전 통지 없이 삭제할 수 있습니다.</li>
+</ul>
+
+<h3 id="t26"><span class="anum">제26조</span>(닉네임·프로필)</h3>
+<ul>
+  <li>이용자는 닉네임, 프로필 아이콘 또는 프로필 이미지를 설정할 수 있습니다.</li>
+  <li>타인을 사칭하거나 오해를 유발하는 닉네임·프로필, 혐오·광고성 표현은 제한될 수 있습니다.</li>
+</ul>
+
+<h3 id="t27"><span class="anum">제27조</span>(신뢰도 점수)</h3>
+<p>회사는 건강한 모임 문화를 위해 정모 참여·활동 등을 바탕으로 한 <b>신뢰도 점수</b>를 산정·표시할 수 있습니다. 신뢰도 점수는 참고 지표이며, 산정 기준은 어뷰징 방지를 위해 일부 비공개될 수 있고 사전 고지 없이 조정될 수 있습니다.</p>
+
+<h3 id="t28"><span class="anum">제28조</span>(알림 — 푸시·인앱·리마인더)</h3>
+<ul>
+  <li>회사는 새 정모, 참여·댓글, 정모 시작 리마인더, 공지 등에 관한 푸시 알림 및 인앱 알림을 제공할 수 있습니다.</li>
+  <li>이용자는 단말기 또는 앱 설정에서 알림 수신을 변경·해제할 수 있습니다(일부 필수 안내성 알림 제외).</li>
+</ul>
+
+<h3 id="t29"><span class="anum">제29조</span>(게시물의 관리 및 이용허락)</h3>
+<ul>
+  <li>이용자가 작성한 콘텐츠의 권리는 해당 이용자에게 귀속됩니다.</li>
+  <li>이용자는 서비스 운영·노출·홍보에 필요한 범위에서 회사가 해당 콘텐츠를 무상으로 사용(저장·복제·표시 등)할 수 있도록 이용을 허락합니다. 이 허락은 서비스 제공 목적에 한정됩니다.</li>
+  <li>이용자가 게시물을 삭제하거나 이용계약이 종료되면 회사는 합리적 기간 내에 해당 콘텐츠의 노출을 중단합니다(법령상 보관 의무가 있는 경우 예외).</li>
+</ul>
+<a class="totop" href="#top">↑ 목차로</a>
+
+<h2 class="chapter">제7장 광고</h2>
+
+<h3 id="t30"><span class="anum">제30조</span>(광고의 게재)</h3>
+<p>서비스는 무료로 제공되며, 운영을 위해 서비스 화면 내에 광고가 게재될 수 있습니다. 이용자는 서비스 이용 시 광고가 노출되는 것에 동의합니다.</p>
+
+<h3 id="t31"><span class="anum">제31조</span>(광고 형태)</h3>
+<ul>
+  <li>광고는 배너, 네이티브(피드 삽입형), 전면(삽입형) 등의 형태로 제공될 수 있으며, 보상형(리워드) 광고가 제공되는 경우 이용자가 자발적으로 시청을 선택할 때에만 노출됩니다.</li>
+  <li>회사는 이용자 경험을 보호하기 위해 광고 노출 빈도를 합리적으로 제한하도록 노력합니다.</li>
+</ul>
+
+<h3 id="t32"><span class="anum">제32조</span>(광고 사업자 고지)</h3>
+<p>광고는 Google AdMob 등 제3자 광고 네트워크를 통해 제공될 수 있습니다. 광고의 내용·링크는 해당 광고주·광고 네트워크의 책임이며, 회사는 광고를 통해 연결되는 외부 사이트·재화·용역에 대해 보증하지 않습니다.</p>
+
+<h3 id="t33"><span class="anum">제33조</span>(하우스 광고 및 자사 앱 홍보)</h3>
+<p>회사는 자체 제작한 안내성 광고(하우스 광고)나 자사·제휴 앱 홍보를 서비스 내에 표시할 수 있습니다.</p>
+<a class="totop" href="#top">↑ 목차로</a>
+
+<h2 class="chapter">제8장 이용자의 의무</h2>
+
+<h3 id="t34"><span class="anum">제34조</span>(이용자의 의무)</h3>
+<p>이용자는 다음 행위를 하여서는 안 됩니다.</p>
+<ul>
+  <li>허위 정보 등록, 타인 사칭, 타인의 권리 침해</li>
+  <li>욕설·차별·괴롭힘·스토킹·성희롱 등 타인에게 불쾌감을 주는 행위</li>
+  <li>불법·음란·폭력적 정보 또는 광고성 스팸의 게시·전송</li>
+  <li>서비스의 안정적 운영을 방해하거나 시스템에 무단 접근하는 행위</li>
+  <li>오프라인 만남을 빙자한 금전 요구·사기·강매 등 부정한 행위</li>
+</ul>
+
+<h3 id="t35"><span class="anum">제35조</span>(부정 이용·어뷰징)</h3>
+<p>이용자는 신뢰도 점수, 정모 모집, 알림 등 서비스의 기능을 비정상적으로 조작·악용해서는 안 됩니다. 회사는 어뷰징 확인 시 관련 활동 내역의 무효화 및 이용 제한 조치를 할 수 있습니다.</p>
+
+<h3 id="t36"><span class="anum">제36조</span>(자동화·봇 금지)</h3>
+<p>이용자는 자동화 스크립트, 크롤러, 봇 등을 이용하여 서비스 또는 연동 API에 비정상적으로 접근·수집·요청해서는 안 됩니다.</p>
+<a class="totop" href="#top">↑ 목차로</a>
+
+<h2 class="chapter">제9장 지적재산권·면책</h2>
+
+<h3 id="t37"><span class="anum">제37조</span>(지적재산권)</h3>
+<p>서비스 및 서비스에 포함된 디자인·로고·UI·소프트웨어 등에 관한 지적재산권은 회사 또는 정당한 권리자에게 있습니다. 이용자는 회사의 사전 동의 없이 이를 복제·배포·2차적 저작·상업적으로 이용할 수 없습니다.</p>
+
+<h3 id="t38"><span class="anum">제38조</span>(회사의 면책 — 모임·오프라인)</h3>
+<ul>
+  <li>회사는 정모의 성사, 진행, 참여자 간 상호작용, 오프라인 만남 및 세차 행위의 결과에 대하여 당사자가 아니며 책임을 지지 않습니다.</li>
+  <li>이용자 간 또는 이용자와 제3자(세차장 등) 간에 발생한 분쟁은 당사자 간 해결을 원칙으로 합니다.</li>
+</ul>
+
+<h3 id="t39"><span class="anum">제39조</span>(외부 콘텐츠 정확성에 대한 면책)</h3>
+<p>회사는 세차장 정보, 지도, 날씨·세차 적합도 등 제3자가 제공하는 정보의 정확성·신뢰성에 대해 보증하지 않으며, 이를 신뢰함으로써 발생한 손해에 대해 고의 또는 중대한 과실이 없는 한 책임을 지지 않습니다.</p>
+
+<h3 id="t40"><span class="anum">제40조</span>(손해배상 및 책임의 제한)</h3>
+<ul>
+  <li>회사는 무료로 제공하는 서비스와 관련하여 관련 법령에 특별한 규정이 없는 한 책임을 지지 않습니다.</li>
+  <li>천재지변, 통신·전력 장애, 제3자 서비스(클라우드·API·광고 등)의 문제 등 회사의 합리적 통제를 벗어난 사유로 인한 손해에 대해 책임이 면제됩니다.</li>
+</ul>
+
+<h3 id="t41"><span class="anum">제41조</span>(미성년자 이용)</h3>
+<p>서비스는 오프라인 만남을 수반할 수 있으므로, 미성년자는 보호자의 지도 하에 이용하여야 합니다. 회사는 만 14세 미만 아동의 개인정보를 수집하지 않는 것을 원칙으로 합니다(개인정보처리방침 제18조 참조).</p>
+
+<h3 id="t42"><span class="anum">제42조</span>(통지·분쟁 해결 및 준거법)</h3>
+<ul>
+  <li>회사가 이용자에게 통지하는 경우 서비스 내 공지, 앱 푸시, 이메일 등의 방법으로 할 수 있습니다.</li>
+  <li>본 약관은 대한민국 법령에 따라 해석되며, 서비스 이용과 관련한 분쟁에 대하여는 관련 법령이 정한 절차에 따른 법원을 관할 법원으로 합니다.</li>
+</ul>
+<a class="totop" href="#top">↑ 목차로</a>
+</article>
+
+<!-- ====================== 개인정보처리방침 ====================== -->
+<article class="terms">
+<div class="part"><div class="num">PART 2</div><h2>개인정보처리방침</h2></div>
+
+<h3 id="p1"><span class="anum">제1조</span>(총칙 및 기본 방침)</h3>
+<p>JoyceStudios(이하 “회사”)는 「개인정보 보호법」 등 관련 법령을 준수하며, 이용자의 개인정보를 보호하기 위해 최소한의 정보만을 수집하고 안전하게 처리합니다. 세모는 실명 회원가입을 요구하지 않으며, 위치·기기 식별자 등 서비스 제공에 필요한 정보 위주로 처리합니다.</p>
+
+<h3 id="p2"><span class="anum">제2조</span>(수집하는 개인정보 항목)</h3>
+<div class="tbl-scroll">
+<table class="tbl">
+  <tr><th>구분</th><th>항목</th><th>비고</th></tr>
+  <tr><td>소셜 로그인</td><td>인증 식별자(UID), 이메일(제공 시), 소셜 계정 식별값</td><td>Google/Apple 로그인 시</td></tr>
+  <tr><td>Apple 로그인</td><td>Apple 제공 식별자, (선택) 이메일/이름</td><td>이메일 가리기 선택 가능</td></tr>
+  <tr><td>게스트(익명)</td><td>익명 인증 식별자(UID)</td><td>개인 식별정보 없음</td></tr>
+  <tr><td>프로필</td><td>닉네임, 프로필 아이콘 또는 프로필 이미지</td><td>이용자가 직접 입력</td></tr>
+  <tr><td>활동 정보</td><td>생성·참여 정모, 댓글, 신뢰도 점수, 즐겨찾기</td><td>서비스 이용 과정</td></tr>
+</table>
 </div>
 
-<h2>1. 용어의 정의</h2>
-
+<h3 id="p3"><span class="anum">제3조</span>(자동 수집 정보 및 식별자)</h3>
 <ul>
-<li>“서비스”란 회사가 제공하는 세모 애플리케이션 및 관련 기능 일체를 의미합니다.</li>
-
-<li>“사용자”란 본 약관에 동의하고 서비스를 이용하는 모든 개인을 의미합니다.</li>
-
-<li>“세차 정모”란 사용자가 특정 시간 및 장소에서 함께 세차하기 위해 생성한 모임을 의미합니다.</li>
-
-<li>“세차장 정보”란 서비스 내에서 제공되는 세차장의 위치, 이름, 운영 정보 등을 의미합니다.</li>
-
-<li>“콘텐츠”란 댓글, 텍스트, 이미지 및 서비스 내 제공되는 모든 데이터를 의미합니다.</li>
+  <li>기기/OS 정보, 앱 버전, 언어·국가 설정 등 환경 정보</li>
+  <li>푸시 알림을 위한 푸시 토큰(FCM 토큰)</li>
+  <li>광고 식별자(IDFA/AAID) 및 광고·분석을 위한 이벤트 로그(동의 또는 설정에 따름)</li>
+  <li>오류 진단을 위한 로그 정보</li>
 </ul>
 
-<h2>2. 약관의 효력 및 변경</h2>
-
+<h3 id="p4"><span class="anum">제4조</span>(위치정보의 처리)</h3>
+<div class="notice">세모는 <b>현재 위치</b>를 기반으로 주변 정모·세차장·세차 날씨를 제공합니다. 위치정보는 이용자가 단말기에서 위치 권한을 허용한 경우에 한해 사용되며, 권한은 단말기 설정에서 언제든지 철회할 수 있습니다.</div>
 <ul>
-<li>본 약관은 서비스 내 게시함으로써 효력이 발생합니다.</li>
-
-<li>회사는 관련 법령을 위반하지 않는 범위 내에서 약관을 변경할 수 있습니다.</li>
-
-<li>변경된 약관은 서비스 내 공지 후 적용됩니다.</li>
-
-<li>사용자가 변경 이후에도 서비스를 계속 이용할 경우 변경된 약관에 동의한 것으로 간주됩니다.</li>
+  <li><b>이용 목적</b>: 주변 정모/세차장 검색·정렬, 지도 표시, 현재 지역 기반 날씨·세차 적합도 제공</li>
+  <li><b>처리 방식</b>: 현재 위치는 해당 기능 제공을 위해 일시적으로 사용되며, 정밀 위치 이력을 별도로 추적·축적하지 않습니다. 다만 정모 생성 시 이용자가 선택한 세차장의 위치 정보는 해당 정모 정보로 저장됩니다.</li>
 </ul>
 
-<h2>3. 서비스의 목적 및 특성</h2>
+<h3 id="p5"><span class="anum">제5조</span>(개인정보 수집 방법)</h3>
+<p>회사는 (1) 이용자가 로그인·프로필 설정·정모 생성·댓글 작성 등 서비스를 이용하는 과정에서 직접 입력하거나, (2) 앱 실행 중 자동으로 생성·수집되는 정보를 통해 개인정보를 수집합니다.</p>
 
+<h3 id="p6"><span class="anum">제6조</span>(개인정보의 이용 목적)</h3>
 <ul>
-<li>세모는 위치 기반 세차 정모 서비스를 제공합니다.</li>
-
-<li>사용자는 주변 세차장을 탐색하고 세차 정모를 생성하거나 참여할 수 있습니다.</li>
-
-<li>서비스는 빠르고 간편한 모임 연결 경험 제공을 핵심 가치로 합니다.</li>
-
-<li>회사는 사용자 간 실제 오프라인 활동에 직접 관여하지 않습니다.</li>
+  <li>이용자 식별 및 인증, 정모 생성·참여·운영, 댓글·알림 등 핵심 기능 제공</li>
+  <li>위치 기반 주변 정모/세차장/날씨 정보 제공</li>
+  <li>부정 이용 방지, 신뢰도 점수 산정, 서비스 안정성 확보</li>
+  <li>고객 문의 대응, 공지 전달, 서비스 개선 및 통계 분석</li>
+  <li>관련 법령에 따른 광고·맞춤형 광고 제공(동의·설정 범위 내)</li>
 </ul>
 
-<h2>4. 서비스 제공 기능</h2>
+<h3 id="p7"><span class="anum">제7조</span>(단말기 로컬 저장 정보)</h3>
+<p>인앱 알림 목록, 알림 수신 설정, 최근 보기·즐겨찾기 등 일부 정보는 이용자 단말기 내부 저장소(예: SharedPreferences/UserDefaults)에 저장될 수 있습니다. 이러한 정보는 앱 삭제 또는 단말기 설정 초기화 시 함께 삭제됩니다.</p>
 
+<h3 id="p8"><span class="anum">제8조</span>(Firebase 이용 고지)</h3>
+<p>회사는 서비스 운영을 위해 Google의 Firebase를 이용합니다. 이용 항목과 목적은 다음과 같습니다.</p>
+<div class="tbl-scroll">
+<table class="tbl">
+  <tr><th>서비스</th><th>목적</th></tr>
+  <tr><td>Firebase Authentication</td><td>소셜/익명 로그인 및 이용자 식별</td></tr>
+  <tr><td>Firebase Realtime Database</td><td>정모·댓글·프로필 등 서비스 데이터 저장</td></tr>
+  <tr><td>Firebase Cloud Messaging</td><td>푸시 알림 발송(토큰 처리)</td></tr>
+  <tr><td>Firebase Cloud Functions</td><td>알림 발송 등 서버 처리</td></tr>
+</table>
+</div>
+<p>Firebase의 데이터 처리에 관한 사항은 Google의 개인정보처리방침을 함께 따릅니다.</p>
+
+<h3 id="p9"><span class="anum">제9조</span>(광고 식별자 및 맞춤형 광고)</h3>
 <ul>
-<li>현재 위치 기반 세차 정모 탐색 기능</li>
-
-<li>세차 정모 생성 및 참여 기능</li>
-
-<li>세차장 검색 및 정보 제공 기능</li>
-
-<li>댓글 기반 커뮤니케이션 기능</li>
-
-<li>푸시 알림 기능</li>
-
-<li>향후 추가되는 기능 및 업데이트</li>
+  <li>회사는 Google AdMob 등을 통해 광고를 제공하며, 이 과정에서 광고 식별자(IDFA/AAID) 및 광고 이벤트 정보가 처리될 수 있습니다.</li>
+  <li>iOS의 경우 앱 추적 투명성(ATT)에 따라 이용자가 추적을 허용한 경우에 한해 맞춤형 광고가 제공됩니다.</li>
+  <li>이용자는 단말기 설정에서 광고 식별자 재설정·맞춤형 광고 제한을 선택할 수 있습니다.</li>
 </ul>
 
-<h2>5. 서비스 이용 조건 및 환경</h2>
+<h3 id="p10"><span class="anum">제10조</span>(네이버 OPEN API 연동 처리)</h3>
+<p>주변 세차장 검색을 위해 검색어·위치 등 최소한의 정보가 외부 OPEN API(예: 네이버 지역검색)로 전송될 수 있습니다. 전송되는 정보는 검색 결과 제공 목적에 한정됩니다.</p>
 
+<h3 id="p11"><span class="anum">제11조</span>(날씨 API 연동 처리)</h3>
+<p>세차 적합도·날씨 제공을 위해 현재 지역(좌표 또는 지역명)이 외부 날씨 제공자(예: OpenWeatherMap)로 전송될 수 있으며, 이는 날씨 정보 제공 목적에 한정됩니다.</p>
+
+<h3 id="p12"><span class="anum">제12조</span>(프로필 이미지의 처리)</h3>
+<p>이용자가 프로필 이미지를 설정하는 경우, 해당 이미지는 서비스 표시를 위해 인코딩된 형태로 데이터베이스에 저장될 수 있습니다. 이용자는 프로필 이미지를 언제든지 변경·삭제할 수 있습니다.</p>
+
+<h3 id="p13"><span class="anum">제13조</span>(개인정보의 제3자 제공)</h3>
+<p>회사는 이용자의 개인정보를 외부에 제공하지 않습니다. 다만 (1) 이용자가 사전 동의한 경우, (2) 법령에 근거가 있거나 수사기관이 적법한 절차에 따라 요청한 경우에는 예외로 합니다. 한편 정모의 닉네임·프로필·작성 댓글 등은 서비스 특성상 다른 이용자에게 공개될 수 있습니다.</p>
+
+<h3 id="p14"><span class="anum">제14조</span>(개인정보 처리의 위탁)</h3>
+<div class="tbl-scroll">
+<table class="tbl">
+  <tr><th>수탁자</th><th>위탁 업무</th></tr>
+  <tr><td>Google LLC (Firebase)</td><td>인증, 데이터 저장, 푸시, 서버 처리</td></tr>
+  <tr><td>Google LLC (AdMob)</td><td>광고 게재 및 측정</td></tr>
+</table>
+</div>
+<p>회사는 위탁 계약 시 개인정보가 안전하게 관리되도록 관련 사항을 규정하고 감독합니다.</p>
+
+<h3 id="p15"><span class="anum">제15조</span>(개인정보의 국외 이전)</h3>
+<p>위 수탁사(Google 등)의 서버가 국외(미국 등)에 위치할 수 있어, 서비스 제공 과정에서 개인정보가 국외로 이전·처리될 수 있습니다. 이전되는 항목·목적·보유기간은 본 방침에 명시된 범위를 따릅니다.</p>
+
+<h3 id="p16"><span class="anum">제16조</span>(개인정보의 보유 및 파기)</h3>
 <ul>
-<li>서비스는 모바일 앱 환경에서 제공됩니다.</li>
-
-<li>일부 기능은 인터넷 연결이 필요합니다.</li>
-
-<li>사용자는 최신 앱 버전 유지가 필요할 수 있습니다.</li>
-
-<li>위치 정보 정확도는 GPS 및 네트워크 환경에 따라 달라질 수 있습니다.</li>
+  <li>회사는 수집 목적이 달성되거나 이용자가 탈퇴(계정 삭제)한 경우 지체 없이 해당 개인정보를 파기합니다.</li>
+  <li>관련 법령에서 보존을 요구하는 경우 해당 기간 동안 보관 후 파기합니다.</li>
+  <li>전자적 파일은 복구 불가능한 방법으로 삭제합니다.</li>
 </ul>
 
-<h2>6. 위치 정보 이용</h2>
-
+<h3 id="p17"><span class="anum">제17조</span>(이용자 및 법정대리인의 권리)</h3>
 <ul>
-<li>서비스는 사용자 주변 정모 및 세차장 정보를 제공하기 위해 위치 정보를 활용합니다.</li>
-
-<li>사용자는 위치 권한을 거부할 수 있으나 일부 기능 이용이 제한될 수 있습니다.</li>
-
-<li>위치 정보는 서비스 제공 목적 외에는 사용되지 않습니다.</li>
+  <li>이용자는 자신의 개인정보에 대해 열람·정정·삭제·처리정지를 요청할 수 있습니다.</li>
+  <li>이용자는 앱 내 프로필 수정, 게시물 삭제, 계정(회원) 탈퇴를 통해 직접 권리를 행사할 수 있으며, 문의처를 통해서도 요청할 수 있습니다.</li>
+  <li>동의 철회(예: 위치·알림·광고 추적)는 단말기·앱 설정에서 가능하며, 철회 시 일부 기능이 제한될 수 있습니다.</li>
 </ul>
 
-<h2>7. 사용자 콘텐츠 및 댓글</h2>
+<h3 id="p18"><span class="anum">제18조</span>(만 14세 미만 아동)</h3>
+<p>회사는 만 14세 미만 아동의 개인정보를 수집하지 않는 것을 원칙으로 합니다. 만 14세 미만 아동의 정보가 수집된 사실이 확인되는 경우 회사는 지체 없이 해당 정보를 파기합니다.</p>
 
+<h3 id="p19"><span class="anum">제19조</span>(안전성 확보 조치)</h3>
 <ul>
-<li>사용자는 댓글 및 콘텐츠 작성 시 타인을 비방하거나 불쾌감을 주는 내용을 게시해서는 안 됩니다.</li>
-
-<li>욕설, 혐오 표현, 음란물, 불법 정보 게시를 금지합니다.</li>
-
-<li>회사는 운영 정책에 따라 부적절한 콘텐츠를 삭제할 수 있습니다.</li>
+  <li>전송 구간 암호화(HTTPS) 및 신뢰할 수 있는 클라우드(Firebase) 인프라 이용</li>
+  <li>데이터베이스 접근 권한의 최소화 및 접근 통제</li>
+  <li>부정 이용·비정상 접근 탐지 및 차단을 위한 조치</li>
 </ul>
 
-<h2>8. 오프라인 모임 관련 안내</h2>
+<h3 id="p20"><span class="anum">제20조</span>(식별자 및 유사 기술)</h3>
+<p>본 서비스는 모바일 앱으로, 웹 쿠키 대신 기기 식별자·광고 식별자·푸시 토큰 등을 이용합니다. 이용자는 단말기 설정을 통해 식별자 재설정·광고 추적 제한을 선택할 수 있습니다.</p>
 
-<ul>
-<li>세차 정모는 사용자 간 자율적으로 이루어지는 활동입니다.</li>
+<h3 id="p21"><span class="anum">제21조</span>(개인정보 보호책임자 및 문의처)</h3>
+<div class="contact">
+  개인정보 처리에 관한 문의, 열람·정정·삭제·처리정지 요청은 아래로 접수해 주시기 바랍니다.<br>
+  <b>운영자</b> JoyceStudios(조이스스튜디오스)<br>
+  <b>이메일</b> <a href="mailto:ibillkim@gmail.com" style="color:var(--brand);font-weight:700;">ibillkim@gmail.com</a><br>
+  접수된 요청은 관련 법령이 정한 기간 내에 성실히 처리합니다.
+</div>
 
-<li>회사는 사용자 간 오프라인 만남, 사고, 분쟁 등에 직접 책임을 지지 않습니다.</li>
+<h3 id="p22"><span class="anum">제22조</span>(방침의 변경 및 고지)</h3>
+<p>본 개인정보처리방침은 법령·서비스의 변경에 따라 개정될 수 있으며, 개정 시 적용일자 및 변경 내용을 서비스 내 공지 또는 본 페이지를 통해 고지합니다. 중대한 변경의 경우 적용일 이전에 별도로 안내합니다.</p>
+<a class="totop" href="#top">↑ 목차로</a>
+</article>
 
-<li>사용자는 자신의 판단과 책임 하에 모임에 참여해야 합니다.</li>
-</ul>
+<footer class="doc">
+  <p><b>세모(SEMO)</b> · 세차 정모 플랫폼</p>
+  <p><b>운영자</b> Joyce Studios(조이스스튜디오스) · <b>문의</b> ibillkim@gmail.com</p>
+  <p><b>시행일</b> 2026년 6월 9일</p>
+  <p style="margin-top:10px;">© 2026 Joyce Studios. All rights reserved.</p>
+</footer>
 
-<h2>9. 개인정보 보호</h2>
-
-<ul>
-<li>회사는 개인정보 최소 수집 원칙을 준수합니다.</li>
-
-<li>서비스는 위치 기반 기능 제공을 위해 일부 정보를 처리할 수 있습니다.</li>
-
-<li>자세한 내용은 개인정보처리방침을 따릅니다.</li>
-</ul>
-
-<h2>10. 서비스 변경 및 중단</h2>
-
-<ul>
-<li>회사는 운영상 또는 기술상 필요에 따라 서비스 일부를 변경하거나 중단할 수 있습니다.</li>
-
-<li>서버 점검, 장애, 외부 API 문제 등에 따라 서비스 이용이 일시 제한될 수 있습니다.</li>
-
-<li>회사는 불가피한 서비스 중단으로 인한 손해에 대해 책임지지 않습니다.</li>
-</ul>
-
-<h2>11. 책임의 제한</h2>
-
-<ul>
-<li>서비스는 “있는 그대로” 제공됩니다.</li>
-
-<li>회사는 사용자 간 분쟁 및 오프라인 활동에 대해 책임지지 않습니다.</li>
-
-<li>회사는 서비스의 안정성 및 지속성을 보장하지 않습니다.</li>
-
-<li>회사는 천재지변, 통신 장애 등 불가항력 상황에 대한 책임을 부담하지 않습니다.</li>
-</ul>
-
-<h2>12. 금지 행위</h2>
-
-<ul>
-<li>타인을 사칭하는 행위</li>
-
-<li>허위 정모 생성 행위</li>
-
-<li>서비스 운영 방해 행위</li>
-
-<li>불법 광고 및 스팸 행위</li>
-
-<li>시스템 해킹 및 비정상 접근 행위</li>
-</ul>
-
-<h2>13. 이용 제한 및 제재</h2>
-
-<ul>
-<li>회사는 약관 위반 시 사전 통지 없이 서비스 이용을 제한할 수 있습니다.</li>
-
-<li>중대한 위반의 경우 계정 이용을 즉시 차단할 수 있습니다.</li>
-</ul>
-
-<h2>14. 광고 및 제휴</h2>
-
-<ul>
-<li>서비스 내에는 광고가 포함될 수 있습니다.</li>
-
-<li>회사는 세차장 및 제휴 업체 정보를 노출할 수 있습니다.</li>
-
-<li>사용자는 광고 클릭 및 외부 서비스 이용 시 해당 서비스 정책을 따릅니다.</li>
-</ul>
-
-<h2>15. 준거법 및 관할</h2>
-
-<ul>
-<li>본 약관은 대한민국 법률을 따릅니다.</li>
-
-<li>서비스와 관련된 분쟁은 관련 법령에 따른 법원을 관할 법원으로 합니다.</li>
-</ul>
-
-<h2>16. 문의 및 고객지원</h2>
-
-<ul>
-<li>이메일: ibillkim@gmail.com</li>
-<li>서비스 관련 문의는 이메일을 통해 접수할 수 있습니다.</li>
-</ul>
-
-<h2>부칙</h2>
-
-<p>
-본 약관은 2026년 5월 7일부터 시행됩니다.
-</p>
-
+</div>
 </body>
 </html>
