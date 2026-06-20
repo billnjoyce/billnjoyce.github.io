@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#08090C">
+<title>Tradeflect — AI가 매주 복기해주는 매매일지</title>
+<meta name="description" content="같은 실수를 반복하는 트레이더를 위한 AI 매매 복기 저널. 당신이 입력한 매매로, 당신만의 패턴을 매주 짚어줍니다.">
+<meta property="og:title" content="Tradeflect — AI가 매주 복기해주는 매매일지">
+<meta property="og:description" content="매매는 느는데 계좌는 그대로인 이유. AI가 매주 당신의 매매를 복기해 같은 실수를 끊어냅니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'Pretendard';font-weight:800;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-ExtraBold.woff2') format('woff2');}
+@font-face{font-family:'Pretendard';font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2');}
+@font-face{font-family:'Pretendard';font-weight:600;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-SemiBold.woff2') format('woff2');}
+@font-face{font-family:'Pretendard';font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Medium.woff2') format('woff2');}
+@font-face{font-family:'Pretendard';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');}
+:root{
+  --bg:#08090C; --bg-grad:#0B0D12; --s1:#0F1116; --s2:#14161D; --s3:#1A1D25;
+  --bd:rgba(255,255,255,0.07); --bd2:rgba(255,255,255,0.12); --bd3:rgba(255,255,255,0.18);
+  --tx:#F5F7FA; --tx2:#AAB2C0; --tx3:#6F7787; --tx4:#474E5C;
+  --grn:#3DDC84; --grn-d:#2BB36A; --grn-ink:#062013;
+  --red:#FF5D6C;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --font:'Pretendard',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;
+  --mx:1120px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--bg);}
+body{font-family:var(--font);color:var(--tx2);line-height:1.65;font-size:16px;font-weight:400;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-x:hidden;
+  background:
+    radial-gradient(1100px 700px at 80% -8%, rgba(61,220,132,0.10), transparent 56%),
+    radial-gradient(950px 800px at 0% 24%, rgba(43,188,178,0.07), transparent 54%),
+    radial-gradient(900px 760px at 62% 114%, rgba(61,220,132,0.06), transparent 58%),
+    linear-gradient(180deg,#0B0F15 0%, #08090C 44%, #0A0E12 100%);
+  background-attachment:fixed;}
+a{color:inherit;text-decoration:none;}
+::selection{background:rgba(61,220,132,0.25);color:#fff;}
+.grain{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.stage::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:470px;height:540px;border-radius:50%;background:radial-gradient(closest-side,rgba(61,220,132,0.22),rgba(43,188,178,0.10) 54%,transparent 72%);filter:blur(30px);z-index:0;pointer-events:none;animation:glowdrift 9s ease-in-out infinite;}
+.stage .phone{position:relative;z-index:1;}
+.sig .fvis{position:relative;}
+.sig .fvis::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:440px;height:500px;border-radius:50%;background:radial-gradient(closest-side,rgba(61,220,132,0.16),rgba(43,188,178,0.07) 55%,transparent 72%);filter:blur(30px);z-index:0;pointer-events:none;}
+.sig .fvis .phone{position:relative;z-index:1;}
+@keyframes glowdrift{0%,100%{opacity:.82;transform:translate(-50%,-52%) scale(1);}50%{opacity:1;transform:translate(-50%,-49%) scale(1.05);}}
+.rev,.pc{box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);}
+.panel{box-shadow:inset 0 1px 0 rgba(255,255,255,0.04),0 40px 80px -32px rgba(0,0,0,0.7);}
+.tnum{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em;}
+.pos{color:var(--grn);}.neg{color:var(--red);}
+.mx{max-width:var(--mx);margin:0 auto;padding:0 24px;}
+.lab{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--tx3);}
+.lab .ac{color:var(--grn);}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;line-height:1;padding:0 20px;height:48px;border-radius:11px;cursor:pointer;border:1px solid transparent;transition:transform .14s ease,background .14s ease,border-color .14s ease;white-space:nowrap;}
+.btn:active{transform:scale(.98);}
+.btn-pri{background:var(--tx);color:#0a0b0e;}
+.btn-pri:hover{background:#fff;}
+.btn-pri .s{font-weight:500;color:#5a6470;font-size:12.5px;}
+.btn-sec{background:transparent;color:var(--tx);border-color:var(--bd2);}
+.btn-sec:hover{border-color:var(--bd3);background:rgba(255,255,255,0.03);}
+.btn-grn{background:var(--grn);color:var(--grn-ink);}
+.btn-grn:hover{background:#46e88e;}
+.btn-grn .s{color:rgba(6,32,19,.6);font-weight:500;font-size:12.5px;}
+.btn.lg{height:52px;font-size:15.5px;padding:0 24px;}
+
+/* nav */
+nav{position:sticky;top:0;z-index:60;background:rgba(8,9,12,0.7);backdrop-filter:saturate(180%) blur(16px);border-bottom:1px solid rgba(255,255,255,0.05);}
+nav .row{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.brand{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:16.5px;color:var(--tx);letter-spacing:-.3px;}
+.brand .mk{width:28px;height:28px;border-radius:8px;background:var(--grn);display:grid;place-items:center;}
+nav .btn{height:38px;font-size:13.5px;padding:0 15px;}
+
+/* hero */
+.hero{position:relative;padding:84px 0 96px;}
+.hero .ambient{position:absolute;top:-160px;right:-8%;width:780px;height:780px;border-radius:50%;background:radial-gradient(closest-side,rgba(61,220,132,0.15),rgba(43,188,178,0.06) 56%,transparent 72%);filter:blur(26px);pointer-events:none;}
+.hero .grid{position:relative;display:grid;grid-template-columns:1.04fr .96fr;gap:56px;align-items:center;}
+.hero h1{font-size:clamp(38px,5.4vw,62px);line-height:1.04;font-weight:800;color:var(--tx);letter-spacing:-.045em;margin:22px 0 22px;}
+.hero h1 em{font-style:normal;color:var(--grn);}
+.hero .lead{font-size:18.5px;line-height:1.6;color:var(--tx2);max-width:480px;}
+.hero .lead b{color:var(--tx);font-weight:600;}
+.hero .cta{display:flex;gap:11px;flex-wrap:wrap;margin:30px 0 18px;}
+.hero .cap{display:flex;gap:7px 20px;flex-wrap:wrap;color:var(--tx3);font-size:13px;}
+.hero .cap span{display:inline-flex;align-items:center;gap:6px;}
+.hero .cap svg{opacity:.9;}
+
+/* device */
+.stage{position:relative;display:flex;justify-content:center;}
+.phone{position:relative;width:316px;border-radius:50px;background:linear-gradient(150deg,#23262f,#15171d);padding:9px;
+  box-shadow:0 2px 0 rgba(255,255,255,0.04) inset,0 60px 110px -30px rgba(0,0,0,0.85),0 0 0 1px rgba(255,255,255,0.04);}
+.phone .scr{position:relative;border-radius:42px;background:var(--bg-grad);overflow:hidden;}
+.island{position:absolute;top:13px;left:50%;transform:translateX(-50%);width:104px;height:30px;background:#000;border-radius:18px;z-index:6;}
+.sb{display:flex;align-items:center;justify-content:space-between;padding:15px 24px 0;height:46px;}
+.sb .t{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--tx);letter-spacing:-.02em;}
+.sb .ic{display:flex;align-items:center;gap:5px;}
+.body{padding:8px 16px 20px;}
+.nav-t{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 14px;}
+.nav-t .h{font-size:17px;font-weight:700;color:var(--tx);}
+.nav-t .badge{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.06em;color:var(--grn);border:1px solid rgba(61,220,132,0.3);border-radius:6px;padding:3px 7px;}
+.float{position:absolute;z-index:8;background:var(--s2);border:1px solid var(--bd2);border-radius:14px;padding:11px 13px;box-shadow:0 24px 50px -16px rgba(0,0,0,0.7);}
+.float.f1{bottom:54px;left:-26px;width:184px;}
+.float .fl-h{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--grn);margin-bottom:6px;}
+.float .fl-b{font-size:12px;line-height:1.5;color:var(--tx);font-weight:500;}
+
+/* review card */
+.rev{background:var(--s1);border:1px solid var(--bd);border-radius:18px;padding:15px;}
+.rev .rh{display:flex;align-items:center;gap:8px;margin-bottom:13px;}
+.rev .rh .dot{width:7px;height:7px;border-radius:50%;background:var(--grn);}
+.rev .rh .lab2{font-size:12.5px;font-weight:700;color:var(--tx);letter-spacing:-.01em;}
+.rev .rh .wk{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--tx3);}
+.rev .row3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:12px;overflow:hidden;margin-bottom:13px;}
+.rev .row3 .c{background:var(--s1);padding:11px 8px;text-align:center;}
+.rev .row3 .v{font-size:17px;font-weight:600;color:var(--tx);}
+.rev .row3 .k{font-size:10px;color:var(--tx3);margin-top:3px;}
+.rev .blk{border-radius:11px;padding:11px 12px;font-size:12px;line-height:1.6;color:var(--tx2);margin-top:8px;}
+.rev .blk b{color:var(--tx);font-weight:600;}
+.rev .blk .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px;}
+.rev .blk.d{background:rgba(255,93,108,0.07);} .rev .blk.d .tag{color:var(--red);}
+.rev .blk.p{background:rgba(61,220,132,0.07);} .rev .blk.p .tag{color:var(--grn);}
+.rev .foot{display:flex;align-items:center;gap:6px;margin-top:13px;padding-top:12px;border-top:1px solid var(--bd);font-size:11.5px;color:var(--tx3);}
+.rev .foot b{color:var(--tx);font-family:var(--mono);font-weight:600;}
+
+/* sections */
+.sec{padding:120px 0;}
+.sec.tint{background:linear-gradient(180deg,var(--bg-grad),var(--bg));}
+.head{max-width:660px;}
+.head.mid{margin:0 auto;text-align:center;}
+.head h2{font-size:clamp(28px,3.6vw,40px);font-weight:800;color:var(--tx);letter-spacing:-.035em;line-height:1.16;margin:16px 0 14px;}
+.head p{font-size:17.5px;color:var(--tx2);line-height:1.6;}
+
+/* empathy */
+.feels{margin-top:48px;border-top:1px solid var(--bd);}
+.feel{display:grid;grid-template-columns:54px 1fr;gap:8px;align-items:center;padding:22px 4px;border-bottom:1px solid var(--bd);transition:background .2s;}
+.feel:hover{background:rgba(255,255,255,0.012);}
+.feel .n{font-family:var(--mono);font-size:13px;color:var(--tx4);}
+.feel .q{font-size:clamp(17px,2.2vw,21px);font-weight:600;color:var(--tx);letter-spacing:-.02em;line-height:1.4;}
+.feel .q b{color:var(--grn);font-weight:600;}
+.feel-foot{margin-top:34px;font-size:19px;color:var(--tx2);font-weight:500;}
+.feel-foot b{color:var(--tx);font-weight:700;}
+
+/* signature */
+.sig{position:relative;display:grid;grid-template-columns:.92fr 1.08fr;gap:64px;align-items:center;}
+.sig .copy .kk{margin-bottom:18px;}
+.sig .copy h3{font-size:clamp(26px,3.2vw,36px);font-weight:800;color:var(--tx);letter-spacing:-.03em;line-height:1.2;margin-bottom:18px;}
+.sig .copy h3 em{font-style:normal;color:var(--grn);}
+.sig .copy p{font-size:16.5px;color:var(--tx2);line-height:1.65;margin-bottom:22px;max-width:440px;}
+.pts{list-style:none;display:flex;flex-direction:column;gap:13px;}
+.pts li{display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:15.5px;color:var(--tx);align-items:start;}
+.pts li .ck{width:20px;height:20px;border-radius:6px;background:rgba(61,220,132,0.1);border:1px solid rgba(61,220,132,0.25);display:grid;place-items:center;margin-top:1px;}
+
+/* feature rows */
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;}
+.frow + .frow{margin-top:104px;}
+.frow.flip .ftx{order:2;}
+.ftx .kk{margin-bottom:16px;}
+.ftx h3{font-size:clamp(23px,2.7vw,29px);font-weight:800;color:var(--tx);letter-spacing:-.03em;line-height:1.25;margin-bottom:14px;}
+.ftx p{font-size:16px;color:var(--tx2);line-height:1.65;max-width:420px;}
+.fvis{display:flex;justify-content:center;}
+
+/* ui panel (recreated screens) */
+.panel{width:100%;max-width:392px;background:var(--s1);border:1px solid var(--bd);border-radius:22px;padding:20px;box-shadow:0 40px 80px -32px rgba(0,0,0,0.7);}
+.panel .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.panel .ph .t{font-size:14px;font-weight:700;color:var(--tx);}
+.panel .ph .s{font-family:var(--mono);font-size:11px;color:var(--tx3);}
+
+/* journal list */
+.jl{display:flex;flex-direction:column;gap:8px;}
+.jr{display:flex;align-items:center;gap:12px;background:var(--bg-grad);border:1px solid var(--bd);border-radius:13px;padding:12px 13px;}
+.jr .tk{width:36px;height:36px;border-radius:9px;background:var(--s3);display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--tx2);}
+.jr .nm{font-size:14px;font-weight:600;color:var(--tx);}
+.jr .dt{font-family:var(--mono);font-size:10.5px;color:var(--tx3);margin-top:2px;letter-spacing:-.01em;}
+.jr .pl{margin-left:auto;font-size:15px;font-weight:600;}
+
+/* stat cards + chart */
+.sgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px;}
+.scell{background:var(--bg-grad);border:1px solid var(--bd);border-radius:13px;padding:13px 14px;}
+.scell .k{font-size:11px;color:var(--tx3);font-weight:500;margin-bottom:6px;}
+.scell .v{font-size:22px;font-weight:600;color:var(--tx);}
+.chartwrap{background:var(--bg-grad);border:1px solid var(--bd);border-radius:13px;padding:14px;}
+.chartwrap .cl{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+.chartwrap .cl .kk2{font-size:11px;color:var(--tx3);font-weight:500;}
+.chartwrap .cl .vv{font-size:13px;font-weight:600;}
+
+/* behavior bars */
+.bb{display:flex;flex-direction:column;gap:14px;}
+.bb .b1{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;}
+.bb .b1 .nm{color:var(--tx);font-weight:500;}
+.bb .b1 .vl{font-family:var(--mono);font-weight:600;font-size:12.5px;}
+.bb .track{height:7px;border-radius:5px;background:var(--s3);overflow:hidden;}
+.bb .fill{height:100%;border-radius:5px;}
+.bb .note{margin-top:16px;font-size:12.5px;line-height:1.6;color:var(--tx2);background:rgba(255,93,108,0.07);border-radius:11px;padding:11px 13px;}
+.bb .note b{color:var(--tx);}
+
+/* whom */
+.whom{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:52px;}
+.who{padding:24px 22px;border:1px solid var(--bd);border-radius:18px;background:var(--s1);}
+.who .ic{width:36px;height:36px;border-radius:10px;background:var(--s3);display:grid;place-items:center;margin-bottom:16px;}
+.who h4{font-size:16px;font-weight:700;color:var(--tx);margin-bottom:7px;letter-spacing:-.01em;}
+.who p{font-size:13.5px;color:var(--tx3);line-height:1.55;}
+
+/* founder */
+.founder{max-width:780px;margin:0 auto;}
+.founder .kk{margin-bottom:24px;}
+.founder p{font-size:clamp(19px,2.4vw,23px);line-height:1.6;color:var(--tx);font-weight:500;letter-spacing:-.02em;margin-bottom:20px;}
+.founder p b{color:var(--grn);font-weight:600;}
+.founder .by{font-family:var(--mono);font-size:13px;color:var(--tx3);letter-spacing:.02em;}
+
+/* pricing */
+.price{display:grid;grid-template-columns:1fr 1.1fr;gap:18px;max-width:740px;margin:52px auto 0;}
+.pc{background:var(--s1);border:1px solid var(--bd);border-radius:20px;padding:28px;}
+.pc.pro{border-color:rgba(61,220,132,0.35);position:relative;}
+.pc.pro::before{content:'';position:absolute;inset:0;border-radius:20px;background:radial-gradient(420px 200px at 80% 0%,rgba(61,220,132,0.06),transparent 70%);pointer-events:none;}
+.pc .pn{font-size:14px;font-weight:700;color:var(--tx);}
+.pc .pd{font-size:13px;color:var(--tx3);margin:4px 0 20px;}
+.pc .amt{font-size:38px;font-weight:800;color:var(--tx);letter-spacing:-.03em;line-height:1;}
+.pc .amt small{font-size:16px;font-weight:500;color:var(--tx3);letter-spacing:0;}
+.pc .tr{font-size:12px;color:var(--tx3);margin-top:9px;line-height:1.5;}
+.pc ul{list-style:none;margin:22px 0 0;display:flex;flex-direction:column;gap:11px;}
+.pc li{display:grid;grid-template-columns:20px 1fr;gap:9px;font-size:14px;color:var(--tx2);align-items:start;}
+.pc li b{color:var(--tx);font-weight:600;}
+.pc li .ck{margin-top:2px;}
+.pc .btn{width:100%;margin-top:24px;position:relative;}
+
+/* faq */
+.faq{max-width:760px;margin:0 auto;border-top:1px solid var(--bd);}
+.qa{border-bottom:1px solid var(--bd);}
+.qa summary{font-size:16.5px;font-weight:600;color:var(--tx);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 4px;letter-spacing:-.01em;}
+.qa summary::-webkit-details-marker{display:none;}
+.qa summary .x{width:18px;height:18px;flex:0 0 auto;position:relative;}
+.qa summary .x::before,.qa summary .x::after{content:'';position:absolute;background:var(--tx3);border-radius:2px;}
+.qa summary .x::before{top:8px;left:0;width:18px;height:2px;}
+.qa summary .x::after{top:0;left:8px;width:2px;height:18px;transition:transform .2s;}
+.qa[open] summary .x::after{transform:rotate(90deg);opacity:0;}
+.qa .a{font-size:15px;color:var(--tx2);line-height:1.7;padding:0 4px 24px;max-width:660px;}
+
+/* final */
+.final{text-align:center;padding:128px 0;position:relative;}
+.final .ambient{position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:880px;height:440px;background:radial-gradient(closest-side,rgba(61,220,132,0.13),rgba(43,188,178,0.05) 56%,transparent 72%);pointer-events:none;}
+.final h2{position:relative;font-size:clamp(30px,4.4vw,46px);font-weight:800;color:var(--tx);letter-spacing:-.04em;line-height:1.12;margin-bottom:18px;}
+.final p{position:relative;font-size:18px;color:var(--tx2);margin-bottom:32px;}
+.final .cta{position:relative;display:flex;justify-content:center;gap:11px;flex-wrap:wrap;}
+
+/* footer */
+footer{border-top:1px solid var(--bd);padding:40px 0 64px;}
+footer .row{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;}
+footer .links{display:flex;gap:22px;flex-wrap:wrap;font-size:13.5px;color:var(--tx3);}
+footer .links a:hover{color:var(--tx);}
+footer .dis{font-size:11.5px;color:var(--tx4);margin-top:22px;line-height:1.65;max-width:780px;}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(14px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1);}
+.rv.in{opacity:1;transform:none;}
+
+@media (max-width:900px){
+  .hero{padding:52px 0 64px;}
+  .hero .grid{grid-template-columns:1fr;gap:52px;}
+  .sig{grid-template-columns:1fr;gap:40px;}
+  .frow,.frow.flip{grid-template-columns:1fr;gap:32px;}
+  .frow.flip .ftx{order:0;}
+  .frow + .frow{margin-top:64px;}
+  .whom{grid-template-columns:1fr 1fr;}
+  .price{grid-template-columns:1fr;}
+  .sec{padding:80px 0;}
+  .float.f1{left:0;}
+}
+@media (max-width:520px){.whom{grid-template-columns:1fr;}.feel{grid-template-columns:38px 1fr;}.float{display:none;}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;}.rv{transition:none;opacity:1;transform:none;}}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<nav><div class="mx row">
+  <a class="brand" href="#"><span class="mk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 15 L8 11 L12 13 L21 5" stroke="#062013" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="5" r="2.2" fill="#062013"/></svg></span>Tradeflect</a>
+  <a class="btn btn-sec" href="https://apps.apple.com/app/id6779860799" target="_blank" rel="noopener">App Store</a>
+</div></nav>
+
+<!-- HERO -->
+<header class="hero"><div class="ambient"></div><div class="mx grid">
+  <div class="rv">
+    <span class="lab"><span class="ac">●</span>&nbsp; AI 매매 복기 저널</span>
+    <h1>매매는 느는데,<br>계좌만 <em>그대로</em>인가요?</h1>
+    <p class="lead">대부분의 트레이더는 같은 실수를 몇 달간 반복합니다. Tradeflect는 당신이 입력한 매매로 <b>매주 당신만의 패턴을 복기</b>하고, 다음 주에 바꿀 한 가지를 짚어줍니다.</p>
+    <div class="cta">
+      <a class="btn btn-pri lg" href="https://apps.apple.com/app/id6779860799" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#0a0b0e"><path d="M16.4 12.9c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9s-1.8-.9-3-.8c-1.5 0-2.9.9-3.7 2.3-1.6 2.7-.4 6.8 1.1 9 .7 1.1 1.6 2.3 2.8 2.2 1.1 0 1.5-.7 2.9-.7s1.7.7 2.9.7 2-1.1 2.7-2.1c.8-1.2 1.2-2.4 1.2-2.5-.1 0-2.3-.9-2.3-3.4zM14.2 6.2c.6-.8 1-1.8.9-2.9-.9 0-2 .6-2.6 1.3-.6.7-1.1 1.7-.9 2.7 1 .1 2-.5 2.6-1.1z"/></svg>
+        다운로드 <span class="s">7일 무료</span>
+      </a>
+      <a class="btn btn-sec lg" href="#review">AI 복기 살펴보기</a>
+    </div>
+    <div class="cap">
+      <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#6F7787" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>증권사 연결 불필요</span>
+      <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#6F7787" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>국내·미국·코인</span>
+      <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#6F7787" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>기기 내 저장</span>
+    </div>
+  </div>
+
+  <div class="stage rv">
+    <div class="phone">
+      <div class="scr">
+        <div class="island"></div>
+        <div class="sb"><span class="t">9:41</span><span class="ic">
+          <svg width="17" height="11" viewBox="0 0 17 11" fill="#F5F7FA"><rect x="0" y="6" width="3" height="5" rx="1"/><rect x="4.5" y="4" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="9" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="none"><path d="M8 9.2a1.3 1.3 0 100 .01M3 6.2a7 7 0 0110 0M.6 3.4a11 11 0 0114.8 0" stroke="#F5F7FA" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="1" y="1.5" width="20" height="9" rx="2.5" stroke="#F5F7FA" stroke-opacity=".5"/><rect x="2.5" y="3" width="15" height="6" rx="1.3" fill="#F5F7FA"/><rect x="22.5" y="4" width="1.6" height="4" rx=".8" fill="#F5F7FA" fill-opacity=".6"/></svg>
+        </span></div>
+        <div class="body">
+          <div class="nav-t"><span class="h">이번 주 복기</span><span class="badge">AI 분석 완료</span></div>
+          <div class="rev">
+            <div class="rh"><span class="dot"></span><span class="lab2">3월 2주차 매매 복기</span><span class="wk">14건 · 5일</span></div>
+            <div class="row3">
+              <div class="c"><div class="v tnum">43%</div><div class="k">승률</div></div>
+              <div class="c"><div class="v tnum neg">0.58</div><div class="k">손익비</div></div>
+              <div class="c"><div class="v tnum neg">−3.4%</div><div class="k">주간 손익</div></div>
+            </div>
+            <div class="blk d"><span class="tag">진단</span>손절은 평균 −1.8%로 빠른데, 익절이 +1.1%로 <b>더 빨라요.</b> 손익비가 3주째 1을 밑돕니다 — ‘버는 건 짧게, 잃는 건 길게’의 반대 패턴.</div>
+            <div class="blk p"><span class="tag">처방</span>익절 라인을 직전 고점까지 한 박자 늦춰보세요. <b>−2% 손절은 잘 지키고 있어요.</b> 그건 유지.</div>
+            <div class="foot"><svg width="13" height="13" viewBox="0 0 24 24" fill="#3DDC84"><path d="M12 2c1 3 4 4 4 8a4 4 0 01-8 0c0-1 .3-1.8.7-2.5C9 9 9 11 10 11c.7 0 1-.6 1-1.4C11 7 12 4 12 2z"/></svg><b>12일</b> 연속 기록 중</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="float f1">
+      <div class="fl-h"><span class="dot" style="width:5px;height:5px;border-radius:50%;background:#3DDC84;display:inline-block"></span>다음 주 처방</div>
+      <div class="fl-b">급등 후 추격 진입 금지 · 눌림만</div>
+    </div>
+  </div>
+</div></header>
+
+<!-- EMPATHY -->
+<section class="sec tint"><div class="mx">
+  <div class="head rv">
+    <span class="lab"><span class="ac">—</span>&nbsp; 혹시, 내 얘기인가요</span>
+    <h2>문제는 종목이 아니라,<br>매번 같은 자리에서 반복되는 ‘나’예요.</h2>
+  </div>
+  <div class="feels">
+    <div class="feel rv"><span class="n">01</span><span class="q">손절은 칼같이 하면서, <b>익절은 못 참고</b> 늘 일찍 던진다.</span></div>
+    <div class="feel rv"><span class="n">02</span><span class="q">오를 것 같아서 <b>또 추격매수</b>했다가, 또 물렸다.</span></div>
+    <div class="feel rv"><span class="n">03</span><span class="q">계획은 있었는데, 장 열리면 <b>손이 먼저 나간다.</b></span></div>
+    <div class="feel rv"><span class="n">04</span><span class="q">‘복기해야지’ 다짐만 하고, <b>기록은 3일이면 끊긴다.</b></span></div>
+    <div class="feel rv"><span class="n">05</span><span class="q">지난달 그 실수, <b>이번 달에 똑같이</b> 또 했다.</span></div>
+    <div class="feel rv"><span class="n">06</span><span class="q">내 매매에 뭐가 문제인지, <b>정작 나만 모른다.</b></span></div>
+  </div>
+  <p class="feel-foot rv">매매 실력은 종목을 더 찾는 게 아니라, <b>내 패턴을 아는 데서</b> 늘어요.</p>
+</div></section>
+
+<!-- SIGNATURE -->
+<section class="sec" id="review"><div class="mx sig">
+  <div class="copy rv">
+    <span class="lab kk"><span class="ac">—</span>&nbsp; 매주 일요일</span>
+    <h3>기록만 하는 일지는<br>이미 충분합니다.<br>Tradeflect는 <em>복기</em>합니다.</h3>
+    <p>당신이 입력한 한 주의 매매를 AI가 분석해, 무엇이 무너졌는지 진단하고 다음 주 처방을 줍니다. 트래커가 숫자를 보여줄 때, Tradeflect는 그 숫자가 무슨 뜻인지 말합니다.</p>
+    <ul class="pts">
+      <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#3DDC84" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>반복되는 실수 패턴을 콕 집어줍니다</li>
+      <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#3DDC84" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>손익비·승률이 무너진 ‘이유’를 진단</li>
+      <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#3DDC84" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>다음 주에 바꿀 ‘한 가지’를 처방</li>
+    </ul>
+  </div>
+  <div class="fvis rv">
+    <div class="phone" style="width:300px">
+      <div class="scr">
+        <div class="island"></div>
+        <div class="sb"><span class="t">9:41</span><span class="ic">
+          <svg width="17" height="11" viewBox="0 0 17 11" fill="#F5F7FA"><rect x="0" y="6" width="3" height="5" rx="1"/><rect x="4.5" y="4" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="9" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="1" y="1.5" width="20" height="9" rx="2.5" stroke="#F5F7FA" stroke-opacity=".5"/><rect x="2.5" y="3" width="15" height="6" rx="1.3" fill="#F5F7FA"/></svg>
+        </span></div>
+        <div class="body">
+          <div class="nav-t"><span class="h">AI 복기</span><span class="badge">PRO</span></div>
+          <div class="rev">
+            <div class="rh"><span class="dot"></span><span class="lab2">3월 2주차</span><span class="wk">총 14건</span></div>
+            <div class="row3">
+              <div class="c"><div class="v tnum">43%</div><div class="k">승률</div></div>
+              <div class="c"><div class="v tnum neg">0.58</div><div class="k">손익비</div></div>
+              <div class="c"><div class="v tnum pos">+8</div><div class="k">기록일</div></div>
+            </div>
+            <div class="blk d"><span class="tag">진단</span>추격매수 4건 중 3건이 손실. 거래량 급증 구간에서 <b>뇌동매매 패턴</b>이 또 보여요.</div>
+            <div class="blk p"><span class="tag">처방</span>다음 주는 ‘급등 후 추격’을 금지 규칙으로. 대신 눌림 구간만 노려보세요.</div>
+            <div class="foot"><svg width="13" height="13" viewBox="0 0 24 24" fill="#3DDC84"><path d="M12 2c1 3 4 4 4 8a4 4 0 01-8 0c0-1 .3-1.8.7-2.5C9 9 9 11 10 11c.7 0 1-.6 1-1.4C11 7 12 4 12 2z"/></svg><b>12일</b> 연속 기록 중</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- FEATURES -->
+<section class="sec tint"><div class="mx">
+  <div class="head rv">
+    <span class="lab"><span class="ac">—</span>&nbsp; 작동 방식</span>
+    <h2>기록은 30초, 통찰은 매주.</h2>
+    <p>복잡한 세팅도, 증권사 연동도 없습니다. 매매한 걸 적기만 하면 나머지는 Tradeflect가 합니다.</p>
+  </div>
+
+  <div class="frow" style="margin-top:64px">
+    <div class="ftx rv">
+      <span class="lab kk"><span class="ac">01</span>&nbsp; 기록</span>
+      <h3>매매한 걸, 빠르게 적어요.</h3>
+      <p>종목·진입·청산·메모. 직전 기록이 자동으로 채워져 몇 번의 탭이면 끝납니다. 한국주식·미국주식·코인, 무엇이든 같은 방식으로.</p>
+    </div>
+    <div class="fvis rv"><div class="panel">
+      <div class="ph"><span class="t">매매 일지</span><span class="s">12일 연속</span></div>
+      <div class="jl">
+        <div class="jr"><span class="tk">삼성</span><div><div class="nm">삼성전자</div><div class="dt">3/14 · 스윙 · 계획대로</div></div><span class="pl tnum pos">+2.4%</span></div>
+        <div class="jr"><span class="tk">에코</span><div><div class="nm">에코프로</div><div class="dt">3/14 · 추격 · 뇌동</div></div><span class="pl tnum neg">−3.1%</span></div>
+        <div class="jr"><span class="tk">BTC</span><div><div class="nm">비트코인</div><div class="dt">3/13 · 눌림 · 계획대로</div></div><span class="pl tnum pos">+1.6%</span></div>
+        <div class="jr"><span class="tk">TSLA</span><div><div class="nm">테슬라</div><div class="dt">3/13 · 손절 · 규칙준수</div></div><span class="pl tnum neg">−1.9%</span></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="frow flip">
+    <div class="ftx rv">
+      <span class="lab kk"><span class="ac">02</span>&nbsp; 분석</span>
+      <h3>어디서 벌고, 어디서 잃는지 한눈에.</h3>
+      <p>승률·손익비·평균 손절·기대값은 물론, 섹터·테마·종목별로 ‘진짜 돈 되는 매매’가 어디였는지 보여줍니다.</p>
+    </div>
+    <div class="fvis rv"><div class="panel">
+      <div class="ph"><span class="t">분석</span><span class="s">최근 30일</span></div>
+      <div class="sgrid">
+        <div class="scell"><div class="k">승률</div><div class="v tnum">43%</div></div>
+        <div class="scell"><div class="k">손익비</div><div class="v tnum neg">0.58</div></div>
+        <div class="scell"><div class="k">누적 손익</div><div class="v tnum neg">−6.2%</div></div>
+        <div class="scell"><div class="k">평균 손절</div><div class="v tnum">−1.8%</div></div>
+      </div>
+      <div class="chartwrap">
+        <div class="cl"><span class="kk2">누적 수익률</span><span class="vv tnum neg">−6.2%</span></div>
+        <svg width="100%" height="76" viewBox="0 0 320 76" preserveAspectRatio="none" fill="none">
+          <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF5D6C" stop-opacity=".18"/><stop offset="1" stop-color="#FF5D6C" stop-opacity="0"/></linearGradient></defs>
+          <path d="M0 20 L40 26 L80 18 L120 34 L160 30 L200 48 L240 42 L280 58 L320 64 L320 76 L0 76 Z" fill="url(#g)"/>
+          <path d="M0 20 L40 26 L80 18 L120 34 L160 30 L200 48 L240 42 L280 58 L320 64" stroke="#FF5D6C" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="frow">
+    <div class="ftx rv">
+      <span class="lab kk"><span class="ac">03</span>&nbsp; 행동·감정</span>
+      <h3>왜 ‘같은 실수’를 반복하는지 알려줘요.</h3>
+      <p>계획대로 vs 뇌동매매, 추격 vs 눌림, 감정 상태별 성과까지. 숫자 뒤에 숨은 ‘행동의 습관’을 드러냅니다. 그게 진짜 새는 구멍이니까요.</p>
+    </div>
+    <div class="fvis rv"><div class="panel">
+      <div class="ph"><span class="t">행동 패턴</span><span class="s">태그별 승률</span></div>
+      <div class="bb">
+        <div><div class="b1"><span class="nm">계획대로 매매</span><span class="vl pos">67%</span></div><div class="track"><div class="fill" style="width:67%;background:#3DDC84"></div></div></div>
+        <div><div class="b1"><span class="nm">뇌동·추격매수</span><span class="vl neg">21%</span></div><div class="track"><div class="fill" style="width:21%;background:#FF5D6C"></div></div></div>
+        <div><div class="b1"><span class="nm">손절 규칙 준수</span><span class="vl pos">58%</span></div><div class="track"><div class="fill" style="width:58%;background:#3DDC84"></div></div></div>
+        <div class="note"><b>새는 구멍.</b> 손실의 71%가 ‘뇌동·추격’ 한 곳에서 발생했어요.</div>
+      </div>
+    </div></div>
+  </div>
+</div></section>
+
+<!-- WHOM -->
+<section class="sec"><div class="mx">
+  <div class="head mid rv">
+    <span class="lab"><span class="ac">—</span>&nbsp; 이런 분께</span>
+    <h2>매매를 ‘운’이 아니라<br>‘실력’으로 만들고 싶은 사람</h2>
+  </div>
+  <div class="whom">
+    <div class="who rv"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 17l5-5 4 3 7-8" stroke="#3DDC84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h4>단타·스윙 개미</h4><p>거래가 잦아 패턴이 쌓이는데, 정작 자기 패턴은 모르는 분</p></div>
+    <div class="who rv"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#3DDC84" stroke-width="2"/><path d="M12 8v4l2.5 2" stroke="#3DDC84" stroke-width="2" stroke-linecap="round"/></svg></div><h4>코인 트레이더</h4><p>변동성에 휩쓸려 뇌동매매가 잦은, 규율이 필요한 분</p></div>
+    <div class="who rv"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 4v16M6 10l6-6 6 6" stroke="#3DDC84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h4>정신 차리려는 분</h4><p>손실 보고 ‘이제 진짜 복기하자’ 결심한 바로 그 순간의 분</p></div>
+    <div class="who rv"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 4h11l3 3v13H5z" stroke="#3DDC84" stroke-width="2" stroke-linejoin="round"/><path d="M8 11h8M8 15h5" stroke="#3DDC84" stroke-width="2" stroke-linecap="round"/></svg></div><h4>일지 포기러</h4><p>일지 쓰려다 매번 3일 만에 그만둔, 습관이 안 잡히는 분</p></div>
+  </div>
+</div></section>
+
+<!-- FOUNDER -->
+<section class="sec tint"><div class="mx founder rv">
+  <span class="lab kk"><span class="ac">—</span>&nbsp; 왜 만들었나</span>
+  <p>저도 같은 실수를 몇 년간 반복했어요. 익절은 못 참고, 손절은 미루고, 복기는 작심삼일. 엑셀로 적어봤지만 숫자만 쌓일 뿐, <b>‘내가 뭘 고쳐야 하는지’는 아무도 안 알려주더군요.</b></p>
+  <p>그래서 직접 만들었습니다. 기록을 넘어, 매주 내 매매를 복기해 다음 주에 바꿀 한 가지를 짚어주는 도구를. Tradeflect는 제가 저를 위해 만든 앱이고, 같은 자리에서 반복해 물리는 당신에게도 필요할 거라 믿어요.</p>
+  <span class="by">— 개발자, Tradeflect 만든 사람</span>
+</div></section>
+
+<!-- PRICING -->
+<section class="sec"><div class="mx">
+  <div class="head mid rv">
+    <span class="lab"><span class="ac">—</span>&nbsp; 요금</span>
+    <h2>먼저 7일, 무료로 복기받아 보세요</h2>
+    <p>일주일 기록하고 첫 AI 복기를 받아본 뒤 결정해도 늦지 않아요.</p>
+  </div>
+  <div class="price">
+    <div class="pc rv">
+      <div class="pn">Free</div>
+      <div class="pd">기록과 기본 통계는 평생 무료</div>
+      <div class="amt tnum">₩0</div>
+      <div class="tr">광고 포함</div>
+      <ul>
+        <li><span class="ck"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#6F7787" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>매매 기록 무제한</li>
+        <li><span class="ck"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#6F7787" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>기본 손익·승률 통계</li>
+        <li><span class="ck"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#6F7787" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>주간 복기 요약 1줄</li>
+      </ul>
+      <a class="btn btn-sec" href="https://apps.apple.com/app/id6779860799" target="_blank" rel="noopener">무료로 시작</a>
+    </div>
+    <div class="pc pro rv">
+      <div class="pn">Tradeflect Pro</div>
+      <div class="pd">복기·분석을 전부 여는 구독</div>
+      <div class="amt tnum">₩9,900<small> / 월</small></div>
+      <div class="tr">7일 무료 체험 포함 · 언제든 해지 · 지역·통화에 따라 가격이 다를 수 있어요</div>
+      <ul>
+        <li><span class="ck"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#3DDC84" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b>AI 주간 복기 — 진단 + 처방</b></li>
+        <li><span class="ck"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#3DDC84" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>고급 분석 · 섹터/테마/종목별</li>
+        <li><span class="ck"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#3DDC84" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>행동·감정 분석</li>
+        <li><span class="ck"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#3DDC84" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>광고 제거</li>
+      </ul>
+      <a class="btn btn-grn" href="https://apps.apple.com/app/id6779860799" target="_blank" rel="noopener">7일 무료로 시작 <span class="s">· 이후 ₩9,900/월</span></a>
+    </div>
+  </div>
+</div></section>
+
+<!-- FAQ -->
+<section class="sec tint"><div class="mx">
+  <div class="head mid rv"><h2>자주 묻는 질문</h2></div>
+  <div class="faq" style="margin-top:44px">
+    <details class="qa rv"><summary>증권사 계좌를 연결해야 하나요?<span class="x"></span></summary><div class="a">아니요. Tradeflect는 어떤 증권사·은행과도 연결되지 않습니다. 당신이 직접 입력한 매매만으로 분석하기 때문에, 계좌 정보나 자산이 노출될 일이 없어요.</div></details>
+    <details class="qa rv"><summary>한국주식, 미국주식, 코인 다 되나요?<span class="x"></span></summary><div class="a">네. 종목을 직접 입력하는 방식이라 국내주식·해외주식·코인·선물 등 무엇이든 같은 방식으로 기록하고 복기할 수 있습니다.</div></details>
+    <details class="qa rv"><summary>제 데이터는 안전한가요?<span class="x"></span></summary><div class="a">기록은 기본적으로 기기 안에 저장되고, 로그인을 켰을 때만 암호화된 연결로 클라우드에 백업·동기화됩니다. 앱 안 ‘모든 데이터 삭제’로 언제든 지울 수 있어요.</div></details>
+    <details class="qa rv"><summary>투자 추천이나 시그널을 주나요?<span class="x"></span></summary><div class="a">아니요. Tradeflect는 매수·매도 추천이나 시그널 서비스가 아니라, 당신의 과거 매매를 복기하는 도구입니다. 모든 결과는 정보·자기 점검 목적이에요.</div></details>
+    <details class="qa rv"><summary>무료 체험은 어떻게 해지하나요?<span class="x"></span></summary><div class="a">설정 &gt; Apple ID &gt; 구독에서 언제든 해지할 수 있습니다. 체험 종료 24시간 전까지 해지하면 요금이 청구되지 않아요.</div></details>
+  </div>
+</div></section>
+
+<!-- FINAL -->
+<section class="final"><div class="ambient"></div><div class="mx">
+  <h2 class="rv">이번 주 매매,<br>AI에게 복기받아 보세요.</h2>
+  <p class="rv">같은 실수를 끊는 건, 그 실수를 ‘보는 것’부터 시작돼요.</p>
+  <div class="cta rv">
+    <a class="btn btn-pri lg" href="https://apps.apple.com/app/id6779860799" target="_blank" rel="noopener">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#0a0b0e"><path d="M16.4 12.9c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9s-1.8-.9-3-.8c-1.5 0-2.9.9-3.7 2.3-1.6 2.7-.4 6.8 1.1 9 .7 1.1 1.6 2.3 2.8 2.2 1.1 0 1.5-.7 2.9-.7s1.7.7 2.9.7 2-1.1 2.7-2.1c.8-1.2 1.2-2.4 1.2-2.5-.1 0-2.3-.9-2.3-3.4zM14.2 6.2c.6-.8 1-1.8.9-2.9-.9 0-2 .6-2.6 1.3-.6.7-1.1 1.7-.9 2.7 1 .1 2-.5 2.6-1.1z"/></svg>
+      App Store에서 다운로드 <span class="s">7일 무료</span>
+    </a>
+  </div>
+</div></section>
+
+<footer><div class="mx">
+  <div class="row">
+    <a class="brand" href="#"><span class="mk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 15 L8 11 L12 13 L21 5" stroke="#062013" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="5" r="2.2" fill="#062013"/></svg></span>Tradeflect</a>
+    <div class="links">
+      <a href="https://apps.apple.com/app/id6779860799" target="_blank" rel="noopener">App Store</a>
+      <a href="https://billnjoyce.github.io/stockdiary/ko/terms.html" target="_blank" rel="noopener">이용약관</a>
+      <a href="https://billnjoyce.github.io/stockdiary/ko/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a>
+      <a href="mailto:ibillkim@gmail.com?subject=%5BTradeflect%5D%20%EB%AC%B8%EC%9D%98%ED%95%98%EA%B8%B0">문의</a>
+    </div>
+  </div>
+  <p class="dis">Tradeflect는 매매일지·복기 도구이며 투자자문 서비스가 아닙니다. 모든 통계·분석·복기는 정보 제공 및 자기 점검 목적이고, 투자 권유나 결과 보장이 아닙니다. 과거 성과는 미래 수익을 보장하지 않으며, 투자에는 원금 손실 위험이 있습니다. © 2026 joycestudios</p>
+</div></footer>
+
+<script>
+(function(){
+  var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(rm){document.querySelectorAll('.rv').forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:0.12,rootMargin:'0px 0px -7% 0px'});
+  document.querySelectorAll('.rv').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>
