@@ -265,6 +265,16 @@ body{
 .hourbar-chips .hchip:hover:not(:disabled){color:var(--txt);border-color:var(--line-2)}
 .hourbar-chips .hchip.on{color:#fff;border-color:transparent;background:linear-gradient(135deg,var(--c),var(--c));box-shadow:0 4px 14px -6px var(--c)}
 .hourbar-chips .hchip:disabled{opacity:.32;cursor:not-allowed}
+.hourbar-chips.hcmp{margin-top:7px;align-items:center}
+.hourbar-chips.hcmp .hchip{font-size:11.5px;padding:4px 11px}
+.hcmplab{font-family:var(--mono);font-size:11px;color:var(--txt-3);margin-right:2px}
+.hourcum{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin-top:8px;padding:9px 12px;
+  background:var(--panel-3);border:1px solid var(--line);border-radius:10px}
+.hourcum .hc-item{display:inline-flex;align-items:baseline;gap:6px}
+.hourcum .hc-item b{font-family:var(--mono);font-size:17px;font-weight:700;color:var(--txt)}
+.hourcum .hc-item i{font-style:normal;font-size:11.5px;color:var(--txt-3)}
+.hourcum .hc-vs{font-size:11px;color:var(--txt-3);opacity:.7}
+.hourcum .hc-delta{margin-left:auto;font-family:var(--mono);font-size:13px;font-weight:700}
 .hourmeta{font-family:var(--mono);font-size:12px;color:var(--txt-3)}
 .hourmeta b{font-weight:700}
 .hourchart{position:relative}
@@ -308,8 +318,8 @@ body{
       <button onclick="App.shiftDate(1)" title="다음 날짜">›</button>
     </div>
     <div class="rangepick" id="rangeSeg">
-      <button data-range="1" onclick="App.setRange(1,this)">1D</button>
-      <button data-range="7" class="on" onclick="App.setRange(7,this)">7D</button>
+      <button data-range="1" class="on" onclick="App.setRange(1,this)">1D</button>
+      <button data-range="7" onclick="App.setRange(7,this)">7D</button>
       <button data-range="14" onclick="App.setRange(14,this)">14D</button>
       <button data-range="30" onclick="App.setRange(30,this)">30D</button>
       <button data-range="all" onclick="App.setRange('all',this)">전체</button>
@@ -401,8 +411,17 @@ const ICON_COLORS = ['#FF6B4A','#3DDC97','#5B8DEF','#9B6BFF','#FFB23E','#FF5C8A'
 
 /* ---------- helpers ---------- */
 const $ = s => document.querySelector(s);
-const fmt = n => n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3).toFixed(n>=1e4?0:1)+'K':String(n);
+const fmt = n => Math.abs(n)>=1e6 ? (n/1e6).toFixed(1)+'M' : Math.round(n).toLocaleString('en-US');
 const fmtFull = n => n.toLocaleString('en-US');
+// 현재 KST 날짜(YYYY-MM-DD)와 시(0–23). 시간대 비교의 '현재 시각' 기준점.
+function kstNowParts(){
+  try{
+    const f=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hour12:false});
+    const p={}; for(const x of f.formatToParts(new Date())) p[x.type]=x.value;
+    let h=parseInt(p.hour,10); if(!(h>=0&&h<=23)) h=0;
+    return {iso:`${p.year}-${p.month}-${p.day}`, hour:h};
+  }catch(e){ const n=new Date(); return {iso:toISO(n), hour:n.getHours()}; }
+}
 function pad(n){return String(n).padStart(2,'0')}
 function toISO(d){if(!(d instanceof Date)||isNaN(d))return '';return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
 function parseISO(s){
@@ -554,7 +573,7 @@ class MockSource{
 
 class FirebaseSource{
   constructor(cfg){this.cfg=cfg;this.kind='firebase';this.token=null;this.authError='';
-    this._q=[];this._active=0;this._MAX=6;}   // 동시 요청 최대 6개 (모바일 안정성)
+    this._q=[];this._active=0;this._MAX=8;}   // 동시 요청 최대 8개 (모바일 안정성 + 속도)
   // 동시성 제한 래퍼: fn(=()=>fetch...)을 큐에 넣고 순차적으로 풀어준다
   _gate(fn){
     return new Promise((resolve,reject)=>{
@@ -728,14 +747,15 @@ class FirebaseSource{
    APP CONTROLLER
    ============================================================ */
 const App={
-  src:null, apps:[], build:'appstore', range:7,
-  date: toISO(new Date('2026-05-20')),
+  src:null, apps:[], build:'appstore', range:1,
+  date: toISO(new Date()),   // 항상 오늘 날짜로 시작
   cache:{},          // cache[appId+'|'+build] = { metric: { date: {platform:count} } }
   hidden:new Set(),  // hidden metric keys in legend
   view:'home', curApp:null,
   platform:'all',    // 'all' = sum every platform; otherwise a specific platform key
   platforms:[],      // platform keys discovered in data (e.g. ios/android/toss/web)
   hourMetric:'dau',  // 시간대 차트에서 선택된 지표
+  hourCompare:1,     // 시간대 비교 기준(며칠 전): 0=끄기, 1=어제, 7/14/30=N일 전
 
   // Default Firebase config — app connects to REAL data automatically on load.
   DEFAULT_CFG:{
@@ -757,8 +777,9 @@ const App={
       await this.src.init();
       this.apps=await this.src.listApps();
       if(!this.apps.length) throw new Error('앱 목록(info)이 비어 있습니다.');
+      this._discoverPlatforms();
+      this.render();                 // 데이터 도착 전 화면(껍데기)을 즉시 띄운다
       await this._prefetchAll();
-      this._autoDate();
       this._status('live','실시간 · Firebase');
       this.render();
     }catch(e){
@@ -767,7 +788,7 @@ const App={
       // 실패 원인을 화면에 그대로 노출 (조용히 폴백하지 않음)
       try{
         this.src=new MockSource();await this.src.init();
-        this.apps=await this.src.listApps();await this._prefetchAll();this._autoDate();
+        this.apps=await this.src.listApps();await this._prefetchAll();
         this._status('mock','오프라인 데이터 · 연결 실패: '+reason);this.render();return;
       }catch(e2){}
       this._status('err','데이터를 불러오지 못했습니다: '+reason);
@@ -816,7 +837,6 @@ const App={
       await this.src.init();           // 토큰 갱신
       this.apps=await this.src.listApps();
       await this._prefetchAll();
-      this._autoDate();
       this._status('live','실시간 · Firebase');
       this.render();
     }catch(e){
@@ -837,9 +857,23 @@ const App={
     return {startKey:start, endKey:today};
   },
 
+  // 현재 보기(선택 날짜 + 기간)에 필요한 "최소" 로딩 범위만 계산한다.
+  // 초기 로드 시 1D면 오늘 하루치만 받아 모바일에서 빠르게 열리도록 한다.
+  _viewWindow(){
+    const today=toISO(new Date());
+    if(this.range==='all') return {startKey:'2000-01-01', endKey:today};
+    const back=(this.range-1)+(this.hourCompare||0);   // 시간대 비교(N일 전)까지 포함
+    const start=shiftISO(this.date, -back);
+    const end = (this.date>today) ? this.date : today;   // 선택 날짜가 오늘 이후면 그날까지
+    return {startKey:start, endKey:end};
+  },
+
   async _prefetchAll(opts){
-    // 항상 서버에서 새로 받는다. opts.startKey~endKey 범위만 받아 속도 최적화.
-    const win = opts || this._loadWindow(this.LOAD_WINDOW);
+    // 항상 서버에서 새로 받는다. 기본값은 현재 보기에 필요한 최소 범위(오늘 1일치 등)만.
+    const win = opts || this._viewWindow();
+    // 렌더가 데이터 도착 전에도 동작하도록 범위·플랫폼을 먼저 확정한다.
+    this._loadedRange={start:win.startKey||'2000-01-01', end:win.endKey||toISO(new Date())};
+    this._discoverPlatforms();
     const jobs=this.apps.map(async a=>{
       const ck=a.appId+'|'+this.build;
       try{
@@ -848,11 +882,18 @@ const App={
         console.warn('[앱 로드 실패]',a.appId,err);
         this.cache[ck]=this.cache[ck]||{};
       }
+      // 도착하는 즉시 화면을 갱신 — 다 받을 때까지 기다리지 않는다(체감 속도 ↑).
+      this._scheduleRender();
     });
     await Promise.all(jobs);
-    // 전체(범위 미지정) 로딩이면 '전부 로드됨'으로 기록
-    this._loadedRange={start:win.startKey||'2000-01-01', end:win.endKey||toISO(new Date())};
-    this._discoverPlatforms();
+  },
+
+  // 짧은 시간에 몰리는 렌더 요청을 1프레임으로 합친다(progressive load용).
+  _scheduleRender(){
+    if(this._renderQueued) return;
+    this._renderQueued=true;
+    const run=()=>{ this._renderQueued=false; try{ this.render(); }catch(e){ console.warn(e); } };
+    (typeof requestAnimationFrame==='function') ? requestAnimationFrame(run) : setTimeout(run,16);
   },
 
   _discoverPlatforms(){
@@ -1051,18 +1092,21 @@ const App={
     if(this.range==='all'){
       needStart='2000-01-01';                                   // 전체: 사실상 무제한
     }else{
-      needStart=shiftISO(this.date, -(this.range-1));
+      const back=(this.range-1)+(this.hourCompare||0);          // 시간대 비교(N일 전)까지 포함
+      needStart=shiftISO(this.date, -back);
     }
     if(needStart >= this._loadedRange.start) return;            // 이미 충분
     // 더 받아야 함 — 전체 보기는 범위 쿼리 없이 메트릭 전체를, 아니면 넓힌 윈도우를
+    const today=toISO(new Date());
+    const endKey = (this.date>today) ? this.date : today;
     const win = this.range==='all'
       ? {startKey:null, endKey:null}                            // 범위 미지정 = 메트릭 전체
-      : {startKey:needStart, endKey:toISO(new Date())};
+      : {startKey:needStart, endKey:endKey};
     this._status('live','데이터 더 불러오는 중…');
     await this._prefetchAll(win);
     this._status('live','실시간 · Firebase');
   },
-  today(){this._autoDate();this.render()},
+  async today(){ this.date=toISO(new Date()); await this._ensureLoadedForView(); this.render(); },
 
   /* ---------- render router ---------- */
   render(){
@@ -1179,8 +1223,9 @@ const App={
 
   // weighted KPI score for ranking apps (period totals, platform-aware)
   _appScore(appId,dates){
-    const w={dau:2,installs:1.5,events:1,updates:1,sales:1.5};
-    let s=0;for(const m of METRICS){const v=dates.reduce((a,d)=>a+this.valueOn(appId,m.key,d),0);s+=v*(w[m.key]||1);}
+    // 순위(KPI) 점수: events(이벤트 집계)는 합산에서 제외 — 가중치 0
+    const w={dau:2,installs:1.5,events:0,updates:1,sales:1.5};
+    let s=0;for(const m of METRICS){if(m.key==='events')continue;const v=dates.reduce((a,d)=>a+this.valueOn(appId,m.key,d),0);s+=v*(w[m.key]||1);}
     return s;
   },
   _sortedApps(dates){return [...this.apps].sort((a,b)=>this._appScore(b.appId,dates)-this._appScore(a.appId,dates))},
@@ -1404,6 +1449,13 @@ const App={
     if(this.view==='detail'&&this.curApp) this._renderHourly(this.curApp);
     else this._renderHourly(null);
   },
+  // 시간대 비교 기준 선택(N일 전). 필요한 과거 데이터를 받아온 뒤 다시 그린다.
+  async setHourCompare(n){
+    this.hourCompare=+n;
+    await this._ensureLoadedForView();
+    if(this.view==='detail'&&this.curApp) this._renderHourly(this.curApp);
+    else this._renderHourly(null);
+  },
 
   /* ---------- 시간대(24h) 차트 ---------- */
   // host(#hourly) 안에 칩 + SVG 막대차트를 그린다. appId=null이면 전체.
@@ -1419,6 +1471,16 @@ const App={
       if(alt) mk=this.hourMetric=alt.key;
     }
     const data=this.hourly(appId,mk,dates);
+    // 비교(N일 전) 시리즈 — 현재 기간을 통째로 N일 당겨 '동시간대' 비교
+    const cmp=this.hourCompare||0;
+    const cmpDates = cmp>0 ? dates.map(d=>shiftISO(d,-cmp)) : null;
+    const cmpData = cmpDates ? this.hourly(appId,mk,cmpDates) : null;
+    const cmpLabel = ({1:'어제',7:'7일 전',14:'14일 전',30:'30일 전'})[cmp] || '';
+    // '현재 시각' 기준 공정 비교: 선택 날짜가 오늘이면 지금 KST 시(hour)까지만 양쪽을 합산.
+    const _kst=kstNowParts();
+    const isToday = (this.range!=='all') && (this.date===_kst.iso || this.date===toISO(new Date()));
+    const cutHour = isToday ? _kst.hour : 23;          // 0..cutHour 까지 포함
+    const sumTo=(arr,hEnd)=>{let s=0;for(let h=0;h<=hEnd;h++)s+=arr[h]||0;return s;};
     // 지표 선택 칩 (데이터 있는 지표만 활성)
     const chips=METRICS.map(m=>{
       const has=!!this.hourly(appId,m.key,dates);
@@ -1426,9 +1488,14 @@ const App={
       return `<button class="hchip ${on?'on':''}" ${has?'':'disabled'} style="--c:${m.raw}"
         onclick="App.setHourMetric('${m.key}')">${m.label}</button>`;
     }).join('');
+    // 비교 기준 칩 (끄기 / 어제 / 7·14·30일 전)
+    const cmpChips=[[0,'끄기'],[1,'어제'],[7,'7일 전'],[14,'14일 전'],[30,'30일 전']]
+      .map(([v,lab])=>`<button class="hchip ${v===cmp?'on':''}" style="--c:#9aa7bd"
+        onclick="App.setHourCompare(${v})">${lab}</button>`).join('');
+    const cmpRow=`<div class="hourbar-chips hcmp"><span class="hcmplab">비교</span>${cmpChips}</div>`;
 
     if(!data){
-      host.innerHTML=`<div class="hourbar-chips">${chips}</div>
+      host.innerHTML=`<div class="hourbar-chips">${chips}</div>${cmpRow}
         <div class="hourempty">이 기간에는 시간대 데이터가 없습니다. (집계 데이터에는 시각 정보가 없을 수 있어요)</div>`;
       return;
     }
@@ -1436,7 +1503,7 @@ const App={
     const W=900,H=240,P={l:40,r:14,t:14,b:28};
     const innerW=W-P.l-P.r, innerH=H-P.t-P.b;
     const counts=data.counts;
-    let gmax=this._niceMax(Math.max(...counts,1));
+    let gmax=this._niceMax(Math.max(...counts, ...(cmpData?cmpData.counts:[]), 1));
     const bw=innerW/24;
     const color=(METRICS.find(m=>m.key===mk)||{}).raw||'#5e8bff';
     const Y=v=>P.t+innerH-(v/gmax)*innerH;
@@ -1461,14 +1528,48 @@ const App={
         rx="3" fill="${color}" fill-opacity="${isPeak?'1':'0.55'}" style="pointer-events:none;transition:fill-opacity .12s"></rect>`;
       if(h%3===0) g+=`<text x="${(x+bw/2).toFixed(1)}" y="${H-10}" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#5d6e87">${String(h).padStart(2,'0')}</text>`;
     }
+    // '현재 시각' 세로 표시선 — 오늘 보기일 때만 (어제 그래프는 가리지 않음)
+    if(isToday && cutHour<23){
+      const xCut=P.l+(cutHour+1)*bw;
+      g+=`<line x1="${xCut.toFixed(1)}" y1="${P.t}" x2="${xCut.toFixed(1)}" y2="${P.t+innerH}" stroke="#9aa7bd" stroke-width="1.2" stroke-dasharray="2 2" opacity="0.6" style="pointer-events:none"/>`;
+      g+=`<text x="${Math.min(xCut+4,W-P.r-26).toFixed(1)}" y="${(P.t+11)}" font-family="'JetBrains Mono',monospace" font-size="10" fill="#9aa7bd" style="pointer-events:none">현재</text>`;
+    }
+    // 비교(N일 전) 오버레이 — 하루 전체(24h)를 점선 + 마커로 모두 표시
+    if(cmpData){
+      const cc=cmpData.counts; const pts=[];
+      for(let h=0;h<24;h++){ pts.push([P.l+h*bw+bw/2, P.t+innerH-(cc[h]/gmax)*innerH]); }
+      const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+      g+=`<path d="${line}" fill="none" stroke="#9aa7bd" stroke-width="2" stroke-dasharray="4 3" stroke-linejoin="round" stroke-linecap="round" opacity="0.95" style="pointer-events:none"/>`;
+      g+=pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="2.2" fill="#0a0e14" stroke="#9aa7bd" stroke-width="1.6" style="pointer-events:none"/>`).join('');
+    }
     const peakH=counts.indexOf(peak);
+    const cmpMeta = cmp>0 ? ` · 점선=${cmpLabel}${cmpData?'':' (데이터 없음)'}` : '';
     const meta = peak>0
-      ? `피크 <b style="color:${color}">${String(peakH).padStart(2,'0')}:00</b> · 합계 ${fmtFull(data.total)} · ${dates.length>1?this.rangeLabel()+' 누적':'당일'} · KST`
+      ? `피크 <b style="color:${color}">${String(peakH).padStart(2,'0')}:00</b> · 합계 ${fmtFull(data.total)} · ${dates.length>1?this.rangeLabel()+' 누적':'당일'} · KST${cmpMeta}`
       : `데이터 없음`;
+
+    // 누적 비교 헤드라인: (오늘이면) 현재 시각까지의 오늘 합 vs 비교일 같은 시간까지의 합
+    let cumHead='';
+    if(cmpData){
+      const tCum=sumTo(counts,cutHour), cCum=sumTo(cmpData.counts,cutHour);
+      const dv=tCum-cCum, sign=dv>0?'+':'', col=dv>0?'#3ddc97':(dv<0?'#ff6b5e':'#9aa7bd');
+      const pctTxt = cCum>0 ? ` (${sign}${(dv/cCum*100).toFixed(0)}%)` : (tCum>0?' (신규)':'');
+      const hh=String(cutHour).padStart(2,'0');
+      const whenTxt = isToday ? `오늘 ${hh}시까지` : (dates.length>1?'기간 누적':'당일');
+      const cmpWhen = isToday ? `${cmpLabel} ${hh}시까지` : cmpLabel;
+      cumHead=`<div class="hourcum">
+        <span class="hc-item"><b style="color:${color}">${fmtFull(tCum)}</b><i>${whenTxt}</i></span>
+        <span class="hc-vs">vs</span>
+        <span class="hc-item"><b>${fmtFull(cCum)}</b><i>${cmpWhen}</i></span>
+        <span class="hc-delta" style="color:${col}">${sign}${fmtFull(dv)}${pctTxt}</span>
+      </div>`;
+    }
 
     host.innerHTML=`
       <div class="hourbar-chips">${chips}</div>
+      ${cmpRow}
       <div class="hourmeta">${meta}</div>
+      ${cumHead}
       <div class="hourchart">
         <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" class="hoursvg">${g}</svg>
         <div class="tip" id="hourtip"></div>
@@ -1480,6 +1581,23 @@ const App={
     const tip=host.querySelector('#hourtip');
     const label=(METRICS.find(m=>m.key===mk)||{}).label||mk;
     const bars=Array.from(svg.querySelectorAll('.hbar'));
+    // 비교 행: N일 전 동시간대 값 + 증감(Δ, %)
+    const cmpTipRow=(h,val)=>{
+      if(!cmpData) return '';
+      const cv=cmpData.counts[h];
+      if(isToday && h>cutHour){
+        // 오늘은 아직 안 지난 시간 — 어제 값은 참고로 보여주되 증감은 생략
+        return `<div class="tipdiv"></div>`
+          +`<div class="tr"><span class="nm"><i style="background:#9aa7bd"></i>${cmpLabel}</span><span class="vv">${fmtFull(cv)}</span></div>`
+          +`<div class="tr"><span class="nm">증감</span><span class="vv" style="color:#9aa7bd">아직</span></div>`;
+      }
+      const dv=val-cv;
+      const sign=dv>0?'+':''; const col=dv>0?'#3ddc97':(dv<0?'#ff6b5e':'#9aa7bd');
+      const pctTxt = cv>0 ? ` (${sign}${(dv/cv*100).toFixed(0)}%)` : (val>0?' (신규)':'');
+      return `<div class="tipdiv"></div>`
+        +`<div class="tr"><span class="nm"><i style="background:#9aa7bd"></i>${cmpLabel}</span><span class="vv">${fmtFull(cv)}</span></div>`
+        +`<div class="tr"><span class="nm">증감</span><span class="vv" style="color:${col}">${sign}${fmtFull(dv)}${pctTxt}</span></div>`;
+    };
     const showAt=(h)=>{
       const val=counts[h];
       const pct=data.total>0?(val/data.total*100):0;
@@ -1493,6 +1611,7 @@ const App={
       tip.innerHTML=`<div class="td">${String(h).padStart(2,'0')}:00 – ${String((h+1)%24).padStart(2,'0')}:00 KST</div>`
         +`<div class="tr"><span class="nm"><i style="background:${color}"></i>${label}</span><span class="vv">${fmtFull(val)}</span></div>`
         +`<div class="tr"><span class="nm">전체 대비</span><span class="vv">${pct.toFixed(1)}%</span></div>`
+        +cmpTipRow(h,val)
         +(pfRows?`<div class="tipdiv"></div>${pfRows}`:'');
       tip.style.opacity='1';
       // 위치: 막대 중앙 위
