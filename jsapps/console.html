@@ -898,18 +898,25 @@ const App={
   //          → 콘솔에서는 자식 노드 개수를 미리 카운트해서 숫자로 평탄화. 렌더 비용↓
   async _prefetchBannerAnalytics(){
     this.bannerStats = this.bannerStats || {};
-    if(!this.src || this.src.kind!=='firebase'){return;}
+    if(!this.src || this.src.kind!=='firebase'){
+      console.warn('[BannerAnalytics] firebase 소스가 아님 → 스킵');
+      return;
+    }
     try{
       const url = this.src._u('apps/toss/banner/analytics');
+      console.log('[BannerAnalytics] fetch →', url.replace(/auth=[^&]+/, 'auth=***'));
       const res = await fetch(url);
       if(!res.ok){throw new Error('HTTP '+res.status);}
       const data = await res.json();
+      console.log('[BannerAnalytics] raw response:', data);
       const out = {};
+      let totalImp=0, totalClk=0, appCount=0;
       if(data && typeof data==='object'){
         for(const appId of Object.keys(data)){
           const byDate = data[appId];
           if(!byDate || typeof byDate!=='object') continue;
           out[appId] = {};
+          let appImp=0, appClk=0;
           for(const date of Object.keys(byDate)){
             const cell = byDate[date];
             if(!cell || typeof cell!=='object') continue;
@@ -924,13 +931,21 @@ const App={
               ? Object.keys(clkNode).length
               : (typeof clkNode==='number' ? clkNode : 0);
             out[appId][date] = {impressions: imp, clicks: clk};
+            appImp+=imp; appClk+=clk;
+          }
+          if(appImp>0||appClk>0){
+            appCount++;
+            totalImp+=appImp;
+            totalClk+=appClk;
           }
         }
       }
       this.bannerStats = out;
+      console.log(`[BannerAnalytics] 파싱 완료 → ${appCount}개 앱, 총 노출 ${totalImp}, 총 터치 ${totalClk}`);
+      console.log('[BannerAnalytics] parsed → App.bannerStats (devtools 에서 확인 가능)');
       this._scheduleRender();
     }catch(err){
-      console.warn('[배너 통계 로드 실패]', err);
+      console.warn('[BannerAnalytics] 로드 실패:', err);
       this.bannerStats = this.bannerStats || {};
     }
   },
@@ -1333,14 +1348,15 @@ const App={
       const rankCls=rank===0?'r1':rank===1?'r2':rank===2?'r3':'';
       // v1.6.1: 인하우스 배너 통계 한 줄 (📢 노출 / 터치 / CTR).
       //   - 노출·터치는 *1일 1유저 1카운트* 기준 (고유 사용자 수).
-      //   - 데이터가 0/0이면 표시 안 함 (카드가 깔끔하게 유지).
+      //   - 0이라도 항상 표시 → 측정 기능이 동작 중이라는 것을 확인할 수 있게.
       const bs = this.bannerStatsFor(a.appId, dates);
-      const bannerRow = (bs.impressions>0||bs.clicks>0) ? `
+      const ctrTxt = bs.impressions>0 ? (bs.ctr*100).toFixed(1)+'%' : '—';
+      const bannerRow = `
         <div class="mini" style="margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)">
           <div class="mi"><div class="ml">📢 노출</div><div class="mv" style="color:#7c8a99">${fmt(bs.impressions)}</div></div>
           <div class="mi"><div class="ml">📢 터치</div><div class="mv" style="color:#7c8a99">${fmt(bs.clicks)}</div></div>
-          <div class="mi"><div class="ml">📢 CTR</div><div class="mv" style="color:#7c8a99">${(bs.ctr*100).toFixed(1)}%</div></div>
-        </div>` : '';
+          <div class="mi"><div class="ml">📢 CTR</div><div class="mv" style="color:#7c8a99">${ctrTxt}</div></div>
+        </div>`;
       return `<div class="card" onclick="App.openApp('${a.appId}')">
         <div class="rank ${rankCls}">#${rank+1}</div>
         <div class="arrow">↗</div>
@@ -1384,10 +1400,9 @@ const App={
       // v1.6.1: 인하우스 배너 통계 mcard 3개 (📢 노출 / 터치 / CTR).
       //   - 노출·터치는 *1일 1유저 1카운트* 기준 (고유 사용자 수).
       //   - 일반 METRICS와 색상 분리(중립 회색) — 광고 지표라는 의미 구분.
-      //   - 데이터가 전부 0이면 표시 안 함 (해당 앱에 배너 노출 기록 없음).
+      //   - 0이라도 항상 표시 → 측정 기능이 동작 중이라는 것을 확인할 수 있게.
       const bs = this.bannerStatsFor(appId, dates);
       const pbs = this.bannerStatsFor(appId, prevDates);
-      if(bs.impressions===0 && bs.clicks===0) return '';
       const BANNER_COLOR = '#7c8a99';
       const bannerArr = dates.map(d => {
         const v = (this.bannerStats||{})[appId]?.[d];
@@ -1405,9 +1420,11 @@ const App={
           <svg class="ms" viewBox="0 0 240 40" preserveAspectRatio="none">${this._areaSpark(bannerArr,240,40,BANNER_COLOR)}</svg>
         </div>`;
       };
+      const ctrCur = bs.impressions>0 ? bs.ctr*100 : 0;
+      const ctrPrev = pbs.impressions>0 ? pbs.ctr*100 : 0;
       return card('📢 노출', bs.impressions, pbs.impressions, fmtFull)
            + card('📢 터치', bs.clicks, pbs.clicks, fmtFull)
-           + card('📢 CTR', bs.ctr*100, pbs.ctr*100, v => v.toFixed(2)+'%');
+           + card('📢 CTR', ctrCur, ctrPrev, v => bs.impressions>0 ? v.toFixed(2)+'%' : '—');
     })();
 
     // platform breakdown table (per metric x platform, summed over range)
