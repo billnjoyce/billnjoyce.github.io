@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0C0B16">
+<title>RepCoach 개인정보 처리방침</title>
+<style>
+:root{
+  --hot:#6E5BF6; --hot-2:#8E7CFF;
+  --hot-soft:rgba(110,91,246,0.12); --hot-line:rgba(110,91,246,0.30);
+  --amber:#FF7A45; --amber-soft:rgba(255,122,69,0.12); --amber-line:rgba(255,122,69,0.34);
+  --bg:#0C0B16; --bg-soft:#16131F; --bg-soft2:#201C30; --line:#2C2842;
+  --ink:#ffffff; --ink-soft:#C9C5DE; --ink-faint:#A6A0C4;
+  --radius:16px; --maxw:880px;
+  --font:'Pretendard',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI","Noto Sans KR",Roboto,sans-serif;
+}
+@font-face{font-family:'Pretendard';font-weight:800;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-ExtraBold.woff2') format('woff2');}
+@font-face{font-family:'Pretendard';font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2');}
+@font-face{font-family:'Pretendard';font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Medium.woff2') format('woff2');}
+@font-face{font-family:'Pretendard';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--bg);}
+body{font-family:var(--font);color:var(--ink-soft);background:var(--bg);line-height:1.8;margin:0;font-size:16px;font-weight:400;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 28px) 20px 90px;}
+header.doc{padding:8px 0 24px;border-bottom:3px solid var(--hot);margin-bottom:8px;}
+.brand{display:inline-flex;align-items:center;gap:11px;margin-bottom:18px;}
+.brand .mk{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--hot),var(--hot-2));display:grid;place-items:center;box-shadow:0 8px 20px rgba(110,91,246,0.4);font-weight:800;color:#fff;font-size:20px;}
+.brand .nm{font-size:18px;font-weight:800;color:#fff;letter-spacing:-.5px;}
+.brand .nm b{color:var(--hot);}
+header.doc .kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--hot);background:var(--hot-soft);border:1px solid var(--hot-line);padding:5px 12px;border-radius:999px;margin-bottom:14px;}
+header.doc h1{font-size:27px;line-height:1.35;margin:0 0 14px;letter-spacing:-.02em;color:#fff;font-weight:800;}
+.meta{color:var(--ink-faint);font-size:13.5px;line-height:1.95;margin:0;}
+.meta b{color:var(--ink-soft);}
+.langbar{display:flex;gap:8px;margin:14px 0 0;}
+.langbar a{font-size:12.5px;font-weight:700;color:var(--ink-faint);text-decoration:none;border:1px solid var(--line);padding:5px 12px;border-radius:999px;cursor:pointer;}
+.langbar a.on{color:#fff;background:var(--hot);border-color:var(--hot);}
+.box{background:var(--bg-soft);border:1px solid var(--line);border-left:4px solid var(--hot);padding:16px 18px;border-radius:var(--radius);margin:20px 0;font-size:14.5px;color:var(--ink-soft);}
+.box b{color:#fff;}
+.notice{background:var(--hot-soft);border:1px solid var(--hot-line);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#cfc7ff;}
+.notice b{color:#fff;}
+.warn{background:var(--amber-soft);border:1px solid var(--amber-line);border-left:4px solid var(--amber);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#ffd9c7;}
+.warn b{color:#fff;}
+.contact{background:var(--hot-soft);border:1px solid var(--hot-line);border-left:4px solid var(--hot);padding:18px 20px;border-radius:var(--radius);font-size:14.5px;line-height:2;color:var(--ink-soft);}
+.contact b{color:#fff;}
+nav.toc{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin:26px 0 10px;}
+nav.toc h2{font-size:16px;margin:0 0 14px;color:#fff;border:0;padding:0;font-weight:800;}
+nav.toc ol{list-style:none;margin:0;padding:0;columns:2;column-gap:26px;}
+nav.toc ol li{margin:0 0 6px;font-size:13.5px;break-inside:avoid;}
+nav.toc a{color:var(--ink-faint);text-decoration:none;}
+nav.toc a:hover{color:var(--hot);text-decoration:underline;}
+.part{margin:50px 0 8px;padding:18px 22px;background:linear-gradient(135deg,var(--hot) 0%,var(--hot-2) 100%);color:#fff;border-radius:var(--radius);box-shadow:0 12px 30px rgba(110,91,246,0.28);}
+.part .num{font-size:12px;font-weight:700;opacity:.9;letter-spacing:.12em;}
+.part h2{color:#fff;border:0;margin:4px 0 0;padding:0;font-size:21px;font-weight:800;}
+h2.chapter{font-size:18px;color:#fff;margin:36px 0 6px;padding-bottom:9px;border-bottom:1px solid var(--line);font-weight:800;letter-spacing:-.3px;scroll-margin-top:16px;}
+h3{font-size:16px;color:#fff;margin:24px 0 6px;scroll-margin-top:16px;font-weight:700;letter-spacing:-.2px;}
+h3 .anum{color:var(--hot);font-weight:800;margin-right:6px;}
+p{margin:8px 0;color:var(--ink-soft);font-size:15px;}
+ul,ol.list{margin:8px 0 8px 2px;padding-left:20px;}
+li{margin:6px 0;font-size:15px;}
+a{color:var(--hot);text-decoration:none;}
+a:hover{text-decoration:underline;}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;}
+th{background:var(--bg-soft2);color:#fff;font-weight:700;}
+td b{color:#fff;}
+footer{margin-top:54px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-faint);font-size:12.5px;line-height:1.95;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="doc">
+  <div class="brand"><div class="mk">R</div><div class="nm">Rep<b>Coach</b></div></div>
+  <span class="kicker">개인정보 처리방침</span>
+  <h1>RepCoach 개인정보 처리방침</h1>
+  <p class="meta">시행일 <b>2026-06-28</b> · 최종 업데이트 <b>2026-06-28</b></p>
+  <div class="langbar"><a class="on">한국어</a><a href="../../en/privacy.html">English</a></div>
+</header>
+<div class='box'>회사는 이용자의 개인정보를 안전하게 보호하기 위해 최선을 다합니다. 본 방침은 렙코치가 수집·이용하는 개인정보, 제3자 처리위탁, 국외 이전, 이용자의 권리를 상세히 설명합니다. 구독·결제·환불 등 서비스 이용 조건은 <a href='terms.html'>이용약관</a>을 참고하세요.</div>
+<nav class="toc"><h2>목차</h2><ol><li><a href="#a0">1. 개요</a></li><li><a href="#a1">2. 수집하는 정보</a></li><li><a href="#a2">3. 수집 방법</a></li><li><a href="#a3">4. 정보의 이용</a></li><li><a href="#a4">5. 보관 및 삭제</a></li><li><a href="#a5">6. 제3자 제공 및 수탁</a></li><li><a href="#a6">7. 결제 데이터 (Apple)</a></li><li><a href="#a7">8. 국외 이전</a></li><li><a href="#a8">9. 이용자의 권리</a></li><li><a href="#a9">10. 보안</a></li><li><a href="#a10">11. 쿠키 · 추적 · 광고</a></li><li><a href="#a11">12. 아동</a></li><li><a href="#a12">13. Apple App Privacy 라벨</a></li><li><a href="#a13">14. 문의 및 분쟁</a></li><li><a href="#a14">15. 변경</a></li></ol></nav>
+<div class="part"><div class="num">PART A</div><h2>수집 및 이용</h2></div>
+<h3 id="a0"><span class="anum">1.</span>개요</h3>
+<p>Joyce Studios(이하 “회사”)는 모바일 앱 렙코치(RepCoach)(이하 “서비스”)를 운영하며, 「개인정보 보호법」 등 관련 법령에 따라 이용자의 개인정보를 보호합니다. 본 개인정보 처리방침은 회사가 수집하는 정보의 종류와 목적, 보관 및 보호 방법, 이용자의 권리를 설명합니다.</p><div class='notice'><b>한눈에 보기</b> · 이용자가 입력한 운동 기록은 기본적으로 기기 내에 저장됩니다. · 로그인/동기화를 켠 경우에만 클라우드에 백업됩니다. · 회사는 데이터를 판매하지 않습니다. · 무료 이용자에게는 Google AdMob 광고가 표시될 수 있습니다. · 의료기기·헬스케어 기기에 연결하지 않습니다.</div>
+<h3 id="a1"><span class="anum">2.</span>수집하는 정보</h3>
+<table><tr><th>구분</th><th>항목</th><th>비고</th></tr><tr><td>계정 / 인증</td><td>Apple 로그인 식별자(선택 시 이름·이메일), 게스트 이용을 위한 익명 식별자</td><td>로그인 시에만 / 선택</td></tr><tr><td>운동 데이터(이용자 콘텐츠)</td><td>운동 기록(종목·중량·횟수·세트), 루틴, 메모, 체중·성별·운동 레벨(선택), 목표</td><td>이용자가 입력</td></tr><tr><td>구독</td><td>구독 상태, 거래 식별자, 상품, 가격, 통화, 스토어프런트, 구매 환경</td><td>결제는 Apple이 처리</td></tr><tr><td>이용 / 진단</td><td>익명 이벤트(설치, 일일 활성, 구독 이벤트), 앱 버전, 플랫폼(iOS)</td><td>익명 / 집계</td></tr><tr><td>광고 식별자</td><td>광고 식별자(IDFA 등) — 무료 이용자 대상 광고 노출 시</td><td>설정에서 제한 / Pro 시 미사용</td></tr><tr><td>기기 / 알림</td><td>서비스가 생성한 사용자 키(가명), 푸시 토큰, 기기·OS 정보</td><td>동기화·알림용</td></tr></table><p>회사는 정밀 위치, 연락처, 주소록, 금융 계좌 접근 정보를 수집하지 않습니다.</p>
+<h3 id="a2"><span class="anum">3.</span>수집 방법</h3>
+<p>회사는 (a) 이용자가 앱에 직접 입력·생성할 때, (b) 로그인 시 Apple을 통해, (c) 구독 시 Apple StoreKit을 통해, (d) 이용 중 자동 생성되는 익명 통계 및 기기 정보, (e) 광고 노출 시 Google AdMob을 통해 정보를 수집합니다.</p>
+<h3 id="a3"><span class="anum">4.</span>정보의 이용</h3>
+<ul><li><b>서비스 제공:</b> 운동 기록 저장, AI 코칭·추천·통계 제공</li><li><b>백업 및 동기화:</b> 로그인한 기기 간 이용자 콘텐츠 백업·동기화</li><li><b>구독 관리:</b> Pro 권한 확인 및 유지</li><li><b>알림:</b> 운동 리마인더 및 주간 코칭 알림 발송</li><li><b>광고:</b> 무료 이용자 대상 광고 노출(Pro 구독 시 제거)</li><li><b>개선:</b> 익명 집계 통계로 품질 개선 및 오류 진단, 부정 이용 방지</li></ul>
+<h3 id="a4"><span class="anum">5.</span>보관 및 삭제</h3>
+<p>이용자 콘텐츠는 기기에 저장되며, 동기화를 켠 경우 계정이 활성인 동안 클라우드에도 저장됩니다. 앱의 “모든 데이터 삭제” 또는 계정 탈퇴로 언제든 삭제할 수 있으며, 해당 클라우드 데이터도 함께 삭제됩니다. 앱을 삭제하면 기기 내 로컬 데이터는 함께 삭제됩니다. 결제 관련 기록은 Apple 및 관련 법령에 따라 일정 기간 보관될 수 있습니다.</p>
+<div class="part"><div class="num">PART B</div><h2>제3자 제공 · 국외 이전</h2></div>
+<h3 id="a5"><span class="anum">6.</span>제3자 제공 및 수탁</h3>
+<p>회사는 이용자의 동의가 있거나 법령에서 요구하는 경우를 제외하고 개인정보를 제3자에게 제공하지 않으며, 데이터를 판매하지 않습니다. 서비스 운영을 위해 다음 수탁사를 이용합니다.</p><table><tr><th>수탁사</th><th>목적</th><th>방침</th></tr><tr><td>Apple Inc.</td><td>앱 배포, Apple로 로그인, 인앱 구독 결제(StoreKit), 푸시 알림</td><td>Apple Privacy Policy</td></tr><tr><td>Google LLC (Firebase)</td><td>인증, 클라우드 백업·동기화(Realtime Database), 분석, 서버 함수</td><td>Google Privacy · Firebase</td></tr><tr><td>Google AdMob</td><td>무료 이용자 대상 광고 노출 및 측정</td><td>Google Ads Privacy</td></tr></table>
+<h3 id="a6"><span class="anum">7.</span>결제 데이터 (Apple)</h3>
+<p>구독 결제는 App Store를 통해 Apple이 처리합니다. 회사는 카드·결제수단 정보를 수집·저장하지 않습니다. 권한 확인과 익명 매출 통계를 위해 비식별 결제 메타데이터(거래 식별자, 상품, 가격, 통화, 스토어프런트)만 처리합니다.</p>
+<h3 id="a7"><span class="anum">8.</span>국외 이전</h3>
+<p>백업·동기화·인증·광고를 위해 이용자 콘텐츠와 계정 식별자가 Apple, Google(Firebase/AdMob)이 운영하는 국외 서버(예: 미국 등)에 저장·처리될 수 있습니다. 서비스를 이용함으로써 이러한 이전에 동의하는 것으로 봅니다. 회사는 전송 구간 암호화 등 합리적 보호조치를 적용합니다.</p>
+<div class="part"><div class="num">PART C</div><h2>권리 · 보호 · 문의</h2></div>
+<h3 id="a8"><span class="anum">9.</span>이용자의 권리</h3>
+<p>이용자는 언제든 개인정보의 열람·정정·삭제·처리정지를 요청할 수 있습니다. 대부분의 데이터는 앱에서 직접 보고 수정·삭제(“모든 데이터 삭제” 포함)할 수 있으며, 추가 요청은 아래 연락처로 문의하세요. 회사는 관련 법령(해당 시 GDPR, CCPA 포함)상의 권리를 보장합니다.</p>
+<h3 id="a9"><span class="anum">10.</span>보안</h3>
+<ul><li>전송 구간 암호화(HTTPS/TLS)</li><li>인증 기반 접근 통제 — 인증된 이용자만 자신의 데이터에 접근</li><li>가명처리, 최소 권한·최소 수집 원칙, 접근 로그 관리</li></ul>
+<h3 id="a10"><span class="anum">11.</span>쿠키 · 추적 · 광고</h3>
+<p>무료 이용자에게는 Google AdMob을 통해 광고가 표시될 수 있으며, 이 과정에서 광고 식별자(IDFA 등)가 사용될 수 있습니다. iOS의 앱 추적 투명성(ATT) 정책에 따라 이용자는 추적 허용 여부를 선택할 수 있고, 기기 설정에서 광고 추적을 제한할 수 있습니다. 렙코치 Pro를 구독하면 광고가 제거됩니다. 회사는 광고 외의 목적으로 이용자 활동을 추적하지 않습니다.</p>
+<h3 id="a11"><span class="anum">12.</span>아동</h3>
+<p>서비스는 이용자의 관할에서 요구하는 연령 미만(예: 대한민국의 만 14세 미만)의 아동을 주 대상으로 하지 않습니다. 보호자 동의 없이 해당 아동의 개인정보가 수집된 사실을 알게 되면 신속히 삭제합니다.</p>
+<h3 id="a12"><span class="anum">13.</span>Apple App Privacy 라벨</h3>
+<p>App Store의 “App Privacy” 항목은 본 방침과 함께 회사의 데이터 처리 관행을 요약합니다. 내용이 다를 경우 본 방침이 더 상세한 설명을 제공합니다.</p>
+<h3 id="a13"><span class="anum">14.</span>문의 및 분쟁</h3>
+<div class='contact'><b>제공자</b> Joyce Studios (렙코치(RepCoach))<br><b>개인정보 보호책임자 이메일</b> <a href='mailto:ibillkim@gmail.com'>ibillkim@gmail.com</a><br><b>이용약관</b> <a href='terms.html'>terms.html</a></div><p style='margin-top:10px;color:var(--ink-faint);font-size:13px'>개인정보 침해에 관한 상담이 필요한 경우 개인정보분쟁조정위원회(kopico.go.kr), 개인정보침해신고센터(privacy.kisa.or.kr, 국번없이 118) 등에 문의할 수 있습니다.</p>
+<h3 id="a14"><span class="anum">15.</span>변경</h3>
+<p>본 방침은 법령·서비스 변경에 따라 개정될 수 있으며, 변경 시 적용일자와 사유를 명시하여 앱 또는 본 페이지를 통해 공지합니다.</p>
+
+<footer>Joyce Studios · 렙코치(RepCoach)<br>시행일 2026-06-28</footer>
+</div>
+</body>
+</html>
