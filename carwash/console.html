@@ -6,11 +6,11 @@
 <title>세알 콘솔</title>
 
 <script type="module">
-import { initializeApp }                               from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp }                           from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword,
          signOut, onAuthStateChanged,
-         setPersistence, browserLocalPersistence }     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDatabase, ref, get, update }               from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+         setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, get, update }           from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 /* ── Firebase 설정 ── */
 const app = initializeApp({
@@ -26,39 +26,98 @@ const auth = getAuth(app);
 const db   = getDatabase(app);
 
 /* ══════════════════════════════════════
-   24시간 쿠키 세션 관리
-   Firebase Auth 자체 persistence + 별도 쿠키로 만료 제어
+   24시간 세션 관리
+   ─ Firebase Auth persistence: LOCAL (탭/브라우저 닫아도 유지)
+   ─ 별도 만료 시각을 localStorage에 저장
+   ─ onAuthStateChanged는 "이미 로그인된 복원" 시에만 만료 체크
+   ─ 로그인 직후에는 절대 만료 체크 안 함 (타이밍 버그 방지)
 ══════════════════════════════════════ */
-const SESSION_KEY  = "seal_console_session";
-const SESSION_TTL  = 24 * 60 * 60 * 1000; // 24시간(ms)
+const EXP_KEY = "seal_login_exp";
+const TTL_MS  = 24 * 60 * 60 * 1000; // 24시간
 
-function saveSession(uid, email) {
-  const data = { uid, email, exp: Date.now() + SESSION_TTL };
-  document.cookie = `${SESSION_KEY}=${encodeURIComponent(JSON.stringify(data))};max-age=${SESSION_TTL/1000};path=/;SameSite=Strict`;
-  localStorage.setItem(SESSION_KEY, JSON.stringify(data));
+function saveExp() {
+  localStorage.setItem(EXP_KEY, String(Date.now() + TTL_MS));
+}
+function clearExp() {
+  localStorage.removeItem(EXP_KEY);
+}
+function isExpired() {
+  const v = localStorage.getItem(EXP_KEY);
+  if (!v) return true;           // 만료 기록 없음 → 만료로 처리
+  return Date.now() > Number(v);
+}
+function remainingHours() {
+  const v = localStorage.getItem(EXP_KEY);
+  if (!v) return 0;
+  return Math.max(0, Math.floor((Number(v) - Date.now()) / 3600000));
 }
 
-function loadSession() {
-  // cookie 우선, fallback localStorage
-  const fromCookie = document.cookie.split(";").find(c => c.trim().startsWith(SESSION_KEY + "="));
-  if (fromCookie) {
-    try {
-      const raw = decodeURIComponent(fromCookie.split("=").slice(1).join("="));
-      return JSON.parse(raw);
-    } catch {}
+/* Firebase Auth 자체를 LOCAL persistence로 설정
+   → 브라우저 재시작해도 토큰 유지 */
+await setPersistence(auth, browserLocalPersistence);
+
+/* ── 플래그: 방금 로그인한 경우 onAuthStateChanged에서 만료 체크 skip ── */
+let justLoggedIn = false;
+
+onAuthStateChanged(auth, async user => {
+  if (user) {
+    if (justLoggedIn) {
+      // 방금 로그인 → 만료 체크 skip, 바로 앱 표시
+      justLoggedIn = false;
+      showApp(user);
+      loadAll();
+      return;
+    }
+    // 페이지 새로고침/재방문 시 → 만료 여부 확인
+    if (isExpired()) {
+      await signOut(auth);
+      clearExp();
+      showLogin("세션이 만료되었습니다 (24시간). 다시 로그인해 주세요.");
+      return;
+    }
+    showApp(user);
+    loadAll();
+  } else {
+    clearExp();
+    showLogin();
   }
-  try { return JSON.parse(localStorage.getItem(SESSION_KEY) || "null"); } catch { return null; }
+});
+
+/* ── 로그인 ── */
+async function login() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const pw    = document.getElementById("loginPw").value;
+  const btn   = document.getElementById("loginBtn");
+  const err   = document.getElementById("loginErr");
+  err.textContent = "";
+
+  if (!email || !pw) {
+    err.textContent = "이메일과 비밀번호를 입력해 주세요."; return;
+  }
+  btn.disabled = true; btn.textContent = "로그인 중...";
+
+  try {
+    justLoggedIn = true;      // ← 플래그 먼저 세팅
+    saveExp();                // ← 만료 시각 먼저 저장
+    await signInWithEmailAndPassword(auth, email, pw);
+    // onAuthStateChanged가 justLoggedIn=true를 보고 만료 체크 skip
+  } catch(e) {
+    justLoggedIn = false;
+    clearExp();
+    const known = ["auth/invalid-credential","auth/wrong-password",
+                   "auth/user-not-found","auth/invalid-email"];
+    err.textContent = known.includes(e.code)
+      ? "이메일 또는 비밀번호가 올바르지 않습니다."
+      : "로그인에 실패했습니다: " + e.message;
+    btn.disabled = false; btn.textContent = "로그인";
+  }
 }
 
-function clearSession() {
-  document.cookie = `${SESSION_KEY}=;max-age=0;path=/`;
-  localStorage.removeItem(SESSION_KEY);
-}
-
-function isSessionValid() {
-  const s = loadSession();
-  if (!s || !s.exp) return false;
-  return Date.now() < s.exp;
+/* ── 로그아웃 ── */
+function logout() {
+  if (!confirm("로그아웃 하시겠습니까?")) return;
+  clearExp();
+  signOut(auth);
 }
 
 /* ══════════════════════════════════════
@@ -66,77 +125,15 @@ function isSessionValid() {
 ══════════════════════════════════════ */
 let STATE = {
   page: "dashboard",
-  shops: {},          // key = shopId
-  shopsByBN: {},      // key = 정규화된 사업자번호
+  shops: {},
   users: {},
   stats: { installs: 0, dau: 0, funnel: {} }
 };
 
 /* ══════════════════════════════════════
-   AUTH — 24시간 세션 유지
+   DATA LOAD
 ══════════════════════════════════════ */
-// Firebase 자체 persistence를 LOCAL로 설정 (브라우저 재시작해도 유지)
-setPersistence(auth, browserLocalPersistence).catch(() => {});
-
-onAuthStateChanged(auth, async user => {
-  if (user) {
-    // 세션 쿠키 유효 여부 확인
-    if (!isSessionValid()) {
-      // 24시간 만료 → 강제 로그아웃
-      await signOut(auth);
-      clearSession();
-      showLogin("세션이 만료되었습니다. 다시 로그인해 주세요.");
-      return;
-    }
-    showApp(user);
-    loadAll();
-  } else {
-    clearSession();
-    showLogin();
-  }
-});
-
-// 페이지 로드 시 세션 만료 선확인 (onAuthStateChanged 전에)
-window.addEventListener("load", () => {
-  const s = loadSession();
-  if (s && !isSessionValid()) {
-    clearSession();
-    signOut(auth).catch(() => {});
-  }
-});
-
-async function login() {
-  const email = document.getElementById("loginEmail").value.trim();
-  const pw    = document.getElementById("loginPw").value;
-  const btn   = document.getElementById("loginBtn");
-  const err   = document.getElementById("loginErr");
-  err.textContent = "";
-  if (!email || !pw) { err.textContent = "이메일과 비밀번호를 입력해 주세요."; return; }
-  btn.disabled = true; btn.textContent = "로그인 중...";
-  try {
-    const cred = await signInWithEmailAndPassword(auth, email, pw);
-    saveSession(cred.user.uid, cred.user.email);
-  } catch(e) {
-    err.textContent = ["auth/invalid-credential","auth/wrong-password","auth/user-not-found"]
-      .includes(e.code)
-      ? "이메일 또는 비밀번호가 올바르지 않습니다."
-      : "로그인에 실패했습니다. 다시 시도해 주세요.";
-    btn.disabled = false; btn.textContent = "로그인";
-  }
-}
-
-function logout() {
-  if (!confirm("로그아웃 하시겠습니까?")) return;
-  clearSession();
-  signOut(auth);
-}
-
-/* ══════════════════════════════════════
-   DATA — 사업자번호 기준 고유 관리
-══════════════════════════════════════ */
-function normBN(bn) {
-  return (bn || "").replace(/-/g, "").trim();
-}
+function normBN(bn) { return (bn||"").replace(/-/g,"").trim(); }
 
 async function loadAll() {
   showLoadingBar(true);
@@ -144,42 +141,15 @@ async function loadAll() {
     const snap = await get(ref(db, "carwash-master"));
     if (!snap.exists()) { showLoadingBar(false); renderPage(); return; }
     const data = snap.val();
-
-    /* ── shops: 사업자번호 기준 고유 인덱스 구성 ── */
-    const rawShops = data.data?.shops || {};
-    STATE.shops    = rawShops;
-    STATE.shopsByBN = {};
-
-    // 사업자번호 중복 그룹 탐지
-    const bnMap = {}; // normBN → [shopId, ...]
-    Object.entries(rawShops).forEach(([sid, s]) => {
-      const bn = normBN(s.businessNumber);
-      if (!bn) return;
-      if (!bnMap[bn]) bnMap[bn] = [];
-      bnMap[bn].push(sid);
-      // 가장 최근 등록 기준으로 대표 샵 설정
-      if (!STATE.shopsByBN[bn] || s.createdAt > STATE.shopsByBN[bn].createdAt) {
-        STATE.shopsByBN[bn] = { ...s, id: sid, _duplicates: [] };
-      }
-    });
-    // 중복 플래그
-    Object.entries(bnMap).forEach(([bn, ids]) => {
-      if (ids.length > 1 && STATE.shopsByBN[bn]) {
-        STATE.shopsByBN[bn]._duplicates = ids.filter(id => id !== STATE.shopsByBN[bn].id);
-      }
-    });
-
-    /* ── users ── */
+    STATE.shops = data.data?.shops || {};
     STATE.users = data.users || {};
-
-    /* ── stats ── */
     STATE.stats.installs = Object.keys(data.install?.ios || {}).length;
     const today = todayStr();
     let dau = 0;
     Object.values(data.dau?.[today]?.ios || {}).forEach(v => { dau += Object.keys(v).length; });
     STATE.stats.dau = dau;
     STATE.stats.funnel = data.funnel || {};
-  } catch(e) { console.error(e); }
+  } catch(e) { console.error("loadAll error:", e); }
   showLoadingBar(false);
   renderPage();
 }
@@ -189,14 +159,13 @@ async function loadAll() {
 ══════════════════════════════════════ */
 async function approveShop(shopId) {
   if (!confirm("이 사업장을 승인하시겠습니까?")) return;
-  // 사업자번호 중복 최종 확인
   const shop = STATE.shops[shopId];
   const bn   = normBN(shop?.businessNumber);
   const dups = Object.entries(STATE.shops).filter(([sid, s]) =>
     sid !== shopId && normBN(s.businessNumber) === bn && s.approvalStatus === "approved"
   );
   if (dups.length > 0) {
-    alert(`⚠️ 이미 승인된 동일 사업자번호 사업장이 있습니다.\n상호명: ${dups[0][1].name}\n중복 승인은 불가합니다.`);
+    alert(`⚠️ 이미 승인된 동일 사업자번호 사업장이 있습니다.\n상호명: ${dups[0][1].name}\n중복 승인 불가합니다.`);
     return;
   }
   const updates = {};
@@ -208,13 +177,13 @@ async function approveShop(shopId) {
 }
 
 async function rejectShop(shopId) {
-  const reason = prompt("반려 사유를 입력하세요:\n(입력하지 않으면 '검토 기준 미달'로 처리됩니다)");
+  const reason = prompt("반려 사유를 입력하세요:\n(비우면 '검토 기준 미달'로 처리됩니다)");
   if (reason === null) return;
   const finalReason = reason.trim() || "검토 기준 미달";
   const shop = STATE.shops[shopId];
   const updates = {};
-  updates[`carwash-master/data/shops/${shopId}/approvalStatus`] = "rejected";
-  updates[`carwash-master/data/shops/${shopId}/rejectedReason`] = finalReason;
+  updates[`carwash-master/data/shops/${shopId}/approvalStatus`]  = "rejected";
+  updates[`carwash-master/data/shops/${shopId}/rejectedReason`]  = finalReason;
   if (shop?.ownerId) {
     updates[`carwash-master/users/${shop.ownerId}/approvalStatus`] = "rejected";
     updates[`carwash-master/users/${shop.ownerId}/rejectedReason`] = finalReason;
@@ -270,21 +239,21 @@ function renderPage() {
 
 /* ── DASHBOARD ── */
 function renderDashboard() {
-  const shops   = Object.values(STATE.shops);
-  const pending = shops.filter(s => s.approvalStatus === "pending");
-  const approved= shops.filter(s => s.approvalStatus === "approved");
+  const shops   = Object.entries(STATE.shops);
+  const pending = shops.filter(([,s]) => s.approvalStatus === "pending");
+  const approved= shops.filter(([,s]) => s.approvalStatus === "approved");
 
-  // 중복 사업자번호 탐지
+  // 사업자번호 중복 탐지
   const bnCount = {};
-  shops.forEach(s => { const bn = normBN(s.businessNumber); if (bn) bnCount[bn] = (bnCount[bn]||0)+1; });
-  const dupBNs  = Object.entries(bnCount).filter(([,c])=>c>1).map(([bn])=>bn);
+  shops.forEach(([,s]) => { const bn = normBN(s.businessNumber); if(bn) bnCount[bn]=(bnCount[bn]||0)+1; });
+  const dupBNs = Object.entries(bnCount).filter(([,c])=>c>1).map(([bn])=>bn);
 
   // 직원 승인 대기
   let crewPending = [];
-  shops.forEach(shop => {
+  shops.forEach(([shopId, shop]) => {
     Object.entries(shop.crews||{}).forEach(([crewId, crew]) => {
       if (crew.approvalStatus === "pending")
-        crewPending.push({ ...crew, crewId, shopId: shop.id, shopName: shop.name });
+        crewPending.push({ ...crew, crewId, shopId, shopName: shop.name });
     });
   });
 
@@ -293,7 +262,6 @@ function renderDashboard() {
     <h1 class="page-title">대시보드</h1>
     <div class="page-subtitle">${todayStr()} 기준 운영 현황</div>
   </div>
-
   <div class="kpi-grid">
     <div class="kpi-card">
       <div class="kpi-icon" style="background:rgba(37,99,235,.15)">🏪</div>
@@ -324,18 +292,17 @@ function renderDashboard() {
     </div>
     <div class="table-wrap">
       <table class="data-table">
-        <thead><tr><th>사업자번호</th><th>중복 사업장</th><th>상태</th><th>등록일</th></tr></thead>
+        <thead><tr><th>사업자번호</th><th>상호명</th><th>상태</th><th>등록일</th></tr></thead>
         <tbody>
-          ${dupBNs.map(bn => {
-            const matched = shops.filter(s=>normBN(s.businessNumber)===bn);
-            return matched.map(s=>`
+          ${dupBNs.flatMap(bn =>
+            shops.filter(([,s])=>normBN(s.businessNumber)===bn).map(([sid,s])=>`
             <tr>
-              <td><span class="font-mono text-warn fw-600">${esc(s.businessNumber)}</span></td>
-              <td><span class="fw-600">${esc(s.name)}</span></td>
+              <td class="font-mono fw-600 text-warn">${esc(s.businessNumber)}</td>
+              <td class="fw-600">${esc(s.name)}</td>
               <td><span class="status-badge ${statusCls(s.approvalStatus)}">${statusTxt(s.approvalStatus)}</span></td>
               <td class="text-dim">${fmtDate(s.createdAt)}</td>
-            </tr>`).join("");
-          }).join("")}
+            </tr>`)
+          ).join("")}
         </tbody>
       </table>
     </div>
@@ -349,25 +316,22 @@ function renderDashboard() {
     </div>
     <div class="table-wrap">
       <table class="data-table">
-        <thead><tr><th>상호명</th><th>사업자번호</th><th>주소</th><th>신청일</th><th>중복여부</th><th>액션</th></tr></thead>
+        <thead><tr><th>상호명</th><th>사업자번호</th><th>주소</th><th>신청일</th><th>중복</th><th>액션</th></tr></thead>
         <tbody>
-          ${pending.map(s => {
-            const bn = normBN(s.businessNumber);
-            const isDup = shops.some(o => o !== s && normBN(o.businessNumber) === bn && o.approvalStatus === "approved");
-            return `<tr>
-              <td><span class="fw-600">${esc(s.id)}</span><br><small class="text-dim">${esc(s.name)}</small></td>
+          ${pending.map(([sid,s])=>{
+            const bn=normBN(s.businessNumber);
+            const isDup=shops.some(([osid,o])=>osid!==sid&&normBN(o.businessNumber)===bn&&o.approvalStatus==="approved");
+            return`<tr>
+              <td class="fw-600">${esc(s.name)}</td>
               <td class="font-mono text-xs">${esc(s.businessNumber)}</td>
               <td class="text-dim text-xs">${esc(s.address)}</td>
               <td class="text-dim">${fmtDate(s.createdAt)}</td>
               <td>${isDup?'<span class="status-badge badge-rejected">⚠️ 중복</span>':'<span class="status-badge badge-approved">고유</span>'}</td>
-              <td>
-                <div class="action-btns">
-                  <button class="btn-approve" onclick="approveShop('${getShopId(s)}')" ${isDup?'disabled title="이미 승인된 동일 사업자번호가 있습니다"':''}>승인</button>
-                  <button class="btn-reject"  onclick="rejectShop('${getShopId(s)}')">반려</button>
-                </div>
-              </td>
-            </tr>`;
-          }).join("")}
+              <td><div class="action-btns">
+                <button class="btn-approve" onclick="approveShop('${sid}')" ${isDup?"disabled":""}>승인</button>
+                <button class="btn-reject"  onclick="rejectShop('${sid}')">반려</button>
+              </div></td>
+            </tr>`;}).join("")}
         </tbody>
       </table>
     </div>
@@ -382,19 +346,16 @@ function renderDashboard() {
       <table class="data-table">
         <thead><tr><th>이름</th><th>소속 사업장</th><th>생년월일</th><th>차량 정보</th><th>신청일</th><th>액션</th></tr></thead>
         <tbody>
-          ${crewPending.map(c=>`
-          <tr>
+          ${crewPending.map(c=>`<tr>
             <td class="fw-600">${esc(c.name)}</td>
             <td class="text-dim">${esc(c.shopName)}</td>
             <td class="text-dim">${esc(c.birthDate||"-")}</td>
             <td class="text-dim">${esc(c.vehicleInfo||"-")}</td>
             <td class="text-dim">${fmtDate(c.createdAt)}</td>
-            <td>
-              <div class="action-btns">
-                <button class="btn-approve" onclick="approveCrew('${c.shopId}','${c.crewId}')">승인</button>
-                <button class="btn-reject"  onclick="rejectCrew('${c.shopId}','${c.crewId}')">반려</button>
-              </div>
-            </td>
+            <td><div class="action-btns">
+              <button class="btn-approve" onclick="approveCrew('${c.shopId}','${c.crewId}')">승인</button>
+              <button class="btn-reject"  onclick="rejectCrew('${c.shopId}','${c.crewId}')">반려</button>
+            </div></td>
           </tr>`).join("")}
         </tbody>
       </table>
@@ -406,93 +367,68 @@ function renderDashboard() {
     <div class="empty-icon">✅</div>
     <div class="empty-title">모든 요청이 처리되었습니다</div>
     <div class="empty-sub">새 요청이 들어오면 이 화면에 표시됩니다</div>
-  </div>`:""}
-  `;
+  </div>`:""}`;
 }
 
-function getShopId(shopObj) {
-  return Object.entries(STATE.shops).find(([,s])=>s===shopObj)?.[0] || shopObj.id || "";
-}
-
-/* ── SHOPS — 사업자번호 기준 고유 뷰 ── */
+/* ── SHOPS ── */
 function renderShops() {
-  const shops = Object.values(STATE.shops);
-  // 사업자번호별 대표 샵 목록
-  const bnGroups = {};
-  shops.forEach(s => {
-    const bn = normBN(s.businessNumber) || s.id;
-    if (!bnGroups[bn]) bnGroups[bn] = [];
-    bnGroups[bn].push(s);
-  });
-
+  const shops = Object.entries(STATE.shops);
   return `
   <div class="page-header">
     <h1 class="page-title">사업장 관리</h1>
-    <div class="page-subtitle">전체 ${shops.length}개 사업장 · 고유 사업자번호 ${Object.keys(bnGroups).length}개</div>
+    <div class="page-subtitle">전체 ${shops.length}개 사업장</div>
   </div>
   <div class="filter-bar">
     <button class="filter-btn active" onclick="filterShops(this,'all')">전체 (${shops.length})</button>
-    <button class="filter-btn" onclick="filterShops(this,'pending')">대기 (${shops.filter(s=>s.approvalStatus==='pending').length})</button>
-    <button class="filter-btn" onclick="filterShops(this,'approved')">승인 (${shops.filter(s=>s.approvalStatus==='approved').length})</button>
-    <button class="filter-btn" onclick="filterShops(this,'rejected')">반려 (${shops.filter(s=>s.approvalStatus==='rejected').length})</button>
+    <button class="filter-btn" onclick="filterShops(this,'pending')">대기 (${shops.filter(([,s])=>s.approvalStatus==='pending').length})</button>
+    <button class="filter-btn" onclick="filterShops(this,'approved')">승인 (${shops.filter(([,s])=>s.approvalStatus==='approved').length})</button>
+    <button class="filter-btn" onclick="filterShops(this,'rejected')">반려 (${shops.filter(([,s])=>s.approvalStatus==='rejected').length})</button>
   </div>
   <div class="shop-cards" id="shopCards">
-    ${shops.length===0
-      ? '<div class="empty-state"><div class="empty-icon">🏪</div><div class="empty-title">등록된 사업장이 없습니다</div></div>'
-      : shops.map(s => renderShopCard(s, Object.entries(STATE.shops).find(([,v])=>v===s)?.[0]||s.id, bnGroups)).join("")}
+    ${shops.length===0?'<div class="empty-state"><div class="empty-icon">🏪</div><div class="empty-title">등록된 사업장이 없습니다</div></div>'
+      :shops.map(([sid,s])=>renderShopCard(sid,s,shops)).join("")}
   </div>`;
 }
 
-function renderShopCard(s, shopId, bnGroups) {
-  const statusCl  = {pending:"badge-pending",approved:"badge-approved",rejected:"badge-rejected"}[s.approvalStatus]||"";
-  const statusTx  = {pending:"⏳ 승인 대기",approved:"✅승인 완료",rejected:"❌ 반려"}[s.approvalStatus]||"";
-  const crews     = Object.values(s.crews||{});
-  const customers = Object.values(s.customers||{});
-  const bn        = normBN(s.businessNumber);
-  const bnGroup   = bnGroups?.[bn] || [];
-  const isDup     = bnGroup.length > 1;
+function renderShopCard(shopId, s, allShops) {
+  const scls = {pending:"badge-pending",approved:"badge-approved",rejected:"badge-rejected"}[s.approvalStatus]||"";
+  const stxt = {pending:"⏳ 승인 대기",approved:"✅ 승인 완료",rejected:"❌ 반려"}[s.approvalStatus]||"";
+  const crews    = Object.entries(s.crews||{});
+  const customers= Object.values(s.customers||{});
+  const bn       = normBN(s.businessNumber);
+  const isDup    = allShops.some(([osid,o])=>osid!==shopId&&normBN(o.businessNumber)===bn);
+  const dupApproved = allShops.some(([osid,o])=>osid!==shopId&&normBN(o.businessNumber)===bn&&o.approvalStatus==="approved");
 
   return `
   <div class="shop-card" data-status="${s.approvalStatus}">
     <div class="shop-card-header">
       <div class="shop-card-info">
-        <div class="shop-name">${esc(s.name)}
-          ${isDup?'<span class="dup-badge">사업자번호 중복</span>':''}
-        </div>
+        <div class="shop-name">${esc(s.name)}${isDup?'<span class="dup-badge">사업자번호 중복</span>':''}</div>
         <div class="shop-meta">${esc(s.address)}</div>
         <div class="shop-meta font-mono text-xs">
           사업자번호: <strong>${esc(s.businessNumber)}</strong>
           &nbsp;·&nbsp;코드: <span class="code-chip">${esc(shopId)}</span>
         </div>
       </div>
-      <span class="status-badge ${statusCl}">${statusTx}</span>
+      <span class="status-badge ${scls}">${stxt}</span>
     </div>
-
     <div class="shop-desc">${esc(s.description||"설명 없음")}</div>
-
     <div class="shop-stats">
       <div class="shop-stat"><span class="shop-stat-num">${customers.length}</span><span class="shop-stat-label">고객</span></div>
-      <div class="shop-stat"><span class="shop-stat-num">${crews.filter(c=>c.approvalStatus==='approved').length}</span><span class="shop-stat-label">직원</span></div>
-      <div class="shop-stat"><span class="shop-stat-num">${crews.filter(c=>c.approvalStatus==='pending').length}</span><span class="shop-stat-label">직원 대기</span></div>
+      <div class="shop-stat"><span class="shop-stat-num">${crews.filter(([,c])=>c.approvalStatus==='approved').length}</span><span class="shop-stat-label">직원</span></div>
+      <div class="shop-stat"><span class="shop-stat-num">${crews.filter(([,c])=>c.approvalStatus==='pending').length}</span><span class="shop-stat-label">직원 대기</span></div>
       <div class="shop-stat"><span class="shop-stat-num">${fmtDate(s.createdAt)}</span><span class="shop-stat-label">등록일</span></div>
     </div>
-
     ${s.approvalStatus==="pending"?`
     <div class="shop-card-actions">
-      <button class="btn-approve" onclick="approveShop('${shopId}')"
-        ${isDup&&shops_hasDupApproved(bn,shopId)?'disabled title="동일 사업자번호 승인 사업장 존재"':''}>
-        ✅ 승인
-      </button>
-      <button class="btn-reject" onclick="rejectShop('${shopId}')">❌ 반려</button>
+      <button class="btn-approve" onclick="approveShop('${shopId}')" ${dupApproved?"disabled title='동일 사업자번호 승인 사업장 존재'":""}>✅ 승인</button>
+      <button class="btn-reject"  onclick="rejectShop('${shopId}')">❌ 반려</button>
     </div>`:""}
-
-    ${s.approvalStatus==="rejected"&&s.rejectedReason?`
-    <div class="reject-reason">반려 사유: ${esc(s.rejectedReason)}</div>`:""}
-
-    ${crews.filter(c=>c.approvalStatus==="pending").length>0?`
+    ${s.approvalStatus==="rejected"&&s.rejectedReason?`<div class="reject-reason">반려 사유: ${esc(s.rejectedReason)}</div>`:""}
+    ${crews.filter(([,c])=>c.approvalStatus==="pending").length>0?`
     <div class="crew-pending-block">
       <div class="crew-pending-title">직원 승인 대기</div>
-      ${Object.entries(s.crews||{}).filter(([,c])=>c.approvalStatus==="pending").map(([cid,c])=>`
+      ${crews.filter(([,c])=>c.approvalStatus==="pending").map(([cid,c])=>`
       <div class="crew-pending-row">
         <div><span class="fw-600">${esc(c.name)}</span><span class="text-dim text-xs"> · ${esc(c.vehicleInfo||"-")}</span></div>
         <div class="action-btns">
@@ -502,12 +438,6 @@ function renderShopCard(s, shopId, bnGroups) {
       </div>`).join("")}
     </div>`:""}
   </div>`;
-}
-
-function shops_hasDupApproved(bn, excludeShopId) {
-  return Object.entries(STATE.shops).some(([sid,s]) =>
-    sid !== excludeShopId && normBN(s.businessNumber) === bn && s.approvalStatus === "approved"
-  );
 }
 
 /* ── USERS ── */
@@ -526,52 +456,41 @@ function renderUsers() {
   </div>
   <div id="userTableWrap">${renderUserTable(owners)}</div>`;
 }
-
 function renderUserTable(users) {
   if (!users.length) return '<div class="empty-state"><div class="empty-icon">👤</div><div class="empty-title">유저 없음</div></div>';
-  return `
-  <div class="table-wrap">
-    <table class="data-table">
-      <thead><tr><th>이름</th><th>이메일</th><th>역할</th><th>사업장 코드</th><th>상태</th><th>가입일</th></tr></thead>
-      <tbody>
-        ${users.map(u=>`
-        <tr>
-          <td class="fw-600">${esc(u.name||"-")}</td>
-          <td class="text-dim font-mono text-xs">${esc(u.email||"-")}</td>
-          <td><span class="role-badge ${u.role==='owner'?'role-owner':'role-crew'}">${u.role==='owner'?'사장':'직원'}</span></td>
-          <td><span class="code-chip font-mono text-xs">${esc(u.shopId||"-")}</span></td>
-          <td><span class="status-badge ${statusCls(u.approvalStatus)}">${statusTxt(u.approvalStatus)}</span></td>
-          <td class="text-dim">${fmtDate(u.createdAt)}</td>
-        </tr>`).join("")}
-      </tbody>
-    </table>
-  </div>`;
+  return `<div class="table-wrap"><table class="data-table">
+    <thead><tr><th>이름</th><th>이메일</th><th>역할</th><th>사업장 코드</th><th>상태</th><th>가입일</th></tr></thead>
+    <tbody>${users.map(u=>`<tr>
+      <td class="fw-600">${esc(u.name||"-")}</td>
+      <td class="text-dim font-mono text-xs">${esc(u.email||"-")}</td>
+      <td><span class="role-badge ${u.role==='owner'?'role-owner':'role-crew'}">${u.role==='owner'?'사장':'직원'}</span></td>
+      <td><span class="code-chip font-mono text-xs">${esc(u.shopId||"-")}</span></td>
+      <td><span class="status-badge ${statusCls(u.approvalStatus)}">${statusTxt(u.approvalStatus)}</span></td>
+      <td class="text-dim">${fmtDate(u.createdAt)}</td>
+    </tr>`).join("")}</tbody>
+  </table></div>`;
 }
 
 /* ── STATS ── */
 function renderStats() {
-  const funnelData = STATE.stats.funnel;
   const events = {};
-  Object.values(funnelData).forEach(day => {
+  Object.values(STATE.stats.funnel).forEach(day => {
     Object.entries(day.ios||{}).forEach(([evt,devs]) => {
       events[evt] = (events[evt]||0) + Object.keys(devs).length;
     });
   });
   const eventList = Object.entries(events).sort((a,b)=>b[1]-a[1]);
   return `
-  <div class="page-header">
-    <h1 class="page-title">앱 통계</h1>
-    <div class="page-subtitle">세알 마스터 iOS 운영 지표</div>
-  </div>
+  <div class="page-header"><h1 class="page-title">앱 통계</h1><div class="page-subtitle">세알 마스터 iOS 운영 지표</div></div>
   <div class="kpi-grid">
     <div class="kpi-card"><div class="kpi-icon" style="background:rgba(37,99,235,.15)">📲</div>
       <div class="kpi-body"><div class="kpi-num">${STATE.stats.installs}</div><div class="kpi-label">누적 설치</div></div></div>
     <div class="kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,.15)">📅</div>
       <div class="kpi-body"><div class="kpi-num">${STATE.stats.dau}</div><div class="kpi-label">오늘 DAU</div></div></div>
     <div class="kpi-card"><div class="kpi-icon" style="background:rgba(124,58,237,.15)">🎯</div>
-      <div class="kpi-body"><div class="kpi-num">${eventList.length}</div><div class="kpi-label">퍼널 이벤트 종류</div></div></div>
+      <div class="kpi-body"><div class="kpi-num">${eventList.length}</div><div class="kpi-label">이벤트 종류</div></div></div>
     <div class="kpi-card"><div class="kpi-icon" style="background:rgba(249,115,22,.15)">🔥</div>
-      <div class="kpi-body"><div class="kpi-num">${eventList.reduce((s,[,v])=>s+v,0)}</div><div class="kpi-label">총 이벤트 수</div></div></div>
+      <div class="kpi-body"><div class="kpi-num">${eventList.reduce((s,[,v])=>s+v,0)}</div><div class="kpi-label">총 이벤트</div></div></div>
   </div>
   <div class="section-block">
     <div class="section-header"><div class="section-title">퍼널 이벤트 현황</div></div>
@@ -590,22 +509,13 @@ function renderStats() {
 /* ══════════════════════════════════════
    UTILS
 ══════════════════════════════════════ */
-function esc(s) {
-  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-}
-function todayStr() {
-  const d=new Date();
-  return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-}
-function fmtDate(ts) {
-  if(!ts)return"-";
-  const d=new Date(ts>1e12?ts:ts*1000);
-  return`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`;
-}
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function todayStr(){const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;}
+function fmtDate(ts){if(!ts)return"-";const d=new Date(ts>1e12?ts:ts*1000);return`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`;}
 function statusCls(s){return{pending:"badge-pending",approved:"badge-approved",rejected:"badge-rejected"}[s]||"";}
 function statusTxt(s){return{pending:"⏳ 대기",approved:"✅ 승인",rejected:"❌ 반려"}[s]||s;}
-function toast(msg) {
-  const t=document.createElement("div"); t.className="toast"; t.textContent=msg;
+function toast(msg){
+  const t=document.createElement("div");t.className="toast";t.textContent=msg;
   document.body.appendChild(t);
   setTimeout(()=>t.classList.add("show"),10);
   setTimeout(()=>{t.classList.remove("show");setTimeout(()=>t.remove(),300);},2800);
@@ -614,17 +524,19 @@ function showLoadingBar(on){document.getElementById("loadingBar").style.opacity=
 function showApp(user){
   document.getElementById("loginScreen").style.display="none";
   document.getElementById("appShell").style.display="grid";
-  const s=loadSession();
-  const remaining=s?Math.max(0,Math.floor((s.exp-Date.now())/3600000)):0;
-  document.getElementById("userEmail").textContent=user.email+` (${remaining}h 후 만료)`;
+  document.getElementById("userEmail").textContent=`${user.email} (${remainingHours()}h 남음)`;
 }
-function showLogin(msg="") {
+function showLogin(msg=""){
   document.getElementById("loginScreen").style.display="flex";
   document.getElementById("appShell").style.display="none";
-  if(msg) document.getElementById("loginErr").textContent=msg;
+  const errEl = document.getElementById("loginErr");
+  if(errEl) errEl.textContent=msg;
+  // 로그인 버튼 복원
+  const btn = document.getElementById("loginBtn");
+  if(btn){btn.disabled=false;btn.textContent="로그인";}
 }
 
-/* ── 전역 바인딩 ── */
+/* 전역 바인딩 */
 window.nav=nav; window.login=login; window.logout=logout;
 window.approveShop=approveShop; window.rejectShop=rejectShop;
 window.approveCrew=approveCrew; window.rejectCrew=rejectCrew;
@@ -645,26 +557,23 @@ window.switchUserTab=function(btn,role){
 </script>
 
 <style>
-:root {
-  --bg:#070C18; --bg-card:#0D1525; --bg-hi:#121D32; --bg-input:#0A1220;
-  --stroke:#1E2D47; --stroke-hi:#2563EB44;
-  --blue:#2563EB; --blue2:#1D4ED8; --blue-l:#EFF6FF; --blue-dim:rgba(37,99,235,.10);
-  --text:#F0F4FF; --text-sec:#7A90B4; --text-dim:#3D5070;
-  --green:#10B981; --green-bg:rgba(16,185,129,.12);
-  --orange:#F97316; --orange-bg:rgba(249,115,22,.12);
-  --red:#EF4444; --red-bg:rgba(239,68,68,.12);
+:root{
+  --bg:#070C18;--bg-card:#0D1525;--bg-hi:#121D32;--bg-input:#0A1220;
+  --stroke:#1E2D47;--stroke-hi:#2563EB44;
+  --blue:#2563EB;--blue2:#1D4ED8;--blue-dim:rgba(37,99,235,.10);
+  --text:#F0F4FF;--text-sec:#7A90B4;--text-dim:#3D5070;
+  --green:#10B981;--green-bg:rgba(16,185,129,.12);
+  --orange:#F97316;--orange-bg:rgba(249,115,22,.12);
+  --red:#EF4444;--red-bg:rgba(239,68,68,.12);
   --purple:#7C3AED;
-  --r:10px; --r-lg:16px; --r-xl:20px;
-  --sidebar-w:224px;
+  --r:10px;--r-lg:16px;--r-xl:20px;--sidebar-w:224px;
   --font:'Pretendard Variable','Pretendard',-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{height:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100%;line-height:1.6;-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer;border:none;outline:none}
 
-/* LOADING BAR */
 #loadingBar{position:fixed;top:0;left:0;right:0;height:2px;z-index:9999;
   background:linear-gradient(90deg,var(--blue),#60A5FA,var(--blue));background-size:200%;
   animation:shimmer 1.4s linear infinite;opacity:0;transition:opacity .2s}
@@ -692,15 +601,13 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 .login-btn:hover:not(:disabled){background:var(--blue2);transform:translateY(-1px)}
 .login-btn:disabled{opacity:.6;cursor:not-allowed}
 .login-err{margin-top:12px;font-size:13px;color:var(--red);min-height:20px;text-align:center}
-.login-note{margin-top:20px;font-size:11px;color:var(--text-dim);text-align:center;line-height:1.6}
-.session-info{margin-top:14px;padding:10px 14px;background:rgba(37,99,235,.08);border:1px solid var(--stroke);
-  border-radius:8px;font-size:12px;color:var(--text-sec);text-align:center}
+.login-note{margin-top:16px;padding:10px 14px;background:rgba(37,99,235,.08);
+  border:1px solid var(--stroke);border-radius:8px;font-size:12px;color:var(--text-sec);text-align:center;line-height:1.6}
 
 /* APP SHELL */
 #appShell{display:none;grid-template-columns:var(--sidebar-w) 1fr;grid-template-rows:auto 1fr;min-height:100vh}
 .topbar{grid-column:1/-1;display:flex;align-items:center;height:56px;padding:0 24px;
-  background:var(--bg-card);border-bottom:1px solid var(--stroke);gap:16px;
-  position:sticky;top:0;z-index:50}
+  background:var(--bg-card);border-bottom:1px solid var(--stroke);gap:16px;position:sticky;top:0;z-index:50}
 .topbar-brand{display:flex;align-items:center;gap:10px}
 .topbar-mark{width:30px;height:30px;border-radius:8px;background:var(--blue);
   display:flex;align-items:center;justify-content:center;font-size:15px}
@@ -716,8 +623,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 .topbar-logout{background:none;border:1px solid var(--stroke);border-radius:8px;
   padding:6px 12px;font-size:12px;color:var(--text-sec);transition:color .15s,border-color .15s}
 .topbar-logout:hover{color:var(--red);border-color:var(--red)}
-
-/* SIDEBAR */
 .sidebar{background:var(--bg-card);border-right:1px solid var(--stroke);padding:16px 12px;
   display:flex;flex-direction:column;gap:4px;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
 .nav-section-label{font-size:10px;font-weight:700;color:var(--text-dim);letter-spacing:.1em;padding:12px 10px 6px}
@@ -736,7 +641,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:28px}
 .kpi-card{background:var(--bg-card);border:1px solid var(--stroke);border-radius:var(--r-lg);
   padding:20px;display:flex;align-items:center;gap:16px;transition:border-color .15s}
-.kpi-card:hover{border-color:var(--stroke-hi)}
 .kpi-card.alert{border-color:rgba(249,115,22,.4)}
 .kpi-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .kpi-num{font-size:28px;font-weight:800;letter-spacing:-.04em;line-height:1}
@@ -751,21 +655,17 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 .btn-text{background:none;border:none;color:var(--blue);font-size:13px;font-weight:600}
 .table-wrap{overflow-x:auto}
 .data-table{width:100%;border-collapse:collapse}
-.data-table th{text-align:left;padding:10px 16px;font-size:11px;font-weight:700;
-  color:var(--text-dim);letter-spacing:.07em;text-transform:uppercase;
-  background:var(--bg-hi);border-bottom:1px solid var(--stroke)}
+.data-table th{text-align:left;padding:10px 16px;font-size:11px;font-weight:700;color:var(--text-dim);
+  letter-spacing:.07em;text-transform:uppercase;background:var(--bg-hi);border-bottom:1px solid var(--stroke)}
 .data-table td{padding:13px 16px;font-size:13px;border-bottom:1px solid var(--stroke);vertical-align:middle}
 .data-table tr:last-child td{border-bottom:none}
 .data-table tr:hover td{background:var(--bg-hi)}
-.fw-600{font-weight:600}
-.text-dim{color:var(--text-sec)}
-.text-xs{font-size:11px}
-.text-warn{color:var(--orange)}
+.fw-600{font-weight:600}.text-dim{color:var(--text-sec)}.text-xs{font-size:11px}.text-warn{color:var(--orange)}
 .font-mono{font-family:'SF Mono','Fira Code',monospace}
 .action-btns{display:flex;gap:6px;align-items:center}
 .btn-approve{background:var(--green);color:#fff;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;transition:opacity .15s,transform .12s}
 .btn-approve:hover:not(:disabled){opacity:.85;transform:translateY(-1px)}
-.btn-approve:disabled{opacity:.4;cursor:not-allowed}
+.btn-approve:disabled{opacity:.35;cursor:not-allowed}
 .btn-reject{background:var(--red-bg);color:var(--red);border:1px solid rgba(239,68,68,.3);
   border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;transition:background .15s}
 .btn-reject:hover{background:rgba(239,68,68,.2)}
@@ -778,7 +678,7 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 .role-owner{background:var(--blue-dim);color:var(--blue)}
 .role-crew{background:rgba(124,58,237,.12);color:var(--purple)}
 .code-chip{display:inline-block;background:var(--bg-hi);color:var(--blue);
-  border:1px solid var(--stroke);border-radius:6px;padding:2px 8px;font-size:11px;letter-spacing:.05em}
+  border:1px solid var(--stroke);border-radius:6px;padding:2px 8px;font-size:11px}
 .dup-badge{display:inline-block;background:var(--orange-bg);color:var(--orange);
   border:1px solid rgba(249,115,22,.3);border-radius:6px;padding:2px 8px;
   font-size:10px;font-weight:700;margin-left:8px;vertical-align:middle}
@@ -790,7 +690,7 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 .shop-meta{font-size:12px;color:var(--text-sec);margin-bottom:3px}
 .shop-desc{padding:0 20px 14px;font-size:13px;color:var(--text-sec);line-height:1.6;
   border-bottom:1px solid var(--stroke);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.shop-stats{display:flex;gap:0;border-bottom:1px solid var(--stroke)}
+.shop-stats{display:flex;border-bottom:1px solid var(--stroke)}
 .shop-stat{flex:1;padding:12px 16px;text-align:center;border-right:1px solid var(--stroke)}
 .shop-stat:last-child{border-right:none}
 .shop-stat-num{display:block;font-size:18px;font-weight:800;letter-spacing:-.03em}
@@ -807,7 +707,7 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
   padding:7px 16px;font-size:13px;font-weight:600;color:var(--text-sec);transition:all .15s}
 .filter-btn:hover{border-color:var(--blue);color:var(--text)}
 .filter-btn.active{background:var(--blue-dim);border-color:rgba(37,99,235,.5);color:var(--blue)}
-.tabs{display:flex;gap:0;border-bottom:1px solid var(--stroke);margin-bottom:20px}
+.tabs{display:flex;border-bottom:1px solid var(--stroke);margin-bottom:20px}
 .tab-btn{background:none;border:none;border-bottom:2px solid transparent;
   padding:10px 20px;font-size:14px;font-weight:600;color:var(--text-sec);cursor:pointer;transition:color .15s,border-color .15s}
 .tab-btn:hover{color:var(--text)}
@@ -819,9 +719,7 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 .funnel-bar{height:100%;background:var(--blue);border-radius:999px;transition:width .4s ease}
 .funnel-count{font-size:13px;min-width:36px;text-align:right}
 .empty-state{text-align:center;padding:60px 24px;display:flex;flex-direction:column;align-items:center;gap:10px}
-.empty-icon{font-size:44px}
-.empty-title{font-size:16px;font-weight:700}
-.empty-sub{font-size:13px;color:var(--text-sec)}
+.empty-icon{font-size:44px}.empty-title{font-size:16px;font-weight:700}.empty-sub{font-size:13px;color:var(--text-sec)}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(16px);
   background:var(--bg-card);border:1px solid var(--stroke);color:var(--text);
   padding:12px 24px;border-radius:999px;font-size:14px;font-weight:600;
@@ -839,7 +737,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 </style>
 </head>
 <body>
-
 <div id="loadingBar"></div>
 
 <!-- LOGIN -->
@@ -866,8 +763,7 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
     </div>
     <button class="login-btn" id="loginBtn" onclick="login()">로그인</button>
     <div class="login-err" id="loginErr"></div>
-    <div class="session-info">🔒 로그인 후 24시간 동안 자동 로그인이 유지됩니다</div>
-    <div class="login-note">Firebase Console → Authentication → Email/Password에서<br>수동으로 등록된 계정만 접속 가능합니다.</div>
+    <div class="login-note">🔒 로그인 후 24시간 자동 유지 · 만료 시 재로그인 필요</div>
   </div>
 </div>
 
@@ -905,6 +801,5 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
   </nav>
   <main class="main-content" id="mainContent"></main>
 </div>
-
 </body>
 </html>
