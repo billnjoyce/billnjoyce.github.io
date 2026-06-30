@@ -368,7 +368,7 @@ function showCrewDetail(shopId, cid){
         ${c.payType==='fullTime'?`<div class="detail-row"><span>월급</span><strong>${krw(c.monthlySalary)}</strong></div>`:''}
         ${c.payType==='contract'?`<div class="detail-row"><span>건당 단가</span><strong>${krw(c.perJobRate)}</strong></div>`:''}
 
-        <div class="detail-section-title">정보 확인 / 수정</div>
+        <div class="detail-section-title">⚠️ 정보 직접 수정 (잘못 저장된 데이터 보정용)</div>
         <div class="edit-field">
           <label>전화번호</label>
           <input type="text" id="edit-phone-${cid}" value="${esc(c.phone||'')}" placeholder="010-0000-0000">
@@ -382,6 +382,9 @@ function showCrewDetail(shopId, cid){
           <input type="text" id="edit-vehicle-${cid}" value="${esc(c.vehicleInfo||'')}" placeholder="12가3456">
         </div>
         <button class="btn-save-sm" onclick="saveCrewEdit('${shopId}','${cid}')">정보 저장</button>
+
+        <div class="detail-section-title">원본 데이터 (디버그)</div>
+        <pre class="raw-json">${esc(JSON.stringify(c, null, 2))}</pre>
       </div>
       ${c.approvalStatus==='pending'?`
       <div class="modal-footer">
@@ -460,6 +463,9 @@ function showCustomerDetail(shopId, cuid){
         <div class="detail-row"><span>세차 시작일</span><strong>${esc(c.washStartDate||'-')}</strong></div>
         <div class="detail-row"><span>최근 세차일</span><strong>${c.lastWashDate?fmtDate(c.lastWashDate):'기록 없음'}</strong></div>
         ${c.notes?`<div class="detail-row"><span>메모</span><strong style="text-align:right;max-width:60%">${esc(c.notes)}</strong></div>`:''}
+
+        <div class="detail-section-title">원본 데이터 (디버그)</div>
+        <pre class="raw-json">${esc(JSON.stringify(c, null, 2))}</pre>
       </div>
     </div>
   `;
@@ -628,7 +634,7 @@ function showUserDetail(uid){
       <div class="detail-row"><span>급여 유형</span><strong>${crew&&crew.payType?(PAYTYPE_TXT[crew.payType]||crew.payType):'미설정'}</strong></div>
       ${crew&&crew.payType==='fullTime'?`<div class="detail-row"><span>월급</span><strong>${krw(crew.monthlySalary)}</strong></div>`:''}
       ${crew&&crew.payType==='contract'?`<div class="detail-row"><span>건당 단가</span><strong>${krw(crew.perJobRate)}</strong></div>`:''}
-      <div class="detail-section-title">정보 확인 / 수정</div>
+      <div class="detail-section-title">⚠️ 정보 직접 수정 (잘못 저장된 데이터 보정용)</div>
       <div class="edit-field">
         <label>전화번호</label>
         <input type="text" id="edit-phone-${uid}" value="${esc((crew&&crew.phone)||u.phone||'')}" placeholder="010-0000-0000">
@@ -1036,6 +1042,10 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 .btn-back{background:none;border:none;color:var(--text-sec);font-size:13px;font-weight:600;
   margin-bottom:14px;padding:0;display:flex;align-items:center;gap:4px}
 .btn-back:hover{color:var(--text)}
+.raw-json{background:var(--bg-hi);border:1px solid var(--stroke);border-radius:8px;
+  padding:12px;font-size:11px;line-height:1.6;color:var(--text-dim);
+  white-space:pre-wrap;word-break:break-all;max-height:240px;overflow-y:auto;
+  font-family:'SF Mono',Menlo,monospace}
 </style>
 </head>
 <body>
