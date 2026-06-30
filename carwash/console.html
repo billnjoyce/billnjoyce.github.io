@@ -257,10 +257,12 @@ function renderShopCard(shopId,s,allShops){
   const scls={pending:"badge-pending",approved:"badge-approved",rejected:"badge-rejected"}[s.approvalStatus]||"";
   const stxt={pending:"⏳ 승인 대기",approved:"✅ 승인 완료",rejected:"❌ 반려"}[s.approvalStatus]||"";
   const crews=Object.entries(s.crews||{});
-  const customers=Object.values(s.customers||{});
+  const approvedCrews=crews.filter(([,c])=>c.approvalStatus==='approved');
+  const customers=Object.entries(s.customers||{});
   const bn=normBN(s.businessNumber);
   const isDup=allShops.some(([osid,o])=>osid!==shopId&&normBN(o.businessNumber)===bn);
   const dupApproved=allShops.some(([osid,o])=>osid!==shopId&&normBN(o.businessNumber)===bn&&o.approvalStatus==="approved");
+  const panelId = `shop-panel-${shopId}`;
   return`<div class="shop-card" data-status="${s.approvalStatus}">
   <div class="shop-card-header"><div class="shop-card-info">
     <div class="shop-name">${esc(s.name)}${isDup?'<span class="dup-badge">사업자번호 중복</span>':''}</div>
@@ -270,7 +272,7 @@ function renderShopCard(shopId,s,allShops){
   <div class="shop-desc">${esc(s.description||"설명 없음")}</div>
   <div class="shop-stats">
     <div class="shop-stat"><span class="shop-stat-num">${customers.length}</span><span class="shop-stat-label">고객</span></div>
-    <div class="shop-stat"><span class="shop-stat-num">${crews.filter(([,c])=>c.approvalStatus==='approved').length}</span><span class="shop-stat-label">직원</span></div>
+    <div class="shop-stat"><span class="shop-stat-num">${approvedCrews.length}</span><span class="shop-stat-label">직원</span></div>
     <div class="shop-stat"><span class="shop-stat-num">${crews.filter(([,c])=>c.approvalStatus==='pending').length}</span><span class="shop-stat-label">직원 대기</span></div>
     <div class="shop-stat"><span class="shop-stat-num">${fmtDate(s.createdAt)}</span><span class="shop-stat-label">등록일</span></div>
   </div>
@@ -287,7 +289,146 @@ function renderShopCard(shopId,s,allShops){
       <div class="action-btns"><button class="btn-approve btn-sm" onclick="approveCrew('${shopId}','${cid}')">승인</button><button class="btn-reject btn-sm" onclick="rejectCrew('${shopId}','${cid}')">반려</button></div>
     </div>`).join("")}
   </div>`:""}
+
+  <div class="shop-toggle-row">
+    <button class="btn-text-sm" onclick="toggleShopPanel('${panelId}','crews','${shopId}')">👷 직원 목록 (${approvedCrews.length})</button>
+    <button class="btn-text-sm" onclick="toggleShopPanel('${panelId}','customers','${shopId}')">🚗 고객 목록 (${customers.length})</button>
+  </div>
+  <div id="${panelId}" class="shop-list-panel" style="display:none"></div>
   </div>`;
+}
+
+/* 사업장 카드 내 직원/고객 리스트 토글 */
+function toggleShopPanel(panelId, kind, shopId){
+  const panel = document.getElementById(panelId);
+  if(!panel) return;
+  const isOpen = panel.style.display !== 'none' && panel.dataset.kind === kind;
+  if(isOpen){ panel.style.display='none'; return; }
+  panel.dataset.kind = kind;
+  panel.style.display='block';
+  const shop = STATE.shops[shopId];
+  if(kind==='crews'){
+    const crews = Object.entries(shop.crews||{}).filter(([,c])=>c.approvalStatus==='approved');
+    panel.innerHTML = crews.length===0
+      ? '<div class="text-dim text-xs" style="padding:10px 0">승인된 직원이 없습니다.</div>'
+      : crews.map(([cid,c])=>`
+        <div class="mini-list-row" onclick="showCrewDetail('${shopId}','${cid}')">
+          <div class="mini-list-avatar">${esc((c.name||'?').charAt(0))}</div>
+          <div class="mini-list-body">
+            <div class="fw-600 text-sm">${esc(c.name||'-')}</div>
+            <div class="text-dim text-xs">${esc(c.phone||'전화번호 없음')} · ${esc(c.vehicleInfo||'차량 미등록')}</div>
+          </div>
+          <div class="text-dim text-xs">▸</div>
+        </div>`).join("");
+  } else {
+    const customers = Object.entries(shop.customers||{});
+    panel.innerHTML = customers.length===0
+      ? '<div class="text-dim text-xs" style="padding:10px 0">등록된 고객이 없습니다.</div>'
+      : customers.map(([cuid,c])=>`
+        <div class="mini-list-row" onclick="showCustomerDetail('${shopId}','${cuid}')">
+          <div class="mini-list-avatar">${esc((c.name||'?').charAt(0))}</div>
+          <div class="mini-list-body">
+            <div class="fw-600 text-sm">${esc(c.name||'-')}</div>
+            <div class="text-dim text-xs">${esc(c.vehicleNumber||'-')} · ${esc(c.phone||'-')}</div>
+          </div>
+          <div class="text-dim text-xs">▸</div>
+        </div>`).join("");
+  }
+}
+
+/* 직원 상세 모달 (사업장 카드에서 진입) — 전화번호/차량정보 직접 수정 가능 */
+function showCrewDetail(shopId, cid){
+  const shop = STATE.shops[shopId];
+  const c = (shop.crews||{})[cid];
+  if(!c) return;
+  const modal = document.getElementById('userDetailModal');
+  modal.innerHTML = `
+    <div class="modal-backdrop" onclick="closeUserDetail()"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">${esc(c.name||'-')}</div>
+          <div class="modal-sub">직원 · ${esc(shop.name)}</div>
+        </div>
+        <button class="modal-close" onclick="closeUserDetail()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-row"><span>상태</span><span class="status-badge ${statusCls(c.approvalStatus)}">${statusTxt(c.approvalStatus)}</span></div>
+        <div class="detail-row"><span>가입일</span><strong>${fmtDate(c.createdAt)}</strong></div>
+        ${c.rejectedReason?`<div class="detail-row"><span>반려 사유</span><strong class="text-warn">${esc(c.rejectedReason)}</strong></div>`:''}
+        <div class="detail-section-title">정보 확인 / 수정</div>
+        <div class="edit-field">
+          <label>전화번호</label>
+          <input type="text" id="edit-phone-${cid}" value="${esc(c.phone||'')}" placeholder="010-0000-0000">
+        </div>
+        <div class="edit-field">
+          <label>입사일 (yyyy-MM-dd)</label>
+          <input type="text" id="edit-hire-${cid}" value="${esc(c.hireDate||'')}" placeholder="2026-01-01">
+        </div>
+        <div class="edit-field">
+          <label>작업 차량 번호</label>
+          <input type="text" id="edit-vehicle-${cid}" value="${esc(c.vehicleInfo||'')}" placeholder="12가3456">
+        </div>
+        <button class="btn-save-sm" onclick="saveCrewEdit('${shopId}','${cid}')">정보 저장</button>
+      </div>
+      ${c.approvalStatus==='pending'?`
+      <div class="modal-footer">
+        <button class="btn-reject" style="flex:1;padding:11px;border-radius:10px" onclick="rejectCrew('${shopId}','${cid}');closeUserDetail()">반려</button>
+        <button class="btn-approve" style="flex:1;padding:11px;border-radius:10px" onclick="approveCrew('${shopId}','${cid}');closeUserDetail()">승인</button>
+      </div>`:''}
+    </div>
+  `;
+  modal.style.display = 'flex';
+}
+
+async function saveCrewEdit(shopId, cid){
+  const phone = document.getElementById(`edit-phone-${cid}`).value.trim();
+  const hire = document.getElementById(`edit-hire-${cid}`).value.trim();
+  const vehicle = document.getElementById(`edit-vehicle-${cid}`).value.trim();
+  const updates = {};
+  updates[`carwash-master/data/shops/${shopId}/crews/${cid}/phone`] = phone || null;
+  updates[`carwash-master/data/shops/${shopId}/crews/${cid}/hireDate`] = hire || null;
+  updates[`carwash-master/data/shops/${shopId}/crews/${cid}/vehicleInfo`] = vehicle || null;
+  // users 노드의 동일 필드도 함께 동기화
+  updates[`carwash-master/users/${cid}/phone`] = phone || null;
+  updates[`carwash-master/users/${cid}/hireDate`] = hire || null;
+  updates[`carwash-master/users/${cid}/vehicleInfo`] = vehicle || null;
+  await update(ref(db), updates);
+  toast('✅ 직원 정보 저장 완료');
+  closeUserDetail();
+  loadAll();
+}
+
+/* 고객 상세 모달 (사업장 카드에서 진입) */
+function showCustomerDetail(shopId, cuid){
+  const shop = STATE.shops[shopId];
+  const c = (shop.customers||{})[cuid];
+  if(!c) return;
+  const modal = document.getElementById('userDetailModal');
+  const cycleTxt={weekly:'매주',biweekly:'격주',monthly:'매월 1회',other:'기타'}[c.washCycle]||c.washCycle||'-';
+  modal.innerHTML = `
+    <div class="modal-backdrop" onclick="closeUserDetail()"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">${esc(c.name||'-')}</div>
+          <div class="modal-sub">고객 · ${esc(shop.name)}</div>
+        </div>
+        <button class="modal-close" onclick="closeUserDetail()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-row"><span>차량번호</span><strong>${esc(c.vehicleNumber||'-')}</strong></div>
+        <div class="detail-row"><span>차종</span><strong>${esc(c.vehicleType||'-')}</strong></div>
+        <div class="detail-row"><span>연락처</span><strong>${esc(c.phone||'-')}</strong></div>
+        <div class="detail-row"><span>세차 주기</span><strong>${cycleTxt}</strong></div>
+        <div class="detail-row"><span>출입 방법</span><strong>${esc(c.parkingAccess||'-')}</strong></div>
+        <div class="detail-row"><span>가입일</span><strong>${esc(c.joinedDate||fmtDate(c.createdAt))}</strong></div>
+        <div class="detail-row"><span>세차 시작일</span><strong>${esc(c.washStartDate||'-')}</strong></div>
+        ${c.notes?`<div class="detail-row"><span>메모</span><strong>${esc(c.notes)}</strong></div>`:''}
+      </div>
+    </div>
+  `;
+  modal.style.display = 'flex';
 }
 
 function renderUsers(){
@@ -339,10 +480,21 @@ function showUserDetail(uid){
     extra = `
       <div class="detail-section-title">직원 정보</div>
       <div class="detail-row"><span>소속 사업장</span><strong>${esc(shop.name)}</strong></div>
-      <div class="detail-row"><span>전화번호</span><strong>${esc((crew&&crew.phone)||u.phone||'-')}</strong></div>
-      <div class="detail-row"><span>입사일</span><strong>${esc((crew&&crew.hireDate)||u.hireDate||'-')}</strong></div>
-      <div class="detail-row"><span>작업 차량 번호</span><strong>${esc((crew&&crew.vehicleInfo)||u.vehicleInfo||'-')}</strong></div>
       ${(crew&&crew.rejectedReason)?`<div class="detail-row"><span>반려 사유</span><strong class="text-warn">${esc(crew.rejectedReason)}</strong></div>`:''}
+      <div class="detail-section-title">정보 확인 / 수정</div>
+      <div class="edit-field">
+        <label>전화번호</label>
+        <input type="text" id="edit-phone-${uid}" value="${esc((crew&&crew.phone)||u.phone||'')}" placeholder="010-0000-0000">
+      </div>
+      <div class="edit-field">
+        <label>입사일 (yyyy-MM-dd)</label>
+        <input type="text" id="edit-hire-${uid}" value="${esc((crew&&crew.hireDate)||u.hireDate||'')}" placeholder="2026-01-01">
+      </div>
+      <div class="edit-field">
+        <label>작업 차량 번호</label>
+        <input type="text" id="edit-vehicle-${uid}" value="${esc((crew&&crew.vehicleInfo)||u.vehicleInfo||'')}" placeholder="12가3456">
+      </div>
+      <button class="btn-save-sm" onclick="saveCrewEdit('${u.shopId}','${uid}')">정보 저장</button>
     `;
   }
 
@@ -485,6 +637,10 @@ window.showUserDetail=showUserDetail;
 window.closeUserDetail=closeUserDetail;
 window.approveUser=approveUser;
 window.rejectUser=rejectUser;
+window.toggleShopPanel=toggleShopPanel;
+window.showCrewDetail=showCrewDetail;
+window.showCustomerDetail=showCustomerDetail;
+window.saveCrewEdit=saveCrewEdit;
 </script>
 
 <style>
@@ -687,6 +843,27 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 .detail-row span:first-child{color:var(--text-sec);flex-shrink:0}
 .detail-row strong{color:var(--text);font-weight:600;text-align:right}
 .modal-footer{display:flex;gap:10px;padding:16px 20px;border-top:1px solid var(--stroke)}
+.shop-toggle-row{display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--stroke)}
+.btn-text-sm{background:var(--bg-hi);border:1px solid var(--stroke);border-radius:8px;
+  padding:7px 12px;font-size:12px;font-weight:600;color:var(--text-sec)}
+.btn-text-sm:hover{color:var(--text);border-color:var(--text-dim)}
+.shop-list-panel{margin-top:10px;max-height:280px;overflow-y:auto;
+  border-top:1px solid var(--stroke);padding-top:8px}
+.mini-list-row{display:flex;align-items:center;gap:10px;padding:9px 4px;
+  border-radius:8px;cursor:pointer}
+.mini-list-row:hover{background:var(--bg-hi)}
+.mini-list-avatar{width:30px;height:30px;border-radius:50%;background:var(--blue-bg);
+  color:var(--blue);display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;flex-shrink:0}
+.mini-list-body{flex:1;min-width:0}
+.edit-field{margin:10px 0}
+.edit-field label{display:block;font-size:11px;color:var(--text-dim);margin-bottom:5px;font-weight:600}
+.edit-field input{width:100%;background:var(--bg-hi);border:1px solid var(--stroke);
+  border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text);font-family:inherit}
+.edit-field input:focus{outline:none;border-color:var(--blue)}
+.btn-save-sm{width:100%;margin-top:8px;background:var(--blue);color:#fff;border:none;
+  border-radius:8px;padding:10px;font-size:13px;font-weight:700}
+.btn-save-sm:hover{opacity:.9}
 </style>
 </head>
 <body>
