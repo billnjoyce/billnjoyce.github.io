@@ -102,7 +102,7 @@ function logout() {
 /* ══════════════════════════════════════
    STATE
 ══════════════════════════════════════ */
-let STATE = { page:"dashboard", shops:{}, users:{}, stats:{installs:0,dau:0,funnel:{}} };
+let STATE = { page:"dashboard", shops:{}, users:{}, selectedShopId:null, stats:{installs:0,dau:0,funnel:{}} };
 
 function normBN(bn) { return (bn||"").replace(/-/g,"").trim(); }
 
@@ -186,9 +186,16 @@ function renderPage(){
   switch(STATE.page){
     case"dashboard":main.innerHTML=renderDashboard();break;
     case"shops":main.innerHTML=renderShops();break;
+    case"shop-detail":main.innerHTML=renderShopDetail(STATE.selectedShopId);break;
     case"users":main.innerHTML=renderUsers();break;
     case"stats":main.innerHTML=renderStats();break;
   }
+}
+function openShopDetail(shopId){
+  STATE.selectedShopId = shopId;
+  STATE.page = 'shop-detail';
+  document.querySelectorAll(".nav-item").forEach(el=>el.classList.toggle("active",el.dataset.page==="shops"));
+  renderPage();
 }
 
 function renderDashboard(){
@@ -264,7 +271,8 @@ function renderShopCard(shopId,s,allShops){
   const dupApproved=allShops.some(([osid,o])=>osid!==shopId&&normBN(o.businessNumber)===bn&&o.approvalStatus==="approved");
   const panelId = `shop-panel-${shopId}`;
   return`<div class="shop-card" data-status="${s.approvalStatus}">
-  <div class="shop-card-header"><div class="shop-card-info">
+  <div class="shop-card-header" onclick="openShopDetail('${shopId}')" style="cursor:pointer">
+    <div class="shop-card-info">
     <div class="shop-name">${esc(s.name)}${isDup?'<span class="dup-badge">사업자번호 중복</span>':''}</div>
     <div class="shop-meta">${esc(s.address)}</div>
     <div class="shop-meta font-mono text-xs">사업자번호: <strong>${esc(s.businessNumber)}</strong> · 코드: <span class="code-chip">${esc(shopId)}</span></div>
@@ -291,10 +299,8 @@ function renderShopCard(shopId,s,allShops){
   </div>`:""}
 
   <div class="shop-toggle-row">
-    <button class="btn-text-sm" onclick="toggleShopPanel('${panelId}','crews','${shopId}')">👷 직원 목록 (${approvedCrews.length})</button>
-    <button class="btn-text-sm" onclick="toggleShopPanel('${panelId}','customers','${shopId}')">🚗 고객 목록 (${customers.length})</button>
+    <button class="btn-text-sm" onclick="openShopDetail('${shopId}')">📋 고객 · 직원 상세 보기</button>
   </div>
-  <div id="${panelId}" class="shop-list-panel" style="display:none"></div>
   </div>`;
 }
 
@@ -429,6 +435,105 @@ function showCustomerDetail(shopId, cuid){
     </div>
   `;
   modal.style.display = 'flex';
+}
+
+/* ══════════════════════════════════════
+   사업장 상세 화면 (고객/직원 전체 리스트)
+══════════════════════════════════════ */
+function renderShopDetail(shopId){
+  const s = STATE.shops[shopId];
+  if(!s) return `<div class="empty-state"><div class="empty-icon">🏪</div><div class="empty-title">사업장을 찾을 수 없습니다</div></div>
+    <button class="btn-text" onclick="nav('shops')">← 사업장 목록으로</button>`;
+
+  const scls={pending:"badge-pending",approved:"badge-approved",rejected:"badge-rejected"}[s.approvalStatus]||"";
+  const stxt={pending:"⏳ 승인 대기",approved:"✅ 승인 완료",rejected:"❌ 반려"}[s.approvalStatus]||"";
+  const crews=Object.entries(s.crews||{});
+  const approvedCrews=crews.filter(([,c])=>c.approvalStatus==='approved');
+  const pendingCrews=crews.filter(([,c])=>c.approvalStatus==='pending');
+  const customers=Object.entries(s.customers||{});
+  const cycleTxt={weekly:'매주',biweekly:'격주',monthly:'매월 1회',other:'기타'};
+
+  return `
+  <button class="btn-back" onclick="nav('shops')">← 사업장 목록</button>
+  <div class="page-header">
+    <h1 class="page-title">${esc(s.name)} <span class="status-badge ${scls}" style="margin-left:8px;vertical-align:middle">${stxt}</span></h1>
+    <div class="page-subtitle">${esc(s.address)} · 코드: <span class="code-chip font-mono">${esc(shopId)}</span></div>
+  </div>
+
+  <div class="kpi-grid" style="margin-bottom:20px">
+    <div class="kpi-card"><div class="kpi-icon" style="background:rgba(37,99,235,.15)">🚗</div><div class="kpi-body"><div class="kpi-num">${customers.length}</div><div class="kpi-label">전체 고객</div></div></div>
+    <div class="kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,.15)">👷</div><div class="kpi-body"><div class="kpi-num">${approvedCrews.length}</div><div class="kpi-label">승인 직원</div></div></div>
+    <div class="kpi-card ${pendingCrews.length>0?'alert':''}"><div class="kpi-icon" style="background:rgba(249,115,22,.15)">⏳</div><div class="kpi-body"><div class="kpi-num">${pendingCrews.length}</div><div class="kpi-label">직원 승인 대기</div></div></div>
+    <div class="kpi-card"><div class="kpi-icon" style="background:rgba(124,58,237,.15)">📅</div><div class="kpi-body"><div class="kpi-num" style="font-size:16px">${fmtDate(s.createdAt)}</div><div class="kpi-label">등록일</div></div></div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-header"><div class="section-title">사업장 정보</div></div>
+    <div style="padding:18px 20px">
+      <div class="detail-row"><span>사업자번호</span><strong>${esc(s.businessNumber)}</strong></div>
+      <div class="detail-row"><span>전화번호</span><strong>${esc(s.phoneNumber||'-')}</strong></div>
+      <div class="detail-row"><span>설명</span><strong style="text-align:right;max-width:60%">${esc(s.description||'-')}</strong></div>
+      ${s.rejectedReason?`<div class="detail-row"><span>반려 사유</span><strong class="text-warn">${esc(s.rejectedReason)}</strong></div>`:''}
+    </div>
+  </div>
+
+  <div class="tabs"><button class="tab-btn active" onclick="switchShopDetailTab(this,'crews','${shopId}')">직원 (${crews.length})</button><button class="tab-btn" onclick="switchShopDetailTab(this,'customers','${shopId}')">고객 (${customers.length})</button></div>
+  <div id="shopDetailTableWrap">${renderShopCrewTable(shopId, crews)}</div>
+  `;
+}
+
+function switchShopDetailTab(btn, kind, shopId){
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");
+  const s = STATE.shops[shopId];
+  const wrap = document.getElementById('shopDetailTableWrap');
+  if(kind==='crews'){
+    wrap.innerHTML = renderShopCrewTable(shopId, Object.entries(s.crews||{}));
+  } else {
+    wrap.innerHTML = renderShopCustomerTable(shopId, Object.entries(s.customers||{}));
+  }
+}
+
+function renderShopCrewTable(shopId, crews){
+  if(!crews.length) return '<div class="empty-state"><div class="empty-icon">👷</div><div class="empty-title">등록된 직원이 없습니다</div></div>';
+  // 승인 대기 → 승인 완료 → 반려 순 정렬
+  const order = {pending:0, approved:1, rejected:2};
+  const sorted = [...crews].sort((a,b)=>(order[a[1].approvalStatus]??9)-(order[b[1].approvalStatus]??9));
+  return `<div class="table-wrap"><table class="data-table"><thead><tr>
+    <th>이름</th><th>전화번호</th><th>입사일</th><th>작업 차량</th><th>상태</th><th>가입일</th><th>액션</th>
+  </tr></thead><tbody>
+  ${sorted.map(([cid,c])=>`<tr class="user-row" onclick="showCrewDetail('${shopId}','${cid}')" style="cursor:pointer">
+    <td class="fw-600">${esc(c.name||'-')}</td>
+    <td class="font-mono text-xs">${esc(c.phone||'-')}</td>
+    <td class="text-dim text-xs">${esc(c.hireDate||'-')}</td>
+    <td class="text-dim text-xs">${esc(c.vehicleInfo||'-')}</td>
+    <td><span class="status-badge ${statusCls(c.approvalStatus)}">${statusTxt(c.approvalStatus)}</span></td>
+    <td class="text-dim text-xs">${fmtDate(c.createdAt)}</td>
+    <td onclick="event.stopPropagation()">
+      ${c.approvalStatus==='pending'?`<div class="action-btns">
+        <button class="btn-approve btn-sm" onclick="approveCrew('${shopId}','${cid}')">승인</button>
+        <button class="btn-reject btn-sm" onclick="rejectCrew('${shopId}','${cid}')">반려</button>
+      </div>`:'<span class="text-dim text-xs">-</span>'}
+    </td>
+  </tr>`).join("")}
+  </tbody></table></div>`;
+}
+
+function renderShopCustomerTable(shopId, customers){
+  if(!customers.length) return '<div class="empty-state"><div class="empty-icon">🚗</div><div class="empty-title">등록된 고객이 없습니다</div></div>';
+  const cycleTxt={weekly:'매주',biweekly:'격주',monthly:'매월 1회',other:'기타'};
+  return `<div class="table-wrap"><table class="data-table"><thead><tr>
+    <th>이름</th><th>차량번호</th><th>차종</th><th>연락처</th><th>세차 주기</th><th>출입 방법</th><th>가입일</th>
+  </tr></thead><tbody>
+  ${customers.map(([cuid,c])=>`<tr class="user-row" onclick="showCustomerDetail('${shopId}','${cuid}')" style="cursor:pointer">
+    <td class="fw-600">${esc(c.name||'-')}</td>
+    <td class="font-mono text-xs">${esc(c.vehicleNumber||'-')}</td>
+    <td class="text-dim text-xs">${esc(c.vehicleType||'-')}</td>
+    <td class="text-dim text-xs">${esc(c.phone||'-')}</td>
+    <td class="text-dim text-xs">${cycleTxt[c.washCycle]||c.washCycle||'-'}</td>
+    <td class="text-dim text-xs">${esc(c.parkingAccess||'-')}</td>
+    <td class="text-dim text-xs">${esc(c.joinedDate||fmtDate(c.createdAt))}</td>
+  </tr>`).join("")}
+  </tbody></table></div>`;
 }
 
 function renderUsers(){
@@ -641,6 +746,8 @@ window.toggleShopPanel=toggleShopPanel;
 window.showCrewDetail=showCrewDetail;
 window.showCustomerDetail=showCustomerDetail;
 window.saveCrewEdit=saveCrewEdit;
+window.openShopDetail=openShopDetail;
+window.switchShopDetailTab=switchShopDetailTab;
 </script>
 
 <style>
@@ -864,6 +971,9 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 .btn-save-sm{width:100%;margin-top:8px;background:var(--blue);color:#fff;border:none;
   border-radius:8px;padding:10px;font-size:13px;font-weight:700}
 .btn-save-sm:hover{opacity:.9}
+.btn-back{background:none;border:none;color:var(--text-sec);font-size:13px;font-weight:600;
+  margin-bottom:14px;padding:0;display:flex;align-items:center;gap:4px}
+.btn-back:hover{color:var(--text)}
 </style>
 </head>
 <body>
