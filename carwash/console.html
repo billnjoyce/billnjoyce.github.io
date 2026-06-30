@@ -114,6 +114,8 @@ async function loadAll() {
     const data = snap.val();
     STATE.shops = data.data?.shops || {};
     STATE.users = data.users || {};
+    // id 필드가 누락된 레코드 대비 — key를 id로 보강
+    Object.entries(STATE.users).forEach(([uid, u]) => { if(!u.id) u.id = uid; });
     STATE.stats.installs = Object.keys(data.install?.ios||{}).length;
     const today = todayStr();
     let dau=0;
@@ -298,13 +300,119 @@ function renderUsers(){
 }
 function renderUserTable(users){
   if(!users.length)return'<div class="empty-state"><div class="empty-icon">👤</div><div class="empty-title">유저 없음</div></div>';
-  return`<div class="table-wrap"><table class="data-table"><thead><tr><th>이름</th><th>이메일</th><th>역할</th><th>사업장 코드</th><th>상태</th><th>가입일</th></tr></thead><tbody>
-  ${users.map(u=>`<tr><td class="fw-600">${esc(u.name||"-")}</td><td class="text-dim font-mono text-xs">${esc(u.email||"-")}</td>
+  return`<div class="table-wrap"><table class="data-table"><thead><tr><th>이름</th><th>이메일</th><th>역할</th><th>사업장 코드</th><th>상태</th><th>가입일</th><th>액션</th></tr></thead><tbody>
+  ${users.map(u=>`<tr class="user-row" onclick="showUserDetail('${u.id}')" style="cursor:pointer">
+  <td class="fw-600">${esc(u.name||"-")}</td><td class="text-dim font-mono text-xs">${esc(u.email||"-")}</td>
   <td><span class="role-badge ${u.role==='owner'?'role-owner':'role-crew'}">${u.role==='owner'?'사장':'직원'}</span></td>
   <td><span class="code-chip font-mono text-xs">${esc(u.shopId||"-")}</span></td>
   <td><span class="status-badge ${statusCls(u.approvalStatus)}">${statusTxt(u.approvalStatus)}</span></td>
-  <td class="text-dim">${fmtDate(u.createdAt)}</td></tr>`).join("")}
+  <td class="text-dim">${fmtDate(u.createdAt)}</td>
+  <td onclick="event.stopPropagation()">
+    ${u.approvalStatus==='pending'?`<div class="action-btns">
+      <button class="btn-approve btn-sm" onclick="approveUser('${u.id}')">승인</button>
+      <button class="btn-reject btn-sm" onclick="rejectUser('${u.id}')">반려</button>
+    </div>`:'<span class="text-dim text-xs">-</span>'}
+  </td>
+  </tr>`).join("")}
   </tbody></table></div>`;
+}
+
+/* ── 유저 상세 모달 ── */
+function showUserDetail(uid){
+  const u = STATE.users[uid];
+  if(!u) return;
+  let extra = '';
+  if(u.role==='owner' && u.shopId && STATE.shops[u.shopId]){
+    const s = STATE.shops[u.shopId];
+    extra = `
+      <div class="detail-section-title">사업장 정보</div>
+      <div class="detail-row"><span>상호명</span><strong>${esc(s.name)}</strong></div>
+      <div class="detail-row"><span>주소</span><strong>${esc(s.address)}</strong></div>
+      <div class="detail-row"><span>전화번호</span><strong>${esc(s.phoneNumber||'-')}</strong></div>
+      <div class="detail-row"><span>사업자번호</span><strong>${esc(s.businessNumber)}</strong></div>
+      <div class="detail-row"><span>설명</span><strong>${esc(s.description||'-')}</strong></div>
+      ${s.rejectedReason?`<div class="detail-row"><span>반려 사유</span><strong class="text-warn">${esc(s.rejectedReason)}</strong></div>`:''}
+    `;
+  } else if(u.role==='crew' && u.shopId && STATE.shops[u.shopId]){
+    const shop = STATE.shops[u.shopId];
+    const crew = (shop.crews||{})[uid];
+    extra = `
+      <div class="detail-section-title">직원 정보</div>
+      <div class="detail-row"><span>소속 사업장</span><strong>${esc(shop.name)}</strong></div>
+      <div class="detail-row"><span>전화번호</span><strong>${esc((crew&&crew.phone)||u.phone||'-')}</strong></div>
+      <div class="detail-row"><span>입사일</span><strong>${esc((crew&&crew.hireDate)||u.hireDate||'-')}</strong></div>
+      <div class="detail-row"><span>작업 차량 번호</span><strong>${esc((crew&&crew.vehicleInfo)||u.vehicleInfo||'-')}</strong></div>
+      ${(crew&&crew.rejectedReason)?`<div class="detail-row"><span>반려 사유</span><strong class="text-warn">${esc(crew.rejectedReason)}</strong></div>`:''}
+    `;
+  }
+
+  const modal = document.getElementById('userDetailModal');
+  modal.innerHTML = `
+    <div class="modal-backdrop" onclick="closeUserDetail()"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">${esc(u.name||'-')}</div>
+          <div class="modal-sub">${esc(u.email||'-')}</div>
+        </div>
+        <button class="modal-close" onclick="closeUserDetail()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-row"><span>역할</span><strong>${u.role==='owner'?'사장':'직원'}</strong></div>
+        <div class="detail-row"><span>상태</span><span class="status-badge ${statusCls(u.approvalStatus)}">${statusTxt(u.approvalStatus)}</span></div>
+        <div class="detail-row"><span>사업장 코드</span><strong class="font-mono">${esc(u.shopId||'-')}</strong></div>
+        <div class="detail-row"><span>가입일</span><strong>${fmtDate(u.createdAt)}</strong></div>
+        ${extra}
+      </div>
+      ${u.approvalStatus==='pending'?`
+      <div class="modal-footer">
+        <button class="btn-reject" style="flex:1;padding:11px;border-radius:10px" onclick="rejectUser('${uid}')">반려</button>
+        <button class="btn-approve" style="flex:1;padding:11px;border-radius:10px" onclick="approveUser('${uid}')">승인</button>
+      </div>`:''}
+    </div>
+  `;
+  modal.style.display = 'flex';
+}
+function closeUserDetail(){
+  document.getElementById('userDetailModal').style.display = 'none';
+}
+
+/* ── 유저 승인/반려 (사장/직원 공통 처리) ── */
+async function approveUser(uid){
+  const u = STATE.users[uid];
+  if(!u || !confirm(`${u.name}님을 승인하시겠습니까?`)) return;
+  const updates = {};
+  updates[`carwash-master/users/${uid}/approvalStatus`] = 'approved';
+  if(u.role==='owner' && u.shopId){
+    updates[`carwash-master/data/shops/${u.shopId}/approvalStatus`] = 'approved';
+  } else if(u.role==='crew' && u.shopId){
+    updates[`carwash-master/data/shops/${u.shopId}/crews/${uid}/approvalStatus`] = 'approved';
+  }
+  await update(ref(db), updates);
+  toast('✅ 승인 완료');
+  closeUserDetail();
+  loadAll();
+}
+async function rejectUser(uid){
+  const u = STATE.users[uid];
+  if(!u) return;
+  const reason = prompt('반려 사유를 입력하세요:');
+  if(reason===null) return;
+  const finalReason = reason.trim() || '검토 기준 미달';
+  const updates = {};
+  updates[`carwash-master/users/${uid}/approvalStatus`] = 'rejected';
+  updates[`carwash-master/users/${uid}/rejectedReason`] = finalReason;
+  if(u.role==='owner' && u.shopId){
+    updates[`carwash-master/data/shops/${u.shopId}/approvalStatus`] = 'rejected';
+    updates[`carwash-master/data/shops/${u.shopId}/rejectedReason`] = finalReason;
+  } else if(u.role==='crew' && u.shopId){
+    updates[`carwash-master/data/shops/${u.shopId}/crews/${uid}/approvalStatus`] = 'rejected';
+    updates[`carwash-master/data/shops/${u.shopId}/crews/${uid}/rejectedReason`] = finalReason;
+  }
+  await update(ref(db), updates);
+  toast('❌ 반려 처리');
+  closeUserDetail();
+  loadAll();
 }
 
 function renderStats(){
@@ -373,6 +481,10 @@ window.switchUserTab=function(btn,role){
   document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");
   document.getElementById("userTableWrap").innerHTML=renderUserTable(Object.values(STATE.users).filter(u=>u.role===role));
 };
+window.showUserDetail=showUserDetail;
+window.closeUserDetail=closeUserDetail;
+window.approveUser=approveUser;
+window.rejectUser=rejectUser;
 </script>
 
 <style>
@@ -552,6 +664,29 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
   .kpi-grid{grid-template-columns:1fr 1fr}
   .login-card{padding:32px 24px}
 }
+
+/* 유저 상세 모달 */
+.user-row:hover td{background:var(--bg-hi)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(2px)}
+.modal-card{position:relative;background:var(--bg-card);border:1px solid var(--stroke);
+  border-radius:var(--r-xl);width:100%;max-width:460px;max-height:85vh;overflow-y:auto;
+  box-shadow:0 32px 80px rgba(0,0,0,.6);z-index:1}
+.modal-header{display:flex;align-items:flex-start;justify-content:space-between;
+  padding:20px 20px 14px;border-bottom:1px solid var(--stroke)}
+.modal-title{font-size:18px;font-weight:800;letter-spacing:-.02em}
+.modal-sub{font-size:12px;color:var(--text-sec);margin-top:3px;font-family:'SF Mono',monospace}
+.modal-close{background:var(--bg-hi);border:1px solid var(--stroke);border-radius:8px;
+  width:28px;height:28px;color:var(--text-sec);font-size:13px}
+.modal-close:hover{color:var(--text)}
+.modal-body{padding:18px 20px}
+.detail-section-title{font-size:11px;font-weight:700;color:var(--text-dim);
+  letter-spacing:.06em;text-transform:uppercase;margin:16px 0 8px}
+.detail-row{display:flex;align-items:center;justify-content:space-between;
+  padding:9px 0;border-bottom:1px solid var(--stroke);font-size:13px;gap:12px}
+.detail-row:last-child{border-bottom:none}
+.detail-row span:first-child{color:var(--text-sec);flex-shrink:0}
+.detail-row strong{color:var(--text);font-weight:600;text-align:right}
+.modal-footer{display:flex;gap:10px;padding:16px 20px;border-top:1px solid var(--stroke)}
 </style>
 </head>
 <body>
@@ -622,6 +757,8 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
   </nav>
   <main class="main-content" id="mainContent"></main>
 </div>
+
+<div id="userDetailModal" style="display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;padding:20px;"></div>
 
 </body>
 </html>
