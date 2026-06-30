@@ -362,6 +362,12 @@ function showCrewDetail(shopId, cid){
         <div class="detail-row"><span>상태</span><span class="status-badge ${statusCls(c.approvalStatus)}">${statusTxt(c.approvalStatus)}</span></div>
         <div class="detail-row"><span>가입일</span><strong>${fmtDate(c.createdAt)}</strong></div>
         ${c.rejectedReason?`<div class="detail-row"><span>반려 사유</span><strong class="text-warn">${esc(c.rejectedReason)}</strong></div>`:''}
+
+        <div class="detail-section-title">급여 정보</div>
+        <div class="detail-row"><span>급여 유형</span><strong>${c.payType?(PAYTYPE_TXT[c.payType]||c.payType):'미설정'}</strong></div>
+        ${c.payType==='fullTime'?`<div class="detail-row"><span>월급</span><strong>${krw(c.monthlySalary)}</strong></div>`:''}
+        ${c.payType==='contract'?`<div class="detail-row"><span>건당 단가</span><strong>${krw(c.perJobRate)}</strong></div>`:''}
+
         <div class="detail-section-title">정보 확인 / 수정</div>
         <div class="edit-field">
           <label>전화번호</label>
@@ -405,13 +411,16 @@ async function saveCrewEdit(shopId, cid){
   loadAll();
 }
 
-/* 고객 상세 모달 (사업장 카드에서 진입) */
+/* 고객 상세 모달 (사업장 카드에서 진입) — 앱의 모든 필드 표시 */
 function showCustomerDetail(shopId, cuid){
   const shop = STATE.shops[shopId];
   const c = (shop.customers||{})[cuid];
   if(!c) return;
   const modal = document.getElementById('userDetailModal');
-  const cycleTxt={weekly:'매주',biweekly:'격주',monthly:'매월 1회',other:'기타'}[c.washCycle]||c.washCycle||'-';
+  const crewName = c.assignedCrewId && shop.crews && shop.crews[c.assignedCrewId]
+    ? shop.crews[c.assignedCrewId].name : '미배정';
+  const product = c.productId && shop.products && shop.products[c.productId]
+    ? shop.products[c.productId] : null;
   modal.innerHTML = `
     <div class="modal-backdrop" onclick="closeUserDetail()"></div>
     <div class="modal-card">
@@ -423,14 +432,34 @@ function showCustomerDetail(shopId, cuid){
         <button class="modal-close" onclick="closeUserDetail()">✕</button>
       </div>
       <div class="modal-body">
+        <div class="detail-section-title">차량 정보</div>
         <div class="detail-row"><span>차량번호</span><strong>${esc(c.vehicleNumber||'-')}</strong></div>
-        <div class="detail-row"><span>차종</span><strong>${esc(c.vehicleType||'-')}</strong></div>
+        <div class="detail-row"><span>차종(모델명)</span><strong>${esc(c.vehicleType||'-')}</strong></div>
+        <div class="detail-row"><span>차종 분류</span><strong>${VCLASS_TXT[c.vehicleClass]||'-'}</strong></div>
+        <div class="detail-row"><span>차량 크기</span><strong>${VSIZE_TXT[c.vehicleSize]||'-'}</strong></div>
+
+        <div class="detail-section-title">연락처 · 상태</div>
         <div class="detail-row"><span>연락처</span><strong>${esc(c.phone||'-')}</strong></div>
-        <div class="detail-row"><span>세차 주기</span><strong>${cycleTxt}</strong></div>
+        <div class="detail-row"><span>회원 상태</span><strong>${c.isActive===false?'해지됨':'활성'}</strong></div>
+        ${c.isActive===false&&c.deactivatedDate?`<div class="detail-row"><span>해지일</span><strong>${esc(c.deactivatedDate)}</strong></div>`:''}
+
+        <div class="detail-section-title">세차 정보</div>
+        <div class="detail-row"><span>세차 주기</span><strong>${CYCLE_TXT[c.washCycle]||c.washCycle||'-'}</strong></div>
+        <div class="detail-row"><span>세차 요일</span><strong>${weekDaysTxt(c.washDays)}</strong></div>
+        <div class="detail-row"><span>세차 시간대</span><strong>${TIMESLOT_TXT[c.washTimeSlot]||'-'}</strong></div>
         <div class="detail-row"><span>출입 방법</span><strong>${esc(c.parkingAccess||'-')}</strong></div>
+        <div class="detail-row"><span>담당 직원</span><strong>${esc(crewName)}</strong></div>
+
+        <div class="detail-section-title">구독 · 결제</div>
+        <div class="detail-row"><span>구독 상품</span><strong>${product?esc(product.name):'미지정'}</strong></div>
+        ${product?`<div class="detail-row"><span>상품 가격</span><strong>${krw(product.discountPrice||product.price)}</strong></div>`:''}
+        <div class="detail-row"><span>납부 기한일</span><strong>${c.paymentDueDay?`매월 ${c.paymentDueDay}일 (개별 설정)`:'사업장 공통값 사용'}</strong></div>
+
+        <div class="detail-section-title">가입 · 이력</div>
         <div class="detail-row"><span>가입일</span><strong>${esc(c.joinedDate||fmtDate(c.createdAt))}</strong></div>
         <div class="detail-row"><span>세차 시작일</span><strong>${esc(c.washStartDate||'-')}</strong></div>
-        ${c.notes?`<div class="detail-row"><span>메모</span><strong>${esc(c.notes)}</strong></div>`:''}
+        <div class="detail-row"><span>최근 세차일</span><strong>${c.lastWashDate?fmtDate(c.lastWashDate):'기록 없음'}</strong></div>
+        ${c.notes?`<div class="detail-row"><span>메모</span><strong style="text-align:right;max-width:60%">${esc(c.notes)}</strong></div>`:''}
       </div>
     </div>
   `;
@@ -499,13 +528,14 @@ function renderShopCrewTable(shopId, crews){
   const order = {pending:0, approved:1, rejected:2};
   const sorted = [...crews].sort((a,b)=>(order[a[1].approvalStatus]??9)-(order[b[1].approvalStatus]??9));
   return `<div class="table-wrap"><table class="data-table"><thead><tr>
-    <th>이름</th><th>전화번호</th><th>입사일</th><th>작업 차량</th><th>상태</th><th>가입일</th><th>액션</th>
+    <th>이름</th><th>전화번호</th><th>입사일</th><th>작업 차량</th><th>급여 유형</th><th>상태</th><th>가입일</th><th>액션</th>
   </tr></thead><tbody>
   ${sorted.map(([cid,c])=>`<tr class="user-row" onclick="showCrewDetail('${shopId}','${cid}')" style="cursor:pointer">
     <td class="fw-600">${esc(c.name||'-')}</td>
     <td class="font-mono text-xs">${esc(c.phone||'-')}</td>
     <td class="text-dim text-xs">${esc(c.hireDate||'-')}</td>
     <td class="text-dim text-xs">${esc(c.vehicleInfo||'-')}</td>
+    <td class="text-dim text-xs">${c.payType?(PAYTYPE_TXT[c.payType]||c.payType):'<span class="text-dim">미설정</span>'}</td>
     <td><span class="status-badge ${statusCls(c.approvalStatus)}">${statusTxt(c.approvalStatus)}</span></td>
     <td class="text-dim text-xs">${fmtDate(c.createdAt)}</td>
     <td onclick="event.stopPropagation()">
@@ -520,17 +550,20 @@ function renderShopCrewTable(shopId, crews){
 
 function renderShopCustomerTable(shopId, customers){
   if(!customers.length) return '<div class="empty-state"><div class="empty-icon">🚗</div><div class="empty-title">등록된 고객이 없습니다</div></div>';
-  const cycleTxt={weekly:'매주',biweekly:'격주',monthly:'매월 1회',other:'기타'};
+  const shop = STATE.shops[shopId];
+  const crewName = (cid)=> cid && shop.crews && shop.crews[cid] ? shop.crews[cid].name : '-';
   return `<div class="table-wrap"><table class="data-table"><thead><tr>
-    <th>이름</th><th>차량번호</th><th>차종</th><th>연락처</th><th>세차 주기</th><th>출입 방법</th><th>가입일</th>
+    <th>이름</th><th>차량번호</th><th>차종</th><th>분류</th><th>연락처</th><th>세차 주기</th><th>담당 직원</th><th>상태</th><th>가입일</th>
   </tr></thead><tbody>
   ${customers.map(([cuid,c])=>`<tr class="user-row" onclick="showCustomerDetail('${shopId}','${cuid}')" style="cursor:pointer">
     <td class="fw-600">${esc(c.name||'-')}</td>
     <td class="font-mono text-xs">${esc(c.vehicleNumber||'-')}</td>
     <td class="text-dim text-xs">${esc(c.vehicleType||'-')}</td>
+    <td class="text-dim text-xs">${VCLASS_TXT[c.vehicleClass]||'-'}${c.vehicleSize?' · '+(VSIZE_TXT[c.vehicleSize]||c.vehicleSize):''}</td>
     <td class="text-dim text-xs">${esc(c.phone||'-')}</td>
-    <td class="text-dim text-xs">${cycleTxt[c.washCycle]||c.washCycle||'-'}</td>
-    <td class="text-dim text-xs">${esc(c.parkingAccess||'-')}</td>
+    <td class="text-dim text-xs">${CYCLE_TXT[c.washCycle]||c.washCycle||'-'}${c.washDays?' ('+weekDaysTxt(c.washDays)+')':''}</td>
+    <td class="text-dim text-xs">${esc(crewName(c.assignedCrewId))}</td>
+    <td>${c.isActive===false?'<span class="status-badge badge-rejected">해지</span>':'<span class="status-badge badge-approved">활성</span>'}</td>
     <td class="text-dim text-xs">${esc(c.joinedDate||fmtDate(c.createdAt))}</td>
   </tr>`).join("")}
   </tbody></table></div>`;
@@ -570,14 +603,19 @@ function showUserDetail(uid){
   let extra = '';
   if(u.role==='owner' && u.shopId && STATE.shops[u.shopId]){
     const s = STATE.shops[u.shopId];
+    const custCount = Object.keys(s.customers||{}).length;
+    const crewCount = Object.values(s.crews||{}).filter(c=>c.approvalStatus==='approved').length;
     extra = `
       <div class="detail-section-title">사업장 정보</div>
       <div class="detail-row"><span>상호명</span><strong>${esc(s.name)}</strong></div>
       <div class="detail-row"><span>주소</span><strong>${esc(s.address)}</strong></div>
       <div class="detail-row"><span>전화번호</span><strong>${esc(s.phoneNumber||'-')}</strong></div>
       <div class="detail-row"><span>사업자번호</span><strong>${esc(s.businessNumber)}</strong></div>
-      <div class="detail-row"><span>설명</span><strong>${esc(s.description||'-')}</strong></div>
+      <div class="detail-row"><span>설명</span><strong style="text-align:right;max-width:60%">${esc(s.description||'-')}</strong></div>
+      <div class="detail-row"><span>고객 수</span><strong>${custCount}명</strong></div>
+      <div class="detail-row"><span>직원 수</span><strong>${crewCount}명</strong></div>
       ${s.rejectedReason?`<div class="detail-row"><span>반려 사유</span><strong class="text-warn">${esc(s.rejectedReason)}</strong></div>`:''}
+      <button class="btn-save-sm" style="background:var(--bg-hi);color:var(--text-sec);border:1px solid var(--stroke)" onclick="closeUserDetail();openShopDetail('${u.shopId}')">사업장 상세 화면 열기 →</button>
     `;
   } else if(u.role==='crew' && u.shopId && STATE.shops[u.shopId]){
     const shop = STATE.shops[u.shopId];
@@ -586,6 +624,10 @@ function showUserDetail(uid){
       <div class="detail-section-title">직원 정보</div>
       <div class="detail-row"><span>소속 사업장</span><strong>${esc(shop.name)}</strong></div>
       ${(crew&&crew.rejectedReason)?`<div class="detail-row"><span>반려 사유</span><strong class="text-warn">${esc(crew.rejectedReason)}</strong></div>`:''}
+      <div class="detail-section-title">급여 정보</div>
+      <div class="detail-row"><span>급여 유형</span><strong>${crew&&crew.payType?(PAYTYPE_TXT[crew.payType]||crew.payType):'미설정'}</strong></div>
+      ${crew&&crew.payType==='fullTime'?`<div class="detail-row"><span>월급</span><strong>${krw(crew.monthlySalary)}</strong></div>`:''}
+      ${crew&&crew.payType==='contract'?`<div class="detail-row"><span>건당 단가</span><strong>${krw(crew.perJobRate)}</strong></div>`:''}
       <div class="detail-section-title">정보 확인 / 수정</div>
       <div class="edit-field">
         <label>전화번호</label>
@@ -718,6 +760,24 @@ function todayStr(){const d=new Date();return`${d.getFullYear()}-${String(d.getM
 function fmtDate(ts){if(!ts)return"-";const d=new Date(ts>1e12?ts:ts*1000);return`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`;}
 function statusCls(s){return{pending:"badge-pending",approved:"badge-approved",rejected:"badge-rejected"}[s]||"";}
 function statusTxt(s){return{pending:"⏳ 대기",approved:"✅ 승인",rejected:"❌ 반려"}[s]||s;}
+
+/* ── 앱 모델과 동일한 표시 텍스트 매핑 ── */
+const CYCLE_TXT={weekly:'매주',biweekly:'격주',monthly:'매월 1회',other:'기타'};
+const VCLASS_TXT={sedan:'세단',suv:'SUV',rv:'RV',van:'승합',sports:'스포츠카·컨버터블',luxury:'럭셔리카'};
+const VSIZE_TXT={mini:'경차',compact:'소형',semiMid:'준중형',mid:'중형',large:'대형'};
+const TIMESLOT_TXT={
+  morning_9_12:'오전 9시 ~ 오후 12시', afternoon_1_5:'오후 1시 ~ 오후 5시',
+  evening_9_1:'오후 9시 ~ 새벽 1시', night_8_10:'오후 8시 ~ 오후 10시',
+  night_11_end:'오후 11시 ~ 새벽 중 종료'
+};
+const WEEKDAY_TXT={1:'월',2:'화',3:'수',4:'목',5:'금',6:'토',7:'일'};
+const PAYTYPE_TXT={fullTime:'정직원 (월급제)',contract:'계약직 (건당)'};
+function weekDaysTxt(days){
+  if(!days) return '-';
+  const arr = Array.isArray(days) ? days : Object.values(days);
+  return arr.map(d=>WEEKDAY_TXT[d]||d).join('·') || '-';
+}
+function krw(n){ return (n||n===0) ? Number(n).toLocaleString('ko-KR')+'원' : '-'; }
 function toast(msg){
   const t=document.createElement("div");t.className="toast";t.textContent=msg;
   document.body.appendChild(t);setTimeout(()=>t.classList.add("show"),10);
@@ -902,10 +962,12 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none}
 .filter-btn{background:var(--bg-card);border:1px solid var(--stroke);border-radius:999px;padding:7px 16px;font-size:13px;font-weight:600;color:var(--text-sec);transition:all .15s}
 .filter-btn:hover{border-color:var(--blue);color:var(--text)}
 .filter-btn.active{background:var(--blue-dim);border-color:rgba(37,99,235,.5);color:var(--blue)}
-.tabs{display:flex;border-bottom:1px solid var(--stroke);margin-bottom:20px}
-.tab-btn{background:none;border:none;border-bottom:2px solid transparent;padding:10px 20px;font-size:14px;font-weight:600;color:var(--text-sec);cursor:pointer;transition:color .15s,border-color .15s}
+.tabs{display:inline-flex;gap:4px;background:var(--bg-hi);border:1px solid var(--stroke);
+  border-radius:12px;padding:4px;margin-bottom:20px}
+.tab-btn{background:none;border:none;border-radius:9px;padding:9px 18px;font-size:13px;
+  font-weight:700;color:var(--text-sec);cursor:pointer;transition:all .18s}
 .tab-btn:hover{color:var(--text)}
-.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab-btn.active{color:#fff;background:var(--blue);box-shadow:0 2px 10px rgba(37,99,235,.4)}
 .funnel-list{padding:16px 20px;display:grid;gap:12px}
 .funnel-row{display:flex;align-items:center;gap:12px}
 .funnel-label{font-size:12px;color:var(--text-sec);min-width:180px}
