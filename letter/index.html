@@ -220,6 +220,17 @@
   .seg{display:inline-flex;background:var(--surface-2);border-radius:11px;padding:3px;margin-bottom:13px;gap:2px}
   .segbtn{border:none;background:transparent;color:var(--ink-2);font-weight:700;font-size:13.5px;padding:8px 15px;border-radius:9px;cursor:pointer;transition:.12s}
   .segbtn.on{background:var(--surface);color:var(--accent);box-shadow:var(--sh-1)}
+  .egrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:11px;flex-wrap:wrap}
+  .eglink{background:none;border:none;color:var(--accent);font-size:12.5px;font-weight:700;cursor:pointer;padding:6px 2px;display:inline-flex;align-items:center;gap:5px}
+  .eglink:hover{text-decoration:underline}
+  .egbox{margin-top:10px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .egbox .cap{font-size:12px;color:var(--ink-2);margin-top:10px;line-height:1.65}
+  .egtable{width:100%;border-collapse:collapse;font-size:12.5px;background:#fff;border-radius:8px;overflow:hidden}
+  .egtable th{background:var(--accent);color:#fff;font-weight:700;padding:6px 8px;font-size:12px}
+  .egtable td{border-bottom:1px solid #EEF0F7;padding:6px 8px;text-align:center}
+  .egtable tr:last-child td{border-bottom:none}
+  .egtable td:first-child{font-weight:700;color:var(--ink)}
+  .egnote{background:linear-gradient(180deg,#FFFDF7,#FBF5E8);border:1px solid #E7DCC4;border-radius:8px;padding:14px 16px;font-family:'Nanum Pen Script';font-size:22px;color:#31364d;line-height:1.75}
   @media(prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important;scroll-behavior:auto!important} }
 </style>
 </head>
@@ -274,6 +285,11 @@
               <img id="thumbImg" alt="올린 노트 미리보기" />
               <div><div class="fx" id="thumbName"></div><button class="btn btn-line btn-sm" id="reup" style="margin-top:8px">다시 올리기</button></div>
             </div>
+            <div class="egrow"><button type="button" class="eglink" data-eg="egPhoto">ⓘ 어떤 사진이 좋아요?</button></div>
+            <div class="egbox" id="egPhoto" hidden>
+              <div class="egnote">김수진 (초4 · 영어반)<br>국어 94 · 영어 92 · 수학 88<br>숙제 성실, 발표 적극적<br>수학 서술형은 조금 더 연습!</div>
+              <div class="cap">학생 이름과 과목·점수·특이사항을 <b>알아보기 쉽게</b> 적어 찍으면 돼요. 한 명씩 찍으면 인식이 가장 정확해요.</div>
+            </div>
           </div>
           <div id="modeSheet" style="display:none">
             <div class="drop" id="dropSheet" role="button" tabindex="0">
@@ -281,6 +297,18 @@
               <div class="s">성적표 파일이면 이게 가장 정확해요. 선택한 학생 행만 읽습니다.</div>
             </div>
             <input type="file" id="fileSheet" accept=".xlsx,.xls,.csv" hidden />
+            <div class="egrow">
+              <button type="button" class="eglink" data-eg="egSheet">ⓘ 어떤 형식이면 돼요?</button>
+              <button type="button" class="btn btn-line btn-sm" id="dlSample">📥 예시 엑셀 받기</button>
+            </div>
+            <div class="egbox" id="egSheet" hidden>
+              <table class="egtable">
+                <tr><th>이름</th><th>국어</th><th>영어</th><th>수학</th><th>과학</th><th>평균</th></tr>
+                <tr><td>김수진</td><td>94</td><td>92</td><td>88</td><td>90</td><td>91.0</td></tr>
+                <tr><td>이도현</td><td>82</td><td>79</td><td>95</td><td>91</td><td>86.8</td></tr>
+              </table>
+              <div class="cap"><b>첫 줄은 제목(이름·과목명)</b>, 그 아래로 학생별 점수. 열 순서·과목 수는 자유예요. "예시 엑셀 받기"로 형식을 그대로 받아 쓰셔도 됩니다.</div>
+            </div>
             <div id="sheetResult"></div>
           </div>
         </section>
@@ -514,6 +542,24 @@
   ["dragover","dragenter"].forEach(function(ev){dropSheet.addEventListener(ev,function(e){e.preventDefault();dropSheet.style.borderColor="var(--accent)"})});
   ["dragleave","drop"].forEach(function(ev){dropSheet.addEventListener(ev,function(e){e.preventDefault();dropSheet.style.borderColor=""})});
   dropSheet.addEventListener("drop",function(e){var f=e.dataTransfer.files[0];if(f)handleSheet(f)});
+
+  document.querySelectorAll(".eglink").forEach(function(b){
+    b.addEventListener("click",function(){ var t=document.getElementById(b.dataset.eg); if(t) t.hidden=!t.hidden; });
+  });
+  $("#dlSample").addEventListener("click",function(){
+    if(typeof XLSX==="undefined"){ toast("모듈을 불러오지 못했어요"); return; }
+    var aoa=[
+      ["이름","국어","영어","수학","과학","사회","평균","반평균"],
+      ["김수진",94,92,88,90,95,91.8,88.5],
+      ["이도현",82,79,95,91,80,85.4,88.5],
+      ["박서아",90,96,84,88,93,90.2,88.5]
+    ];
+    var ws=XLSX.utils.aoa_to_sheet(aoa);
+    ws["!cols"]=[{wch:10},{wch:6},{wch:6},{wch:6},{wch:6},{wch:6},{wch:8},{wch:8}];
+    var wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"성적");
+    XLSX.writeFile(wb,"글월_예시_성적표.xlsx");
+    toast("예시 엑셀을 내려받았어요"); track("download_sample",{kind:"xlsx"});
+  });
 
   function handleSheet(f){
     if(!state.sel){ toast("먼저 1단계에서 학생을 선택하세요"); return; }
