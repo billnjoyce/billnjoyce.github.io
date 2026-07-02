@@ -18,48 +18,83 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,'Helvetica Neue',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;font-size:14px;}
 
-/* AUTH */
+/* ── AUTH ── */
 #auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
   background:radial-gradient(ellipse at 30% 20%,rgba(75,123,245,0.12) 0%,transparent 55%),var(--bg);}
-.auth-box{width:100%;max-width:380px;background:var(--card);border:1px solid var(--stroke);border-radius:20px;padding:40px 32px;text-align:center;}
-.auth-logo{width:56px;height:56px;background:var(--brandBg);border:1.5px solid var(--brand);border-radius:16px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:24px;}
+.auth-box{width:100%;max-width:400px;background:var(--card);border:1px solid var(--stroke);border-radius:20px;padding:40px 32px;text-align:center;}
+.auth-logo{width:60px;height:60px;background:var(--brandBg);border:1.5px solid var(--brand);border-radius:16px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:26px;}
 .auth-title{font-size:20px;font-weight:700;margin-bottom:6px;}
 .auth-sub{font-size:13px;color:var(--txt2);margin-bottom:28px;line-height:1.6;}
-.auth-inp{width:100%;background:var(--card2);border:1.5px solid var(--stroke);border-radius:var(--r2);padding:13px 16px;font-size:16px;font-weight:600;color:var(--txt);text-align:center;letter-spacing:2px;outline:none;transition:border-color .2s;font-family:inherit;}
+
+/* 단계 인디케이터 */
+.step-ind{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px;}
+.step-dot{width:8px;height:8px;border-radius:50%;background:var(--stroke);transition:all .25s;}
+.step-dot.on{background:var(--brand);width:20px;border-radius:4px;}
+.step-dot.done{background:var(--green);}
+
+.auth-label{font-size:11px;font-weight:600;color:var(--txt2);text-align:left;margin-bottom:6px;letter-spacing:.5px;}
+.auth-inp{width:100%;background:var(--card2);border:1.5px solid var(--stroke);border-radius:var(--r2);
+  padding:13px 16px;font-size:16px;font-weight:600;color:var(--txt);text-align:center;
+  letter-spacing:2px;outline:none;transition:border-color .2s;font-family:inherit;margin-bottom:10px;}
 .auth-inp:focus{border-color:var(--brand);}
 .auth-inp::placeholder{color:var(--txt3);letter-spacing:0;font-weight:400;}
-.auth-btn{width:100%;margin-top:10px;background:var(--brand);color:#fff;border:none;border-radius:var(--r2);padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s;}
+.auth-inp.phone{letter-spacing:4px;}
+
+.auth-btn{width:100%;background:var(--brand);color:#fff;border:none;border-radius:var(--r2);
+  padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s;}
 .auth-btn:hover{opacity:.88;}
+.auth-btn:disabled{opacity:.45;cursor:not-allowed;}
 .auth-err{margin-top:10px;color:var(--red);font-size:12px;min-height:18px;}
 
-/* APP */
+.auth-back{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;
+  margin-top:10px;font-family:inherit;text-decoration:underline;}
+.auth-back:hover{color:var(--txt2);}
+
+/* 보안 배지 */
+.sec-badge{display:flex;align-items:center;justify-content:center;gap:6px;
+  margin-top:20px;font-size:11px;color:var(--txt3);}
+.sec-badge::before{content:'';display:inline-block;width:6px;height:6px;
+  border-radius:50%;background:var(--green);}
+
+/* ── APP ── */
 #app{display:none;}
-.topbar{position:sticky;top:0;z-index:50;background:rgba(11,17,32,0.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--stroke);height:56px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(11,17,32,0.9);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--stroke);height:56px;padding:0 20px;
+  display:flex;align-items:center;justify-content:space-between;}
 .topbar-l{display:flex;align-items:center;gap:10px;}
-.t-logo{width:30px;height:30px;background:var(--brandBg);border:1px solid var(--brand);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.t-logo{width:30px;height:30px;background:var(--brandBg);border:1px solid var(--brand);
+  border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;}
 .t-name{font-size:15px;font-weight:700;}
 .t-name span{color:var(--brand);}
-.t-vn{background:var(--card2);border:1px solid var(--stroke);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--txt2);letter-spacing:1px;}
-.logout{background:none;border:1px solid var(--stroke);border-radius:6px;padding:5px 10px;color:var(--txt3);font-size:11px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.t-vn{background:var(--card2);border:1px solid var(--stroke);border-radius:20px;
+  padding:3px 10px;font-size:11px;font-weight:600;color:var(--txt2);letter-spacing:1px;}
+.logout{background:none;border:1px solid var(--stroke);border-radius:6px;
+  padding:5px 10px;color:var(--txt3);font-size:11px;cursor:pointer;
+  font-family:inherit;transition:all .2s;}
 .logout:hover{border-color:var(--red);color:var(--red);}
 
-/* LAYOUT */
-.layout{max-width:1080px;margin:0 auto;padding:24px 20px;display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start;}
+/* ── LAYOUT ── */
+.layout{max-width:1080px;margin:0 auto;padding:24px 20px;
+  display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start;}
 
-/* SIDEBAR */
+/* ── SIDEBAR ── */
 .sidebar{position:sticky;top:72px;display:flex;flex-direction:column;gap:14px;}
 .card{background:var(--card);border:1px solid var(--stroke);border-radius:var(--r);overflow:hidden;}
 .card-hd{padding:14px 18px;border-bottom:1px solid var(--stroke);font-size:12px;font-weight:600;color:var(--txt2);}
 
-/* CALENDAR */
+/* ── CALENDAR ── */
 .cal-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;}
 .cal-mo{font-size:14px;font-weight:700;}
-.cal-arr{width:26px;height:26px;background:var(--card2);border:1px solid var(--stroke);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--txt2);font-size:11px;transition:all .15s;user-select:none;}
+.cal-arr{width:26px;height:26px;background:var(--card2);border:1px solid var(--stroke);
+  border-radius:6px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--txt2);font-size:11px;transition:all .15s;user-select:none;}
 .cal-arr:hover{border-color:var(--brand);color:var(--brand);}
 .cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;padding:0 10px 14px;}
 .dow{text-align:center;font-size:9px;font-weight:600;color:var(--txt3);padding:3px 0 5px;}
 .dow.s{color:var(--red);}.dow.sa{color:var(--brandL);}
-.cday{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:11px;font-weight:500;color:var(--txt2);position:relative;transition:all .12s;}
+.cday{aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  border-radius:6px;font-size:11px;font-weight:500;color:var(--txt2);position:relative;transition:all .12s;}
 .cday.om{color:var(--txt3);}
 .cday.su{color:var(--red);}.cday.sa{color:var(--brandL);}
 .cday.has{cursor:pointer;background:var(--greenBg);color:var(--green);font-weight:700;}
@@ -68,7 +103,7 @@ body{font-family:-apple-system,'Helvetica Neue',sans-serif;background:var(--bg);
 .cday.td:not(.has):not(.sel){border:1.5px solid var(--brand);color:var(--brand);}
 .cdot{position:absolute;bottom:2px;width:3px;height:3px;border-radius:50%;background:var(--green);}
 
-/* HISTORY */
+/* ── HISTORY ── */
 .hist{padding:6px 10px 10px;}
 .hi{display:flex;align-items:center;gap:8px;padding:9px 8px;border-radius:8px;cursor:pointer;transition:background .12s;}
 .hi:hover{background:var(--card2);}
@@ -77,15 +112,17 @@ body{font-family:-apple-system,'Helvetica Neue',sans-serif;background:var(--bg);
 .hi-date{font-size:12px;font-weight:600;flex:1;}
 .hi-sub{font-size:10px;color:var(--txt3);}
 
-/* MAIN */
+/* ── MAIN ── */
 .main{min-width:0;}
 .empty{text-align:center;padding:60px 20px;color:var(--txt3);}
 .empty-ico{font-size:40px;margin-bottom:12px;}
 .empty p{font-size:13px;line-height:1.6;}
 
-/* REPORT */
-.rhero{background:linear-gradient(135deg,#0d1930 0%,#131C2E 100%);border:1px solid var(--stroke);border-radius:var(--r);padding:24px;margin-bottom:14px;position:relative;overflow:hidden;}
-.rhero::before{content:'';position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(75,123,245,0.12) 0%,transparent 70%);}
+/* ── REPORT ── */
+.rhero{background:linear-gradient(135deg,#0d1930 0%,#131C2E 100%);border:1px solid var(--stroke);
+  border-radius:var(--r);padding:24px;margin-bottom:14px;position:relative;overflow:hidden;}
+.rhero::before{content:'';position:absolute;top:-30px;right:-30px;width:140px;height:140px;
+  border-radius:50%;background:radial-gradient(circle,rgba(75,123,245,0.12) 0%,transparent 70%);}
 .r-lbl{font-size:10px;font-weight:600;letter-spacing:2px;color:var(--brandL);margin-bottom:6px;}
 .r-title{font-size:22px;font-weight:800;margin-bottom:4px;}
 .r-sub{font-size:13px;color:var(--txt2);margin-bottom:16px;}
@@ -106,11 +143,20 @@ body{font-family:-apple-system,'Helvetica Neue',sans-serif;background:var(--bg);
 .pt{aspect-ratio:1;border-radius:8px;overflow:hidden;cursor:pointer;background:var(--card2);border:1px solid var(--stroke);}
 .pt img{width:100%;height:100%;object-fit:cover;transition:transform .25s;display:block;}
 .pt:hover img{transform:scale(1.05);}
-.pe{padding:24px;text-align:center;color:var(--txt3);font-size:12px;}
+
+/* ── 사진 없음 — 중앙 정렬 ── */
+.pe{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:36px 20px;gap:10px;
+}
+.pe-icon{font-size:36px;opacity:.5;}
+.pe-text{font-size:13px;color:var(--txt3);font-weight:500;}
+.pe-sub{font-size:11px;color:var(--txt3);opacity:.7;}
+
 .cbub{background:var(--card2);border-radius:var(--r2);padding:12px 14px;font-size:13px;line-height:1.7;border-left:3px solid var(--brand);}
 .cb-lbl{font-size:11px;font-weight:600;color:var(--txt2);margin-bottom:6px;}
 
-/* TIMELINE */
+/* ── TIMELINE ── */
 .tl-item{display:flex;gap:14px;padding-bottom:18px;position:relative;}
 .tl-line{position:absolute;left:13px;top:28px;width:2px;bottom:0;background:var(--stroke);}
 .tl-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;border:2px solid var(--stroke);background:var(--card2);}
@@ -125,18 +171,26 @@ body{font-family:-apple-system,'Helvetica Neue',sans-serif;background:var(--bg);
 .star{font-size:18px;}
 .sf{color:var(--orange);}.se{color:var(--txt3);}
 
-/* LIGHTBOX */
+/* ── LIGHTBOX ── */
 .lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);align-items:center;justify-content:center;z-index:200;}
 .lb.open{display:flex;}
 .lb img{max-width:90vw;max-height:88vh;border-radius:10px;object-fit:contain;}
 .lb-x{position:absolute;top:16px;right:20px;font-size:24px;color:#fff;cursor:pointer;background:none;border:none;line-height:1;}
 
-/* LOADING */
+/* ── LOCK BANNER ── */
+#lockBanner{position:sticky;top:56px;z-index:40;background:#1A1030;
+  border-bottom:1px solid rgba(248,113,113,0.25);
+  padding:9px 20px;display:none;align-items:center;justify-content:center;gap:8px;}
+#lockBanner.show{display:flex;}
+.lb-txt{font-size:13px;color:var(--red);font-weight:700;}
+.lb-sub{font-size:11px;color:var(--txt2);}
+
+/* ── LOADING ── */
 .spin{width:18px;height:18px;border-radius:50%;border:2px solid var(--stroke);border-top-color:var(--brand);animation:sp .7s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg)}}
 .ld{display:flex;align-items:center;justify-content:center;gap:10px;padding:50px;color:var(--txt3);font-size:13px;}
 
-/* RESPONSIVE */
+/* ── RESPONSIVE ── */
 @media(max-width:700px){
   .layout{grid-template-columns:1fr;gap:14px;padding:14px;}
   .sidebar{position:static;}
@@ -152,18 +206,42 @@ body{font-family:-apple-system,'Helvetica Neue',sans-serif;background:var(--bg);
 </head>
 <body>
 
+<!-- ── 인증 화면 ── -->
 <div id="auth">
   <div class="auth-box">
     <div class="auth-logo">✨</div>
     <div class="auth-title">세알 세차 리포트</div>
-    <div class="auth-sub">차량 번호를 입력하면<br>세차 완료 리포트를 확인할 수 있어요.</div>
-    <input class="auth-inp" id="vInput" type="text" maxlength="12"
-      placeholder="예: 123가3456" autocomplete="off" spellcheck="false">
-    <button class="auth-btn" id="authBtn" onclick="doAuth()">리포트 확인</button>
+    <div class="auth-sub" id="authSub">차량 번호와 연락처로<br>본인 확인 후 리포트를 볼 수 있어요.</div>
+
+    <!-- 단계 인디케이터 -->
+    <div class="step-ind">
+      <div class="step-dot on" id="sd1"></div>
+      <div class="step-dot" id="sd2"></div>
+    </div>
+
+    <!-- STEP 1: 차량번호 -->
+    <div id="step1">
+      <div class="auth-label">차량번호</div>
+      <input class="auth-inp" id="vInput" type="text" maxlength="12"
+        placeholder="예: 123가3456" autocomplete="off" spellcheck="false">
+      <button class="auth-btn" id="step1Btn" onclick="goStep2()">다음</button>
+    </div>
+
+    <!-- STEP 2: 전화번호 끝 4자리 -->
+    <div id="step2" style="display:none">
+      <div class="auth-label">연락처 끝 4자리</div>
+      <input class="auth-inp phone" id="pInput" type="text" maxlength="4"
+        placeholder="1234" autocomplete="off" inputmode="numeric">
+      <button class="auth-btn" id="step2Btn" onclick="doAuth()">리포트 확인</button>
+      <button class="auth-back" onclick="backStep1()">← 차량번호 다시 입력</button>
+    </div>
+
     <div class="auth-err" id="authErr"></div>
+    <div class="sec-badge">차량번호 + 연락처 2단계 인증</div>
   </div>
 </div>
 
+<!-- ── 메인 앱 ── -->
 <div id="app">
   <div class="topbar">
     <div class="topbar-l">
@@ -172,6 +250,13 @@ body{font-family:-apple-system,'Helvetica Neue',sans-serif;background:var(--bg);
       <div class="t-vn" id="tvn"></div>
     </div>
     <button class="logout" onclick="doLogout()">로그아웃</button>
+  </div>
+
+  <!-- 잠금 배너 -->
+  <div id="lockBanner">
+    <span>🔒</span>
+    <span class="lb-txt" id="lockTxt"></span>
+    <span class="lb-sub">세차 완료 후 6시간 뒤 공개됩니다.</span>
   </div>
 
   <div class="layout">
@@ -203,80 +288,125 @@ body{font-family:-apple-system,'Helvetica Neue',sans-serif;background:var(--bg);
   </div>
 </div>
 
+<!-- 라이트박스 -->
 <div class="lb" id="lb" onclick="closeLb()">
   <button class="lb-x" onclick="closeLb()">✕</button>
   <img id="lbImg" src="" alt="세차 사진">
 </div>
 
 <script>
-/* ── Firebase REST API (SDK 불필요) ── */
+/* ── Firebase REST ── */
 const DB = 'https://carwash-4699b.firebaseio.com';
 
-let VN='', SHOP='', CID='';
+let VN='', SHOP='', CID='', PHONE='';
 let reports=[], reportDates=new Set(), curMo=new Date(), selDate=null;
+let lockTimer=null;
+const LOCK_HOURS=6;
 
 function nv(v){ return v.replace(/\s/g,'').toUpperCase(); }
+function np(v){ return v.replace(/\D/g,''); }
 
 async function fbGet(path){
-  const res = await fetch(DB + '/' + path + '.json');
-  if(!res.ok) throw new Error(res.status);
-  return res.json();
+  const r=await fetch(DB+'/'+path+'.json');
+  if(!r.ok) throw new Error(r.status);
+  return r.json();
 }
 
-/* ── 인증 ── */
-async function doAuth(){
-  const raw = document.getElementById('vInput').value.trim();
+/* ── 단계 UI ── */
+function goStep2(){
+  const raw=document.getElementById('vInput').value.trim();
   if(!raw){ setErr('차량 번호를 입력해주세요.'); return; }
-  const vn = nv(raw);
   setErr('');
-  const btn = document.getElementById('authBtn');
-  btn.textContent='확인 중...'; btn.disabled=true;
+  document.getElementById('step1').style.display='none';
+  document.getElementById('step2').style.display='block';
+  document.getElementById('sd1').classList.remove('on'); document.getElementById('sd1').classList.add('done');
+  document.getElementById('sd2').classList.add('on');
+  document.getElementById('authSub').textContent='연락처 끝 4자리를 입력해주세요.';
+  document.getElementById('pInput').focus();
+}
 
-  try {
-    const shops = await fbGet('carwash-master/data/shops');
-    if(!shops){ setErr('데이터를 불러올 수 없습니다.'); resetBtn(); return; }
+function backStep1(){
+  setErr('');
+  document.getElementById('step2').style.display='none';
+  document.getElementById('step1').style.display='block';
+  document.getElementById('sd1').classList.add('on'); document.getElementById('sd1').classList.remove('done');
+  document.getElementById('sd2').classList.remove('on');
+  document.getElementById('authSub').textContent='차량 번호와 연락처로\n본인 확인 후 리포트를 볼 수 있어요.';
+}
+
+function setErr(m){ document.getElementById('authErr').textContent=m; }
+
+function setBtnLoading(id, loading){
+  const b=document.getElementById(id);
+  b.disabled=loading;
+  b.textContent=loading?'확인 중...': (id==='step1Btn'?'다음':'리포트 확인');
+}
+
+/* ── 2단계 인증 ── */
+async function doAuth(){
+  const rawV=document.getElementById('vInput').value.trim();
+  const rawP=document.getElementById('pInput').value.trim();
+
+  if(!rawV){ setErr('차량 번호를 입력해주세요.'); return; }
+  if(rawP.length!==4||!/^\d{4}$/.test(rawP)){ setErr('연락처 끝 4자리를 정확히 입력해주세요.'); return; }
+
+  const vn=nv(rawV);
+  const last4=rawP;
+  setErr(''); setBtnLoading('step2Btn',true);
+
+  try{
+    const shops=await fbGet('carwash-master/data/shops');
+    if(!shops){ setErr('데이터를 불러올 수 없습니다.'); setBtnLoading('step2Btn',false); return; }
 
     let found=false;
     outer:
     for(const [sid, shopData] of Object.entries(shops)){
-      const custs = shopData.customers || {};
+      const custs=shopData.customers||{};
       for(const [cid, c] of Object.entries(custs)){
-        if(nv(c.vehicleNumber||'')===vn){
-          VN=vn; SHOP=sid; CID=cid; found=true; break outer;
-        }
-        for(const v of Object.values(c.vehicles||{})){
-          if(nv(v.vehicleNumber||'')===vn){
-            VN=vn; SHOP=sid; CID=cid; found=true; break outer;
-          }
-        }
+        // 차량번호 매칭 (Customer 기본 또는 등록 Vehicle)
+        const vehicleMatch = nv(c.vehicleNumber||'')===vn ||
+          Object.values(c.vehicles||{}).some(function(v){ return nv(v.vehicleNumber||'')===vn; });
+
+        if(!vehicleMatch) continue;
+
+        // 전화번호 끝 4자리 검증
+        const phone=np(c.phone||'');
+        if(phone.length<4 || phone.slice(-4)!==last4) continue;
+
+        // ✅ 차량번호 + 전화번호 모두 일치
+        VN=vn; SHOP=sid; CID=cid; PHONE=phone;
+        found=true; break outer;
       }
     }
 
-    if(!found){ setErr('등록된 차량 번호가 아닙니다. 다시 확인해주세요.'); resetBtn(); return; }
+    if(!found){
+      setErr('차량번호 또는 연락처 정보가 일치하지 않습니다.');
+      setBtnLoading('step2Btn',false); return;
+    }
+
     sessionStorage.setItem('seal_vn',VN);
     sessionStorage.setItem('seal_shop',SHOP);
     sessionStorage.setItem('seal_cid',CID);
     enterApp();
-  } catch(e){
+  }catch(e){
     console.error(e);
     setErr('연결 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-    resetBtn();
+    setBtnLoading('step2Btn',false);
   }
 }
 
-function setErr(m){ document.getElementById('authErr').textContent=m; }
-function resetBtn(){
-  const btn=document.getElementById('authBtn');
-  btn.textContent='리포트 확인'; btn.disabled=false;
-}
-
 function doLogout(){
-  VN=SHOP=CID=''; reports=[]; reportDates.clear(); selDate=null;
+  VN=SHOP=CID=PHONE=''; reports=[]; reportDates.clear(); selDate=null;
+  if(lockTimer) clearInterval(lockTimer);
   sessionStorage.clear();
   document.getElementById('app').style.display='none';
   document.getElementById('auth').style.display='flex';
+  document.getElementById('lockBanner').classList.remove('show');
+  // 인증 초기화
+  backStep1();
   document.getElementById('vInput').value='';
-  resetBtn();
+  document.getElementById('pInput').value='';
+  setBtnLoading('step2Btn',false);
 }
 
 /* ── 앱 진입 ── */
@@ -297,96 +427,76 @@ async function loadReports(){
     renderCal(); return;
   }
 
-  const completed = Object.values(schedules).filter(s=>s.customerId===CID && s.status==='completed');
+  const completed=Object.values(schedules).filter(function(s){
+    return s.customerId===CID && s.status==='completed';
+  });
 
   for(const s of completed){
     let logs=[];
-    try{ const l=await fbGet('carwash-master/data/shops/'+SHOP+'/workLogs/'+s.id); if(l) logs=Object.values(l); }catch(e){}
+    try{
+      const l=await fbGet('carwash-master/data/shops/'+SHOP+'/workLogs/'+s.id);
+      if(l) logs=Object.values(l);
+    }catch(e){}
     let report=null;
     try{
       const all=await fbGet('carwash-master/data/shops/'+SHOP+'/reports');
-      if(all){ const f=Object.values(all).find(r=>r.scheduleId===s.id); if(f) report=f; }
+      if(all){ const f=Object.values(all).find(function(r){ return r.scheduleId===s.id; }); if(f) report=f; }
     }catch(e){}
     reportDates.add(s.scheduledDate);
-    reports.push({scheduleId:s.id, date:s.scheduledDate, report, logs});
+    reports.push({scheduleId:s.id, date:s.scheduledDate, report, logs, updatedAt:s.updatedAt});
   }
 
-  reports.sort((a,b)=>b.date.localeCompare(a.date));
+  reports.sort(function(a,b){ return b.date.localeCompare(a.date); });
   renderHist(); renderCal();
-  if(reports.length > 0) selRep(reports[0].date, 0);
+  if(reports.length>0) selRep(reports[0].date, 0);
   checkLock();
 }
-const LOCK_HOURS = 6;
-let lockTimer = null;
 
-function getCompletedAt(data) {
-  // workLogs에서 completed action의 timestamp 찾기
-  if(data.logs && data.logs.length) {
-    const cl = data.logs.find(function(l){ return l.action==='completed'; });
+/* ── 잠금 배너 ── */
+function getCompletedAt(data){
+  if(data.logs && data.logs.length){
+    const cl=data.logs.find(function(l){ return l.action==='completed'; });
     if(cl && cl.timestamp) return new Date(cl.timestamp);
   }
-  // fallback: updatedAt (ms)
+  if(data.updatedAt) return new Date(data.updatedAt);
   return null;
 }
 
-function checkLock() {
+function checkLock(){
   if(!reports.length) return;
-  const latest = reports[0];
-  const completedAt = getCompletedAt(latest);
-  if(!completedAt) return;
-  const elapsed = (Date.now() - completedAt.getTime()) / 1000;
-  const lockSec = LOCK_HOURS * 3600;
-  if(elapsed < lockSec) {
-    showLockBanner(completedAt, lockSec);
-  }
+  const ca=getCompletedAt(reports[0]);
+  if(!ca) return;
+  const lockSec=LOCK_HOURS*3600;
+  const elapsed=(Date.now()-ca.getTime())/1000;
+  if(elapsed<lockSec) startLockBanner(ca, lockSec);
 }
 
-function showLockBanner(completedAt, lockSec) {
-  // 기존 배너 제거
-  const prev = document.getElementById('lockBanner');
-  if(prev) prev.remove();
+function startLockBanner(completedAt, lockSec){
+  const banner=document.getElementById('lockBanner');
+  const txt=document.getElementById('lockTxt');
 
-  const banner = document.createElement('div');
-  banner.id = 'lockBanner';
-  banner.style.cssText = 'position:fixed;top:56px;left:0;right:0;z-index:90;'
-    +'background:#1A2540;border-bottom:1px solid rgba(248,113,113,0.3);'
-    +'padding:10px 20px;display:flex;align-items:center;justify-content:center;gap:10px;';
-
-  const lock = document.createElement('span');
-  lock.textContent = '🔒';
-
-  const txt = document.createElement('span');
-  txt.style.cssText = 'font-size:13px;color:#F87171;font-weight:600;';
-
-  const sub = document.createElement('span');
-  sub.style.cssText = 'font-size:11px;color:#8899BB;';
-  sub.textContent = '세차 완료 후 6시간 이후 리포트가 공개됩니다.';
-
-  banner.appendChild(lock);
-  banner.appendChild(txt);
-  banner.appendChild(sub);
-  document.body.appendChild(banner);
-
-  function tick() {
-    const elapsed = (Date.now() - completedAt.getTime()) / 1000;
-    const remaining = Math.max(0, lockSec - elapsed);
-    if(remaining <= 0) {
-      banner.remove();
+  function tick(){
+    const elapsed=(Date.now()-completedAt.getTime())/1000;
+    const rem=Math.max(0, lockSec-elapsed);
+    if(rem<=0){
+      banner.classList.remove('show');
       if(lockTimer) clearInterval(lockTimer);
-      // 잠금 해제 — 리포트 다시 렌더
-      if(selDate && reports.length) {
-        const idx = reports.findIndex(function(r){ return r.date===selDate; });
-        if(idx>=0) { document.getElementById('rWrap').innerHTML=''; showReport(reports[idx]); }
+      lockTimer=null;
+      if(selDate && reports.length){
+        const idx=reports.findIndex(function(r){ return r.date===selDate; });
+        if(idx>=0){ document.getElementById('rWrap').innerHTML=''; showReport(reports[idx]); }
       }
       return;
     }
-    const h = Math.floor(remaining/3600);
-    const m = Math.floor((remaining%3600)/60);
+    const h=Math.floor(rem/3600);
+    const m=Math.floor((rem%3600)/60);
     txt.textContent = h>0 ? h+'시간 '+m+'분 후 공개' : m+'분 후 공개';
   }
+
   tick();
+  banner.classList.add('show');
   if(lockTimer) clearInterval(lockTimer);
-  lockTimer = setInterval(tick, 60000);
+  lockTimer=setInterval(tick, 30000);
 }
 
 /* ── 이력 리스트 ── */
@@ -396,7 +506,7 @@ function renderHist(){
     el.innerHTML='<div style="padding:16px;text-align:center;color:var(--txt3);font-size:12px;">아직 완료된 세차가 없습니다.</div>';
     return;
   }
-  el.innerHTML=reports.map((r,i)=>{
+  el.innerHTML=reports.map(function(r,i){
     const d=new Date(r.date);
     const wd=['일','월','화','수','목','금','토'][d.getDay()];
     const lbl=(d.getMonth()+1)+'월 '+d.getDate()+'일 ('+wd+')';
@@ -415,7 +525,9 @@ function renderCal(){
   const y=curMo.getFullYear(), m=curMo.getMonth(), today=new Date();
   document.getElementById('calMo').textContent=y+'년 '+(m+1)+'월';
   const dows=['일','월','화','수','목','금','토'];
-  let h=dows.map(function(d,i){ return '<div class="dow '+(i===0?'s':i===6?'sa':'')+'">' +d+'</div>'; }).join('');
+  let h=dows.map(function(d,i){
+    return '<div class="dow '+(i===0?'s':i===6?'sa':'')+'">' +d+'</div>';
+  }).join('');
   const first=new Date(y,m,1), last=new Date(y,m+1,0);
   for(let i=0;i<first.getDay();i++){
     const dd=new Date(y,m,-first.getDay()+i+1);
@@ -439,20 +551,20 @@ function renderCal(){
 function chMo(d){ curMo=new Date(curMo.getFullYear(),curMo.getMonth()+d,1); renderCal(); }
 
 function selRepByDate(ds){
-  const i=reports.findIndex(function(r){return r.date===ds;});
+  const i=reports.findIndex(function(r){ return r.date===ds; });
   if(i>=0) selRep(ds,i);
 }
 
 function selRep(ds,idx){
   selDate=ds;
-  document.querySelectorAll('.hi').forEach(function(e){e.classList.remove('act');});
+  document.querySelectorAll('.hi').forEach(function(e){ e.classList.remove('act'); });
   const el=document.getElementById('hi'+idx);
   if(el) el.classList.add('act');
   renderCal();
   showReport(reports[idx]);
 }
 
-/* ── 리포트 표시 ── */
+/* ── 리포트 렌더링 ── */
 function showReport(data){
   document.getElementById('empty').style.display='none';
   const w=document.getElementById('rWrap');
@@ -475,7 +587,7 @@ function buildReport(data){
   const vn=report.vehicleNumber||VN;
   const logs=data.logs||[];
 
-  const sorted=logs.slice().sort(function(a,b){return (a.timestamp||0)-(b.timestamp||0);});
+  const sorted=logs.slice().sort(function(a,b){ return (a.timestamp||0)-(b.timestamp||0); });
   const acts={
     assigned:{e:'👤',l:'담당자 배정'},
     inProgress:{e:'🚿',l:'세차 시작'},
@@ -499,14 +611,21 @@ function buildReport(data){
   }).join('');
   if(!tlH) tlH='<div style="color:var(--txt3);font-size:12px;padding:6px 0">기록 없음</div>';
 
+  /* ── 사진: 있으면 그리드, 없으면 중앙 안내 ── */
   let photoH='';
   if(photos.length){
-    photoH=photos.map(function(u){
-      return '<div class="pt" onclick="openLb(\''+u+'\')">'
-        +'<img src="'+u+'" alt="세차 사진" loading="lazy"></div>';
-    }).join('');
+    photoH='<div class="pgrid">'
+      +photos.map(function(u){
+        return '<div class="pt" onclick="openLb(\''+u+'\')">'
+          +'<img src="'+u+'" alt="세차 사진" loading="lazy"></div>';
+      }).join('')
+      +'</div>';
   } else {
-    photoH='<div class="pe">📷 등록된 사진이 없습니다.</div>';
+    photoH='<div class="pe">'
+      +'<div class="pe-icon">📷</div>'
+      +'<div class="pe-text">등록된 사진이 없습니다</div>'
+      +'<div class="pe-sub">담당자가 사진을 등록하면 여기에 표시됩니다.</div>'
+      +'</div>';
   }
 
   const starH=Array.from({length:5},function(_,i){
@@ -529,7 +648,7 @@ function buildReport(data){
     +(rt?'<div class="ic" style="grid-column:span 2"><div class="ic-lbl">만족도</div><div class="stars" style="margin-top:4px">'+starH+'</div></div>':'')
     +'</div>'
 
-    +'<div class="sec"><div class="sec-ttl">📸 세차 사진</div><div class="pgrid">'+photoH+'</div></div>'
+    +'<div class="sec"><div class="sec-ttl">📸 세차 사진</div>'+photoH+'</div>'
 
     +(memo?'<div class="sec"><div class="sec-ttl">📝 담당자 메모</div><div class="cbub">'+memo+'</div></div>':'')
 
@@ -544,19 +663,20 @@ function buildReport(data){
 }
 
 /* ── 라이트박스 ── */
-function openLb(u){
-  document.getElementById('lbImg').src=u;
-  document.getElementById('lb').classList.add('open');
-}
-function closeLb(){
-  document.getElementById('lb').classList.remove('open');
-}
+function openLb(u){ document.getElementById('lbImg').src=u; document.getElementById('lb').classList.add('open'); }
+function closeLb(){ document.getElementById('lb').classList.remove('open'); }
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeLb(); });
 
 /* ── 키보드 ── */
 document.getElementById('vInput').addEventListener('keydown',function(e){
   if(e.key===' ') e.preventDefault();
+  if(e.key==='Enter') goStep2();
+});
+document.getElementById('pInput').addEventListener('keydown',function(e){
   if(e.key==='Enter') doAuth();
+});
+document.getElementById('pInput').addEventListener('input',function(e){
+  e.target.value=e.target.value.replace(/\D/g,'').slice(0,4);
 });
 
 /* ── 세션 복원 ── */
