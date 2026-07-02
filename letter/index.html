@@ -488,7 +488,7 @@
           <div class="addbox">
             <div class="row">
               <div style="flex:1.4"><label class="fld">학생 이름</label><input type="text" id="nick" placeholder="예) 김수진, 도은" autocomplete="off" /></div>
-              <div><label class="fld">보호자 호칭</label><select id="honor"><option>어머니</option><option>아버지</option><option>보호자님</option></select></div>
+              <div><label class="fld">보호자 호칭</label><select id="honor"><option>어머니</option><option>어머님</option><option>아버지</option><option>아버님</option><option>보호자님</option><option value="__custom">직접 입력…</option></select></div>
             </div>
             <div style="margin-top:10px"><label class="fld">한 줄 메모 (선택)</label><input type="text" id="memo" placeholder="예) 초4 영어반 · 수요일" autocomplete="off" /></div>
             <button class="btn btn-ghost btn-full btn-sm" style="margin-top:12px" id="addStu">+ 학생 추가</button>
@@ -786,7 +786,11 @@
   function selectedStudents(){ return st.selIds.map(function(id){return st.students.filter(function(x){return x.id===id})[0]}).filter(Boolean); }
 
   /* ---------- roster (multi-select) ---------- */
-  var HONORS=["어머니","아버지","보호자님"];
+  var HONORS=["어머니","어머님","아버지","아버님","보호자님"];
+  function honorOptions(cur){
+    var list=HONORS.slice(); if(cur && list.indexOf(cur)<0) list.unshift(cur);
+    return list.map(function(h){return '<option'+(h===cur?" selected":"")+'>'+esc(h)+'</option>'}).join("")+'<option value="__custom">직접 입력…</option>';
+  }
   function renderRoster(){
     var el=$("#roster");
     if(!st.students.length){ el.innerHTML='<div class="empty">아직 등록된 학생이 없어요. 아래에서 추가해 주세요.</div>'; updateAppGating(); return; }
@@ -794,10 +798,9 @@
     st.students.forEach(function(s){
       var on=st.selIds.indexOf(s.id)>=0;
       var d=document.createElement("div"); d.className="stu"; d.setAttribute("aria-selected",on?"true":"false");
-      var opts=HONORS.map(function(h){return '<option'+(h===s.honor?" selected":"")+'>'+h+'</option>'}).join("");
       d.innerHTML='<span class="chk">'+(on?"✓":"")+'</span><span class="av">'+esc(s.nick.slice(0,1))+'</span>'+
         '<span class="meta"><span class="nm">'+esc(s.nick)+'</span><span class="dt">'+esc(s.memo||"메모 없음")+'</span></span>'+
-        '<select class="honorsel" data-id="'+s.id+'" title="보호자 호칭">'+opts+'</select>'+
+        '<select class="honorsel" data-id="'+s.id+'" title="보호자 호칭">'+honorOptions(s.honor)+'</select>'+
         '<button class="del" data-del="'+s.id+'" title="삭제">🗑</button>';
       d.addEventListener("click",function(ev){
         if(ev.target.dataset.del){ removeStudent(ev.target.dataset.del); return; }
@@ -808,7 +811,11 @@
     });
     el.querySelectorAll(".honorsel").forEach(function(sel){
       sel.addEventListener("click",function(e){e.stopPropagation();});
-      sel.addEventListener("change",function(){ var s=st.students.filter(function(x){return x.id===sel.dataset.id})[0]; if(s){ s.honor=sel.value; saveStudents(); renderPreview(); } });
+      sel.addEventListener("change",function(){
+        var s=st.students.filter(function(x){return x.id===sel.dataset.id})[0]; if(!s)return;
+        if(sel.value==="__custom"){ var v=prompt("보호자 호칭을 입력하세요","보호자님"); if(v&&v.trim()){ s.honor=v.trim(); saveStudents(); renderRoster(); renderPreview(); } else { sel.value=s.honor; } return; }
+        s.honor=sel.value; saveStudents(); renderPreview();
+      });
     });
     updateAppGating();
   }
@@ -828,6 +835,12 @@
     renderRoster(); refreshLocks(); resetResultsView(); toast(nick+" 학생을 추가했어요"); track("add_student");
   });
   $("#nick").addEventListener("keydown",function(e){ if(e.key==="Enter")$("#addStu").click(); });
+  $("#honor").addEventListener("change",function(){
+    if(this.value!=="__custom")return;
+    var v=prompt("보호자 호칭을 입력하세요","보호자님");
+    if(v&&v.trim()){ var o=document.createElement("option"); o.textContent=v.trim(); this.insertBefore(o,this.querySelector('option[value="__custom"]')); this.value=v.trim(); }
+    else this.selectedIndex=0;
+  });
   $("#resetAll").addEventListener("click",resetAll);
   $("#selectAll").addEventListener("click",selectAll);
 
@@ -899,9 +912,21 @@
   function buildPrompt(nick,honor,srcText,sheetMode){
     var srcLine=sheetMode?("아래는 '"+nick+"' 학생의 성적 데이터입니다(성적표 파일에서 정확히 추출한 실제 값).\n\n"+srcText+"\n\n"):("첨부 이미지는 '"+nick+"' 학생과 관련된 평가 자료입니다(손글씨 메모이거나 여러 학생이 함께 있는 성적표·엑셀 표 캡처일 수 있음).\n\n");
     var step1=sheetMode?("[1단계 — 확인] 위 데이터는 이미 '"+nick+"' 학생의 값입니다. 그대로 사용하고 없는 수치는 지어내지 마세요.\n"):("[1단계 — 정확한 추출] 이미지에 여러 학생이 있으면 반드시 '"+nick+"' 행/항목만 정확히 찾으세요. 표가 크고 글자가 작아도 '이름' 열을 꼼꼼히 훑어 '"+nick+"'을 찾으세요. 다른 학생 값을 섞지 말고 없는 수치는 지어내지 마세요. 이름이 정말 없을 때에만 found=false.\n");
-    return "당신은 학생을 깊이 아끼는 다정하고 신뢰감 있는 선생님입니다. "+srcLine+step1+
-      "[2단계 — 분석] 평균(있으면), 잘한 과목(강점)과 더 챙기면 좋을 과목(보완)을 판단하세요.\n"+
-      "[3단계 — 편지] 아이는 이름 전체 '"+nick+"'(으)로 부르세요(예: '"+nick+"이는/"+nick+"이가'). 성을 빼지 마세요. '"+honor+"'을 부르며 시작하고, 본문은 공백 포함 약 "+st.len+"자 내외(±15%). 구체적 데이터를 1~2개 근거로 들고 보완점도 부드럽지만 솔직하게 한 가지, 마지막은 가정에서의 다정한 응원으로 맺으세요.\n\n"+
+    return "당신은 학생 한 명 한 명을 진심으로 아끼며 오래 곁에서 지켜본 선생님입니다. 학부모가 읽고 코끝이 찡해지고 아이를 새롭게 바라보게 되는, 마음이 담긴 손편지를 씁니다. "+srcLine+step1+
+      "[2단계 — 분석] 데이터로 평균(있으면), 잘한 과목(강점)과 더 챙기면 좋을 과목(보완)을 판단하세요. (이 분석은 JSON의 분석 필드에만 쓰고, 편지 본문은 아래 원칙을 따르세요.)\n"+
+      "[3단계 — 편지 — 매우 중요]\n"+
+      "· 편지의 중심은 점수·등수가 아니라 아이의 '사람됨과 성장'입니다. 정량 수치는 근거로 딱 한두 번만, 스치듯 녹이고, 절대 점수를 나열하지 마세요.\n"+
+      "· 아이의 태도·끈기·호기심·집중하는 눈빛·실수를 대하는 자세·친구를 대하는 마음·머뭇거리다 용기 내는 순간·작은 변화와 노력처럼, 선생님만이 곁에서 볼 수 있는 정성적인 면을 구체적인 장면으로 생생하게 그려 주세요.\n"+
+      "· 진심과 애정이 배어나는 감성적 문장으로, 학부모가 뭉클하도록 쓰세요. 단, 과장·미사여구 남발·상투어('무럭무럭','앞날이 창창','일취월장')는 피하고, 진짜 관찰에서 우러난 담백하면서 따뜻한 표현을 쓰세요.\n"+
+      "· 표현은 매번 완전히 새롭게: 도입 문장, 비유, 묘사, 맺음말을 학생마다 다르게 하여 천편일률적이지 않게. 정해진 틀·반복되는 문구를 쓰지 마세요.\n"+
+      "· 없는 일화를 지어내진 말되, 주어진 데이터·메모에서 드러나는 태도와 강약점을 따뜻하게 해석하고 의미를 부여하세요.\n"+
+      "· 보완점은 부드럽지만 솔직하게 한 가지만, 가능성에 대한 믿음과 함께 전하고, 가정에서의 다정한 응원과 '곁에서 지켜보겠다'는 진심으로 맺으세요.\n"+
+      "[호칭 — 반드시 네이티브 한국어로]\n"+
+      "· '"+honor+"'을(를) 자연스럽게 부르며 시작하세요(예: '"+honor+"께,').\n"+
+      "· 학생 이름은 '"+nick+"'입니다. 성은 보통 한 글자이니 첫 글자를 성, 나머지를 이름으로 보세요(단 남궁·선우·황보 등 두 글자 성 예외).\n"+
+      "· 아이를 부를 때 다음 자연스러운 형태를 문맥에 맞게 섞어 쓰세요: ①이름(성 제외) 다정형 — 이름이 받침으로 끝나면 '이'를 붙이고(수진→수진이, 도현→도현이), 받침이 없으면 붙이지 않습니다(서아→서아, 민서→민서). 예: '수진이는', '서아는', '우리 서아는'. ②'풀네임+학생' — 예: '박서아 학생은', '김수진 학생은'. ③'우리+이름' 따뜻형 — 예: '우리 서아', '우리 수진이'.\n"+
+      "· 절대 금지: 성+이름 뒤에 '이'를 붙이는 것(예 '박서아이는'(X), '김수진이가'(어색)). 조사(은/는·이/가·을/를·와/과)는 받침 유무에 맞게 정확히 붙이세요.\n\n"+
+      "본문은 공백 포함 약 "+st.len+"자 내외(±15%).\n"+
       "아래 JSON으로만 답하세요(코드블록 금지):\n{\"found\":true,\"average\":\"평균 또는 null\",\"items\":[{\"k\":\"과목\",\"v\":\"값\"}],\"strengths\":[\"강점\"],\"weaknesses\":[\"보완\"],\"letter\":\"편지 본문\"}\nitems는 대표 과목 위주 최대 10개.";
   }
   async function callAI(prompt,sheetMode){
@@ -912,7 +937,7 @@
     var headers=isA?{"content-type":"application/json","x-api-key":aiCfg.apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"}:{"content-type":"application/json","authorization":"Bearer "+aiCfg.apiKey};
     var aC=sheetMode?[{type:"text",text:prompt}]:[{type:"image",source:{type:"base64",media_type:st.mime||"image/jpeg",data:st.img}},{type:"text",text:prompt}];
     var oC=sheetMode?[{type:"text",text:prompt}]:[{type:"text",text:prompt},{type:"image_url",image_url:{url:dataUrl,detail:"high"}}];
-    var body=isA?JSON.stringify({model:aiCfg.model,max_tokens:maxTokens,messages:[{role:"user",content:aC}]}):JSON.stringify({model:aiCfg.model,max_tokens:maxTokens,response_format:{type:"json_object"},messages:[{role:"user",content:oC}]});
+    var body=isA?JSON.stringify({model:aiCfg.model,max_tokens:maxTokens,messages:[{role:"user",content:aC}]}):JSON.stringify({model:aiCfg.model,max_tokens:maxTokens,temperature:0.95,frequency_penalty:0.3,presence_penalty:0.3,response_format:{type:"json_object"},messages:[{role:"user",content:oC}]});
     var lastErr=null;
     for(var attempt=1;attempt<=3;attempt++){
       try{
