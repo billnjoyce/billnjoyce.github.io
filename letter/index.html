@@ -498,28 +498,28 @@
         <section class="step" id="s2" data-locked="true">
           <div class="step-h"><span class="num">2</span><h2>평가 자료 올리기</h2><span class="sub">사진 또는 엑셀·CSV</span></div>
           <div class="seg">
-            <button type="button" class="segbtn on" data-mode="photo">📷 사진</button>
-            <button type="button" class="segbtn" data-mode="sheet">📊 엑셀·CSV</button>
+            <button type="button" class="segbtn on" data-mode="sheet">📊 엑셀·CSV</button>
+            <button type="button" class="segbtn" data-mode="photo">📷 사진</button>
           </div>
-          <div id="modePhoto">
+          <div id="modeSheet">
+            <div class="drop" id="dropSheet" role="button" tabindex="0"><div class="ic">📊</div><div class="t">엑셀·CSV 파일 올리기</div><div class="s">성적표 파일이면 가장 정확하고 저렴해요.</div></div>
+            <input type="file" id="fileSheet" accept=".xlsx,.xls,.csv" hidden />
+            <div class="egrow"><button type="button" class="eglink" data-eg="egSheet">ⓘ 어떤 형식이면 돼요?</button><button type="button" class="btn btn-line btn-sm" id="dlSample">📥 예시 엑셀 받기</button></div>
+            <div class="egbox" id="egSheet" hidden><table class="egtable"><tr><th>이름</th><th>국어</th><th>영어</th><th>수학</th><th>평균</th></tr><tr><td>김수진</td><td>94</td><td>92</td><td>88</td><td>91.3</td></tr><tr><td>이도현</td><td>82</td><td>79</td><td>95</td><td>85.3</td></tr></table><div class="cap"><b>첫 줄은 제목(이름·과목명)</b>, 아래로 학생별 점수. "예시 엑셀 받기"로 형식을 받아 쓰셔도 됩니다.</div></div>
+            <div id="sheetResult"></div>
+          </div>
+          <div id="modePhoto" style="display:none">
             <div class="drop" id="drop" role="button" tabindex="0"><div class="ic">📷</div><div class="t">노트 사진 올리기</div><div class="s">손글씨 메모에 적합해요.</div></div>
             <input type="file" id="file" accept="image/*" hidden />
             <div class="thumb" id="thumb" style="display:none"><img id="thumbImg" alt="미리보기" /><div><div class="fx" id="thumbName"></div><button class="btn btn-line btn-sm" id="reup" style="margin-top:8px">다시 올리기</button></div></div>
             <div class="egrow"><button type="button" class="eglink" data-eg="egPhoto">ⓘ 어떤 사진이 좋아요?</button></div>
             <div class="egbox" id="egPhoto" hidden><div class="egnote">김수진 (초4 · 영어반)<br>국어 94 · 영어 92 · 수학 88<br>숙제 성실, 발표 적극적</div><div class="cap">이름·과목·점수·특이사항을 알아보기 쉽게. 한 명씩 찍으면 가장 정확해요.</div></div>
           </div>
-          <div id="modeSheet" style="display:none">
-            <div class="drop" id="dropSheet" role="button" tabindex="0"><div class="ic">📊</div><div class="t">엑셀·CSV 파일 올리기</div><div class="s">성적표 파일이면 가장 정확해요.</div></div>
-            <input type="file" id="fileSheet" accept=".xlsx,.xls,.csv" hidden />
-            <div class="egrow"><button type="button" class="eglink" data-eg="egSheet">ⓘ 어떤 형식이면 돼요?</button><button type="button" class="btn btn-line btn-sm" id="dlSample">📥 예시 엑셀 받기</button></div>
-            <div class="egbox" id="egSheet" hidden><table class="egtable"><tr><th>이름</th><th>국어</th><th>영어</th><th>수학</th><th>평균</th></tr><tr><td>김수진</td><td>94</td><td>92</td><td>88</td><td>91.3</td></tr><tr><td>이도현</td><td>82</td><td>79</td><td>95</td><td>85.3</td></tr></table><div class="cap"><b>첫 줄은 제목(이름·과목명)</b>, 아래로 학생별 점수. "예시 엑셀 받기"로 형식을 받아 쓰셔도 됩니다.</div></div>
-            <div id="sheetResult"></div>
-          </div>
         </section>
 
         <section class="step" id="s3" data-locked="true">
           <div class="step-h"><span class="num">3</span><h2>편지 만들기</h2><span class="sub">AI가 읽고 씁니다</span></div>
-          <div class="lenwrap"><div class="lenhead"><label class="fld" style="margin:0">편지 길이</label><b id="lenOut">약 300자</b></div><input type="range" id="len" min="100" max="1000" step="50" value="300" /><div class="lenticks"><span>100</span><span>짧게</span><span>넉넉히</span><span>1000</span></div></div>
+          <div class="lenwrap"><div class="lenhead"><label class="fld" style="margin:0">편지 길이</label><b id="lenOut">약 400자</b></div><input type="range" id="len" min="100" max="500" step="50" value="400" /><div class="lenticks"><span>100자</span><span>짧게</span><span>적당히</span><span>넉넉히</span></div></div>
           <button class="btn btn-g btn-full" id="gen">✍️ 편지 초안 만들기</button>
           <div class="banner warn" id="warn"></div>
           <div class="acard" id="analysis" style="display:none"></div>
@@ -549,7 +549,7 @@
           </div>
           <div class="wm" id="wm" aria-hidden="true"><div class="row" id="wmRow"></div></div>
         </div>
-        <div class="lock-note" id="freeLock" style="display:none"><b>무료 요금제</b><p>편지 초안 미리보기까지는 무료로 볼 수 있어요. 저장(PNG·PDF)은 유료 요금제에서 이용할 수 있어요.</p><button class="btn btn-g btn-sm" data-go="pricing">요금제 보기</button></div>
+        <div class="lock-note" id="freeLock" style="display:none"><b>무료 요금제</b><p>편지 초안을 하루 3개까지 미리보기로 볼 수 있어요. 저장(PNG·PDF)과 무제한 생성은 유료 요금제에서 이용할 수 있어요.</p><button class="btn btn-g btn-sm" data-go="pricing">요금제 보기</button></div>
         <p class="foot">학생 데이터는 계정에 안전하게 저장됩니다.</p>
       </div>
     </div>
@@ -606,8 +606,8 @@
 
   /* ---------- plans ---------- */
   var PLANS={
-    free:{id:"free",name:"무료",price:0,students:3,img:false,pdf:false,tag:"둘러보기",
-      feats:[["둘러보기 · 화면 미리보기",1],["학생 등록 (체험 3명)",1],["편지 생성 · 파일 저장",0],["이미지(PNG) 추출",0],["PDF 추출",0]]},
+    free:{id:"free",name:"무료",price:0,students:3,img:false,pdf:false,tag:"체험",
+      feats:[["편지 초안 하루 3개 미리보기",1],["학생 등록 (체험 3명)",1],["파일 저장(PNG·PDF)",0],["무제한 생성",0],["일괄·PDF 병합",0]]},
     basic:{id:"basic",name:"베이직",price:19900,students:50,img:true,pdf:false,tag:"가장 인기",hot:true,
       feats:[["학생 최대 50명",1],["편지 생성 무제한",1],["이미지(PNG) 추출",1],["PDF 추출",0],["성적 자동 분석",1]]},
     premium:{id:"premium",name:"프리미엄",price:39900,students:Infinity,img:true,pdf:true,tag:"모든 기능",
@@ -642,7 +642,7 @@
     {id:"gaegu",name:"담백한 연필",font:"'Gaegu'",grp:"U"},{id:"poor",name:"자연스러운 일상",font:"'Poor Story'",grp:"U"}
   ];
   var user=null, profile=null, aiCfg=null, aiReady=false;
-  var st={students:[],selIds:[],results:{},viewIndex:0,img:null,mime:null,style:STYLES[0],teacher:"",len:300,inputMode:"photo",wb:null,wbName:""};
+  var st={students:[],selIds:[],results:{},viewIndex:0,img:null,mime:null,style:STYLES[0],teacher:"",len:400,inputMode:"sheet",wb:null,wbName:""};
   function plan(){ return planOf(profile&&profile.membership&&profile.membership.plan); }
 
   /* ---------- routing ---------- */
@@ -769,7 +769,7 @@
       var snap=await db.ref("apps/config/letter").once("value"); var v=snap.val()||{};
       var key=v.api_key||v.apiKey||null;
       if(key){ var prov=v.provider||(String(key).indexOf("sk-ant")===0?"anthropic":"openai");
-        aiCfg={apiKey:key,provider:prov,model:v.model||(prov==="anthropic"?"claude-sonnet-4-5":"gpt-4o"),maxTokens:v.maxTokens||v.max_tokens||null}; aiReady=true;
+        aiCfg={apiKey:key,provider:prov,model:v.model||(prov==="anthropic"?"claude-sonnet-4-5":"gpt-4.1-mini"),maxTokens:v.maxTokens||v.max_tokens||null}; aiReady=true;
       } else aiReady=false;
     }catch(e){ aiReady=false; }
   }
@@ -904,40 +904,50 @@
 
   /* ---------- length ---------- */
   var lenEl=$("#len");
-  function syncLen(){st.len=parseInt(lenEl.value,10);$("#lenOut").textContent="약 "+st.len+"자";lenEl.style.setProperty("--pct",((st.len-100)/900*100)+"%");}
+  function syncLen(){st.len=parseInt(lenEl.value,10);$("#lenOut").textContent="약 "+st.len+"자";lenEl.style.setProperty("--pct",((st.len-100)/400*100)+"%");}
   lenEl.addEventListener("input",syncLen);syncLen();
 
   /* ---------- generate ---------- */
   $("#gen").addEventListener("click",generate);
-  function buildPrompt(nick,honor,srcText,sheetMode){
-    var srcLine=sheetMode?("아래는 '"+nick+"' 학생의 성적 데이터입니다(성적표 파일에서 정확히 추출한 실제 값).\n\n"+srcText+"\n\n"):("첨부 이미지는 '"+nick+"' 학생과 관련된 평가 자료입니다(손글씨 메모이거나 여러 학생이 함께 있는 성적표·엑셀 표 캡처일 수 있음).\n\n");
-    var step1=sheetMode?("[1단계 — 확인] 위 데이터는 이미 '"+nick+"' 학생의 값입니다. 그대로 사용하고 없는 수치는 지어내지 마세요.\n"):("[1단계 — 정확한 추출] 이미지에 여러 학생이 있으면 반드시 '"+nick+"' 행/항목만 정확히 찾으세요. 표가 크고 글자가 작아도 '이름' 열을 꼼꼼히 훑어 '"+nick+"'을 찾으세요. 다른 학생 값을 섞지 말고 없는 수치는 지어내지 마세요. 이름이 정말 없을 때에만 found=false.\n");
-    return "당신은 학생 한 명 한 명을 진심으로 아끼며 오래 곁에서 지켜본 선생님입니다. 학부모가 읽고 코끝이 찡해지고 아이를 새롭게 바라보게 되는, 마음이 담긴 손편지를 씁니다. "+srcLine+step1+
-      "[2단계 — 분석] 데이터로 평균(있으면), 잘한 과목(강점)과 더 챙기면 좋을 과목(보완)을 판단하세요. (이 분석은 JSON의 분석 필드에만 쓰고, 편지 본문은 아래 원칙을 따르세요.)\n"+
-      "[3단계 — 편지 — 매우 중요]\n"+
-      "· 편지의 중심은 점수·등수가 아니라 아이의 '사람됨과 성장'입니다. 정량 수치는 근거로 딱 한두 번만, 스치듯 녹이고, 절대 점수를 나열하지 마세요.\n"+
-      "· 아이의 태도·끈기·호기심·집중하는 눈빛·실수를 대하는 자세·친구를 대하는 마음·머뭇거리다 용기 내는 순간·작은 변화와 노력처럼, 선생님만이 곁에서 볼 수 있는 정성적인 면을 구체적인 장면으로 생생하게 그려 주세요.\n"+
-      "· 진심과 애정이 배어나는 감성적 문장으로, 학부모가 뭉클하도록 쓰세요. 단, 과장·미사여구 남발·상투어('무럭무럭','앞날이 창창','일취월장')는 피하고, 진짜 관찰에서 우러난 담백하면서 따뜻한 표현을 쓰세요.\n"+
-      "· 표현은 매번 완전히 새롭게: 도입 문장, 비유, 묘사, 맺음말을 학생마다 다르게 하여 천편일률적이지 않게. 정해진 틀·반복되는 문구를 쓰지 마세요.\n"+
-      "· 없는 일화를 지어내진 말되, 주어진 데이터·메모에서 드러나는 태도와 강약점을 따뜻하게 해석하고 의미를 부여하세요.\n"+
-      "· 보완점은 부드럽지만 솔직하게 한 가지만, 가능성에 대한 믿음과 함께 전하고, 가정에서의 다정한 응원과 '곁에서 지켜보겠다'는 진심으로 맺으세요.\n"+
-      "[호칭 — 반드시 네이티브 한국어로]\n"+
-      "· '"+honor+"'을(를) 자연스럽게 부르며 시작하세요(예: '"+honor+"께,').\n"+
-      "· 학생 이름은 '"+nick+"'입니다. 성은 보통 한 글자이니 첫 글자를 성, 나머지를 이름으로 보세요(단 남궁·선우·황보 등 두 글자 성 예외).\n"+
-      "· 아이를 부를 때 다음 자연스러운 형태를 문맥에 맞게 섞어 쓰세요: ①이름(성 제외) 다정형 — 이름이 받침으로 끝나면 '이'를 붙이고(수진→수진이, 도현→도현이), 받침이 없으면 붙이지 않습니다(서아→서아, 민서→민서). 예: '수진이는', '서아는', '우리 서아는'. ②'풀네임+학생' — 예: '박서아 학생은', '김수진 학생은'. ③'우리+이름' 따뜻형 — 예: '우리 서아', '우리 수진이'.\n"+
-      "· 절대 금지: 성+이름 뒤에 '이'를 붙이는 것(예 '박서아이는'(X), '김수진이가'(어색)). 조사(은/는·이/가·을/를·와/과)는 받침 유무에 맞게 정확히 붙이세요.\n\n"+
-      "본문은 공백 포함 약 "+st.len+"자 내외(±15%).\n"+
-      "아래 JSON으로만 답하세요(코드블록 금지):\n{\"found\":true,\"average\":\"평균 또는 null\",\"items\":[{\"k\":\"과목\",\"v\":\"값\"}],\"strengths\":[\"강점\"],\"weaknesses\":[\"보완\"],\"letter\":\"편지 본문\"}\nitems는 대표 과목 위주 최대 10개.";
+  function systemPrompt(N){
+    return "당신은 학생을 오래 곁에서 지켜보며 진심으로 아끼는 선생님입니다. 과장이나 꾸밈 없이 담백하고 진솔한 손편지를 씁니다. 학생 이름·보호자 호칭·평가 자료는 사용자 메시지로 제공됩니다.\n\n"+
+      "[추출] 자료가 여러 학생이 섞인 표·이미지이면 제공된 학생의 행·항목만 정확히 찾으세요. 표가 크고 글자가 작아도 '이름' 열을 꼼꼼히 훑고, 다른 학생 값을 섞지 마세요. 자료에 없는 수치는 지어내지 말고, 해당 학생을 정말 찾을 수 없으면 found=false로 하세요.\n"+
+      "[분석] 평균(있으면), 잘한 과목(강점)과 더 챙기면 좋을 과목(보완)을 판단하세요(JSON 분석 필드용).\n"+
+      "[편지 — 핵심 원칙]\n"+
+      "· 가장 중요: 자료(점수·메모)에 실제로 드러난 사실만 근거로 삼으세요. 관찰하지 않은 구체적 일화·장면·행동·감동적 에피소드를 절대 지어내지 마세요. 지어낸 미담이나 입에 발린 과한 칭찬은 금물이며, 편지가 거짓처럼 느껴지면 안 됩니다.\n"+
+      "· 학업 성취도(정량적 부분: 잘하는 과목·성적·향상 등)를 조리 있고 명료하게 전달하세요. 점수를 그냥 나열하지 말고 의미가 읽히도록 자연스럽게 풀어 주세요.\n"+
+      "· 그 위에 학생을 아끼고 보살피는 선생님의 진심을 절제해서 담으세요. 딱 '진심이 느껴질 정도'까지만, 감정을 억지로 부풀리지 마세요.\n"+
+      "· 보완점은 솔직하되 부드럽게 한 가지만, 믿음과 함께. 마지막은 가정에서의 응원과 계속 지켜보겠다는 담백한 진심으로 맺으세요.\n"+
+      "· 금지: 상투어('무럭무럭','앞날이 창창','일취월장')와 근거 없는 확신('반드시 최고가 될','천재적인'). 억지 미사여구·과장을 쓰지 마세요. 표현은 학생마다 자연스럽게 달리하되 담백함을 유지하세요.\n"+
+      "[호칭 — 반드시 네이티브 한국어]\n"+
+      "· 보호자 호칭을 자연스럽게 부르며 시작하세요(예: 'OO께,').\n"+
+      "· 학생 이름에서 성은 보통 첫 한 글자, 나머지가 이름입니다(남궁·선우·황보 등 두 글자 성 예외).\n"+
+      "· 아이 호칭은 문맥에 맞게 섞어 쓰세요: ①이름(성 제외) 다정형 — 받침 있으면 '이'를 붙이고(수진→수진이, 도현→도현이), 없으면 안 붙임(서아→서아, 민서→민서). 예 '수진이는','서아는','우리 서아는'. ②'풀네임+학생' 예 '박서아 학생은','김수진 학생은'. ③'우리+이름' 예 '우리 서아','우리 수진이'.\n"+
+      "· 절대 금지: 성+이름 뒤에 '이' 붙이기('박서아이는'X). 조사(은/는·이/가·을/를·와/과)는 받침에 맞게 정확히.\n"+
+      "[분량·형식] 본문은 공백 포함 약 "+N+"자 내외(±15%). 아래 JSON으로만 답하세요(코드블록 금지):\n"+
+      "{\"found\":true,\"average\":\"평균 또는 null\",\"items\":[{\"k\":\"과목\",\"v\":\"값\"}],\"strengths\":[\"강점\"],\"weaknesses\":[\"보완\"],\"letter\":\"편지 본문\"}\nitems는 대표 과목 위주 최대 10개.";
   }
-  async function callAI(prompt,sheetMode){
+  function userText(nick,honor,srcText,sheetMode){
+    var t="학생 이름: "+nick+"\n보호자 호칭: "+honor;
+    if(sheetMode) t+="\n\n[성적 데이터]\n"+srcText;
+    else t+="\n\n첨부한 이미지에서 이 학생('"+nick+"')의 평가 자료를 찾아 사용하세요.";
+    return t;
+  }
+  async function callAI(nick,honor,srcText,sheetMode){
     var N=st.len, need=Math.round(N*4)+2500, maxTokens=Math.min(16000,Math.max(need,aiCfg.maxTokens||0,4000));
-    var dataUrl=st.img?("data:"+(st.mime||"image/jpeg")+";base64,"+st.img):"";
+    var sys=systemPrompt(N), ut=userText(nick,honor,srcText,sheetMode);
+    var dataUrl=(!sheetMode&&st.img)?("data:"+(st.mime||"image/jpeg")+";base64,"+st.img):"";
     var isA=(aiCfg.provider==="anthropic");
     var url=isA?"https://api.anthropic.com/v1/messages":"https://api.openai.com/v1/chat/completions";
     var headers=isA?{"content-type":"application/json","x-api-key":aiCfg.apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"}:{"content-type":"application/json","authorization":"Bearer "+aiCfg.apiKey};
-    var aC=sheetMode?[{type:"text",text:prompt}]:[{type:"image",source:{type:"base64",media_type:st.mime||"image/jpeg",data:st.img}},{type:"text",text:prompt}];
-    var oC=sheetMode?[{type:"text",text:prompt}]:[{type:"text",text:prompt},{type:"image_url",image_url:{url:dataUrl,detail:"high"}}];
-    var body=isA?JSON.stringify({model:aiCfg.model,max_tokens:maxTokens,messages:[{role:"user",content:aC}]}):JSON.stringify({model:aiCfg.model,max_tokens:maxTokens,temperature:0.95,frequency_penalty:0.3,presence_penalty:0.3,response_format:{type:"json_object"},messages:[{role:"user",content:oC}]});
+    var body;
+    if(isA){
+      var aUser=sheetMode?[{type:"text",text:ut}]:[{type:"image",source:{type:"base64",media_type:st.mime||"image/jpeg",data:st.img}},{type:"text",text:ut}];
+      body=JSON.stringify({model:aiCfg.model,max_tokens:maxTokens,system:[{type:"text",text:sys,cache_control:{type:"ephemeral"}}],messages:[{role:"user",content:aUser}]});
+    }else{
+      var oUser=sheetMode?[{type:"text",text:ut}]:[{type:"text",text:ut},{type:"image_url",image_url:{url:dataUrl,detail:"high"}}];
+      body=JSON.stringify({model:aiCfg.model,max_tokens:maxTokens,temperature:0.7,frequency_penalty:0.2,presence_penalty:0.1,response_format:{type:"json_object"},messages:[{role:"system",content:sys},{role:"user",content:oUser}]});
+    }
     var lastErr=null;
     for(var attempt=1;attempt<=3;attempt++){
       try{
@@ -952,9 +962,19 @@
     }
     return {error:lastErr||"오류"};
   }
+  var FREE_DAILY=3;
+  function todayKey(){var d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();}
+  function usedToday(){var u=profile&&profile.usage;return (u&&u.date===todayKey())?(u.count||0):0;}
+  function addUsage(n){if(!profile)return;var t=todayKey();if(!profile.usage||profile.usage.date!==t)profile.usage={date:t,count:0};profile.usage.count+=n;saveProfile();}
   async function generate(){
     var sel=selectedStudents(); if(!sel.length||!hasInput())return;
     if(!aiReady){ $("#warn").style.display="block"; $("#warn").innerHTML="AI가 아직 연결되지 않았어요. 관리자에게 문의해 주세요."; return; }
+    var isFree=(plan().id==="free"), capNote="";
+    if(isFree){
+      var remain=FREE_DAILY-usedToday();
+      if(remain<=0){ needUpgrade("무료 요금제는 하루 "+FREE_DAILY+"개까지 편지 초안을 만들 수 있어요. 내일 다시 시도하거나 요금제를 올려 주세요."); return; }
+      if(sel.length>remain){ sel=sel.slice(0,remain); capNote="무료 요금제는 하루 "+FREE_DAILY+"개까지라 "+remain+"명만 생성했어요. "; }
+    }
     var btn=$("#gen");btn.disabled=true;$("#warn").style.display="none";
     var sheetMode=(st.inputMode==="sheet"); st.results={};
     var ok=0, fails=[];
@@ -962,14 +982,15 @@
       var s=sel[i]; btn.innerHTML='<span class="spin"></span> '+(i+1)+' / '+sel.length+'명 생성 중…';
       var srcText=null;
       if(sheetMode){ srcText=sheetTextFor(s.nick); if(!srcText){ fails.push(s.nick+"(자료 없음)"); continue; } }
-      var res=await callAI(buildPrompt(s.nick,s.honor,srcText,sheetMode),sheetMode);
+      var res=await callAI(s.nick,s.honor,srcText,sheetMode);
       if(res.error){ fails.push(s.nick+"("+res.error+")"); continue; }
       if(res.data.found===false||!res.data.letter){ fails.push(s.nick+"(못 찾음)"); continue; }
       st.results[s.id]={r:res.data,letter:res.data.letter}; ok++;
     }
+    if(isFree && ok>0) addUsage(ok);
     btn.disabled=false; refreshLocks();
-    if(!ok){ $("#warn").style.display="block"; $("#warn").innerHTML="편지를 만들지 못했어요."+(fails.length?" (<code>"+esc(fails.join(", "))+"</code>)":""); return; }
-    if(fails.length){ $("#warn").style.display="block"; $("#warn").innerHTML=ok+"명 완료 · 일부 실패: "+esc(fails.join(", ")); }
+    if(!ok){ $("#warn").style.display="block"; $("#warn").innerHTML=capNote+"편지를 만들지 못했어요."+(fails.length?" (<code>"+esc(fails.join(", "))+"</code>)":""); return; }
+    if(capNote||fails.length){ $("#warn").style.display="block"; $("#warn").innerHTML=capNote+(fails.length?(ok+"명 완료 · 일부 실패: "+esc(fails.join(", "))):""); }
     st.viewIndex=0; renderResultView();
     toast(ok+"명의 편지가 완성됐어요"); track("generate_letter",{plan:plan().id,mode:st.inputMode,count:ok});
   }
