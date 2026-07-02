@@ -313,8 +313,80 @@ async function loadReports(){
 
   reports.sort((a,b)=>b.date.localeCompare(a.date));
   renderHist(); renderCal();
-  // ✅ 가장 최근 완료 세차 자동 선택
   if(reports.length > 0) selRep(reports[0].date, 0);
+  checkLock();
+}
+const LOCK_HOURS = 6;
+let lockTimer = null;
+
+function getCompletedAt(data) {
+  // workLogs에서 completed action의 timestamp 찾기
+  if(data.logs && data.logs.length) {
+    const cl = data.logs.find(function(l){ return l.action==='completed'; });
+    if(cl && cl.timestamp) return new Date(cl.timestamp);
+  }
+  // fallback: updatedAt (ms)
+  return null;
+}
+
+function checkLock() {
+  if(!reports.length) return;
+  const latest = reports[0];
+  const completedAt = getCompletedAt(latest);
+  if(!completedAt) return;
+  const elapsed = (Date.now() - completedAt.getTime()) / 1000;
+  const lockSec = LOCK_HOURS * 3600;
+  if(elapsed < lockSec) {
+    showLockBanner(completedAt, lockSec);
+  }
+}
+
+function showLockBanner(completedAt, lockSec) {
+  // 기존 배너 제거
+  const prev = document.getElementById('lockBanner');
+  if(prev) prev.remove();
+
+  const banner = document.createElement('div');
+  banner.id = 'lockBanner';
+  banner.style.cssText = 'position:fixed;top:56px;left:0;right:0;z-index:90;'
+    +'background:#1A2540;border-bottom:1px solid rgba(248,113,113,0.3);'
+    +'padding:10px 20px;display:flex;align-items:center;justify-content:center;gap:10px;';
+
+  const lock = document.createElement('span');
+  lock.textContent = '🔒';
+
+  const txt = document.createElement('span');
+  txt.style.cssText = 'font-size:13px;color:#F87171;font-weight:600;';
+
+  const sub = document.createElement('span');
+  sub.style.cssText = 'font-size:11px;color:#8899BB;';
+  sub.textContent = '세차 완료 후 6시간 이후 리포트가 공개됩니다.';
+
+  banner.appendChild(lock);
+  banner.appendChild(txt);
+  banner.appendChild(sub);
+  document.body.appendChild(banner);
+
+  function tick() {
+    const elapsed = (Date.now() - completedAt.getTime()) / 1000;
+    const remaining = Math.max(0, lockSec - elapsed);
+    if(remaining <= 0) {
+      banner.remove();
+      if(lockTimer) clearInterval(lockTimer);
+      // 잠금 해제 — 리포트 다시 렌더
+      if(selDate && reports.length) {
+        const idx = reports.findIndex(function(r){ return r.date===selDate; });
+        if(idx>=0) { document.getElementById('rWrap').innerHTML=''; showReport(reports[idx]); }
+      }
+      return;
+    }
+    const h = Math.floor(remaining/3600);
+    const m = Math.floor((remaining%3600)/60);
+    txt.textContent = h>0 ? h+'시간 '+m+'분 후 공개' : m+'분 후 공개';
+  }
+  tick();
+  if(lockTimer) clearInterval(lockTimer);
+  lockTimer = setInterval(tick, 60000);
 }
 
 /* ── 이력 리스트 ── */
