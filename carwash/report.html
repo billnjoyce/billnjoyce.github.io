@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세알 세차 리포트</title>
+<style>
+:root {
+  --bg:#0B1120; --card:#131C2E; --card2:#1A2540;
+  --brand:#4B7BF5; --brandL:#7B9FFF; --brandBg:rgba(75,123,245,0.12);
+  --green:#34D399; --greenBg:rgba(52,211,153,0.1);
+  --red:#F87171; --redBg:rgba(248,113,113,0.1);
+  --orange:#FBBF24;
+  --txt:#E8F0FF; --txt2:#8899BB; --txt3:#3D4F70;
+  --stroke:rgba(255,255,255,0.07);
+  --r:12px; --r2:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'Helvetica Neue',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;font-size:14px;}
+
+/* AUTH */
+#auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:radial-gradient(ellipse at 30% 20%,rgba(75,123,245,0.12) 0%,transparent 55%),var(--bg);}
+.auth-box{width:100%;max-width:380px;background:var(--card);border:1px solid var(--stroke);border-radius:20px;padding:40px 32px;text-align:center;}
+.auth-logo{width:56px;height:56px;background:var(--brandBg);border:1.5px solid var(--brand);border-radius:16px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:24px;}
+.auth-title{font-size:20px;font-weight:700;margin-bottom:6px;}
+.auth-sub{font-size:13px;color:var(--txt2);margin-bottom:28px;line-height:1.6;}
+.auth-inp{width:100%;background:var(--card2);border:1.5px solid var(--stroke);border-radius:var(--r2);padding:13px 16px;font-size:16px;font-weight:600;color:var(--txt);text-align:center;letter-spacing:2px;outline:none;transition:border-color .2s;font-family:inherit;}
+.auth-inp:focus{border-color:var(--brand);}
+.auth-inp::placeholder{color:var(--txt3);letter-spacing:0;font-weight:400;}
+.auth-btn{width:100%;margin-top:10px;background:var(--brand);color:#fff;border:none;border-radius:var(--r2);padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s;}
+.auth-btn:hover{opacity:.88;}
+.auth-err{margin-top:10px;color:var(--red);font-size:12px;min-height:18px;}
+
+/* APP */
+#app{display:none;}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(11,17,32,0.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--stroke);height:56px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;}
+.topbar-l{display:flex;align-items:center;gap:10px;}
+.t-logo{width:30px;height:30px;background:var(--brandBg);border:1px solid var(--brand);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.t-name{font-size:15px;font-weight:700;}
+.t-name span{color:var(--brand);}
+.t-vn{background:var(--card2);border:1px solid var(--stroke);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--txt2);letter-spacing:1px;}
+.logout{background:none;border:1px solid var(--stroke);border-radius:6px;padding:5px 10px;color:var(--txt3);font-size:11px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.logout:hover{border-color:var(--red);color:var(--red);}
+
+/* LAYOUT */
+.layout{max-width:1080px;margin:0 auto;padding:24px 20px;display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start;}
+
+/* SIDEBAR */
+.sidebar{position:sticky;top:72px;display:flex;flex-direction:column;gap:14px;}
+.card{background:var(--card);border:1px solid var(--stroke);border-radius:var(--r);overflow:hidden;}
+.card-hd{padding:14px 18px;border-bottom:1px solid var(--stroke);font-size:12px;font-weight:600;color:var(--txt2);}
+
+/* CALENDAR */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;}
+.cal-mo{font-size:14px;font-weight:700;}
+.cal-arr{width:26px;height:26px;background:var(--card2);border:1px solid var(--stroke);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--txt2);font-size:11px;transition:all .15s;user-select:none;}
+.cal-arr:hover{border-color:var(--brand);color:var(--brand);}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;padding:0 10px 14px;}
+.dow{text-align:center;font-size:9px;font-weight:600;color:var(--txt3);padding:3px 0 5px;}
+.dow.s{color:var(--red);}.dow.sa{color:var(--brandL);}
+.cday{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:11px;font-weight:500;color:var(--txt2);position:relative;transition:all .12s;}
+.cday.om{color:var(--txt3);}
+.cday.su{color:var(--red);}.cday.sa{color:var(--brandL);}
+.cday.has{cursor:pointer;background:var(--greenBg);color:var(--green);font-weight:700;}
+.cday.has:hover{background:var(--green);color:#fff;}
+.cday.sel{background:var(--brand)!important;color:#fff!important;font-weight:700;}
+.cday.td:not(.has):not(.sel){border:1.5px solid var(--brand);color:var(--brand);}
+.cdot{position:absolute;bottom:2px;width:3px;height:3px;border-radius:50%;background:var(--green);}
+
+/* HISTORY */
+.hist{padding:6px 10px 10px;}
+.hi{display:flex;align-items:center;gap:8px;padding:9px 8px;border-radius:8px;cursor:pointer;transition:background .12s;}
+.hi:hover{background:var(--card2);}
+.hi.act{background:var(--brandBg);}
+.hi-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.hi-date{font-size:12px;font-weight:600;flex:1;}
+.hi-sub{font-size:10px;color:var(--txt3);}
+
+/* MAIN */
+.main{min-width:0;}
+.empty{text-align:center;padding:60px 20px;color:var(--txt3);}
+.empty-ico{font-size:40px;margin-bottom:12px;}
+.empty p{font-size:13px;line-height:1.6;}
+
+/* REPORT */
+.rhero{background:linear-gradient(135deg,#0d1930 0%,#131C2E 100%);border:1px solid var(--stroke);border-radius:var(--r);padding:24px;margin-bottom:14px;position:relative;overflow:hidden;}
+.rhero::before{content:'';position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(75,123,245,0.12) 0%,transparent 70%);}
+.r-lbl{font-size:10px;font-weight:600;letter-spacing:2px;color:var(--brandL);margin-bottom:6px;}
+.r-title{font-size:22px;font-weight:800;margin-bottom:4px;}
+.r-sub{font-size:13px;color:var(--txt2);margin-bottom:16px;}
+.badges{display:flex;gap:6px;flex-wrap:wrap;}
+.bdg{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:4px;}
+.bg{background:var(--greenBg);color:var(--green);border:1px solid rgba(52,211,153,.2);}
+.bb{background:var(--brandBg);color:var(--brandL);border:1px solid rgba(75,123,245,.2);}
+.bo{background:rgba(251,191,36,.1);color:var(--orange);border:1px solid rgba(251,191,36,.2);}
+
+.igrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.ic{background:var(--card);border:1px solid var(--stroke);border-radius:var(--r2);padding:14px;}
+.ic-lbl{font-size:10px;font-weight:600;letter-spacing:.8px;color:var(--txt3);text-transform:uppercase;margin-bottom:6px;}
+.ic-val{font-size:14px;font-weight:600;}
+
+.sec{background:var(--card);border:1px solid var(--stroke);border-radius:var(--r);padding:18px;margin-bottom:14px;}
+.sec-ttl{font-size:12px;font-weight:700;color:var(--txt2);margin-bottom:14px;letter-spacing:.4px;}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:7px;}
+.pt{aspect-ratio:1;border-radius:8px;overflow:hidden;cursor:pointer;background:var(--card2);border:1px solid var(--stroke);}
+.pt img{width:100%;height:100%;object-fit:cover;transition:transform .25s;display:block;}
+.pt:hover img{transform:scale(1.05);}
+.pe{padding:24px;text-align:center;color:var(--txt3);font-size:12px;}
+.cbub{background:var(--card2);border-radius:var(--r2);padding:12px 14px;font-size:13px;line-height:1.7;border-left:3px solid var(--brand);}
+.cb-lbl{font-size:11px;font-weight:600;color:var(--txt2);margin-bottom:6px;}
+
+/* TIMELINE */
+.tl-item{display:flex;gap:14px;padding-bottom:18px;position:relative;}
+.tl-line{position:absolute;left:13px;top:28px;width:2px;bottom:0;background:var(--stroke);}
+.tl-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;border:2px solid var(--stroke);background:var(--card2);}
+.tl-dot.ok{background:var(--greenBg);border-color:var(--green);}
+.tl-dot.ng{background:var(--redBg);border-color:var(--red);}
+.tl-body{flex:1;padding-top:4px;}
+.tl-act{font-size:13px;font-weight:600;}
+.tl-ts{font-size:10px;color:var(--txt3);margin-top:2px;}
+.tl-note{font-size:11px;color:var(--txt2);margin-top:4px;background:var(--card2);border-radius:6px;padding:5px 8px;}
+
+.stars{display:flex;gap:3px;}
+.star{font-size:18px;}
+.sf{color:var(--orange);}.se{color:var(--txt3);}
+
+/* LIGHTBOX */
+.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);align-items:center;justify-content:center;z-index:200;}
+.lb.open{display:flex;}
+.lb img{max-width:90vw;max-height:88vh;border-radius:10px;object-fit:contain;}
+.lb-x{position:absolute;top:16px;right:20px;font-size:24px;color:#fff;cursor:pointer;background:none;border:none;line-height:1;}
+
+/* LOADING */
+.spin{width:18px;height:18px;border-radius:50%;border:2px solid var(--stroke);border-top-color:var(--brand);animation:sp .7s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ld{display:flex;align-items:center;justify-content:center;gap:10px;padding:50px;color:var(--txt3);font-size:13px;}
+
+/* RESPONSIVE */
+@media(max-width:700px){
+  .layout{grid-template-columns:1fr;gap:14px;padding:14px;}
+  .sidebar{position:static;}
+  .t-vn{display:none;}
+  .igrid{grid-template-columns:1fr 1fr;}
+  .r-title{font-size:18px;}
+}
+@media(max-width:400px){
+  .igrid{grid-template-columns:1fr;}
+  .auth-box{padding:32px 20px;}
+}
+</style>
+</head>
+<body>
+
+<div id="auth">
+  <div class="auth-box">
+    <div class="auth-logo">✨</div>
+    <div class="auth-title">세알 세차 리포트</div>
+    <div class="auth-sub">차량 번호를 입력하면<br>세차 완료 리포트를 확인할 수 있어요.</div>
+    <input class="auth-inp" id="vInput" type="text" maxlength="12"
+      placeholder="예: 123가3456" autocomplete="off" spellcheck="false">
+    <button class="auth-btn" id="authBtn" onclick="doAuth()">리포트 확인</button>
+    <div class="auth-err" id="authErr"></div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-l">
+      <div class="t-logo">✨</div>
+      <div class="t-name"><span>세알</span> 세차 리포트</div>
+      <div class="t-vn" id="tvn"></div>
+    </div>
+    <button class="logout" onclick="doLogout()">로그아웃</button>
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <div class="card">
+        <div class="card-hd">📅 세차 캘린더</div>
+        <div class="cal-nav">
+          <div class="cal-arr" onclick="chMo(-1)">&#8249;</div>
+          <div class="cal-mo" id="calMo"></div>
+          <div class="cal-arr" onclick="chMo(1)">&#8250;</div>
+        </div>
+        <div class="cal-g" id="calG"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd">✅ 세차 이력</div>
+        <div class="hist" id="hist">
+          <div class="ld"><div class="spin"></div>불러오는 중...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main" id="main">
+      <div class="empty" id="empty">
+        <div class="empty-ico">📋</div>
+        <p>캘린더에서 날짜를 선택하거나<br>세차 이력을 클릭하면 리포트를 볼 수 있어요.</p>
+      </div>
+      <div id="rWrap" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<div class="lb" id="lb" onclick="closeLb()">
+  <button class="lb-x" onclick="closeLb()">✕</button>
+  <img id="lbImg" src="" alt="세차 사진">
+</div>
+
+<script>
+/* ── Firebase REST API (SDK 불필요) ── */
+const DB = 'https://carwash-4699b.firebaseio.com';
+
+let VN='', SHOP='', CID='';
+let reports=[], reportDates=new Set(), curMo=new Date(), selDate=null;
+
+function nv(v){ return v.replace(/\s/g,'').toUpperCase(); }
+
+async function fbGet(path){
+  const res = await fetch(DB + '/' + path + '.json');
+  if(!res.ok) throw new Error(res.status);
+  return res.json();
+}
+
+/* ── 인증 ── */
+async function doAuth(){
+  const raw = document.getElementById('vInput').value.trim();
+  if(!raw){ setErr('차량 번호를 입력해주세요.'); return; }
+  const vn = nv(raw);
+  setErr('');
+  const btn = document.getElementById('authBtn');
+  btn.textContent='확인 중...'; btn.disabled=true;
+
+  try {
+    const shops = await fbGet('carwash-master/data/shops');
+    if(!shops){ setErr('데이터를 불러올 수 없습니다.'); resetBtn(); return; }
+
+    let found=false;
+    outer:
+    for(const [sid, shopData] of Object.entries(shops)){
+      const custs = shopData.customers || {};
+      for(const [cid, c] of Object.entries(custs)){
+        if(nv(c.vehicleNumber||'')===vn){
+          VN=vn; SHOP=sid; CID=cid; found=true; break outer;
+        }
+        for(const v of Object.values(c.vehicles||{})){
+          if(nv(v.vehicleNumber||'')===vn){
+            VN=vn; SHOP=sid; CID=cid; found=true; break outer;
+          }
+        }
+      }
+    }
+
+    if(!found){ setErr('등록된 차량 번호가 아닙니다. 다시 확인해주세요.'); resetBtn(); return; }
+    sessionStorage.setItem('seal_vn',VN);
+    sessionStorage.setItem('seal_shop',SHOP);
+    sessionStorage.setItem('seal_cid',CID);
+    enterApp();
+  } catch(e){
+    console.error(e);
+    setErr('연결 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    resetBtn();
+  }
+}
+
+function setErr(m){ document.getElementById('authErr').textContent=m; }
+function resetBtn(){
+  const btn=document.getElementById('authBtn');
+  btn.textContent='리포트 확인'; btn.disabled=false;
+}
+
+function doLogout(){
+  VN=SHOP=CID=''; reports=[]; reportDates.clear(); selDate=null;
+  sessionStorage.clear();
+  document.getElementById('app').style.display='none';
+  document.getElementById('auth').style.display='flex';
+  document.getElementById('vInput').value='';
+  resetBtn();
+}
+
+/* ── 앱 진입 ── */
+async function enterApp(){
+  document.getElementById('auth').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('tvn').textContent=VN;
+  await loadReports();
+}
+
+/* ── 리포트 로드 ── */
+async function loadReports(){
+  reports=[]; reportDates.clear();
+  let schedules=null;
+  try{ schedules=await fbGet('carwash-master/data/shops/'+SHOP+'/schedules'); }catch(e){}
+  if(!schedules){
+    document.getElementById('hist').innerHTML='<div style="padding:16px;text-align:center;color:var(--txt3);font-size:12px;">이력이 없습니다.</div>';
+    renderCal(); return;
+  }
+
+  const completed = Object.values(schedules).filter(s=>s.customerId===CID && s.status==='completed');
+
+  for(const s of completed){
+    let logs=[];
+    try{ const l=await fbGet('carwash-master/data/shops/'+SHOP+'/workLogs/'+s.id); if(l) logs=Object.values(l); }catch(e){}
+    let report=null;
+    try{
+      const all=await fbGet('carwash-master/data/shops/'+SHOP+'/reports');
+      if(all){ const f=Object.values(all).find(r=>r.scheduleId===s.id); if(f) report=f; }
+    }catch(e){}
+    reportDates.add(s.scheduledDate);
+    reports.push({scheduleId:s.id, date:s.scheduledDate, report, logs});
+  }
+
+  reports.sort((a,b)=>b.date.localeCompare(a.date));
+  renderHist(); renderCal();
+  // ✅ 가장 최근 완료 세차 자동 선택
+  if(reports.length > 0) selRep(reports[0].date, 0);
+}
+
+/* ── 이력 리스트 ── */
+function renderHist(){
+  const el=document.getElementById('hist');
+  if(!reports.length){
+    el.innerHTML='<div style="padding:16px;text-align:center;color:var(--txt3);font-size:12px;">아직 완료된 세차가 없습니다.</div>';
+    return;
+  }
+  el.innerHTML=reports.map((r,i)=>{
+    const d=new Date(r.date);
+    const wd=['일','월','화','수','목','금','토'][d.getDay()];
+    const lbl=(d.getMonth()+1)+'월 '+d.getDate()+'일 ('+wd+')';
+    const rt=r.report&&r.report.rating?'⭐'.repeat(r.report.rating):'';
+    return '<div class="hi" id="hi'+i+'" onclick="selRep(\''+r.date+'\','+i+')">'
+      +'<div class="hi-dot"></div>'
+      +'<div style="flex:1;min-width:0">'
+      +'<div class="hi-date">'+lbl+'</div>'
+      +(rt?'<div class="hi-sub">'+rt+'</div>':'')
+      +'</div></div>';
+  }).join('');
+}
+
+/* ── 캘린더 ── */
+function renderCal(){
+  const y=curMo.getFullYear(), m=curMo.getMonth(), today=new Date();
+  document.getElementById('calMo').textContent=y+'년 '+(m+1)+'월';
+  const dows=['일','월','화','수','목','금','토'];
+  let h=dows.map(function(d,i){ return '<div class="dow '+(i===0?'s':i===6?'sa':'')+'">' +d+'</div>'; }).join('');
+  const first=new Date(y,m,1), last=new Date(y,m+1,0);
+  for(let i=0;i<first.getDay();i++){
+    const dd=new Date(y,m,-first.getDay()+i+1);
+    h+='<div class="cday om">'+dd.getDate()+'</div>';
+  }
+  for(let d=1;d<=last.getDate();d++){
+    const ds=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const dow=new Date(y,m,d).getDay();
+    const isTd=today.getFullYear()===y&&today.getMonth()===m&&today.getDate()===d;
+    const has=reportDates.has(ds), isSel=selDate===ds;
+    const cls=['cday',dow===0?'su':dow===6?'sa':'',isTd?'td':'',has?'has':'',isSel?'sel':''].filter(Boolean).join(' ');
+    const click=has?'onclick="selRepByDate(\''+ds+'\')"':'';
+    const dot=has&&!isSel?'<div class="cdot"></div>':'';
+    h+='<div class="'+cls+'" '+click+'>'+d+dot+'</div>';
+  }
+  const rem=42-(first.getDay()+last.getDate());
+  for(let d=1;d<=rem;d++) h+='<div class="cday om">'+d+'</div>';
+  document.getElementById('calG').innerHTML=h;
+}
+
+function chMo(d){ curMo=new Date(curMo.getFullYear(),curMo.getMonth()+d,1); renderCal(); }
+
+function selRepByDate(ds){
+  const i=reports.findIndex(function(r){return r.date===ds;});
+  if(i>=0) selRep(ds,i);
+}
+
+function selRep(ds,idx){
+  selDate=ds;
+  document.querySelectorAll('.hi').forEach(function(e){e.classList.remove('act');});
+  const el=document.getElementById('hi'+idx);
+  if(el) el.classList.add('act');
+  renderCal();
+  showReport(reports[idx]);
+}
+
+/* ── 리포트 표시 ── */
+function showReport(data){
+  document.getElementById('empty').style.display='none';
+  const w=document.getElementById('rWrap');
+  w.style.display='block';
+  w.innerHTML='<div class="ld"><div class="spin"></div>리포트 불러오는 중...</div>';
+  setTimeout(function(){ w.innerHTML=buildReport(data); }, 350);
+}
+
+function buildReport(data){
+  const d=new Date(data.date);
+  const wd=['일','월','화','수','목','금','토'][d.getDay()];
+  const dl=d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일 ('+wd+')';
+  const report=data.report||{};
+  const rt=report.rating||0;
+  const memo=report.memo||'';
+  const cc=report.customerComment||'';
+  const cr=report.crewReply||'';
+  const amt=report.amount;
+  const photos=report.photoUrls||[];
+  const vn=report.vehicleNumber||VN;
+  const logs=data.logs||[];
+
+  const sorted=logs.slice().sort(function(a,b){return (a.timestamp||0)-(b.timestamp||0);});
+  const acts={
+    assigned:{e:'👤',l:'담당자 배정'},
+    inProgress:{e:'🚿',l:'세차 시작'},
+    completed:{e:'✅',l:'세차 완료'},
+    cancelled:{e:'❌',l:'취소'}
+  };
+
+  let tlH=sorted.map(function(lg,idx){
+    const a=acts[lg.action]||{e:'📝',l:lg.action||'기록'};
+    const ts=lg.timestamp?new Date(lg.timestamp).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}):'';
+    const ok=lg.action==='completed', ng=lg.action==='cancelled';
+    const isLast=idx===sorted.length-1;
+    return '<div class="tl-item">'
+      +(!isLast?'<div class="tl-line"></div>':'')
+      +'<div class="tl-dot '+(ok?'ok':ng?'ng':'')+'">'+(a.e)+'</div>'
+      +'<div class="tl-body">'
+      +'<div class="tl-act">'+a.l+'</div>'
+      +(ts?'<div class="tl-ts">'+ts+'</div>':'')
+      +(lg.note?'<div class="tl-note">'+lg.note+'</div>':'')
+      +'</div></div>';
+  }).join('');
+  if(!tlH) tlH='<div style="color:var(--txt3);font-size:12px;padding:6px 0">기록 없음</div>';
+
+  let photoH='';
+  if(photos.length){
+    photoH=photos.map(function(u){
+      return '<div class="pt" onclick="openLb(\''+u+'\')">'
+        +'<img src="'+u+'" alt="세차 사진" loading="lazy"></div>';
+    }).join('');
+  } else {
+    photoH='<div class="pe">📷 등록된 사진이 없습니다.</div>';
+  }
+
+  const starH=Array.from({length:5},function(_,i){
+    return '<span class="star '+(i<rt?'sf':'se')+'">'+(i<rt?'★':'☆')+'</span>';
+  }).join('');
+
+  return '<div class="rhero">'
+    +'<div class="r-lbl">WASH REPORT</div>'
+    +'<div class="r-title">'+dl+'</div>'
+    +'<div class="r-sub">'+vn+' 세차 완료 리포트</div>'
+    +'<div class="badges">'
+    +'<span class="bdg bg">✓ 세차 완료</span>'
+    +(amt?'<span class="bdg bb">💳 '+amt.toLocaleString()+'원</span>':'')
+    +(rt?'<span class="bdg bo">⭐ '+rt+'점</span>':'')
+    +'</div></div>'
+
+    +'<div class="igrid">'
+    +'<div class="ic"><div class="ic-lbl">차량번호</div><div class="ic-val">'+vn+'</div></div>'
+    +'<div class="ic"><div class="ic-lbl">세차일</div><div class="ic-val" style="font-size:12px">'+dl+'</div></div>'
+    +(rt?'<div class="ic" style="grid-column:span 2"><div class="ic-lbl">만족도</div><div class="stars" style="margin-top:4px">'+starH+'</div></div>':'')
+    +'</div>'
+
+    +'<div class="sec"><div class="sec-ttl">📸 세차 사진</div><div class="pgrid">'+photoH+'</div></div>'
+
+    +(memo?'<div class="sec"><div class="sec-ttl">📝 담당자 메모</div><div class="cbub">'+memo+'</div></div>':'')
+
+    +((cc||cr)?'<div class="sec"><div class="sec-ttl">💬 후기</div>'
+      +(cc?'<div class="cb-lbl">😊 고객 의견</div><div class="cbub" style="margin-bottom:'+(cr?'14px':'0')+'">'+cc+'</div>':'')
+      +(cr?'<div class="cb-lbl">🧹 담당자 답변</div><div class="cbub" style="border-left-color:var(--green)">'+cr+'</div>':'')
+      +'</div>':'')
+
+    +'<div class="sec"><div class="sec-ttl">🕐 작업 타임라인</div>'+tlH+'</div>'
+
+    +'<div style="text-align:center;padding:16px 0 4px;color:var(--txt3);font-size:11px">세알 세차 리포트</div>';
+}
+
+/* ── 라이트박스 ── */
+function openLb(u){
+  document.getElementById('lbImg').src=u;
+  document.getElementById('lb').classList.add('open');
+}
+function closeLb(){
+  document.getElementById('lb').classList.remove('open');
+}
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeLb(); });
+
+/* ── 키보드 ── */
+document.getElementById('vInput').addEventListener('keydown',function(e){
+  if(e.key===' ') e.preventDefault();
+  if(e.key==='Enter') doAuth();
+});
+
+/* ── 세션 복원 ── */
+window.addEventListener('DOMContentLoaded',function(){
+  const vn=sessionStorage.getItem('seal_vn');
+  const shop=sessionStorage.getItem('seal_shop');
+  const cid=sessionStorage.getItem('seal_cid');
+  if(vn&&shop&&cid){ VN=vn; SHOP=shop; CID=cid; enterApp(); }
+});
+</script>
+</body>
+</html>
