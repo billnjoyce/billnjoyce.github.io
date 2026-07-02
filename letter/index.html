@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>글월 · 선생님의 손편지</title>
+<meta name="description" content="평가만 하면, 학부모께 보낼 손편지로 바꿔 드려요." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;600;700;800&family=Gowun+Batang:wght@400;700&family=Nanum+Pen+Script&family=Nanum+Brush+Script&family=Gamja+Flower&family=Hi+Melody&family=Single+Day&family=Dokdo&family=Gaegu:wght@400;700&family=Poor+Story&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root{
+    --paper:#FAF6EC; --surface:#FFFFFF; --surface-2:#F5F0E4;
+    --ink:#22263C; --ink-2:#575D75; --ink-3:#9498AA;
+    --accent:#38427A; --accent-deep:#2A3162; --accent-tint:#EDEFF8;
+    --gold:#BE8836; --gold-tint:#F4E7CD;
+    --seal:#B0504A; --ok:#3B7A61; --ok-tint:#E7F1EB; --warn:#A9701F; --warn-tint:#FAEED8;
+    --line:#EAE2D0; --line-2:#E1D9C5;
+    --r:16px; --r-sm:11px;
+    --sh-1:0 1px 2px rgba(34,38,60,.05);
+    --sh-2:0 2px 6px rgba(34,38,60,.06), 0 14px 40px rgba(34,38,60,.07);
+    --sh-3:0 20px 60px rgba(34,38,60,.16);
+    --fs-ui:"Gothic A1",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    --fs-disp:"Gowun Batang",serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--fs-ui);background:var(--paper);color:var(--ink);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  button{font-family:inherit}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+  /* ---------- app bar ---------- */
+  .appbar{position:sticky;top:0;z-index:30;background:rgba(250,246,236,.86);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+  .appbar-in{max-width:1160px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px}
+  .logo{display:flex;align-items:baseline;gap:9px;text-decoration:none}
+  .logo .mk{font-family:var(--fs-disp);font-weight:700;font-size:25px;letter-spacing:-.5px;color:var(--accent-deep);line-height:1}
+  .logo .mk i{color:var(--seal);font-style:normal}
+  .logo .cap{font-size:12.5px;color:var(--ink-3);font-weight:600}
+  @media(max-width:560px){ .logo .cap{display:none} }
+  .appbar .spacer{flex:1}
+  .abtn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+  .abtn:hover{border-color:var(--accent);color:var(--accent)}
+  .dotstate{width:8px;height:8px;border-radius:50%;background:var(--ink-3);flex:0 0 auto}
+  .dotstate.on{background:var(--ok)} .dotstate.off{background:var(--gold)}
+
+  /* ---------- shell ---------- */
+  .wrap{max-width:1160px;margin:0 auto;padding:26px 20px 90px}
+  .hero{margin:6px 2px 22px}
+  .hero h1{font-family:var(--fs-disp);font-weight:700;font-size:clamp(24px,4.6vw,34px);letter-spacing:-.6px;margin:0 0 6px;line-height:1.18}
+  .hero p{color:var(--ink-2);font-size:clamp(14px,2.4vw,15.5px);margin:0;max-width:640px}
+  .hero .rule{width:46px;height:3px;border-radius:3px;background:var(--seal);margin:14px 0 0;opacity:.8}
+
+  .grid{display:grid;grid-template-columns:minmax(0,1fr) 452px;gap:28px;align-items:start}
+  @media(max-width:980px){ .grid{grid-template-columns:1fr;gap:22px} }
+
+  /* ---------- step cards ---------- */
+  .step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:16px;box-shadow:var(--sh-1);transition:opacity .2s}
+  .step-h{display:flex;align-items:center;gap:11px;margin-bottom:15px}
+  .num{flex:0 0 auto;width:28px;height:28px;border-radius:9px;background:var(--accent);color:#fff;font-family:var(--fs-disp);font-weight:700;font-size:15px;display:grid;place-items:center}
+  .step-h h2{font-size:16.5px;margin:0;font-weight:700;letter-spacing:-.3px}
+  .step-h .sub{color:var(--ink-3);font-size:12px;font-weight:600;margin-left:auto;text-align:right}
+  .step[data-locked="true"]{opacity:.5;pointer-events:none}
+
+  label.fld{display:block;font-size:12px;color:var(--ink-2);font-weight:700;margin:0 0 6px;letter-spacing:.1px}
+  input[type=text],select,textarea{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--line-2);border-radius:var(--r-sm);padding:11px 13px;transition:.15s}
+  textarea{resize:vertical;line-height:1.75}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .row>*{flex:1;min-width:130px}
+
+  .btn{font-weight:700;font-size:14.5px;border:none;border-radius:var(--r-sm);padding:12px 16px;cursor:pointer;transition:transform .06s,background .15s,box-shadow .15s;display:inline-flex;align-items:center;gap:8px;justify-content:center;line-height:1}
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:var(--sh-1)}
+  .btn-primary:hover{background:var(--accent-deep)}
+  .btn-primary:disabled{background:#B9BDD1;cursor:not-allowed;box-shadow:none}
+  .btn-ghost{background:var(--surface-2);color:var(--ink)}
+  .btn-ghost:hover{background:var(--gold-tint)}
+  .btn-line{background:var(--surface);color:var(--ink);border:1px solid var(--line-2)}
+  .btn-line:hover{border-color:var(--accent);color:var(--accent)}
+  .btn-full{width:100%}
+  .btn-sm{padding:8px 12px;font-size:13px}
+
+  /* roster */
+  .roster{display:flex;flex-direction:column;gap:8px}
+  .stu{display:flex;align-items:center;gap:11px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:var(--paper);text-align:left;transition:.12s;width:100%}
+  .stu:hover{border-color:var(--accent)}
+  .stu[aria-selected="true"]{border-color:var(--accent);background:var(--accent-tint);box-shadow:inset 0 0 0 1px var(--accent)}
+  .stu .av{width:34px;height:34px;border-radius:10px;background:var(--gold-tint);color:var(--gold);display:grid;place-items:center;font-weight:700;flex:0 0 auto;font-family:var(--fs-disp);font-size:16px}
+  .stu .meta{flex:1;min-width:0}
+  .stu .nm{font-weight:700;font-size:15px;display:flex;align-items:baseline;gap:6px}
+  .stu .nm em{font-style:normal;font-size:11.5px;color:var(--ink-3);font-weight:600}
+  .stu .dt{font-size:12px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .stu .del{color:var(--ink-3);font-size:16px;background:none;border:none;cursor:pointer;padding:4px 7px;line-height:1;border-radius:8px}
+  .stu .del:hover{color:var(--seal);background:#F7ECEB}
+  .empty{color:var(--ink-3);font-size:13.5px;text-align:center;padding:16px;border:1px dashed var(--line-2);border-radius:12px}
+  .addbox{margin-top:13px;padding-top:14px;border-top:1px dashed var(--line-2)}
+  .roster-foot{display:flex;justify-content:flex-end;margin-top:10px}
+  .linkbtn{background:none;border:none;color:var(--ink-3);font-size:12.5px;font-weight:600;cursor:pointer;padding:4px}
+  .linkbtn:hover{color:var(--seal)}
+
+  /* upload */
+  .drop{border:1.5px dashed var(--line-2);border-radius:13px;padding:26px 16px;text-align:center;cursor:pointer;background:var(--paper);transition:.15s}
+  .drop:hover{border-color:var(--accent);background:var(--accent-tint)}
+  .drop .ic{font-size:28px}
+  .drop .t{font-weight:700;margin-top:5px;font-size:14.5px}
+  .drop .s{color:var(--ink-3);font-size:12.5px;margin-top:2px}
+  .thumb{margin-top:12px;display:flex;gap:12px;align-items:center}
+  .thumb img{width:82px;height:82px;object-fit:cover;border-radius:11px;border:1px solid var(--line-2)}
+  .thumb .fx{font-size:13px;color:var(--ink-2);word-break:break-all}
+
+  /* length control */
+  .lenwrap{margin:2px 0 14px}
+  .lenhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .lenhead b{font-family:var(--fs-disp);color:var(--accent-deep);font-size:16px}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;background:linear-gradient(90deg,var(--accent) var(--pct,25%),var(--line-2) var(--pct,25%));outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);border:3px solid #fff;box-shadow:var(--sh-1);cursor:pointer}
+  input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);border:3px solid #fff;cursor:pointer}
+  .lenticks{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-3);margin-top:5px}
+
+  /* banners */
+  .banner{border-radius:var(--r-sm);padding:11px 13px;font-size:13px;margin:12px 0;line-height:1.6;display:none}
+  .banner code{background:rgba(0,0,0,.06);padding:1px 5px;border-radius:5px;font-size:12px}
+  .banner.warn{background:var(--warn-tint);border:1px solid #EED9AE;color:#7d5514;display:block}
+  .spin{width:15px;height:15px;border:2px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;display:inline-block}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  /* analysis card */
+  .acard{background:var(--accent-tint);border:1px solid #DDE1F1;border-radius:13px;padding:14px;margin:14px 0}
+  .acard-h{font-weight:700;font-size:14px;color:var(--accent-deep);margin-bottom:11px;display:flex;align-items:center;gap:7px}
+  .acard-h .cap{font-size:11px;color:var(--ink-3);font-weight:600;margin-left:auto}
+  .amet{display:inline-flex;align-items:baseline;gap:7px;background:#fff;border:1px solid #DDE1F1;border-radius:10px;padding:6px 13px;margin-bottom:11px}
+  .amet span{font-size:11.5px;color:var(--ink-2);font-weight:700}
+  .amet b{font-size:18px;color:var(--accent-deep);font-family:var(--fs-disp)}
+  .arow{display:flex;align-items:flex-start;gap:9px;margin:8px 0;flex-wrap:wrap}
+  .alab{font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:20px;flex:0 0 auto;white-space:nowrap}
+  .alab.good{background:var(--ok-tint);color:var(--ok)} .alab.warn{background:var(--warn-tint);color:var(--warn)}
+  .achips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{font-size:12.5px;font-weight:600;padding:4px 11px;border-radius:20px}
+  .chip.good{background:#EAF4EF;color:#2f6b56;border:1px solid #CBE5D8}
+  .chip.warn{background:#FBF1E0;color:#8f6420;border:1px solid #EFDDBD}
+  .adet{margin-top:10px}
+  .adet summary{font-size:12.5px;color:var(--accent);cursor:pointer;font-weight:700}
+  .dtable{width:100%;border-collapse:collapse;margin-top:9px;font-size:13px;background:#fff;border-radius:9px;overflow:hidden}
+  .dtable td{border-bottom:1px solid #EEF0F7;padding:6px 10px}
+  .dtable tr:last-child td{border-bottom:none}
+  .dtable td:first-child{color:var(--ink-2)} .dtable td:last-child{text-align:right;font-weight:700}
+  .anote{font-size:12.5px;color:var(--ink-2)}
+  .hint{font-size:12px;color:var(--ink-3);margin-top:7px;line-height:1.6}
+
+  /* styles picker */
+  .cat{font-size:11.5px;color:var(--ink-3);font-weight:800;margin:14px 0 6px;letter-spacing:.4px;text-transform:uppercase}
+  .cat:first-child{margin-top:2px}
+  .styles{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  @media(max-width:420px){ .styles{grid-template-columns:1fr} }
+  .sw{border:1px solid var(--line-2);border-radius:12px;padding:10px 12px;cursor:pointer;background:var(--paper);text-align:left;transition:.12s}
+  .sw:hover{border-color:var(--accent)}
+  .sw[aria-selected="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-tint)}
+  .sw .lab{font-size:11.5px;color:var(--ink-2);font-weight:700;margin-bottom:3px}
+  .sw .prev{font-size:23px;color:var(--ink);line-height:1.25}
+
+  /* ---------- letter preview (signature) ---------- */
+  .stage{position:sticky;top:82px}
+  @media(max-width:980px){ .stage{position:static} }
+  .stage-h{display:flex;align-items:center;justify-content:space-between;margin:0 2px 11px}
+  .stage-h .t{font-size:12px;color:var(--ink-3);font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+  .stage-h .c{font-size:12px;color:var(--ink-3);font-weight:600}
+  .letter{
+    background:
+      repeating-linear-gradient(transparent 0, transparent 39px, #ECE3D0 39px, #ECE3D0 40px),
+      linear-gradient(180deg,#FFFDF7,#FBF5E8);
+    border:1px solid #E7DCC4;border-radius:8px;
+    padding:clamp(26px,5vw,40px) clamp(22px,4.5vw,36px) 30px;
+    box-shadow:var(--sh-2);position:relative;overflow:hidden;min-height:480px;
+  }
+  .letter::before{content:"";position:absolute;left:24px;top:0;bottom:0;width:1px;background:rgba(176,80,74,.25)}
+  .letter .stamp{position:absolute;top:16px;right:18px;width:42px;height:50px;border:1px dashed #D8C9A9;border-radius:3px;display:grid;place-items:center;color:#C6B48D;font-size:8.5px;transform:rotate(3deg);text-align:center;line-height:1.25;font-family:var(--fs-disp)}
+  .letter .to{font-family:var(--fs-disp);font-size:clamp(14px,3vw,16px);color:var(--ink-2);margin-bottom:12px}
+  .letter .body{white-space:pre-wrap;word-break:keep-all;font-size:clamp(20px,5.1vw,27px);line-height:1.95;color:#31364d;min-height:230px}
+  .letter .sign{margin-top:22px;text-align:right}
+  .letter .sign .frm{font-size:13.5px;color:var(--ink-3);font-family:var(--fs-disp)}
+  .letter .sign .who{font-size:clamp(20px,4.5vw,25px);color:#31364d;margin-top:3px;display:inline-flex;align-items:center;gap:11px}
+  .letter .seal{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#C46056,#A5423A);color:#fff;font-family:var(--fs-disp);font-size:15px;box-shadow:0 2px 6px rgba(165,66,58,.4)}
+  .ph{color:#B6AB90 !important}
+  .export{display:flex;gap:10px;margin-top:14px}
+  .foot{color:var(--ink-3);font-size:11.5px;text-align:center;margin-top:20px;line-height:1.7}
+
+  /* ---------- settings drawer ---------- */
+  .scrim{position:fixed;inset:0;background:rgba(34,38,60,.4);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:.2s;z-index:40}
+  .scrim.on{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,92vw);background:var(--paper);box-shadow:var(--sh-3);transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);z-index:41;overflow-y:auto;padding:22px}
+  .drawer.on{transform:none}
+  .drawer h3{font-family:var(--fs-disp);font-size:20px;margin:0 0 4px;color:var(--accent-deep)}
+  .drawer .close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;color:var(--ink-3);cursor:pointer}
+  .sec{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:15px;margin-top:16px}
+  .sec h4{margin:0 0 8px;font-size:13.5px;font-weight:800}
+  .statusline{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;margin-bottom:8px}
+  .kv{font-size:12.5px;color:var(--ink-2);margin:3px 0}
+  .kv code{background:var(--surface-2);padding:1px 6px;border-radius:5px;font-size:12px}
+  .warnbox{background:var(--warn-tint);border:1px solid #EED9AE;color:#7d5514;border-radius:10px;padding:11px 12px;font-size:12.5px;line-height:1.65;margin-top:10px}
+  pre.snippet{background:#20233A;color:#E9EAF2;border-radius:10px;padding:12px;font-size:11.5px;overflow-x:auto;line-height:1.6;margin:8px 0 0}
+
+  /* toast */
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(18px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:13.5px;font-weight:600;opacity:0;transition:.25s;pointer-events:none;z-index:60;max-width:90vw;text-align:center}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  .seg{display:inline-flex;background:var(--surface-2);border-radius:11px;padding:3px;margin-bottom:13px;gap:2px}
+  .segbtn{border:none;background:transparent;color:var(--ink-2);font-weight:700;font-size:13.5px;padding:8px 15px;border-radius:9px;cursor:pointer;transition:.12s}
+  .segbtn.on{background:var(--surface);color:var(--accent);box-shadow:var(--sh-1)}
+  @media(prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important;scroll-behavior:auto!important} }
+</style>
+</head>
+<body>
+  <div class="appbar">
+    <div class="appbar-in">
+      <a class="logo" href="#"><span class="mk">글월<i>.</i></span><span class="cap">선생님은 평가만, 편지는 글월이</span></a>
+      <span class="spacer"></span>
+      <button class="abtn" id="openSettings"><span class="dotstate" id="aiDot"></span>설정</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header class="hero">
+      <h1>평가만 하세요.<br>편지는 글월이 씁니다.</h1>
+      <p>학생을 등록하고 평가 노트를 사진으로 올리면, 성적을 정리해 분석하고 학부모께 보낼 손편지로 바꿔 드려요. 손글씨체를 골라 PNG·PDF로 내려받으면 끝입니다.</p>
+      <div class="rule"></div>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <div class="panel">
+        <!-- 1 -->
+        <section class="step" id="s1">
+          <div class="step-h"><span class="num">1</span><h2>학생 고르기</h2><span class="sub">이 기기에 저장돼요</span></div>
+          <div class="roster" id="roster"></div>
+          <div class="roster-foot"><button class="linkbtn" id="resetAll">전체 삭제</button></div>
+          <div class="addbox">
+            <div class="row">
+              <div style="flex:1.4"><label class="fld">학생 이름</label><input type="text" id="nick" placeholder="예) 김수진, 도은" autocomplete="off" /></div>
+              <div><label class="fld">보호자 호칭</label><select id="honor"><option>어머니</option><option>아버지</option><option>보호자님</option></select></div>
+            </div>
+            <div style="margin-top:10px"><label class="fld">한 줄 메모 (선택)</label><input type="text" id="memo" placeholder="예) 초4 영어반 · 수요일" autocomplete="off" /></div>
+            <button class="btn btn-ghost btn-full btn-sm" style="margin-top:12px" id="addStu">+ 학생 추가</button>
+          </div>
+        </section>
+
+        <!-- 2 -->
+        <section class="step" id="s2" data-locked="true">
+          <div class="step-h"><span class="num">2</span><h2>평가 자료 올리기</h2><span class="sub">사진 또는 엑셀·CSV</span></div>
+          <div class="seg">
+            <button type="button" class="segbtn on" data-mode="photo">📷 사진</button>
+            <button type="button" class="segbtn" data-mode="sheet">📊 엑셀·CSV</button>
+          </div>
+          <div id="modePhoto">
+            <div class="drop" id="drop" role="button" tabindex="0">
+              <div class="ic">📷</div><div class="t">노트 사진 올리기</div>
+              <div class="s">손글씨 메모에 적합해요. 적어둔 걸 그대로 찍으면 됩니다.</div>
+            </div>
+            <input type="file" id="file" accept="image/*" hidden />
+            <div class="thumb" id="thumb" style="display:none">
+              <img id="thumbImg" alt="올린 노트 미리보기" />
+              <div><div class="fx" id="thumbName"></div><button class="btn btn-line btn-sm" id="reup" style="margin-top:8px">다시 올리기</button></div>
+            </div>
+          </div>
+          <div id="modeSheet" style="display:none">
+            <div class="drop" id="dropSheet" role="button" tabindex="0">
+              <div class="ic">📊</div><div class="t">엑셀·CSV 파일 올리기</div>
+              <div class="s">성적표 파일이면 이게 가장 정확해요. 선택한 학생 행만 읽습니다.</div>
+            </div>
+            <input type="file" id="fileSheet" accept=".xlsx,.xls,.csv" hidden />
+            <div id="sheetResult"></div>
+          </div>
+        </section>
+
+        <!-- 3 -->
+        <section class="step" id="s3" data-locked="true">
+          <div class="step-h"><span class="num">3</span><h2>편지 만들기</h2><span class="sub">AI가 읽고 씁니다 · 보내기 전 확인</span></div>
+          <div class="lenwrap">
+            <div class="lenhead"><label class="fld" style="margin:0">편지 길이</label><b id="lenOut">약 300자</b></div>
+            <input type="range" id="len" min="100" max="1000" step="50" value="300" />
+            <div class="lenticks"><span>100</span><span>짧게</span><span>넉넉히</span><span>1000</span></div>
+          </div>
+          <button class="btn btn-primary btn-full" id="gen">✍️ 편지 초안 만들기</button>
+          <div class="banner warn" id="warn"></div>
+          <div class="acard" id="analysis" style="display:none"></div>
+          <div id="letterWrap" style="display:none;margin-top:13px">
+            <label class="fld">편지 내용 (자유롭게 다듬으세요)</label>
+            <textarea id="letterText" rows="8"></textarea>
+            <div class="hint">AI가 노트에 없는 내용을 지어내지 않도록 설계했지만, 보내기 전 한 번 읽어보세요.</div>
+          </div>
+        </section>
+
+        <!-- 4 -->
+        <section class="step" id="s4" data-locked="true">
+          <div class="step-h"><span class="num">4</span><h2>손글씨체 고르고 완성</h2><span class="sub">느낌 분류일 뿐, 아무거나 OK</span></div>
+          <label class="fld">보내는 선생님 이름</label>
+          <input type="text" id="teacher" placeholder="예) 김하늘 선생님" autocomplete="off" />
+          <div class="cat">여성 느낌</div><div class="styles" id="stylesF"></div>
+          <div class="cat">남성 느낌</div><div class="styles" id="stylesM"></div>
+          <div class="cat">공용</div><div class="styles" id="stylesU"></div>
+          <div class="export">
+            <button class="btn btn-line btn-full" id="dlPng">🖼️ PNG 저장</button>
+            <button class="btn btn-primary btn-full" id="dlPdf">📄 PDF 저장</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="stage">
+        <div class="stage-h"><span class="t">편지지 미리보기</span><span class="c" id="pvCount"></span></div>
+        <div class="letter" id="letter">
+          <div class="stamp">글월<br>郵</div>
+          <div class="to" id="pvTo">○○ 어머니께</div>
+          <div class="body" id="pvBody"><span class="ph">왼쪽에서 학생을 고르고 노트를 올리면, 이 자리에 손편지가 나타나요.</span></div>
+          <div class="sign"><div class="frm">마음을 담아,</div><div class="who" id="pvWho"><span class="ph">선생님 이름</span></div></div>
+        </div>
+        <p class="foot">학생 데이터는 이 기기에만 저장됩니다 · AI 설정은 Firebase에서 안전하게 불러와요.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- settings -->
+  <div class="scrim" id="scrim"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <button class="close" id="closeSettings" aria-label="닫기">×</button>
+    <h3>설정</h3>
+    <div class="sec">
+      <h4>AI 연결 상태</h4>
+      <div class="statusline"><span class="dotstate" id="aiDot2"></span><span id="aiStatus">확인 중…</span></div>
+      <div class="kv" id="aiDetail"></div>
+      <button class="btn btn-line btn-sm btn-full" id="reload" style="margin-top:8px">다시 연결</button>
+    </div>
+    <div class="sec">
+      <h4>Firebase RTDB 설정 방법</h4>
+      <div class="kv">아래 경로에 AI 키를 넣어 두면, 이 앱이 안전하게 불러와 사용해요.</div>
+      <pre class="snippet" id="cfgSnippet"></pre>
+      <div class="warnbox" id="secNote"></div>
+    </div>
+    <div class="sec">
+      <h4>데이터</h4>
+      <div class="kv">저장된 학생 <b id="stuCount">0</b>명 · 이 기기에만 보관됩니다.</div>
+      <button class="btn btn-line btn-sm btn-full" id="resetAll2" style="margin-top:8px">학생 전체 삭제</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  var $=function(s){return document.querySelector(s)};
+
+  /* ---------- Firebase ---------- */
+  var firebaseConfig={
+    apiKey:"AIzaSyBS2lq8G5AAL41hYDFxG2NX-VfYWZl8aAA",
+    authDomain:"carfund-f5102.firebaseapp.com",
+    databaseURL:"https://carfund-f5102.firebaseio.com",
+    projectId:"carfund-f5102",
+    storageBucket:"carfund-f5102.appspot.com",
+    messagingSenderId:"694883881246",
+    appId:"1:694883881246:web:cc610160ee1bf5f35f390f",
+    measurementId:"G-YX94DTPHCC"
+  };
+  var db=null, aiCfg=null, aiReady=false;
+  try{ firebase.initializeApp(firebaseConfig); db=firebase.database(); }catch(e){ console.warn("firebase init",e); }
+
+  async function loadAiConfig(){
+    setAiState("loading","AI 설정을 불러오는 중…","");
+    if(!db){ setAiState("off","Firebase를 초기화하지 못했어요","네트워크 상태를 확인해 주세요."); return; }
+    try{ if(firebase.auth) await firebase.auth().signInAnonymously().catch(function(){}); }catch(e){}
+    try{
+      var snap=await db.ref("apps/config/letter").once("value");
+      var v=snap.val()||{};
+      var key=v.api_key||v.apiKey||null;
+      if(key){
+        var prov=v.provider||(String(key).indexOf("sk-ant")===0?"anthropic":"openai");
+        var defModel=(prov==="anthropic")?"claude-sonnet-4-5":"gpt-4o";
+        aiCfg={apiKey:key, provider:prov, model:v.model||defModel, maxTokens:v.maxTokens||v.max_tokens||null};
+        aiReady=true;
+        setAiState("on","AI 연결 준비됨", prov.toUpperCase()+" · "+aiCfg.model);
+      }else{
+        aiReady=false;
+        setAiState("off","AI 키가 아직 없어요", "apps/config/letter/api_key 에 키를 넣어 주세요.");
+      }
+    }catch(err){
+      aiReady=false;
+      setAiState("off","설정을 읽지 못했어요", (err&&err.code)||(err&&err.message)||"권한/규칙을 확인해 주세요.");
+    }
+  }
+  function setAiState(kind,msg,detail){
+    var cls=kind==="on"?"on":(kind==="off"?"off":"");
+    $("#aiDot").className="dotstate "+cls; $("#aiDot2").className="dotstate "+cls;
+    $("#aiStatus").textContent=msg; $("#aiDetail").textContent=detail||"";
+  }
+
+  /* ---------- local storage (with in-memory fallback) ---------- */
+  var LS_KEY="geulwol.students.v1";
+  var memStore={}, lsOk=(function(){ try{ localStorage.setItem("__g","1"); localStorage.removeItem("__g"); return true; }catch(e){ return false; } })();
+  function storeGet(){ try{ return lsOk? JSON.parse(localStorage.getItem(LS_KEY)||"[]") : (memStore[LS_KEY]||[]); }catch(e){ return []; } }
+  function storeSet(arr){ try{ if(lsOk) localStorage.setItem(LS_KEY,JSON.stringify(arr)); else memStore[LS_KEY]=arr; }catch(e){} }
+
+  /* ---------- styles ---------- */
+  var STYLES=[
+    {id:"pen",name:"여리여리 펜글씨",font:"'Nanum Pen Script'",grp:"F"},
+    {id:"gamja",name:"동글동글",font:"'Gamja Flower'",grp:"F"},
+    {id:"melody",name:"산뜻한",font:"'Hi Melody'",grp:"F"},
+    {id:"single",name:"가늘고 정갈한",font:"'Single Day'",grp:"F"},
+    {id:"dokdo",name:"힘 있는 매직펜",font:"'Dokdo'",grp:"M"},
+    {id:"brush",name:"굵은 붓글씨",font:"'Nanum Brush Script'",grp:"M"},
+    {id:"gaegu",name:"담백한 연필",font:"'Gaegu'",grp:"U"},
+    {id:"poor",name:"자연스러운 일상",font:"'Poor Story'",grp:"U"}
+  ];
+
+  var state={students:[],sel:null,img:null,mime:null,letter:"",style:STYLES[0],teacher:"",len:300,inputMode:"photo",sheetText:"",sheetFields:null};
+
+  /* ---------- helpers ---------- */
+  function esc(s){return (s==null?"":String(s)).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+  function wait(ms){return new Promise(function(r){setTimeout(r,ms)})}
+  var toastT; function toast(m){var t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("on")},2200)}
+
+  function hasInput(){ return state.inputMode==="sheet" ? !!state.sheetText : !!state.img; }
+  function refreshLocks(){
+    $("#s2").dataset.locked=state.sel?"false":"true";
+    $("#s3").dataset.locked=(state.sel&&hasInput())?"false":"true";
+    $("#s4").dataset.locked=state.letter?"false":"true";
+    $("#gen").disabled=!(state.sel&&hasInput());
+  }
+
+  /* ---------- roster ---------- */
+  function renderRoster(){
+    var el=$("#roster"); $("#stuCount").textContent=state.students.length;
+    if(!state.students.length){ el.innerHTML='<div class="empty">아직 등록된 학생이 없어요. 아래에서 추가해 주세요.</div>'; return; }
+    el.innerHTML="";
+    state.students.forEach(function(s){
+      var d=document.createElement("button");
+      d.className="stu"; d.type="button"; d.setAttribute("aria-selected",state.sel&&state.sel.id===s.id?"true":"false");
+      d.innerHTML='<span class="av">'+esc(s.nick.slice(0,1))+'</span>'+
+        '<span class="meta"><span class="nm">'+esc(s.nick)+' <em>'+esc(s.honor)+'</em></span>'+
+        '<span class="dt">'+esc(s.memo||"메모 없음")+'</span></span>'+
+        '<span class="del" role="button" title="삭제" data-del="'+s.id+'">🗑</span>';
+      d.addEventListener("click",function(ev){
+        if(ev.target.dataset.del){ removeStudent(ev.target.dataset.del); return; }
+        state.sel=s; renderRoster(); refreshLocks(); renderPreview();
+      });
+      el.appendChild(d);
+    });
+  }
+  function removeStudent(id){
+    var s=state.students.filter(function(x){return x.id===id})[0];
+    if(s && !confirm("'"+s.nick+"' 학생을 삭제할까요?")) return;
+    state.students=state.students.filter(function(x){return x.id!==id});
+    if(state.sel&&state.sel.id===id) state.sel=null;
+    storeSet(state.students); renderRoster(); refreshLocks(); renderPreview();
+  }
+  function resetAll(){
+    if(!state.students.length){ toast("삭제할 학생이 없어요"); return; }
+    if(!confirm("저장된 학생 "+state.students.length+"명을 모두 삭제할까요? 되돌릴 수 없어요.")) return;
+    state.students=[]; state.sel=null; storeSet(state.students);
+    renderRoster(); refreshLocks(); renderPreview(); toast("학생을 모두 삭제했어요");
+  }
+  $("#addStu").addEventListener("click",function(){
+    var nick=$("#nick").value.trim();
+    if(!nick){ toast("학생 이름을 입력해 주세요"); $("#nick").focus(); return; }
+    var s={id:"s"+Date.now(),nick:nick,honor:$("#honor").value,memo:$("#memo").value.trim()};
+    state.students.push(s); state.sel=s; storeSet(state.students);
+    $("#nick").value=""; $("#memo").value="";
+    renderRoster(); refreshLocks(); renderPreview(); toast(nick+" 학생을 추가했어요");
+  });
+  $("#nick").addEventListener("keydown",function(e){ if(e.key==="Enter") $("#addStu").click(); });
+  $("#resetAll").addEventListener("click",resetAll);
+  $("#resetAll2").addEventListener("click",resetAll);
+
+  /* ---------- upload ---------- */
+  var drop=$("#drop"),fileInput=$("#file");
+  drop.addEventListener("click",function(){fileInput.click()});
+  drop.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){e.preventDefault();fileInput.click();} });
+  $("#reup").addEventListener("click",function(){fileInput.click()});
+  fileInput.addEventListener("change",function(e){var f=e.target.files[0];if(f)handleFile(f)});
+  ["dragover","dragenter"].forEach(function(ev){drop.addEventListener(ev,function(e){e.preventDefault();drop.style.borderColor="var(--accent)"})});
+  ["dragleave","drop"].forEach(function(ev){drop.addEventListener(ev,function(e){e.preventDefault();drop.style.borderColor=""})});
+  drop.addEventListener("drop",function(e){var f=e.dataTransfer.files[0];if(f&&/^image\//.test(f.type))handleFile(f)});
+  function handleFile(f){
+    var r=new FileReader();
+    r.onload=function(){
+      var res=r.result; state.mime=(res.match(/^data:(.*?);base64,/)||[])[1]||f.type; state.img=res.split(",")[1];
+      $("#thumbImg").src=res; $("#thumbName").textContent=f.name; $("#thumb").style.display="flex"; drop.style.display="none";
+      refreshLocks();
+    };
+    r.readAsDataURL(f);
+  }
+
+  /* ---------- input mode + sheet parsing ---------- */
+  document.querySelectorAll(".segbtn").forEach(function(b){
+    b.addEventListener("click",function(){
+      var m=b.dataset.mode; state.inputMode=m;
+      document.querySelectorAll(".segbtn").forEach(function(x){x.classList.toggle("on",x.dataset.mode===m)});
+      $("#modePhoto").style.display=(m==="photo")?"block":"none";
+      $("#modeSheet").style.display=(m==="sheet")?"block":"none";
+      refreshLocks();
+    });
+  });
+  var dropSheet=$("#dropSheet"),fileSheet=$("#fileSheet");
+  dropSheet.addEventListener("click",function(){fileSheet.click()});
+  dropSheet.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){e.preventDefault();fileSheet.click();} });
+  fileSheet.addEventListener("change",function(e){var f=e.target.files[0];if(f)handleSheet(f)});
+  ["dragover","dragenter"].forEach(function(ev){dropSheet.addEventListener(ev,function(e){e.preventDefault();dropSheet.style.borderColor="var(--accent)"})});
+  ["dragleave","drop"].forEach(function(ev){dropSheet.addEventListener(ev,function(e){e.preventDefault();dropSheet.style.borderColor=""})});
+  dropSheet.addEventListener("drop",function(e){var f=e.dataTransfer.files[0];if(f)handleSheet(f)});
+
+  function handleSheet(f){
+    if(!state.sel){ toast("먼저 1단계에서 학생을 선택하세요"); return; }
+    if(typeof XLSX==="undefined"){ toast("표 읽기 모듈을 불러오지 못했어요"); return; }
+    var isCsv=/\.csv$/i.test(f.name), reader=new FileReader();
+    reader.onload=function(){
+      try{
+        var wb=isCsv?XLSX.read(reader.result,{type:"string"}):XLSX.read(new Uint8Array(reader.result),{type:"array"});
+        var found=findStudentRow(wb,state.sel.nick);
+        if(!found){ state.sheetText="";state.sheetFields=null; showSheetResult(false,f.name); refreshLocks(); return; }
+        state.sheetFields=found.fields; state.sheetText=found.text;
+        showSheetResult(true,f.name); refreshLocks();
+      }catch(e){ console.error(e); toast("파일을 읽지 못했어요"); }
+    };
+    if(isCsv) reader.readAsText(f); else reader.readAsArrayBuffer(f);
+  }
+  function isNumericLike(v){ v=String(v).trim(); if(!v) return false; return !isNaN(Number(v.replace(/[,%\s]/g,""))); }
+  function findHeaderRow(aoa,idx,matchRow){
+    var mFilled=matchRow.filter(function(x){return String(x).trim()!==""}).length;
+    for(var r=idx-1;r>=0&&r>=idx-15;r--){
+      var row=aoa[r]; if(!row) continue;
+      if(/이름|성명|과목|국어|수학|영어|점수|합계|평균/.test(row.join(" "))) return row;
+      var filled=0,textCells=0;
+      for(var c=0;c<row.length;c++){ var v=String(row[c]).trim(); if(v){ filled++; if(!isNumericLike(v)) textCells++; } }
+      if(filled>=Math.max(3,mFilled*0.5) && textCells>=filled*0.6) return row;
+    }
+    return null;
+  }
+  function findStudentRow(wb,name){
+    var nm=String(name).trim();
+    for(var si=0;si<wb.SheetNames.length;si++){
+      var aoa=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[si]],{header:1,defval:""});
+      for(var r=0;r<aoa.length;r++){
+        var row=aoa[r]||[], hit=false;
+        for(var c=0;c<row.length;c++){ var cell=String(row[c]).trim(); if(cell===nm||(cell&&cell.indexOf(nm)>=0&&cell.length<=nm.length+2)){ hit=true; break; } }
+        if(!hit) continue;
+        var header=findHeaderRow(aoa,r,row), fields=[];
+        for(var c2=0;c2<row.length;c2++){
+          var val=String(row[c2]).trim(); if(!val||val===nm) continue;
+          var key=header?String(header[c2]||"").trim():""; if(!key) key="항목"+(c2+1);
+          fields.push({k:key,v:val});
+        }
+        var text="학생 이름: "+nm+"\n"+fields.map(function(x){return "· "+x.k+": "+x.v}).join("\n");
+        return {fields:fields,text:text};
+      }
+    }
+    return null;
+  }
+  function showSheetResult(ok,fname){
+    var el=$("#sheetResult");
+    if(!ok){ el.innerHTML='<div class="banner warn" style="display:block;margin-top:12px">파일에서 <b>'+esc(state.sel.nick)+'</b> 학생을 찾지 못했어요. 이름이 파일과 정확히 같은지 확인해 주세요.</div>'; return; }
+    var rows=state.sheetFields.slice(0,40).map(function(x){return '<tr><td>'+esc(x.k)+'</td><td>'+esc(x.v)+'</td></tr>'}).join("");
+    el.innerHTML='<div class="acard" style="display:block;margin-top:12px"><div class="acard-h">✅ '+esc(state.sel.nick)+' 데이터 추출 완료<span class="cap">'+esc(fname||"")+'</span></div><table class="dtable">'+rows+'</table></div>';
+  }
+
+  /* ---------- length ---------- */
+  var lenEl=$("#len");
+  function syncLen(){
+    state.len=parseInt(lenEl.value,10);
+    $("#lenOut").textContent="약 "+state.len+"자";
+    var pct=(state.len-100)/(1000-100)*100;
+    lenEl.style.setProperty("--pct",pct+"%");
+  }
+  lenEl.addEventListener("input",syncLen); syncLen();
+
+  /* ---------- generate ---------- */
+  $("#gen").addEventListener("click",generate);
+  async function generate(){
+    if(!state.sel||!hasInput()) return;
+    if(!aiReady){
+      $("#warn").style.display="block";
+      $("#warn").innerHTML="AI가 아직 연결되지 않았어요. 오른쪽 위 <b>설정</b>에서 상태를 확인하고 Firebase에 AI 키를 넣어 주세요.";
+      return;
+    }
+    var btn=$("#gen"); btn.disabled=true; btn.innerHTML='<span class="spin"></span> 편지를 쓰는 중…';
+    $("#warn").style.display="none";
+    var s=state.sel, N=state.len, sheetMode=(state.inputMode==="sheet");
+    var srcLine=sheetMode
+      ? "아래는 '"+s.nick+"' 학생의 성적 데이터입니다(성적표 파일에서 정확히 추출한 실제 값).\n\n"+state.sheetText+"\n\n"
+      : "첨부 이미지는 '"+s.nick+"' 학생과 관련된 평가 자료입니다(손글씨 메모이거나, 여러 학생이 함께 있는 성적표·엑셀 표 캡처일 수 있음).\n\n";
+    var step1=sheetMode
+      ? "[1단계 — 확인] 위 데이터는 이미 '"+s.nick+"' 학생의 값입니다. 값을 그대로 사용하고, 없는 수치는 지어내지 마세요.\n"
+      : "[1단계 — 정확한 추출] 이미지에 여러 학생이 있으면 반드시 '"+s.nick+"' 행/항목만 정확히 찾아 그 학생 데이터만 사용하세요. 표가 크고 글자가 작아도 '이름' 열을 위에서 아래로 꼼꼼히 훑어 '"+s.nick+"'을 찾으세요. 다른 학생 값을 절대 섞지 말고, 이미지에 없는 수치는 지어내지 마세요. 이름이 이미지에 정말로 존재하지 않을 때에만 found=false, letter는 빈 문자열로 두세요.\n";
+    var prompt=
+      "당신은 학생을 깊이 아끼는 다정하고 신뢰감 있는 선생님입니다. "+srcLine+
+      step1+
+      "[2단계 — 분석] 데이터로 평균(있으면), 상대적으로 잘한 과목(강점)과 더 챙기면 좋을 과목(보완)을 판단하세요. 반/전체 평균이 함께 있으면 비교해 더 정확히 짚으세요.\n"+
+      "[3단계 — 편지] 아이는 이름 전체 '"+s.nick+"'(으)로 부르세요(예: '"+s.nick+"이는/"+s.nick+"이가', 받침 없으면 자연스러운 조사). 성을 빼지 마세요. '"+s.honor+"'을 부르며 시작하고, 본문은 공백 포함 약 "+N+"자 내외(±15%)로. 막연한 칭찬 대신 구체적 데이터를 1~2개 근거로 들고 보완점도 부드럽지만 솔직하게 한 가지, 마지막은 가정에서의 다정한 응원으로 맺으세요. 과장·상투어 최소화, 문단은 줄바꿈으로 나눠도 좋음.\n\n"+
+      "아래 JSON 형식으로만 답하세요(코드블록·다른 말 금지):\n"+
+      '{"found":true,"average":"평균 또는 null","items":[{"k":"과목/항목","v":"값"}],"strengths":["강점 과목"],"weaknesses":["보완 과목"],"letter":"편지 본문"}\n'+
+      "items에는 대표 과목 위주로 최대 10개만 담으세요.";
+    var need=Math.round(N*4)+2500;
+    var maxTokens=Math.min(16000,Math.max(need, aiCfg.maxTokens||0, 4000));
+    var dataUrl=state.img?("data:"+(state.mime||"image/jpeg")+";base64,"+state.img):"";
+    var isAnthropic=(aiCfg.provider==="anthropic");
+    var url=isAnthropic?"https://api.anthropic.com/v1/messages":"https://api.openai.com/v1/chat/completions";
+    var headers=isAnthropic
+      ? {"content-type":"application/json","x-api-key":aiCfg.apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"}
+      : {"content-type":"application/json","authorization":"Bearer "+aiCfg.apiKey};
+    var aContent=sheetMode?[{type:"text",text:prompt}]:[{type:"image",source:{type:"base64",media_type:state.mime||"image/jpeg",data:state.img}},{type:"text",text:prompt}];
+    var oContent=sheetMode?[{type:"text",text:prompt}]:[{type:"text",text:prompt},{type:"image_url",image_url:{url:dataUrl,detail:"high"}}];
+    var body=isAnthropic
+      ? JSON.stringify({model:aiCfg.model,max_tokens:maxTokens,messages:[{role:"user",content:aContent}]})
+      : JSON.stringify({model:aiCfg.model,max_tokens:maxTokens,response_format:{type:"json_object"},messages:[{role:"user",content:oContent}]});
+    var lastErr=null;
+    for(var attempt=1;attempt<=3;attempt++){
+      try{
+        if(attempt>1) btn.innerHTML='<span class="spin"></span> 다시 시도 중… ('+attempt+'/3)';
+        var resp=await fetch(url,{method:"POST",headers:headers,body:body});
+        if(!resp.ok){ lastErr=new Error("HTTP "+resp.status); if(resp.status>=500||resp.status===429){ await wait(700*attempt); continue; } break; }
+        var data=await resp.json();
+        var txt=isAnthropic
+          ? (data.content||[]).filter(function(b){return b.type==="text"}).map(function(b){return b.text}).join("\n").trim()
+          : ((data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content)||"").trim();
+        var parsed=parseJson(txt);
+        if(!parsed){
+          var fin=isAnthropic?data.stop_reason:(data.choices&&data.choices[0]&&data.choices[0].finish_reason);
+          lastErr=new Error((fin==="length"||fin==="max_tokens")?"응답이 잘렸어요":"형식 오류");
+          if(attempt<3){ await wait(500); continue; }
+          break;
+        }
+        if(parsed.found===false||!parsed.letter){
+          $("#warn").style.display="block";
+          $("#warn").innerHTML="이미지에서 <b>"+esc(s.nick)+"</b> 학생을 찾지 못했어요. 이름이 자료와 정확히 같은지, 사진에 그 학생이 있는지 확인해 주세요.";
+          btn.disabled=false; btn.innerHTML="✍️ 다시 만들기"; refreshLocks(); return;
+        }
+        applyResult(parsed); toast("분석과 편지 초안이 완성됐어요");
+        btn.disabled=false; btn.innerHTML="✍️ 다시 만들기"; refreshLocks(); return;
+      }catch(e){ lastErr=e; await wait(600*attempt); }
+    }
+    var m=(lastErr&&lastErr.message)||"알 수 없는 오류";
+    $("#warn").style.display="block";
+    $("#warn").innerHTML="편지 생성에 실패했어요 (<code>"+esc(m)+"</code>). 잠시 후 다시 시도하거나, 설정에서 AI 키·모델을 확인해 주세요.";
+    btn.disabled=false; btn.innerHTML="✍️ 다시 만들기"; refreshLocks();
+  }
+  function parseJson(t){
+    try{return JSON.parse(t)}catch(e){}
+    var a=t.indexOf("{"),b=t.lastIndexOf("}");
+    if(a>=0&&b>a){ try{return JSON.parse(t.slice(a,b+1))}catch(e){} }
+    return null;
+  }
+  function chip(t,k){return '<span class="chip '+k+'">'+esc(t)+'</span>'}
+  function applyResult(r){
+    state.letter=r.letter||"";
+    var el=$("#analysis"),s=state.sel,parts=[];
+    parts.push('<div class="acard-h">📊 '+esc(s.nick)+' 성적 분석<span class="cap">선생님 확인용</span></div>');
+    if(r.average) parts.push('<div class="amet"><span>평균</span><b>'+esc(r.average)+'</b></div>');
+    if(r.strengths&&r.strengths.length) parts.push('<div class="arow"><span class="alab good">잘하는 과목</span><span class="achips">'+r.strengths.map(function(x){return chip(x,"good")}).join("")+'</span></div>');
+    if(r.weaknesses&&r.weaknesses.length) parts.push('<div class="arow"><span class="alab warn">더 챙기면</span><span class="achips">'+r.weaknesses.map(function(x){return chip(x,"warn")}).join("")+'</span></div>');
+    if(r.items&&r.items.length){
+      var rows=r.items.map(function(it){return '<tr><td>'+esc(it.k)+'</td><td>'+esc(it.v)+'</td></tr>'}).join("");
+      parts.push('<details class="adet"><summary>읽어낸 항목 '+r.items.length+'개 펼쳐보기</summary><table class="dtable">'+rows+'</table></details>');
+    }
+    if(parts.length<=1) parts.push('<div class="anote">점수 데이터는 못 찾았지만 메모 내용으로 편지를 작성했어요.</div>');
+    el.innerHTML=parts.join(""); el.style.display="block";
+    $("#letterText").value=state.letter; $("#letterWrap").style.display="block";
+    refreshLocks(); renderPreview();
+  }
+  $("#letterText").addEventListener("input",function(){state.letter=this.value;renderPreview()});
+  $("#teacher").addEventListener("input",function(){state.teacher=this.value;renderPreview()});
+
+  /* ---------- styles picker ---------- */
+  function buildStyles(){
+    var g={F:$("#stylesF"),M:$("#stylesM"),U:$("#stylesU")};
+    STYLES.forEach(function(st){
+      var b=document.createElement("button"); b.type="button"; b.className="sw"; b.dataset.id=st.id;
+      b.setAttribute("aria-selected",st.id===state.style.id?"true":"false");
+      b.innerHTML='<div class="lab">'+esc(st.name)+'</div><div class="prev" style="font-family:'+st.font+'">사랑하는 마음을 담아</div>';
+      b.addEventListener("click",function(){
+        state.style=st;
+        document.querySelectorAll(".sw").forEach(function(x){x.setAttribute("aria-selected",x.dataset.id===st.id?"true":"false")});
+        renderPreview();
+      });
+      g[st.grp].appendChild(b);
+    });
+  }
+
+  /* ---------- preview ---------- */
+  function renderPreview(){
+    var to=$("#pvTo"),bodyEl=$("#pvBody"),who=$("#pvWho"),ff=state.style.font;
+    bodyEl.style.fontFamily=ff; who.style.fontFamily=ff;
+    to.textContent=state.sel?(state.sel.nick+" "+state.sel.honor+"께"):"○○ 어머니께";
+    if(state.letter){ bodyEl.textContent=state.letter; $("#pvCount").textContent=state.letter.replace(/\s/g,"").length+"자"; }
+    else{ bodyEl.innerHTML='<span class="ph">왼쪽에서 학생을 고르고 노트를 올리면, 이 자리에 손편지가 나타나요.</span>'; $("#pvCount").textContent=""; }
+    who.innerHTML=state.teacher?(esc(state.teacher)+'<span class="seal">師</span>'):'<span class="ph">선생님 이름</span>';
+  }
+
+  /* ---------- export ---------- */
+  async function ensureFonts(){ try{ await document.fonts.ready; await Promise.all(STYLES.map(function(s){return document.fonts.load('27px '+s.font,'가나다라')})); }catch(e){} }
+  async function snap(){ if(!state.letter){toast("먼저 편지를 만들어 주세요");return null;} await ensureFonts(); return await html2canvas($("#letter"),{scale:2,backgroundColor:"#FBF5E8",useCORS:true}); }
+  function fname(ext){return "글월_"+((state.sel&&state.sel.nick)||"편지")+"."+ext}
+  $("#dlPng").addEventListener("click",async function(){var c=await snap();if(!c)return;var a=document.createElement("a");a.href=c.toDataURL("image/png");a.download=fname("png");a.click();toast("PNG로 저장했어요")});
+  $("#dlPdf").addEventListener("click",async function(){var c=await snap();if(!c)return;var J=window.jspdf.jsPDF;var pw=420,ph=pw*c.height/c.width;var pdf=new J({orientation:"portrait",unit:"pt",format:[pw,ph]});pdf.addImage(c.toDataURL("image/png"),"PNG",0,0,pw,ph);pdf.save(fname("pdf"));toast("PDF로 저장했어요")});
+
+  /* ---------- settings drawer ---------- */
+  function openDrawer(){$("#drawer").classList.add("on");$("#scrim").classList.add("on");$("#drawer").setAttribute("aria-hidden","false")}
+  function closeDrawer(){$("#drawer").classList.remove("on");$("#scrim").classList.remove("on");$("#drawer").setAttribute("aria-hidden","true")}
+  $("#openSettings").addEventListener("click",openDrawer);
+  $("#closeSettings").addEventListener("click",closeDrawer);
+  $("#scrim").addEventListener("click",closeDrawer);
+  $("#reload").addEventListener("click",loadAiConfig);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeDrawer(); });
+
+  $("#cfgSnippet").textContent='apps/\n └ config/\n     └ letter/\n         ├ api_key   : "sk-proj-..."   (OpenAI) 또는 "sk-ant-..." (Anthropic)\n         ├ model     : "gpt-4o"        (OpenAI) / "claude-sonnet-4-5"\n         ├ provider  : "openai"        (선택 · 없으면 키로 자동 판별)\n         └ maxTokens : 3000            (선택)';
+  $("#secNote").innerHTML="⚠️ 이 방식은 프로토타입용이에요. 브라우저가 키를 직접 읽어 호출하므로 방문자에게 노출될 수 있습니다. 실서비스는 키를 <b>클라우드 함수(서버)</b>에만 두고 프록시하세요. RTDB 규칙은 최소한 <code>apps/config/letter</code>의 <code>.read</code>를 <code>auth != null</code>로 잠그세요. 키가 한번이라도 노출됐다면 즉시 폐기 후 재발급하세요.";
+
+  /* ---------- init ---------- */
+  state.students=storeGet();
+  renderRoster(); buildStyles(); refreshLocks(); renderPreview(); loadAiConfig();
+})();
+</script>
+</body>
+</html>
