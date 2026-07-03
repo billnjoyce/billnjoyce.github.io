@@ -600,6 +600,47 @@
   function esc(s){return (s==null?"":String(s)).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
   function wait(ms){return new Promise(function(r){setTimeout(r,ms)})}
   function track(n,p){try{if(window.gtag)window.gtag('event',n,p||{})}catch(e){}}
+
+  /* ===== PlatformManager — jsapps 지표(dau/installs/updates/sales/events) + 이벤트 푸시
+     동일 패턴 (findmybenefis/usePlatform) · appName:letter / platform:web / v1.0.0 ===== */
+  var PM=(function(){
+    var CFG={
+      API_KEY:'AIzaSyDvQ-CLAZ11NXLGGJTnT6xMB37UEf6MQkY',
+      DB:'https://carfund-f5102.firebaseio.com',
+      EMAIL:'firebase-common@joyce.com', PASSWORD:'Joyce1234!',
+      CF:'https://us-central1-carfund-f5102.cloudfunctions.net',
+      APP:'letter', PLATFORM:'web', VER:'1-0-0',
+      RELEASE:(location.protocol==='https:' && !/localhost|127\.0\.0\.1/.test(location.hostname))
+    };
+    var TOPIC='topic-jsapps-all';
+    function bpath(){return CFG.RELEASE?'/':'-dev/';}
+    function bsuf(){return CFG.RELEASE?'-release':'-dev';}
+    function dstr(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+    function uuid(){var v=localStorage.getItem('pm_uuid');if(!v){v=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():'dev_'+Date.now()+'_'+Math.random().toString(36).slice(2,10);localStorage.setItem('pm_uuid',v);}return v;}
+    var _tok='',_exp=0;
+    async function login(){
+      if(_tok && Date.now()<_exp-300000) return _tok;
+      var r=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key='+CFG.API_KEY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:CFG.EMAIL,password:CFG.PASSWORD,returnSecureToken:true})});
+      if(!r.ok) throw new Error('pm login '+r.status);
+      var d=await r.json(); _tok=d.idToken||''; _exp=Date.now()+parseInt(d.expiresIn||'3600')*1000; return _tok;
+    }
+    async function fset(path,val){try{var t=await login();await fetch(CFG.DB+'/'+path+'.json?auth='+t,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(val)});}catch(e){}}
+    async function fget(path){try{var t=await login();var r=await fetch(CFG.DB+'/'+path+'.json?auth='+t);if(!r.ok)return null;var d=await r.json();return (d&&typeof d==='object')?d:null;}catch(e){return null;}}
+    var flags={dau:false,installs:false,updates:false,sales:false,events:false},_nchk=false;
+    async function checkNotif(){ if(_nchk)return; var dic=await fget('jsapps/'+CFG.APP+'/notifications'+bsuf()+'/'+CFG.PLATFORM); if(dic){flags={dau:!!dic.dau,installs:!!dic.installs,updates:!!dic.updates,sales:!!dic.sales,events:!!dic.events};_nchk=true;} }
+    async function push(title,msg){try{await fetch(CFG.CF+'/sendPush?topic='+encodeURIComponent(TOPIC)+'&title='+encodeURIComponent(title)+'&message='+encodeURIComponent(msg));}catch(e){}}
+    async function pushEvent(root,label,extra){ var dic=await fget('jsapps/'+CFG.APP+'/'+root+bpath()+dstr()+'/'+CFG.PLATFORM+'/'+CFG.VER); var count=dic?Object.keys(dic).length:1; var ver=CFG.VER.replace(/-/g,'.'); var b=CFG.RELEASE?'Release':'Dev'; var title='['+CFG.APP+']'; var msg=extra?(CFG.PLATFORM+' 앱에서 '+label+' 이벤트가 발생하였습니다. ('+count+')\n['+b+' - '+ver+']\n'+extra):(CFG.PLATFORM+' 앱에서 '+label+' 이벤트가 발생하였습니다. ('+count+')\n['+b+' - '+ver+']'); await push(title,msg); }
+    async function mInstalls(){await fset('jsapps/'+CFG.APP+'/installs'+bpath()+dstr()+'/'+CFG.PLATFORM+'/'+CFG.VER+'/'+uuid(),Date.now()); if(flags.installs)await pushEvent('installs','Installs');}
+    async function mDau(){await fset('jsapps/'+CFG.APP+'/dau'+bpath()+dstr()+'/'+CFG.PLATFORM+'/'+CFG.VER+'/'+uuid(),Date.now()); if(flags.dau)await pushEvent('dau','DAU');}
+    async function mUpdates(){await fset('jsapps/'+CFG.APP+'/updates'+bpath()+dstr()+'/'+CFG.PLATFORM+'/'+CFG.VER+'/'+uuid(),Date.now()); if(flags.updates)await pushEvent('updates','Updates');}
+    async function sale(type,name,price){await fset('jsapps/'+CFG.APP+'/sales'+bpath()+dstr()+'/'+CFG.PLATFORM+'/'+CFG.VER+'/'+uuid()+'/'+type+'/'+name,String(price)); if(flags.sales)await pushEvent('sales','Sales','[type: '+type+', productName: '+name+', price: '+price+']');}
+    async function event(ev,info){await fset('jsapps/'+CFG.APP+'/events'+bpath()+dstr()+'/'+CFG.PLATFORM+'/'+CFG.VER+'/'+Date.now()+'/'+ev,info||''); if(flags.events)await pushEvent('events','Event','[event: '+ev+', info: '+(info||'')+']');}
+    function checkInstalls(){ if(!localStorage.getItem('pm_installed_ver')){localStorage.setItem('pm_installed_ver',CFG.VER);localStorage.setItem('pm_current_ver',CFG.VER);mInstalls();} else if(localStorage.getItem('pm_current_ver')!==CFG.VER){localStorage.setItem('pm_current_ver',CFG.VER);mUpdates();} }
+    var _init=false;
+    async function init(){ if(_init)return; _init=true; try{ await login(); await checkNotif(); checkInstalls(); await mDau(); }catch(e){ _init=false; } }
+    return { init:init, sale:sale, event:event, version:function(){return CFG.VER.replace(/-/g,'.');} };
+  })();
+  PM.init();
   var toastT;function toast(m){var t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("on")},2400)}
   function fmtDate(ts){ if(!ts) return "-"; var d=new Date(ts); return d.getFullYear()+"."+("0"+(d.getMonth()+1)).slice(-2)+"."+("0"+d.getDate()).slice(-2); }
   function won(n){ return n.toLocaleString("ko-KR")+"원"; }
@@ -652,7 +693,7 @@
     if(view==="pricingL"){ document.getElementById("view-landing").classList.add("on"); var t=$("#pricingL"); if(t) t.scrollIntoView({behavior:"smooth"}); }
     else window.scrollTo(0,0);
     $$(".navlink").forEach(function(b){ b.classList.toggle("active", b.dataset.go===view); });
-    if(view==="pricing") renderPlans($("#plansApp"),true);
+    if(view==="pricing") renderPlans($("#plansApp"),true,"app_pricing");
     if(view==="settings") renderSettings();
     if(view==="app") updateAppGating();
     track("view",{name:view});
@@ -1051,7 +1092,8 @@
   });
 
   /* ---------- plans render + subscribe ---------- */
-  function renderPlans(host,showCurrent){
+  function renderPlans(host,showCurrent,source){
+    source=source||"pricing";
     var cur=plan().id, order=["free","basic","premium"];
     host.innerHTML="";
     order.forEach(function(id){
@@ -1061,18 +1103,26 @@
       div.innerHTML='<div class="nm">'+esc(p.name)+'</div><div class="pr">'+(p.price?won(p.price):"0원")+'<small>'+(p.price?" /월":"")+'</small></div><div class="sub">'+esc(p.tag)+'</div><ul>'+feats+'</ul>'+btn;
       host.appendChild(div);
     });
-    host.querySelectorAll(".plan").forEach(function(card){ card.addEventListener("click",function(e){ if(e.target.closest("[data-sub]"))return; host.querySelectorAll(".plan").forEach(function(x){x.classList.remove("selected")}); card.classList.add("selected"); }); });
-    host.querySelectorAll("[data-sub]").forEach(function(b){ b.addEventListener("click",function(e){ e.preventDefault(); e.stopPropagation(); onSubscribe(b.dataset.sub); }); });
+    host.querySelectorAll(".plan").forEach(function(card){ card.addEventListener("click",function(e){ if(e.target.closest("[data-sub]"))return; host.querySelectorAll(".plan").forEach(function(x){x.classList.remove("selected")}); card.classList.add("selected"); var pid=card.getAttribute("data-plan"); track("select_plan",{plan:pid,price:(PLANS[pid]||{}).price||0,source:source}); }); });
+    host.querySelectorAll("[data-sub]").forEach(function(b){ b.addEventListener("click",function(e){ e.preventDefault(); e.stopPropagation(); onSubscribe(b.dataset.sub,source); }); });
   }
-  async function onSubscribe(id){
-    if(!user){ gLogin(); return; }
-    if(id==="free"){ toast("무료 요금제로 이용 중이에요"); return; }
-    track("begin_checkout",{plan:id});
-    var res=await Payment.checkout(PLANS[id]);
+  async function onSubscribe(id,source){
+    source=source||"pricing";
+    if(!user){ track("payment_intent",{plan:id,source:source,logged_in:false}); gLogin(); return; }
+    if(id==="free"){ track("select_free",{source:source}); toast("무료 요금제로 이용 중이에요"); return; }
+    var p=PLANS[id], value=p.price||0;
+    // 결제 의향 집계 (실제 결제 기능은 아직 없음)
+    track("payment_intent",{plan:id,price:value,source:source,logged_in:true});
+    track("begin_checkout",{currency:"KRW",value:value,source:source,items:[{item_id:id,item_name:p.name,price:value}]});
+    try{ PM.event("payment_intent","plan="+id+", price="+value+", source="+source); }catch(e){}
+    var res=await Payment.checkout(p);
     if(res.ok){ // 결제 성공 시 (추후 실제 모듈 연동)
+      track("purchase",{currency:"KRW",value:value,plan:id,items:[{item_id:id,item_name:p.name,price:value}]});
+      try{ PM.sale("subscription",p.name,value); }catch(e){}
       var now=Date.now(); profile.membership={plan:id,startedAt:now,expiresAt:now+30*24*3600*1000};
-      await saveProfile(); updateAppGating(); renderSettings(); toast(PLANS[id].name+" 구독이 시작됐어요"); go("settings");
+      await saveProfile(); updateAppGating(); renderSettings(); toast(p.name+" 구독이 시작됐어요"); go("settings");
     } else {
+      track("checkout_unavailable",{plan:id,price:value,source:source,reason:res.reason||"준비중"});
       openModal("결제 준비 중", "결제 모듈은 인증 완료 후 연결될 예정이에요. 지금은 어댑터만 준비돼 있어 실제 결제는 진행되지 않아요.\n("+esc(res.reason||"")+")", "확인", closeModal);
     }
   }
@@ -1097,7 +1147,7 @@
   $("#modalOk").addEventListener("click",function(){ if(modalOkFn)modalOkFn(); else closeModal(); });
 
   /* ---------- init ---------- */
-  renderPlans($("#plansLanding"),false);
+  renderPlans($("#plansLanding"),false,"landing");
   (function(){
     var els=$$(".reveal");
     try{ var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}})},{threshold:.16,rootMargin:"0px 0px -8% 0px"}); els.forEach(function(el){io.observe(el)}); }
