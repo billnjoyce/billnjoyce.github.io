@@ -168,6 +168,15 @@ footer.ft{border-top:1px solid var(--line);margin-top:20px;padding:50px 0 40px;}
 .hero-bg{position:absolute;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:1400px;height:100%;object-fit:cover;object-position:center 30%;opacity:.22;z-index:0;pointer-events:none;-webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.5) 45%,transparent 78%);mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.5) 45%,transparent 78%);}
 .hero .wrap{position:relative;z-index:1;}
 .visual-photo{width:100%;height:210px;object-fit:cover;border-radius:16px;margin-bottom:18px;border:1px solid var(--line);filter:saturate(1.05) contrast(1.03);}
+
+.price2{margin:6px 0 4px;}
+.prow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);}
+.prow:last-child{border-bottom:none;}
+.prow .pk{font-size:15px;font-weight:700;color:var(--soft);display:flex;align-items:center;gap:8px;}
+.prow .pk em{font-style:normal;font-size:11.5px;font-weight:800;color:#231400;background:linear-gradient(135deg,var(--amber),var(--amber2));padding:3px 9px;border-radius:999px;}
+.prow .pv{font-size:26px;font-weight:900;color:#fff;letter-spacing:-.02em;white-space:nowrap;}
+.prow .pv small{font-size:13px;font-weight:600;color:var(--faint);margin-left:3px;}
+.prow.best .pv{color:var(--amber);}
 </style></head><body>
 <div class="bgfx"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
 <div class="grid-ov"></div>
@@ -288,7 +297,11 @@ footer.ft{border-top:1px solid var(--line);margin-top:20px;padding:50px 0 40px;}
   </div>
   <div class="price hot reveal d1">
    <div class="tag">가장 인기</div>
-   <div class="plan amber">Pro</div><div class="amt">₩99,000</div><div class="per">연간 · ₩12,900/월(월간 결제 시)</div>
+   <div class="plan amber">Pro</div>
+   <div class="price2">
+     <div class="prow"><span class="pk">월간</span><span class="pv">₩12,900<small>/월</small></span></div>
+     <div class="prow best"><span class="pk">연간 <em>약 36% 할인</em></span><span class="pv">₩99,000<small>/년</small></span></div>
+   </div>
    <ul><li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>회원·프로그램 무제한</li><li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>전체 수입 분석 + 예측</li><li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>SNS 홍보 카드 + 분석 PDF</li><li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>AI 인사이트</li><li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>클라우드 동기화</li></ul>
    <a class="btn btn-p" style="width:100%;justify-content:center" href="https://apps.apple.com/app/id6787320858">Pro 시작하기</a>
   </div>
