@@ -1,120 +1,93 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="format-detection" content="telephone=no">
-<meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#0C0B16">
-<title>RepFit.ai 개인정보 처리방침</title>
+<html lang="ko"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#0B0C10"/><title>RepFit Coach 개인정보 처리방침</title>
 <style>
-:root{
-  --hot:#6E5BF6; --hot-2:#8E7CFF;
-  --hot-soft:rgba(110,91,246,0.12); --hot-line:rgba(110,91,246,0.30);
-  --amber:#FF7A45; --amber-soft:rgba(255,122,69,0.12); --amber-line:rgba(255,122,69,0.34);
-  --bg:#0C0B16; --bg-soft:#16131F; --bg-soft2:#201C30; --line:#2C2842;
-  --ink:#ffffff; --ink-soft:#C9C5DE; --ink-faint:#A6A0C4;
-  --radius:16px; --maxw:880px;
-  --font:'Pretendard',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI","Noto Sans KR",Roboto,sans-serif;
-}
+:root{--font:'Pretendard',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI","Noto Sans KR",Roboto,sans-serif;
+--bg:#0B0C10;--bg-soft:#14161C;--bg-2:#1a1d24;--line:#262b34;--radius:14px;
+--ink:#f4f5f7;--ink-soft:#c7ccd4;--ink-faint:#8b93a1;
+--hot:#F5A623;--hot-2:#FFC24B;--hot-soft:rgba(245,166,35,.10);--hot-line:rgba(245,166,35,.3);
+--blue:#5B8DEF;--blue-soft:rgba(91,141,239,.10);--blue-line:rgba(91,141,239,.28);
+--amber:#FBBF24;--amber-soft:rgba(251,191,36,.09);--amber-line:rgba(251,191,36,.3);}
 @font-face{font-family:'Pretendard';font-weight:800;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-ExtraBold.woff2') format('woff2');}
 @font-face{font-family:'Pretendard';font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2');}
+@font-face{font-family:'Pretendard';font-weight:600;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-SemiBold.woff2') format('woff2');}
 @font-face{font-family:'Pretendard';font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Medium.woff2') format('woff2');}
 @font-face{font-family:'Pretendard';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--bg);}
-body{font-family:var(--font);color:var(--ink-soft);background:var(--bg);line-height:1.8;margin:0;font-size:16px;font-weight:400;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased;}
-.wrap{max-width:var(--maxw);margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 28px) 20px 90px;}
-header.doc{padding:8px 0 24px;border-bottom:3px solid var(--hot);margin-bottom:8px;}
-.brand{display:inline-flex;align-items:center;gap:11px;margin-bottom:18px;}
-.brand .mk{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--hot),var(--hot-2));display:grid;place-items:center;box-shadow:0 8px 20px rgba(110,91,246,0.4);font-weight:800;color:#fff;font-size:20px;}
-.brand .nm{font-size:18px;font-weight:800;color:#fff;letter-spacing:-.5px;}
-.brand .nm b{color:var(--hot);}
-header.doc .kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--hot);background:var(--hot-soft);border:1px solid var(--hot-line);padding:5px 12px;border-radius:999px;margin-bottom:14px;}
-header.doc h1{font-size:27px;line-height:1.35;margin:0 0 14px;letter-spacing:-.02em;color:#fff;font-weight:800;}
-.meta{color:var(--ink-faint);font-size:13.5px;line-height:1.95;margin:0;}
+html{scroll-behavior:smooth;background:var(--bg);-webkit-text-size-adjust:100%;}
+body{font-family:var(--font);color:var(--ink-soft);background:var(--bg);line-height:1.8;margin:0;font-size:16px;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:860px;margin:0 auto;padding:34px 22px 100px;}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:26px;}
+.brand .mk{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,var(--hot),var(--hot-2));display:grid;place-items:center;box-shadow:0 8px 22px rgba(245,166,35,.42);}
+.brand .mk svg{width:23px;height:23px;}
+.brand .nm{font-size:19px;font-weight:800;color:#fff;letter-spacing:-.5px;}
+.langbar{display:flex;gap:8px;margin:0 0 24px;}
+.langbar a{font-size:12.5px;font-weight:700;color:var(--ink-faint);text-decoration:none;border:1px solid var(--line);padding:6px 13px;border-radius:999px;transition:.15s;}
+.langbar a.on{color:#2a1c02;background:var(--hot);border-color:var(--hot);}
+header.doc .kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--hot);background:var(--hot-soft);border:1px solid var(--hot-line);padding:6px 13px;border-radius:999px;margin-bottom:15px;}
+header.doc h1{font-size:29px;line-height:1.32;margin:0 0 14px;letter-spacing:-.02em;color:#fff;font-weight:800;}
+.meta{color:var(--ink-faint);font-size:13.5px;line-height:2;margin:0;}
 .meta b{color:var(--ink-soft);}
-.langbar{display:flex;gap:8px;margin:14px 0 0;}
-.langbar a{font-size:12.5px;font-weight:700;color:var(--ink-faint);text-decoration:none;border:1px solid var(--line);padding:5px 12px;border-radius:999px;cursor:pointer;}
-.langbar a.on{color:#fff;background:var(--hot);border-color:var(--hot);}
-.box{background:var(--bg-soft);border:1px solid var(--line);border-left:4px solid var(--hot);padding:16px 18px;border-radius:var(--radius);margin:20px 0;font-size:14.5px;color:var(--ink-soft);}
+.lead{font-size:15.5px;color:var(--ink-soft);background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:22px 0;}
+.box{background:var(--bg-soft);border:1px solid var(--line);border-left:4px solid var(--hot);padding:15px 18px;border-radius:var(--radius);margin:16px 0;font-size:14.5px;color:var(--ink-soft);}
 .box b{color:#fff;}
-.notice{background:var(--hot-soft);border:1px solid var(--hot-line);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#cfc7ff;}
-.notice b{color:#fff;}
-.warn{background:var(--amber-soft);border:1px solid var(--amber-line);border-left:4px solid var(--amber);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#ffd9c7;}
+.warn{background:var(--amber-soft);border:1px solid var(--amber-line);border-left:4px solid var(--amber);padding:14px 17px;border-radius:12px;margin:16px 0;font-size:14px;color:#f2d79a;}
 .warn b{color:#fff;}
-.contact{background:var(--hot-soft);border:1px solid var(--hot-line);border-left:4px solid var(--hot);padding:18px 20px;border-radius:var(--radius);font-size:14.5px;line-height:2;color:var(--ink-soft);}
-.contact b{color:#fff;}
-nav.toc{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin:26px 0 10px;}
-nav.toc h2{font-size:16px;margin:0 0 14px;color:#fff;border:0;padding:0;font-weight:800;}
-nav.toc ol{list-style:none;margin:0;padding:0;columns:2;column-gap:26px;}
-nav.toc ol li{margin:0 0 6px;font-size:13.5px;break-inside:avoid;}
+nav.toc{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin:28px 0 12px;}
+nav.toc h2{font-size:15px;margin:0 0 14px;color:#fff;border:0;padding:0;font-weight:800;letter-spacing:.02em;}
+nav.toc ol{list-style:none;margin:0;padding:0;columns:2;column-gap:28px;}
+nav.toc ol li{margin:0 0 7px;font-size:13.5px;break-inside:avoid;}
 nav.toc a{color:var(--ink-faint);text-decoration:none;}
 nav.toc a:hover{color:var(--hot);text-decoration:underline;}
-.part{margin:50px 0 8px;padding:18px 22px;background:linear-gradient(135deg,var(--hot) 0%,var(--hot-2) 100%);color:#fff;border-radius:var(--radius);box-shadow:0 12px 30px rgba(110,91,246,0.28);}
-.part .num{font-size:12px;font-weight:700;opacity:.9;letter-spacing:.12em;}
-.part h2{color:#fff;border:0;margin:4px 0 0;padding:0;font-size:21px;font-weight:800;}
-h2.chapter{font-size:18px;color:#fff;margin:36px 0 6px;padding-bottom:9px;border-bottom:1px solid var(--line);font-weight:800;letter-spacing:-.3px;scroll-margin-top:16px;}
-h3{font-size:16px;color:#fff;margin:24px 0 6px;scroll-margin-top:16px;font-weight:700;letter-spacing:-.2px;}
-h3 .anum{color:var(--hot);font-weight:800;margin-right:6px;}
-p{margin:8px 0;color:var(--ink-soft);font-size:15px;}
-ul,ol.list{margin:8px 0 8px 2px;padding-left:20px;}
-li{margin:6px 0;font-size:15px;}
+.art{margin:30px 0 6px;scroll-margin-top:18px;}
+.art h2{font-size:18.5px;color:#fff;font-weight:800;letter-spacing:-.3px;margin:0 0 4px;padding-bottom:10px;border-bottom:1px solid var(--line);}
+.art h2 .n{color:var(--hot);margin-right:8px;font-weight:800;}
+h3{font-size:15.5px;color:#fff;margin:20px 0 4px;font-weight:700;letter-spacing:-.2px;}
+p{margin:9px 0;color:var(--ink-soft);font-size:15px;}
+ul,ol.list{margin:8px 0 10px 2px;padding-left:20px;}
+ul li,ol.list li{margin:6px 0;font-size:14.8px;color:var(--ink-soft);}
+b{color:#e9edf2;font-weight:700;}
 a{color:var(--hot);text-decoration:none;}
 a:hover{text-decoration:underline;}
-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.8px;}
 th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;}
-th{background:var(--bg-soft2);color:#fff;font-weight:700;}
+th{background:var(--bg-2);color:#fff;font-weight:700;}
 td b{color:#fff;}
-footer{margin-top:54px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-faint);font-size:12.5px;line-height:1.95;}
-</style>
-</head>
-<body>
-<div class="wrap">
-<header class="doc">
-  <div class="brand"><div class="mk">R</div><div class="nm">Rep<b>Fit.ai</b></div></div>
-  <span class="kicker">개인정보 처리방침</span>
-  <h1>RepFit.ai 개인정보 처리방침</h1>
-  <p class="meta">시행일 <b>2026-06-28</b> · 최종 업데이트 <b>2026-06-28</b></p>
-  <div class="langbar"><a class="on">한국어</a><a href="../../en/privacy.html">English</a></div>
-</header>
-<div class='box'>회사는 이용자의 개인정보를 안전하게 보호하기 위해 최선을 다합니다. 본 방침은 RepFit.ai가 수집·이용하는 개인정보, 제3자 처리위탁, 국외 이전, 이용자의 권리를 상세히 설명합니다. 구독·결제·환불 등 서비스 이용 조건은 <a href='terms.html'>이용약관</a>을 참고하세요.</div>
-<nav class="toc"><h2>목차</h2><ol><li><a href="#a0">1. 개요</a></li><li><a href="#a1">2. 수집하는 정보</a></li><li><a href="#a2">3. 수집 방법</a></li><li><a href="#a3">4. 정보의 이용</a></li><li><a href="#a4">5. 보관 및 삭제</a></li><li><a href="#a5">6. 제3자 제공 및 수탁</a></li><li><a href="#a6">7. 결제 데이터 (Apple)</a></li><li><a href="#a7">8. 국외 이전</a></li><li><a href="#a8">9. 이용자의 권리</a></li><li><a href="#a9">10. 보안</a></li><li><a href="#a10">11. 쿠키 · 추적 · 광고</a></li><li><a href="#a11">12. 아동</a></li><li><a href="#a12">13. Apple App Privacy 라벨</a></li><li><a href="#a13">14. 문의 및 분쟁</a></li><li><a href="#a14">15. 변경</a></li></ol></nav>
-<div class="part"><div class="num">PART A</div><h2>수집 및 이용</h2></div>
-<h3 id="a0"><span class="anum">1.</span>개요</h3>
-<p>Joyce Studios(이하 “회사”)는 모바일 앱 RepFit.ai(이하 “서비스”)를 운영하며, 「개인정보 보호법」 등 관련 법령에 따라 이용자의 개인정보를 보호합니다. 본 개인정보 처리방침은 회사가 수집하는 정보의 종류와 목적, 보관 및 보호 방법, 이용자의 권리를 설명합니다.</p><div class='notice'><b>한눈에 보기</b> · 이용자가 입력한 운동 기록은 기본적으로 기기 내에 저장됩니다. · 로그인/동기화를 켠 경우에만 클라우드에 백업됩니다. · 회사는 데이터를 판매하지 않습니다. · 무료 이용자에게는 Google AdMob 광고가 표시될 수 있습니다. · 의료기기·헬스케어 기기에 연결하지 않습니다.</div>
-<h3 id="a1"><span class="anum">2.</span>수집하는 정보</h3>
-<table><tr><th>구분</th><th>항목</th><th>비고</th></tr><tr><td>계정 / 인증</td><td>Apple 로그인 식별자(선택 시 이름·이메일), 게스트 이용을 위한 익명 식별자</td><td>로그인 시에만 / 선택</td></tr><tr><td>운동 데이터(이용자 콘텐츠)</td><td>운동 기록(종목·중량·횟수·세트), 루틴, 메모, 체중·성별·운동 레벨(선택), 목표</td><td>이용자가 입력</td></tr><tr><td>구독</td><td>구독 상태, 거래 식별자, 상품, 가격, 통화, 스토어프런트, 구매 환경</td><td>결제는 Apple이 처리</td></tr><tr><td>이용 / 진단</td><td>익명 이벤트(설치, 일일 활성, 구독 이벤트), 앱 버전, 플랫폼(iOS)</td><td>익명 / 집계</td></tr><tr><td>광고 식별자</td><td>광고 식별자(IDFA 등) — 무료 이용자 대상 광고 노출 시</td><td>설정에서 제한 / Pro 시 미사용</td></tr><tr><td>기기 / 알림</td><td>서비스가 생성한 사용자 키(가명), 푸시 토큰, 기기·OS 정보</td><td>동기화·알림용</td></tr></table><p>회사는 정밀 위치, 연락처, 주소록, 금융 계좌 접근 정보를 수집하지 않습니다.</p>
-<h3 id="a2"><span class="anum">3.</span>수집 방법</h3>
-<p>회사는 (a) 이용자가 앱에 직접 입력·생성할 때, (b) 로그인 시 Apple을 통해, (c) 구독 시 Apple StoreKit을 통해, (d) 이용 중 자동 생성되는 익명 통계 및 기기 정보, (e) 광고 노출 시 Google AdMob을 통해 정보를 수집합니다.</p>
-<h3 id="a3"><span class="anum">4.</span>정보의 이용</h3>
-<ul><li><b>서비스 제공:</b> 운동 기록 저장, AI 코칭·추천·통계 제공</li><li><b>백업 및 동기화:</b> 로그인한 기기 간 이용자 콘텐츠 백업·동기화</li><li><b>구독 관리:</b> Pro 권한 확인 및 유지</li><li><b>알림:</b> 운동 리마인더 및 주간 코칭 알림 발송</li><li><b>광고:</b> 무료 이용자 대상 광고 노출(Pro 구독 시 제거)</li><li><b>개선:</b> 익명 집계 통계로 품질 개선 및 오류 진단, 부정 이용 방지</li></ul>
-<h3 id="a4"><span class="anum">5.</span>보관 및 삭제</h3>
-<p>이용자 콘텐츠는 기기에 저장되며, 동기화를 켠 경우 계정이 활성인 동안 클라우드에도 저장됩니다. 앱의 “모든 데이터 삭제” 또는 계정 탈퇴로 언제든 삭제할 수 있으며, 해당 클라우드 데이터도 함께 삭제됩니다. 앱을 삭제하면 기기 내 로컬 데이터는 함께 삭제됩니다. 결제 관련 기록은 Apple 및 관련 법령에 따라 일정 기간 보관될 수 있습니다.</p>
-<div class="part"><div class="num">PART B</div><h2>제3자 제공 · 국외 이전</h2></div>
-<h3 id="a5"><span class="anum">6.</span>제3자 제공 및 수탁</h3>
-<p>회사는 이용자의 동의가 있거나 법령에서 요구하는 경우를 제외하고 개인정보를 제3자에게 제공하지 않으며, 데이터를 판매하지 않습니다. 서비스 운영을 위해 다음 수탁사를 이용합니다.</p><table><tr><th>수탁사</th><th>목적</th><th>방침</th></tr><tr><td>Apple Inc.</td><td>앱 배포, Apple로 로그인, 인앱 구독 결제(StoreKit), 푸시 알림</td><td>Apple Privacy Policy</td></tr><tr><td>Google LLC (Firebase)</td><td>인증, 클라우드 백업·동기화(Realtime Database), 분석, 서버 함수</td><td>Google Privacy · Firebase</td></tr><tr><td>Google AdMob</td><td>무료 이용자 대상 광고 노출 및 측정</td><td>Google Ads Privacy</td></tr></table>
-<h3 id="a6"><span class="anum">7.</span>결제 데이터 (Apple)</h3>
-<p>구독 결제는 App Store를 통해 Apple이 처리합니다. 회사는 카드·결제수단 정보를 수집·저장하지 않습니다. 권한 확인과 익명 매출 통계를 위해 비식별 결제 메타데이터(거래 식별자, 상품, 가격, 통화, 스토어프런트)만 처리합니다.</p>
-<h3 id="a7"><span class="anum">8.</span>국외 이전</h3>
-<p>백업·동기화·인증·광고를 위해 이용자 콘텐츠와 계정 식별자가 Apple, Google(Firebase/AdMob)이 운영하는 국외 서버(예: 미국 등)에 저장·처리될 수 있습니다. 서비스를 이용함으로써 이러한 이전에 동의하는 것으로 봅니다. 회사는 전송 구간 암호화 등 합리적 보호조치를 적용합니다.</p>
-<div class="part"><div class="num">PART C</div><h2>권리 · 보호 · 문의</h2></div>
-<h3 id="a8"><span class="anum">9.</span>이용자의 권리</h3>
-<p>이용자는 언제든 개인정보의 열람·정정·삭제·처리정지를 요청할 수 있습니다. 대부분의 데이터는 앱에서 직접 보고 수정·삭제(“모든 데이터 삭제” 포함)할 수 있으며, 추가 요청은 아래 연락처로 문의하세요. 회사는 관련 법령(해당 시 GDPR, CCPA 포함)상의 권리를 보장합니다.</p>
-<h3 id="a9"><span class="anum">10.</span>보안</h3>
-<ul><li>전송 구간 암호화(HTTPS/TLS)</li><li>인증 기반 접근 통제 — 인증된 이용자만 자신의 데이터에 접근</li><li>가명처리, 최소 권한·최소 수집 원칙, 접근 로그 관리</li></ul>
-<h3 id="a10"><span class="anum">11.</span>쿠키 · 추적 · 광고</h3>
-<p>무료 이용자에게는 Google AdMob을 통해 광고가 표시될 수 있으며, 이 과정에서 광고 식별자(IDFA 등)가 사용될 수 있습니다. iOS의 앱 추적 투명성(ATT) 정책에 따라 이용자는 추적 허용 여부를 선택할 수 있고, 기기 설정에서 광고 추적을 제한할 수 있습니다. RepFit.ai Pro를 구독하면 광고가 제거됩니다. 회사는 광고 외의 목적으로 이용자 활동을 추적하지 않습니다.</p>
-<h3 id="a11"><span class="anum">12.</span>아동</h3>
-<p>서비스는 이용자의 관할에서 요구하는 연령 미만(예: 대한민국의 만 14세 미만)의 아동을 주 대상으로 하지 않습니다. 보호자 동의 없이 해당 아동의 개인정보가 수집된 사실을 알게 되면 신속히 삭제합니다.</p>
-<h3 id="a12"><span class="anum">13.</span>Apple App Privacy 라벨</h3>
-<p>App Store의 “App Privacy” 항목은 본 방침과 함께 회사의 데이터 처리 관행을 요약합니다. 내용이 다를 경우 본 방침이 더 상세한 설명을 제공합니다.</p>
-<h3 id="a13"><span class="anum">14.</span>문의 및 분쟁</h3>
-<div class='contact'><b>제공자</b> Joyce Studios (RepFit.ai)<br><b>개인정보 보호책임자 이메일</b> <a href='mailto:ibillkim@gmail.com'>ibillkim@gmail.com</a><br><b>이용약관</b> <a href='terms.html'>terms.html</a></div><p style='margin-top:10px;color:var(--ink-faint);font-size:13px'>개인정보 침해에 관한 상담이 필요한 경우 개인정보분쟁조정위원회(kopico.go.kr), 개인정보침해신고센터(privacy.kisa.or.kr, 국번없이 118) 등에 문의할 수 있습니다.</p>
-<h3 id="a14"><span class="anum">15.</span>변경</h3>
-<p>본 방침은 법령·서비스 변경에 따라 개정될 수 있으며, 변경 시 적용일자와 사유를 명시하여 앱 또는 본 페이지를 통해 공지합니다.</p>
+.contact{background:var(--blue-soft);border:1px solid var(--blue-line);border-left:4px solid var(--blue);padding:18px 20px;border-radius:var(--radius);font-size:14.5px;line-height:2;color:var(--ink-soft);margin-top:12px;}
+.contact b{color:#fff;}
+footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:var(--ink-faint);font-size:13px;text-align:center;line-height:1.9;}
+footer a{color:var(--ink-faint);}
+</style></head><body><div class="wrap">
+<div class="brand"><span class="mk"><svg viewBox="0 0 24 24" fill="none"><path d="M4 15 C9 13,12 10,15 6" stroke="#2a1c02" stroke-width="2.4" stroke-linecap="round"/><circle cx="15.5" cy="6.2" r="1.9" fill="#2a1c02"/><rect x="7" y="17" width="10" height="2.6" rx="1.3" fill="#2a1c02"/></svg></span><span class="nm">RepFit Coach</span></div>
+<header class="doc"><span class="kicker">개인정보 처리방침</span><h1>RepFit Coach 개인정보 처리방침</h1>
+<p class="meta"><b>시행일:</b> 2026-07-05 · <b>최종 개정:</b> 2026-07-05</p></header>
+<div class="lead">회사는 이용자와 회원의 개인정보를 안전하게 보호하기 위하여 최선을 다합니다. 본 방침은 «RepFit Coach»에서 개인정보가 어떻게 처리되는지 투명하게 설명합니다.</div>
+<nav class="toc"><h2>목차</h2><ol><li><a href="#a1">1. 총칙 및 개인정보처리자</a></li><li><a href="#a2">2. 개인정보 처리의 원칙</a></li><li><a href="#a3">3. 수집하는 개인정보 항목</a></li><li><a href="#a4">4. 개인정보의 수집 방법</a></li><li><a href="#a5">5. 개인정보의 처리 근거 (법적 근거)</a></li><li><a href="#a6">6. 개인정보의 이용 목적</a></li><li><a href="#a7">7. 개인정보의 보유 및 이용 기간</a></li><li><a href="#a8">8. 개인정보의 파기 절차 및 방법</a></li><li><a href="#a9">9. 개인정보의 제3자 제공</a></li><li><a href="#a10">10. 개인정보 처리의 위탁</a></li><li><a href="#a11">11. 개인정보의 국외 이전</a></li><li><a href="#a12">12. 정보주체·이용자의 권리와 행사 방법</a></li><li><a href="#a13">13. 가명·익명 처리 및 통계</a></li><li><a href="#a14">14. 자동 수집 장치 및 분석 도구</a></li><li><a href="#a15">15. 개인정보의 안전성 확보 조치</a></li><li><a href="#a16">16. 개인정보 유출 등의 통지</a></li><li><a href="#a17">17. 자동화된 의사결정 및 프로파일링</a></li><li><a href="#a18">18. 아동의 개인정보</a></li><li><a href="#a19">19. 사업의 양도·합병 등</a></li><li><a href="#a20">20. 개인정보 보호책임자 및 문의처</a></li><li><a href="#a21">21. 권익침해 구제 방법</a></li><li><a href="#a22">22. 지역별 특약 (EEA/영국, 캘리포니아)</a></li><li><a href="#a23">23. 고지 의무 및 방침의 변경</a></li></ol></nav>
+<section class="art" id="a1"><h2><span class="n">제 1 조</span>총칙 및 개인정보처리자</h2><p>Joyce Studios(이하 "회사")는 «RepFit Coach»(이하 "서비스") 이용자 및 이용자가 관리하는 회원의 개인정보를 소중히 여기며, 대한민국 「개인정보 보호법」, 「정보통신망 이용촉진 및 정보보호 등에 관한 법률」 및 해당되는 경우 EU 「일반개인정보보호규정(GDPR)」, 미국 캘리포니아 「소비자프라이버시법(CCPA/CPRA)」 등 관계 법령을 준수합니다.</p><p>본 개인정보 처리방침(이하 "방침")은 회사가 어떤 개인정보를, 어떤 법적 근거와 목적으로, 어떻게 수집·이용·보관·제공·파기하는지와 이용자 및 정보주체의 권리·행사 방법을 설명합니다. 본 방침은 서비스에 적용되며, 서비스에서 링크로 연결되는 제3자 서비스에는 적용되지 않습니다.</p><div class="box"><b>이중적 지위 안내:</b> 회사는 이용자(트레이너)의 계정 정보에 대하여는 <b>개인정보처리자</b>의 지위를, 이용자가 입력하는 <b>회원 데이터</b>에 대하여는 이용자의 지시에 따라 처리하는 <b>수탁자(처리자)</b>의 지위를 가집니다. 회원 데이터에 대한 개인정보처리자(관리자)는 이용자이며, 회원에 대한 고지·동의 확보 등 처리자로서의 의무는 이용자가 부담합니다.</div></section>
+<section class="art" id="a2"><h2><span class="n">제 2 조</span>개인정보 처리의 원칙</h2><p>회사는 개인정보를 처리함에 있어 다음 원칙을 준수합니다.</p><ul><li><b>적법성·목적 제한:</b> 명확한 목적을 위하여 적법하게 수집하고, 그 목적 범위에서만 이용합니다.</li><li><b>최소 수집:</b> 서비스 제공에 필요한 최소한의 개인정보만 수집합니다.</li><li><b>정확성:</b> 처리 목적에 필요한 범위에서 개인정보를 정확하고 최신으로 유지하도록 노력합니다.</li><li><b>보관 제한:</b> 목적 달성에 필요한 기간 동안만 보관하고 그 후 지체 없이 파기합니다.</li><li><b>안전성:</b> 개인정보의 안전한 처리를 위하여 적절한 기술적·관리적·물리적 조치를 취합니다.</li><li><b>투명성:</b> 정보주체가 자신의 개인정보 처리에 관하여 알 수 있도록 본 방침을 공개합니다.</li></ul></section>
+<section class="art" id="a3"><h2><span class="n">제 3 조</span>수집하는 개인정보 항목</h2><p>회사는 서비스 제공을 위하여 필요한 최소한의 개인정보를 다음과 같이 처리합니다.</p><table><tr><th>구분</th><th>항목</th><th>수집 시점·방법</th></tr><tr><td><b>트레이너 계정(필수)</b></td><td>Sign in with Apple 사용자 식별자, 닉네임</td><td>회원가입 시 이용자 입력/Apple 제공</td></tr><tr><td>트레이너 계정(선택)</td><td>이메일, 프로필 사진, 전화번호, 홈페이지·SNS 채널(Instagram·YouTube·Threads·Facebook·TikTok 등)</td><td>프로필/설정 입력 시</td></tr><tr><td><b>회원 데이터(이용자가 입력)</b></td><td>회원 이름·나이·성별·키·몸무게·메모, 회원권 유형·세션 수·결제 금액·단가, 출결·성취도(평점)·세션 기록·프로그램 배정</td><td>이용자가 직접 입력</td></tr><tr><td>자동 생성·수집</td><td>앱 자체 생성 기기 식별자(UUID), 앱 버전·빌드, 기기·OS 유형, 설치·실행(DAU) 로그, 서비스 이용·오류 진단 기록</td><td>서비스 이용 시 자동</td></tr><tr><td>결제 관련</td><td>구독 상태·구매 영수증(App Store를 통해 처리). 회사는 카드번호·계좌 등 결제수단 정보를 수집·보관하지 않음</td><td>구독 결제 시</td></tr><tr><td>고객지원</td><td>문의 시 제공하는 이메일·문의 내용</td><td>고객문의 시</td></tr></table><div class="box"><b>민감정보 안내:</b> 회원의 키·몸무게 등 신체 정보가 회원 데이터에 포함될 수 있습니다. 이는 이용자가 트레이닝 목적으로 입력하는 정보이며, 이용자는 해당 정보의 수집·이용에 대한 회원의 동의를 확보할 책임이 있습니다. 회사는 인종·사상·신념·정치적 견해·건강 상태(질병)·유전정보·성생활 등 「개인정보 보호법」상 별도 동의가 필요한 민감정보를 서비스 기능으로서 수집하지 않습니다.</div></section>
+<section class="art" id="a4"><h2><span class="n">제 4 조</span>개인정보의 수집 방법</h2><ul><li>이용자가 회원가입, 프로필·설정, 회원·세션·수입 관리 화면에서 직접 입력하는 방법</li><li>서비스 이용 과정에서 기기·앱을 통해 자동으로 생성·수집되는 방법</li><li>Apple(Sign in with Apple·결제), Google Firebase(인프라) 등 제휴·수탁 서비스를 통하여 처리되는 방법</li><li>이용자가 고객문의를 위하여 이메일 등으로 제공하는 방법</li></ul></section>
+<section class="art" id="a5"><h2><span class="n">제 5 조</span>개인정보의 처리 근거 (법적 근거)</h2><p>회사는 다음의 법적 근거에 따라 개인정보를 처리합니다. GDPR이 적용되는 이용자의 경우 괄호 안의 근거가 적용됩니다.</p><ul><li><b>계약의 이행:</b> 서비스 제공, 계정 관리, 데이터 동기화, 구독 이행을 위하여 필요한 처리 (GDPR 제6조 제1항 (b))</li><li><b>정당한 이익:</b> 서비스 개선, 오류 진단, 보안 및 부정이용 방지, 통계 분석 등 회사의 정당한 이익을 위한 처리로서 정보주체의 권리·이익을 부당하게 침해하지 않는 경우 (GDPR 제6조 제1항 (f))</li><li><b>동의:</b> 선택 정보의 입력, 국외 이전 등 관계 법령상 동의가 필요한 처리 (GDPR 제6조 제1항 (a)). 이용자는 언제든지 동의를 철회할 수 있으며, 철회는 그 이전 처리의 적법성에 영향을 미치지 않습니다.</li><li><b>법적 의무의 준수:</b> 관계 법령에 따른 기록 보존 등 법적 의무 이행을 위한 처리 (GDPR 제6조 제1항 (c))</li></ul></section>
+<section class="art" id="a6"><h2><span class="n">제 6 조</span>개인정보의 이용 목적</h2><ul><li><b>서비스 제공:</b> 회원·프로그램·출결·수입 관리, 리포트·SNS 카드 생성 및 공유 등 핵심 기능 제공</li><li><b>계정 및 동기화:</b> 본인 확인, 계정 관리, 기기 간 데이터 동기화 및 백업</li><li><b>구독 관리:</b> 유료 구독 상태 확인 및 유료 기능 제공, 무료 체험 관리</li><li><b>서비스 개선:</b> 이용 통계·오류 진단 분석을 통한 품질 향상, 안정성 확보 및 신규 기능 개발</li><li><b>고객지원 및 공지:</b> 문의 응대, 중요 정책·업데이트·보안 관련 안내</li><li><b>법적 의무 준수 및 분쟁 대응, 부정이용·보안위협 방지</b></li></ul></section>
+<section class="art" id="a7"><h2><span class="n">제 7 조</span>개인정보의 보유 및 이용 기간</h2><ul><li>회사는 원칙적으로 개인정보의 수집·이용 목적이 달성되면 지체 없이 파기합니다.</li><li>이용자가 <b>계정을 삭제</b>하는 경우, 계정 정보 및 서버에 동기화된 데이터는 지체 없이(합리적 기술 범위 내에서 최대 30일 이내) 삭제합니다. 게스트 데이터는 서버에 저장되지 않으며 이용자 기기에서 관리됩니다.</li><li>오류 진단·통계 목적의 로그는 수집일로부터 최대 24개월간 보관 후 파기하거나 복원 불가능하게 비식별화합니다.</li><li>관계 법령에 따라 보존이 필요한 경우 해당 기간 동안 분리 보관합니다. 예) 「전자상거래 등에서의 소비자보호에 관한 법률」: 계약·청약철회 기록 5년, 대금결제·재화공급 기록 5년, 소비자 불만·분쟁처리 기록 3년 / 「통신비밀보호법」에 따른 서비스 이용 로그 등. (실제 보관 주체·항목·기간은 관계 법령 및 결제 대행 주체에 따르며, App Store 결제 기록은 Apple이 보관)</li></ul></section>
+<section class="art" id="a8"><h2><span class="n">제 8 조</span>개인정보의 파기 절차 및 방법</h2><ul><li><b>파기 절차:</b> 목적이 달성된 개인정보는 지체 없이 파기하며, 법령에 따라 보존이 필요한 경우 별도의 저장공간에 분리 보관한 후 보존기간 경과 시 파기합니다.</li><li><b>파기 방법:</b> 전자적 파일 형태의 정보는 복구·재생이 불가능한 기술적 방법으로 영구 삭제하고, 출력물 등은 분쇄하거나 소각합니다.</li></ul></section>
+<section class="art" id="a9"><h2><span class="n">제 9 조</span>개인정보의 제3자 제공</h2><p>회사는 이용자의 개인정보를 본 방침에 명시한 목적 범위를 초과하여 이용하거나 제3자에게 제공하지 않습니다. 다만 다음의 경우는 예외로 합니다.</p><ul><li>이용자가 사전에 명시적으로 동의한 경우</li><li>법령의 규정에 의하거나, 수사·감독기관이 적법한 절차에 따라 요구하는 경우</li><li>이용자·회원의 생명·신체·재산에 대한 급박한 위험을 방지하기 위하여 필요하다고 인정되는 경우</li></ul><div class="box">회사는 <b>이용자·회원의 개인정보를 광고·마케팅 목적으로 제3자에게 판매하거나 공유하지 않습니다.</b> (미국 CCPA/CPRA상 "판매(sell)" 및 "공유(share)"에 해당하는 행위를 하지 않습니다.)</div></section>
+<section class="art" id="a10"><h2><span class="n">제 10 조</span>개인정보 처리의 위탁</h2><p>회사는 원활한 서비스 제공을 위하여 다음과 같이 개인정보 처리 업무를 국내외 수탁자에게 위탁하고 있습니다.</p><table><tr><th>수탁자</th><th>위탁 업무</th><th>보유·이용 기간</th></tr><tr><td>Google LLC (Firebase)</td><td>계정 인증, 데이터 저장·동기화, 앱 통계·오류 진단 인프라</td><td>위탁계약 종료 또는 회원 탈퇴 시까지</td></tr><tr><td>Apple Inc.</td><td>Sign in with Apple 인증, 구독 결제 처리</td><td>Apple 정책에 따름</td></tr></table><p>회사는 위탁계약 체결 시 「개인정보 보호법」 제26조에 따라 위탁업무 수행 목적 외 개인정보 처리 금지, 기술적·관리적 보호조치, 재위탁 제한, 관리·감독, 손해배상 등 개인정보의 안전한 처리에 관한 사항을 문서로 규정하고 수탁자를 관리·감독합니다. 수탁 업무의 내용이나 수탁자가 변경되는 경우 본 방침을 통하여 공개합니다.</p></section>
+<section class="art" id="a11"><h2><span class="n">제 11 조</span>개인정보의 국외 이전</h2><p>회사가 이용하는 클라우드 인프라의 특성상 개인정보가 국외에서 처리·보관될 수 있습니다. 회사는 「개인정보 보호법」 제28조의8에 따라 다음 사항을 고지합니다.</p><table><tr><th>이전받는 자</th><th>이전 국가</th><th>이전 일시·방법</th><th>이전 항목</th><th>이용 목적·보유기간</th></tr><tr><td>Google LLC</td><td>미국 등 Google 데이터센터 소재국</td><td>서비스 이용 시 정보통신망을 통한 전송</td><td>계정 식별자, 이용자·회원 데이터, 이용·진단 로그</td><td>저장·동기화·분석 / 위탁계약 종료 시까지</td></tr><tr><td>Apple Inc.</td><td>미국 등</td><td>로그인·결제 시 전송</td><td>로그인 식별자, 구독 영수증</td><td>인증·결제 / Apple 정책에 따름</td></tr></table><p>GDPR이 적용되는 이용자의 개인정보가 EEA 밖으로 이전되는 경우, 회사 및 수탁자는 EU 표준계약조항(SCC) 등 적법한 이전 보호수단을 적용합니다. 이용자는 국외 이전에 동의하지 않을 권리가 있으며, 이 경우 계정 삭제를 통하여 서비스 이용을 중단할 수 있습니다(다만 국외 이전 없이는 동기화 등 일부 기능의 제공이 제한될 수 있습니다).</p></section>
+<section class="art" id="a12"><h2><span class="n">제 12 조</span>정보주체·이용자의 권리와 행사 방법</h2><p>이용자 및 회원(정보주체)은 관계 법령에 따라 다음의 권리를 가집니다.</p><ul><li>개인정보의 <b>열람, 정정, 삭제, 처리정지</b> 요구 (대한민국 「개인정보 보호법」)</li><li>GDPR 적용 시: <b>접근권, 정정권, 삭제권(잊혀질 권리), 처리제한권, 정보이동권, 반대권, 동의철회권, 감독기구 제소권, 자동화된 의사결정 관련 권리</b></li><li>CCPA/CPRA 적용 시: <b>알 권리, 삭제 요구권, 정정 요구권, 판매·공유 거부권(회사는 판매·공유하지 않음), 권리 행사에 따른 차별을 받지 않을 권리</b></li></ul><p>이용자는 앱 내에서 자신의 계정 정보를 직접 열람·수정할 수 있으며, <b>설정 → 계정 삭제</b>를 통하여 계정과 전체 데이터를 삭제할 수 있습니다. 회원(정보주체)의 권리 요청은 1차적으로 해당 회원을 관리하는 이용자(개인정보처리자)에게 하여야 하며, 회사는 수탁자로서 이용자의 적법한 지시에 따라 협조합니다. 그 밖의 권리 행사는 아래 개인정보 보호책임자에게 서면·이메일 등으로 요청할 수 있으며, 회사는 관계 법령에 따라 지체 없이(원칙적으로 요청일로부터 10일 이내) 조치하고 그 결과를 통지합니다.</p><p>이용자는 법정대리인이나 위임을 받은 자를 통하여 권리를 행사할 수 있으며, 회사는 요청자가 본인 또는 정당한 대리인인지 합리적으로 확인할 수 있습니다. 권리 행사가 법령에서 정한 제한 사유에 해당하는 경우 회사는 그 사유를 통지하고 요청을 거절할 수 있습니다.</p></section>
+<section class="art" id="a13"><h2><span class="n">제 13 조</span>가명·익명 처리 및 통계</h2><p>회사는 서비스 개선 및 통계 산출을 위하여 개인을 식별할 수 없도록 가명처리 또는 익명처리(비식별화)한 정보를 이용할 수 있습니다. 이러한 정보는 특정 개인을 알아볼 수 없으므로 개인정보에 해당하지 않으며, 통계작성·연구·서비스 개선 목적으로 처리될 수 있습니다.</p></section>
+<section class="art" id="a14"><h2><span class="n">제 14 조</span>자동 수집 장치 및 분석 도구</h2><ul><li>회사는 서비스 개선을 위하여 기기에서 생성한 식별자(UUID)와 설치·접속(DAU) 통계, 오류 진단 정보를 수집합니다.</li><li>회사는 <b>광고 추적 목적의 식별자(IDFA)를 수집하지 않으며, 이용자 추적(cross-app tracking)을 위한 제3자 광고 SDK를 사용하지 않습니다.</b></li><li>서비스는 웹 브라우저 쿠키를 이용한 추적을 수행하지 않으며, "Do Not Track" 신호에 대하여는 업계 표준이 확립되어 있지 않아 별도로 대응하지 않으나, 어떠한 경우에도 이용자를 광고 목적으로 추적하지 않습니다.</li></ul></section>
+<section class="art" id="a15"><h2><span class="n">제 15 조</span>개인정보의 안전성 확보 조치</h2><ul><li><b>기술적 조치:</b> 전송 구간 암호화(HTTPS/TLS), 접근권한의 최소 부여 및 통제, 인증·인가 체계, 인프라 사업자의 보안 시스템 활용, 취약점 점검</li><li><b>관리적 조치:</b> 개인정보 취급자의 최소화 및 관리, 내부관리계획의 수립·시행, 정기적인 교육 및 점검</li><li><b>물리적 조치:</b> 클라우드 데이터센터의 물리적 접근 통제(수탁자 제공)</li><li>회사는 합리적인 보안 조치를 적용하나, 인터넷을 통한 전송이나 전자적 저장의 절대적 안전성을 보장할 수는 없습니다. 이용자 또한 계정 및 기기의 보안을 유지할 책임이 있습니다.</li></ul></section>
+<section class="art" id="a16"><h2><span class="n">제 16 조</span>개인정보 유출 등의 통지</h2><p>회사는 개인정보의 분실·도난·유출·위조·변조·훼손 사실을 인지한 경우, 관계 법령(「개인정보 보호법」 등)이 정하는 바에 따라 지체 없이 정보주체 및 관계 기관에 통지·신고하고, 피해를 최소화하기 위하여 필요한 조치를 취합니다.</p></section>
+<section class="art" id="a17"><h2><span class="n">제 17 조</span>자동화된 의사결정 및 프로파일링</h2><p>서비스는 이용자에게 통계·인사이트(예: 재등록 임박 안내)를 제공하나, 이는 이용자의 판단을 돕기 위한 보조 정보이며, 이용자 또는 회원에게 법적 효력이나 이에 준하는 중대한 영향을 미치는 <b>전적으로 자동화된 의사결정</b>은 수행하지 않습니다.</p></section>
+<section class="art" id="a18"><h2><span class="n">제 18 조</span>아동의 개인정보</h2><p>서비스는 성인 개인 트레이너를 대상으로 하며, 만 14세 미만(대한민국 기준) 아동을 대상으로 개인정보를 수집하지 않습니다. GDPR이 적용되는 지역에서는 만 16세 미만, 미국 COPPA가 적용되는 경우 만 13세 미만 아동으로부터 고의로 개인정보를 수집하지 않습니다. 만약 법정 연령 미만 아동의 개인정보가 법정대리인의 동의 없이 수집된 사실이 확인되면 회사는 지체 없이 해당 정보를 삭제합니다.</p><p>이용자가 미성년 회원의 데이터를 입력하는 경우, 이용자는 해당 미성년자의 법정대리인으로부터 필요한 동의를 받을 책임이 있습니다.</p></section>
+<section class="art" id="a19"><h2><span class="n">제 19 조</span>사업의 양도·합병 등</h2><p>회사가 사업의 전부 또는 일부를 양도하거나 합병·분할 등으로 개인정보를 이전하여야 하는 경우, 회사는 관계 법령이 정한 절차에 따라 사전에 그 사실과 이전받는 자, 정보주체의 권리 행사 방법 등을 이용자에게 통지하며, 이용자에게 개인정보의 이전을 거부하거나 동의를 철회할 수 있는 기회를 제공합니다.</p></section>
+<section class="art" id="a20"><h2><span class="n">제 20 조</span>개인정보 보호책임자 및 문의처</h2><p>회사는 개인정보 처리에 관한 업무를 총괄하고 정보주체의 문의·불만·피해구제를 처리하기 위하여 개인정보 보호책임자를 지정하고 있습니다.</p><ul><li>개인정보 보호책임자: Bill Kim</li><li>문의 이메일: <a href="mailto:ibillkim@gmail.com">ibillkim@gmail.com</a></li></ul><p>이용자는 개인정보 보호와 관련한 문의, 불만처리, 피해구제 등을 위 연락처로 요청할 수 있으며, 회사는 지체 없이 성실히 답변·처리합니다.</p></section>
+<section class="art" id="a21"><h2><span class="n">제 21 조</span>권익침해 구제 방법</h2><p>정보주체는 개인정보 침해로 인한 구제를 받기 위하여 다음 기관에 분쟁해결이나 상담 등을 신청할 수 있습니다. 아래 기관은 회사와 별개의 기관으로서, 회사의 자체적인 처리 결과에 만족하지 못하거나 보다 자세한 도움이 필요한 경우 연락하실 수 있습니다.</p><ul><li>개인정보분쟁조정위원회: (국번없이) 1833-6972 · kopico.go.kr</li><li>개인정보침해신고센터(한국인터넷진흥원): (국번없이) 118 · privacy.kisa.or.kr</li><li>대검찰청 사이버수사과: (국번없이) 1301 · spo.go.kr</li><li>경찰청 국가수사본부 사이버수사국: (국번없이) 182 · ecrm.police.go.kr</li></ul><p>GDPR이 적용되는 이용자는 자신의 상거소지 또는 침해발생지를 관할하는 감독기구(Supervisory Authority)에 제소할 권리가 있습니다.</p></section>
+<section class="art" id="a22"><h2><span class="n">제 22 조</span>지역별 특약 (EEA/영국, 캘리포니아)</h2><h3>EEA·영국 이용자 (GDPR/UK GDPR)</h3><p>회사는 위 "처리 근거"에 명시된 법적 근거에 따라 개인정보를 처리하며, EEA 밖으로의 이전 시 표준계약조항(SCC) 등 적법한 보호수단을 적용합니다. 이용자는 접근·정정·삭제·처리제한·정보이동·반대·동의철회의 권리와 감독기구에 제소할 권리를 가집니다. 정당한 이익에 근거한 처리에 대하여는 자신의 특수한 상황을 이유로 반대할 권리가 있습니다.</p><h3>캘리포니아 이용자 (CCPA/CPRA)</h3><p>지난 12개월간 회사가 처리한 개인정보의 범주는 본 방침 "수집하는 개인정보 항목"에 기재된 바와 같으며, 수집 출처·이용 목적·공유 대상은 본 방침 각 해당 항목에 설명되어 있습니다. 회사는 개인정보를 <b>판매(sell)하거나 공유(share)하지 않으며</b>, 지난 12개월간 판매·공유한 사실이 없습니다. 이용자는 알 권리, 삭제·정정 요구권, 그리고 권리 행사에 따른 차별을 받지 않을 권리를 가지며, 이러한 권리는 위임받은 대리인을 통하여도 행사할 수 있습니다. 권리 행사는 아래 문의처로 요청할 수 있습니다.</p></section>
+<section class="art" id="a23"><h2><span class="n">제 23 조</span>고지 의무 및 방침의 변경</h2><p>본 방침은 법령·서비스의 변경에 따라 개정될 수 있습니다. 회사는 개정 시 변경 사항과 시행일을 서비스 내 또는 본 페이지를 통하여 사전에 공지하며, 중요한 변경(수집 항목·이용 목적·제3자 제공·국외 이전·보유기간의 실질적 변경 등)의 경우 시행일 <b>30일 전</b>에 공지하고, 관계 법령상 필요한 경우 이용자의 동의를 다시 받습니다. 이용자가 개정된 방침의 시행일 이후에도 서비스를 계속 이용하는 경우 개정 내용에 동의한 것으로 간주될 수 있습니다.</p></section>
 
-<footer>Joyce Studios · RepFit.ai<br>시행일 2026-06-28</footer>
-</div>
-</body>
-</html>
+<section class="art" id="contact"><h2>문의처</h2><div class="contact">상호: <b>Joyce Studios</b> · 개인정보 보호책임자: Bill Kim<br>이메일: <a href="mailto:ibillkim@gmail.com">ibillkim@gmail.com</a><br>본 방침은 2026-07-05부터 시행됩니다. 이전 버전은 요청 시 확인하실 수 있습니다.</div></section>
+<footer>© 2026 Joyce Studios · RepFit Coach · <a href="terms.html">이용약관</a> · <a href="privacy.html">개인정보 처리방침</a></footer>
+</div></body></html>
