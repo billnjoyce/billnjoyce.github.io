@@ -1,0 +1,321 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="theme-color" content="#0A0B0E"/>
+<title>RepFit Coach · Member & Income Manager for Trainers</title><meta name="description" content="From member management to income and promo reports. The all-in-one coaching studio for personal trainers."/>
+<style>
+:root{
+ --font:'Pretendard',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",Roboto,sans-serif;
+ --bg:#0A0B0E;--bg2:#101218;--card:#14161d;--card2:#191c24;--line:#252a33;
+ --ink:#f5f6f8;--soft:#c3c9d2;--faint:#8b93a1;
+ --amber:#F5A623;--amber2:#FFC24B;--blue:#5B8DEF;--green:#34D399;
+ --glow:rgba(245,166,35,.5);
+}
+@font-face{font-family:'Pretendard';font-weight:900;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Black.woff2') format('woff2');}
+@font-face{font-family:'Pretendard';font-weight:800;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-ExtraBold.woff2') format('woff2');}
+@font-face{font-family:'Pretendard';font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2');}
+@font-face{font-family:'Pretendard';font-weight:600;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-SemiBold.woff2') format('woff2');}
+@font-face{font-family:'Pretendard';font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Medium.woff2') format('woff2');}
+@font-face{font-family:'Pretendard';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{font-family:var(--font);background:var(--bg);color:var(--soft);line-height:1.65;overflow-x:hidden;word-break:keep-all;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+.amber{color:var(--amber);}
+/* animated background */
+.bgfx{position:fixed;inset:0;z-index:-2;overflow:hidden;background:var(--bg);}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;animation:float 18s ease-in-out infinite;}
+.b1{width:520px;height:520px;background:radial-gradient(circle,rgba(245,166,35,.5),transparent 70%);top:-140px;right:-120px;}
+.b2{width:460px;height:460px;background:radial-gradient(circle,rgba(91,141,239,.35),transparent 70%);top:40%;left:-160px;animation-delay:-6s;}
+.b3{width:420px;height:420px;background:radial-gradient(circle,rgba(255,194,75,.28),transparent 70%);bottom:-120px;right:10%;animation-delay:-11s;}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(40px,-30px) scale(1.08);}66%{transform:translate(-30px,25px) scale(.95);}}
+.grid-ov{position:fixed;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse at 50% 0%,#000,transparent 75%);}
+/* nav */
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(10,11,14,.72);border-bottom:1px solid var(--line);}
+nav .row{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;color:#fff;font-size:17px;letter-spacing:-.4px;}
+.logo .mk{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--amber),var(--amber2));display:grid;place-items:center;box-shadow:0 6px 18px var(--glow);}
+.logo .mk svg{width:19px;height:19px;}
+.navlinks{display:flex;align-items:center;gap:26px;}
+.navlinks a{font-size:14.5px;color:var(--soft);font-weight:500;transition:.15s;}
+.navlinks a:hover{color:#fff;}
+.lang{display:flex;gap:4px;border:1px solid var(--line);border-radius:999px;padding:3px;}
+.lang a{font-size:12px;font-weight:700;color:var(--faint);padding:4px 10px;border-radius:999px;}
+.lang a.on{background:var(--amber);color:#231400;}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;border-radius:12px;padding:12px 20px;font-size:14.5px;transition:.18s;cursor:pointer;border:none;}
+.btn-p{background:linear-gradient(135deg,var(--amber),var(--amber2));color:#231400;box-shadow:0 8px 24px var(--glow);}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 12px 30px var(--glow);}
+.btn-g{background:var(--card2);color:#fff;border:1px solid var(--line);}
+.btn-g:hover{border-color:var(--amber);color:var(--amber);}
+.nav-cta{padding:9px 16px;}
+/* reveal */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);}
+.reveal.in{opacity:1;transform:none;}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+/* hero */
+.hero{padding:72px 0 40px;text-align:center;}
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--amber);background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3);padding:7px 15px;border-radius:999px;margin-bottom:24px;}
+.pill .dot{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber);animation:pulse 1.8s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+h1.hero-t{font-size:clamp(38px,7vw,72px);line-height:1.08;font-weight:900;color:#fff;letter-spacing:-.03em;margin-bottom:22px;}
+h1.hero-t .g{background:linear-gradient(120deg,var(--amber),var(--amber2) 60%,#fff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero-sub{font-size:clamp(16px,2.4vw,20px);color:var(--soft);max-width:640px;margin:0 auto 34px;line-height:1.7;}
+.hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
+.hero-note{font-size:13px;color:var(--faint);}
+/* phone mockup */
+.hero-visual{margin-top:56px;display:flex;justify-content:center;gap:22px;perspective:1600px;}
+.phone{width:250px;flex-shrink:0;border-radius:34px;background:linear-gradient(160deg,#1b1f27,#0d0f14);border:1px solid #2b313c;box-shadow:0 40px 90px rgba(0,0,0,.6);padding:12px 10px;transform:rotateY(-14deg) rotateX(4deg);animation:sway 7s ease-in-out infinite;}
+.phone.mid{transform:translateY(-26px) rotateY(0) scale(1.04);z-index:3;animation-delay:-2s;}
+.phone.r{transform:rotateY(14deg) rotateX(4deg);animation-delay:-4s;}
+@keyframes sway{0%,100%{transform:translateY(0) rotateY(var(--ry,-14deg)) rotateX(4deg);}50%{transform:translateY(-14px) rotateY(var(--ry,-14deg)) rotateX(4deg);}}
+.phone.mid{--ry:0deg}.phone.r{--ry:14deg}.phone.l{--ry:-14deg}
+.pscreen{border-radius:26px;background:#0c0d11;overflow:hidden;height:440px;display:flex;flex-direction:column;padding:16px 13px;gap:9px;}
+.pnotch{width:46px;height:5px;border-radius:3px;background:#20242c;margin:2px auto 6px;}
+.pt{color:#fff;font-weight:700;font-size:15px;}
+.pdim{color:#8b93a1;font-size:11px;}
+.ptile{background:#181a20;border:1px solid #262b34;border-radius:11px;padding:9px 10px;}
+.ptile .v{font-weight:800;font-size:17px;}
+.ptile .l{color:#8b93a1;font-size:10px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.pbtn{background:linear-gradient(135deg,var(--amber),var(--amber2));color:#231400;font-weight:700;font-size:12px;text-align:center;padding:10px;border-radius:11px;}
+.pbar{height:6px;border-radius:3px;background:#262b34;overflow:hidden;}
+.pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--amber),var(--amber2));border-radius:3px;}
+.chip{display:inline-block;font-size:10px;font-weight:700;color:#231400;background:linear-gradient(135deg,var(--amber),var(--amber2));border-radius:999px;padding:4px 9px;}
+.chipo{display:inline-block;font-size:10px;color:#c3c9d2;background:#181a20;border:1px solid #262b34;border-radius:999px;padding:4px 9px;}
+/* logos strip */
+.strip{padding:30px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:70px;}
+.strip .in{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;color:var(--faint);font-size:13.5px;}
+.strip b{color:var(--soft);}
+/* sections */
+section.sec{padding:88px 0;}
+.eyebrow{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:14px;text-align:center;}
+h2.sec-t{font-size:clamp(28px,4.6vw,44px);font-weight:900;color:#fff;letter-spacing:-.02em;text-align:center;line-height:1.15;margin-bottom:16px;}
+.sec-sub{text-align:center;color:var(--soft);max-width:600px;margin:0 auto 52px;font-size:16.5px;}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:20px;padding:28px;transition:.25s;position:relative;overflow:hidden;}
+.card:hover{transform:translateY(-6px);border-color:rgba(245,166,35,.4);box-shadow:0 20px 50px rgba(0,0,0,.4);}
+.card .ic{width:52px;height:52px;border-radius:14px;background:rgba(245,166,35,.12);display:grid;place-items:center;margin-bottom:18px;}
+.card .ic svg{width:26px;height:26px;stroke:var(--amber);}
+.card h3{color:#fff;font-size:19px;font-weight:800;margin-bottom:9px;letter-spacing:-.01em;}
+.card p{font-size:14.5px;color:var(--soft);line-height:1.68;}
+/* feature split */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding:44px 0;}
+.split.rev .txt{order:2;}
+.split h3{font-size:clamp(24px,3.4vw,34px);font-weight:900;color:#fff;letter-spacing:-.02em;margin-bottom:16px;line-height:1.2;}
+.split p{font-size:16px;color:var(--soft);margin-bottom:18px;}
+.split .li{display:flex;gap:11px;align-items:flex-start;margin:11px 0;font-size:15px;color:var(--soft);}
+.split .li svg{width:20px;height:20px;stroke:var(--amber);flex-shrink:0;margin-top:2px;}
+.visual{background:linear-gradient(160deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:24px;padding:26px;min-height:300px;box-shadow:0 24px 60px rgba(0,0,0,.35);position:relative;overflow:hidden;}
+.visual .shine{position:absolute;top:-40%;left:-30%;width:80%;height:180%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.05),transparent);transform:rotate(18deg);animation:shine 5s linear infinite;}
+@keyframes shine{0%{left:-60%}100%{left:130%}}
+/* report card demo */
+.repcard{background:linear-gradient(160deg,#15171e,#0c0d11);border:1px solid #262b34;border-radius:18px;padding:22px;}
+.repcard .hd{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.repcard .av{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--amber),var(--amber2));display:grid;place-items:center;color:#231400;font-weight:900;}
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;}
+.stat .s{background:#181a20;border:1px solid #262b34;border-radius:12px;padding:12px;}
+.stat .s .n{font-size:22px;font-weight:900;color:#fff;}
+.stat .s .k{font-size:11px;color:#8b93a1;}
+.stars{color:var(--amber);font-size:15px;letter-spacing:2px;}
+/* metrics band */
+.band{background:linear-gradient(120deg,rgba(245,166,35,.09),rgba(91,141,239,.06));border:1px solid var(--line);border-radius:24px;padding:44px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center;}
+.band .m .n{font-size:clamp(30px,4vw,44px);font-weight:900;color:#fff;letter-spacing:-.02em;}
+.band .m .n .amber{color:var(--amber);}
+.band .m .k{font-size:14px;color:var(--soft);margin-top:4px;}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.step{position:relative;padding:28px;background:var(--card);border:1px solid var(--line);border-radius:20px;}
+.step .no{font-size:44px;font-weight:900;color:rgba(245,166,35,.22);line-height:1;margin-bottom:10px;}
+.step h3{color:#fff;font-size:18px;font-weight:800;margin-bottom:8px;}
+.step p{font-size:14px;color:var(--soft);}
+/* pricing */
+.prices{display:grid;grid-template-columns:1fr 1fr;gap:22px;max-width:760px;margin:0 auto;}
+.price{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px;position:relative;}
+.price.hot{border-color:var(--amber);box-shadow:0 20px 50px rgba(245,166,35,.14);}
+.price .tag{position:absolute;top:-13px;right:24px;background:linear-gradient(135deg,var(--amber),var(--amber2));color:#231400;font-size:12px;font-weight:800;padding:5px 13px;border-radius:999px;}
+.price .plan{font-size:15px;color:var(--soft);font-weight:700;}
+.price .amt{font-size:44px;font-weight:900;color:#fff;margin:8px 0 2px;letter-spacing:-.02em;}
+.price .per{font-size:14px;color:var(--faint);}
+.price ul{list-style:none;margin:20px 0;}
+.price li{display:flex;gap:10px;align-items:center;font-size:14.5px;color:var(--soft);margin:11px 0;}
+.price li svg{width:18px;height:18px;stroke:var(--amber);flex-shrink:0;}
+/* cta */
+.cta-box{text-align:center;background:linear-gradient(160deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:28px;padding:64px 30px;position:relative;overflow:hidden;}
+.cta-box::before{content:"";position:absolute;top:-50%;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(245,166,35,.16),transparent 70%);pointer-events:none;z-index:0;}
+.cta-box h2{font-size:clamp(28px,4.6vw,46px);font-weight:900;color:#fff;letter-spacing:-.02em;margin-bottom:16px;position:relative;}
+.cta-box p{color:var(--soft);font-size:17px;margin-bottom:30px;position:relative;}
+/* footer */
+footer.ft{border-top:1px solid var(--line);margin-top:20px;padding:50px 0 40px;}
+.ft-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;}
+.ft a{color:var(--faint);font-size:14px;display:block;margin:7px 0;transition:.15s;}
+.ft a:hover{color:var(--amber);}
+.ft h4{color:#fff;font-size:14px;font-weight:700;margin-bottom:10px;}
+.ft-bottom{margin-top:36px;padding-top:24px;border-top:1px solid var(--line);color:var(--faint);font-size:13px;text-align:center;}
+@media(max-width:860px){
+ .navlinks .hidem{display:none;}
+ .cards,.steps,.band{grid-template-columns:1fr;}
+ .band{gap:30px;}
+ .split{grid-template-columns:1fr;gap:30px;}
+ .split.rev .txt{order:0;}
+ .prices{grid-template-columns:1fr;}
+ .hero-visual{transform:scale(.82);margin-top:30px;}
+ .phone.l,.phone.r{display:none;}
+}
+
+.navlinks a.btn-p{color:#231400 !important;}
+.logomk{width:36px;height:36px;border-radius:10px;box-shadow:0 6px 18px var(--glow);display:block;}
+.hero{position:relative;overflow:hidden;}
+.hero-bg{position:absolute;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:1400px;height:100%;object-fit:cover;object-position:center 30%;opacity:.22;z-index:0;pointer-events:none;-webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.5) 45%,transparent 78%);mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.5) 45%,transparent 78%);}
+.hero .wrap{position:relative;z-index:1;}
+.visual-photo{width:100%;height:210px;object-fit:cover;border-radius:16px;margin-bottom:18px;border:1px solid var(--line);filter:saturate(1.05) contrast(1.03);}
+</style></head><body>
+<div class="bgfx"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="grid-ov"></div>
+<nav><div class="wrap row">
+ <a class="logo" href="#"><img class="logomk" src="../assets/icon.png" alt="RepFit Coach"/>RepFit Coach</a>
+ <div class="navlinks">
+  <a class="hidem" href="#features">Features</a>
+  <a class="hidem" href="#how">How it works</a>
+  <a class="hidem" href="#pricing">Pricing</a>
+  <a class="btn btn-p nav-cta" href="https://apps.apple.com/app/id6787320858">Get the app</a>
+ </div>
+</div></nav>
+
+<header class="hero"><img class="hero-bg" src="../assets/hero.jpg" alt=""/><div class="wrap">
+ <div class="pill reveal"><span class="dot"></span>The all-in-one app for personal trainers</div>
+ <h1 class="hero-t reveal d1">Manage members <span class="g">simply</span>,<br>grow revenue <span class="g">boldly</span>.</h1>
+ <p class="hero-sub reveal d2">Members, programs, attendance and income in one place. Log a session in one tap and records and revenue sort themselves — plus member reports and SNS promo cards, made in seconds.</p>
+ <div class="hero-cta reveal d3">
+  <a class="btn btn-p" href="https://apps.apple.com/app/id6787320858"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>Start free</a>
+  <a class="btn btn-g" href="#features">Explore features</a>
+ </div>
+ <p class="hero-note reveal d3">Try instantly as a guest · Sign in with Apple to save & sync securely</p>
+
+ <div class="hero-visual reveal d4">
+  <div class="phone l"><div class="pscreen">
+    <div class="pnotch"></div><div class="pt">Members</div>
+    <div class="ptile"><div class="pt" style="font-size:13px">J. Park</div><div class="pdim">Active · 8 left</div><div class="pbar" style="margin-top:6px"><i style="width:60%"></i></div></div>
+    <div class="ptile"><div class="pt" style="font-size:13px">S. Lee</div><div class="pdim">Expiring · 2 left</div><div class="pbar" style="margin-top:6px"><i style="width:25%;background:var(--amber)"></i></div></div>
+    <div><span class="chip">VIP</span> <span class="chipo">Regular</span></div>
+  </div></div>
+  <div class="phone mid"><div class="pscreen">
+    <div class="pnotch"></div><div class="pt">Welcome, Coach</div><div class="pdim">Today</div>
+    <div class="g2">
+      <div class="ptile"><div class="v amber">12</div><div class="l">Active</div></div>
+      <div class="ptile"><div class="v" style="color:var(--amber)">$1,860</div><div class="l">This month</div></div>
+    </div>
+    <div class="ptile"><div class="l" style="margin-bottom:4px">Today</div><div class="v" style="color:var(--amber)">$315</div></div>
+    <div class="pbtn">✓ Quick log</div>
+    <div class="ptile"><div class="pdim">🔔 3 members expiring · perfect timing</div></div>
+  </div></div>
+  <div class="phone r"><div class="pscreen" style="background:linear-gradient(160deg,#14161c,#0a0b0f)">
+    <div class="pnotch"></div>
+    <div style="font-size:10px;font-weight:800;color:var(--amber2);letter-spacing:1px">Coaching results</div>
+    <div class="pt" style="font-size:16px">Structured 1:1 training</div>
+    <div class="stat" style="margin:8px 0"><div class="s"><div class="n">42</div><div class="k">Sessions</div></div><div class="s"><div class="n">4.6</div><div class="k">Avg score</div></div></div>
+    <div class="stars">★★★★★</div>
+    <div style="margin-top:auto"><span class="chipo">🌐 mysite.com</span></div>
+    <div style="font-size:9px;color:var(--amber);font-weight:700">⚡ RepFit Coach</div>
+  </div></div>
+ </div>
+</div></header>
+
+<div class="strip"><div class="wrap in"><b>All-in-one</b> management for PTs · Pilates · studios · group coaches</div></div>
+
+<section class="sec" id="features"><div class="wrap">
+ <div class="eyebrow reveal">Core features</div>
+ <h2 class="sec-t reveal">Everything a trainer needs</h2>
+ <p class="sec-sub reveal d1">Ditch the spreadsheets and notes. Focus on coaching.</p>
+ <div class="cards"><div class="card reveal d1"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Member CRM</h3><p>Membership, sessions left and programs at a glance — with expiry alerts and Regular/VIP tiers, automatically.</p></div><div class="card reveal d2"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg></div><h3>Session logging</h3><p>One tap logs attendance, deducts a session and records the score. Every session becomes data.</p></div><div class="card reveal d3"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l3-4 3 2 4-6"/></svg></div><h3>Income tracking</h3><p>Daily, monthly and ranged revenue plus projections, tallied automatically. See your business in numbers.</p></div><div class="card reveal d1"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></div><h3>Member reports</h3><p>Professional PDF reports to hand your members. Win trust with systematic management.</p></div><div class="card reveal d2"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></div><h3>SNS promo cards</h3><p>Win new clients with results-only cards — your contacts and channels included.</p></div><div class="card reveal d3"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg></div><h3>AI insights</h3><p>AI flags renewal timing and revenue trends so you never miss an opportunity.</p></div></div>
+</div></section>
+
+<section class="sec" style="padding-top:0"><div class="wrap">
+ <div class="split">
+  <div class="txt reveal">
+   <h3>Member management, made effortless</h3><p>Just add a name — membership, sessions left and the active program line up in one cell. Expiry glows in color, and loyalty badges appear as attendance grows.</p>
+   <div class="li"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg><span>Sessions left & total at a glance</span></div><div class="li"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg><span>Auto expiry highlight + renewal alerts</span></div><div class="li"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg><span>Attendance-based tiers (New·Regular·VIP·Royal)</span></div><div class="li"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg><span>Sort by name, program or sessions left</span></div>
+  </div>
+  <div class="visual reveal d2"><div class="shine"></div>
+   <img class="visual-photo" src="../assets/feat_members.jpg" alt=""/>
+   <div class="repcard">
+     <div class="stat"><div class="s"><div class="n amber">12</div><div class="k">Active</div></div><div class="s"><div class="n">3</div><div class="k">Expiring</div></div><div class="s"><div class="n" style="color:var(--amber)">$1,860</div><div class="k">This month</div></div></div>
+     <div class="ptile" style="margin-top:6px"><div class="pt" style="font-size:13px">J. Park <span class="chip">VIP</span></div><div class="pbar" style="margin-top:7px"><i style="width:60%"></i></div><div class="pdim" style="margin-top:5px">12/20 · 8 left</div></div>
+   </div>
+  </div>
+ </div>
+ <div class="split rev">
+  <div class="txt reveal">
+   <h3>Every share starts a sale</h3><p>A detailed report for your member; a results-only card for your socials. Cards carry your photo, phone and channels, so viewers reach out to you directly.</p>
+   <div class="li"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg><span>Detailed member PDF (with personal info)</span></div><div class="li"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg><span>SNS card + analysis PDF shared together</span></div><div class="li"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg><span>Photo, phone, website & socials auto-shown</span></div><div class="li"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg><span>A CTA that turns views into new clients</span></div>
+  </div>
+  <div class="visual reveal d2"><div class="shine"></div>
+   <img class="visual-photo" src="../assets/feat_report.jpg" alt=""/>
+   <div class="repcard">
+     <div class="hd"><div class="av">K</div><div><div style="color:#fff;font-weight:800">This month</div><div class="pdim">June 2026</div></div></div>
+     <div class="stat"><div class="s"><div class="n">42</div><div class="k">Sessions</div></div><div class="s"><div class="n">4.6</div><div class="k">Avg score</div></div><div class="s"><div class="n">18</div><div class="k">Days</div></div></div>
+     <div class="stars">★★★★★</div>
+     <div class="pdim" style="margin-top:10px">⚡ Coached with RepFit Coach</div>
+   </div>
+  </div>
+ </div>
+</div></section>
+
+<section class="sec" style="padding-top:0"><div class="wrap">
+ <div class="band reveal">
+  <div class="m"><div class="n"><span class="amber">3×</span></div><div class="k">Faster member ops</div></div>
+  <div class="m"><div class="n">10<span class="amber">s</span></div><div class="k">One-tap session log</div></div>
+  <div class="m"><div class="n"><span class="amber">0</span></div><div class="k">Complex setup</div></div>
+  <div class="m"><div class="n">100<span class="amber">%</span></div><div class="k">You own your data</div></div>
+ </div>
+</div></section>
+
+<section class="sec" id="how"><div class="wrap">
+ <div class="eyebrow reveal">How it works</div>
+ <h2 class="sec-t reveal">Three steps is all it takes</h2>
+ <p class="sec-sub reveal d1">From install to your first logged session in minutes.</p>
+ <div class="steps"><div class="step reveal d1"><div class="no">01</div><h3>Add a member</h3><p>Enter a name and membership (total sessions & price). Per-session price is auto-calculated.</p></div><div class="step reveal d2"><div class="no">02</div><h3>Log a session</h3><p>After class, tap the member and rate it. Session deduction and revenue sort themselves.</p></div><div class="step reveal d3"><div class="no">03</div><h3>Share a report</h3><p>Create weekly or monthly member reports and SNS promo cards, then share.</p></div></div>
+</div></section>
+
+<section class="sec" id="pricing" style="padding-top:0"><div class="wrap">
+ <div class="eyebrow reveal">Pricing</div>
+ <h2 class="sec-t reveal">Start with zero pressure</h2>
+ <p class="sec-sub reveal d1">Begin free, upgrade to Pro when you need it.</p>
+ <div class="prices">
+  <div class="price reveal">
+   <div class="plan">Free</div><div class="amt">$0</div><div class="per">Free forever</div>
+   <ul><li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>Up to 3 members</li><li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>Session logging & attendance</li><li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>Basic income tracking</li><li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>Member reports</li></ul>
+   <a class="btn btn-g" style="width:100%;justify-content:center" href="https://apps.apple.com/app/id6787320858">Start free</a>
+  </div>
+  <div class="price hot reveal d1">
+   <div class="tag">Most popular</div>
+   <div class="plan amber">Pro</div><div class="amt">₩99,000</div><div class="per">per year · ₩12,900/mo billed monthly</div>
+   <ul><li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>Unlimited members & programs</li><li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>Full income analytics + forecast</li><li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>SNS promo card + analysis PDF</li><li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>AI insights</li><li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>Cloud sync</li></ul>
+   <a class="btn btn-p" style="width:100%;justify-content:center" href="https://apps.apple.com/app/id6787320858">Go Pro</a>
+  </div>
+ </div>
+ <p style="text-align:center;color:var(--faint);font-size:13px;margin-top:20px">Subscriptions are billed via the App Store and renew automatically. A free trial is available for new subscribers.</p>
+</div></section>
+
+<section class="sec"><div class="wrap"><div class="cta-box reveal">
+ <h2>Focus on coaching, starting today.</h2><p>Let RepFit Coach handle the admin. You focus on your members.</p>
+ <a class="btn btn-p" style="font-size:16px;padding:15px 30px;position:relative;z-index:1" href="https://apps.apple.com/app/id6787320858"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>Start free</a>
+</div></div></section>
+
+<footer class="ft"><div class="wrap">
+ <div class="ft-row">
+  <div style="max-width:280px">
+   <a class="logo" href="#" style="margin-bottom:12px"><img class="logomk" src="../assets/icon.png" alt="RepFit Coach"/>RepFit Coach</a>
+   <p style="color:var(--faint);font-size:13.5px;margin-top:10px">The all-in-one coaching studio for personal trainers.</p>
+  </div>
+  <div><h4>Product</h4><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="https://apps.apple.com/app/id6787320858">Get the app</a></div>
+  <div><h4>Legal</h4><a href="https://billnjoyce.github.io/repfitcoach/en/terms.html">Terms of Service</a><a href="https://billnjoyce.github.io/repfitcoach/en/privacy.html">Privacy Policy</a></div>
+  <div><h4>Contact</h4><a href="mailto:ibillkim@gmail.com">ibillkim@gmail.com</a></div>
+ </div>
+ <div class="ft-bottom">© 2026 Joyce Studios · RepFit Coach. All rights reserved.</div>
+</div></footer>
+
+<script>
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body></html>
