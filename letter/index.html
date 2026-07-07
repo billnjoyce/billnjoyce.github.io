@@ -662,18 +662,56 @@
   try{ firebase.initializeApp(firebaseConfig); auth=firebase.auth(); db=firebase.database(); fbOK=true; }catch(e){ console.warn("firebase",e); }
   function dataRef(uid,sub){ return db.ref("apps/config/letter/data/"+uid+(sub?"/"+sub:"")); }
 
-  /* ---------- payment adapter (pattern) ---------- */
-  var Payment={
-    provider:null,
-    use:function(p){ this.provider=p; },
-    ready:function(){ return !!this.provider; },
-    checkout:async function(plan){
-      if(!this.provider) return {ok:false,reason:"결제 모듈이 아직 연결되지 않았어요."};
-      try{ return await this.provider.checkout(plan); }catch(e){ return {ok:false,reason:String(e&&e.message||e)}; }
-    }
+  /* ---------- payment: Paddle Billing (paddle.js v2) ----------
+     설정값은 아래 PADDLE에 채우거나, RTDB apps/config/letter/payment 로 덮어쓸 수 있어요.
+     clientToken·priceId·environment 는 공개 가능한 값입니다(비밀 키/웹훅 시크릿은 서버에만). */
+  var PADDLE={
+    environment:"sandbox",                 // "sandbox"(테스트) 또는 "production"(실서비스)
+    clientToken:"test_REPLACE_ME",         // Paddle > Developer tools > Authentication > Client-side token
+    prices:{ basic:"pri_REPLACE_BASIC", premium:"pri_REPLACE_PREMIUM" }  // 요금제별 Price ID
   };
-  // 기본(미연결) 어댑터 — 추후 Toss/Stripe/PortOne 등을 같은 인터페이스로 교체
-  Payment.use({ name:"none", checkout:async function(plan){ return {ok:false,reason:"준비중"}; } });
+  try{ if(db) db.ref("apps/config/letter/payment").once("value").then(function(s){ var v=s.val()||{}; if(v.environment)PADDLE.environment=v.environment; if(v.clientToken)PADDLE.clientToken=v.clientToken; if(v.prices)PADDLE.prices=v.prices; }); }catch(e){}
+
+  function paddleConfigured(){
+    return !!(PADDLE.clientToken && PADDLE.clientToken.indexOf("REPLACE")<0 && PADDLE.prices && PADDLE.prices.basic && String(PADDLE.prices.basic).indexOf("REPLACE")<0);
+  }
+  var PaddleAdapter=(function(){
+    var initing=null;
+    function loadScript(){ return new Promise(function(res,rej){ if(window.Paddle) return res(); var s=document.createElement("script"); s.src="https://cdn.paddle.com/paddle/v2/paddle.js"; s.onload=function(){res();}; s.onerror=function(){rej(new Error("paddle.js 로드 실패"));}; document.head.appendChild(s); }); }
+    function init(){ if(initing) return initing; initing=loadScript().then(function(){ try{ if(PADDLE.environment==="sandbox" && window.Paddle.Environment) window.Paddle.Environment.set("sandbox"); }catch(e){} window.Paddle.Initialize({ token:PADDLE.clientToken, eventCallback:onPaddleEvent }); }); return initing; }
+    async function checkout(plan){
+      if(!paddleConfigured()) return {ok:false,reason:"결제 설정 미완료"};
+      var pid=(PADDLE.prices||{})[plan.id]; if(!pid) return {ok:false,reason:"Price ID 없음"};
+      try{
+        await init();
+        window.Paddle.Checkout.open({
+          settings:{ displayMode:"overlay", theme:"light", locale:"ko" },
+          items:[{ priceId:pid, quantity:1 }],
+          customer: (user&&user.email)?{ email:user.email }:undefined,
+          customData:{ uid:(user?user.uid:""), plan:plan.id }
+        });
+        return { opened:true };
+      }catch(e){ return {ok:false,reason:String(e&&e.message||e)}; }
+    }
+    return { name:"paddle", checkout:checkout, init:init };
+  })();
+  function onPaddleEvent(ev){
+    try{
+      if(!ev||ev.name!=="checkout.completed") return;
+      var d=ev.data||{}, cd=d.custom_data||d.customData||{};
+      applyPurchase(cd.plan||"basic", d);
+      try{ window.Paddle.Checkout.close&&window.Paddle.Checkout.close(); }catch(e){}
+    }catch(e){ console.warn("paddle ev",e); }
+  }
+  async function applyPurchase(planId,data){
+    var p=PLANS[planId]||PLANS.basic, value=p.price||0;
+    track("purchase",{currency:"KRW",value:value,plan:planId,transaction_id:(data&&(data.transaction_id||data.id))||"",items:[{item_id:planId,item_name:p.name,price:value}]});
+    try{ PM.sale("subscription",p.name,value); }catch(e){}
+    if(profile){ var now=Date.now(); profile.membership={plan:planId,startedAt:now,expiresAt:now+30*24*3600*1000,provider:"paddle"}; await saveProfile(); updateAppGating(); renderSettings(); }
+    toast(p.name+" 구독이 시작됐어요"); go("settings");
+  }
+  var Payment={ provider:PaddleAdapter, use:function(p){ this.provider=p; }, ready:function(){ return !!this.provider; },
+    checkout:async function(plan){ if(!this.provider) return {ok:false,reason:"결제 모듈 미연결"}; try{ return await this.provider.checkout(plan); }catch(e){ return {ok:false,reason:String(e&&e.message||e)}; } } };
 
   /* ---------- app state ---------- */
   var STYLES=[
@@ -1111,19 +1149,16 @@
     if(!user){ track("payment_intent",{plan:id,source:source,logged_in:false}); gLogin(); return; }
     if(id==="free"){ track("select_free",{source:source}); toast("무료 요금제로 이용 중이에요"); return; }
     var p=PLANS[id], value=p.price||0;
-    // 결제 의향 집계 (실제 결제 기능은 아직 없음)
     track("payment_intent",{plan:id,price:value,source:source,logged_in:true});
     track("begin_checkout",{currency:"KRW",value:value,source:source,items:[{item_id:id,item_name:p.name,price:value}]});
     try{ PM.event("payment_intent","plan="+id+", price="+value+", source="+source); }catch(e){}
     var res=await Payment.checkout(p);
-    if(res.ok){ // 결제 성공 시 (추후 실제 모듈 연동)
-      track("purchase",{currency:"KRW",value:value,plan:id,items:[{item_id:id,item_name:p.name,price:value}]});
-      try{ PM.sale("subscription",p.name,value); }catch(e){}
-      var now=Date.now(); profile.membership={plan:id,startedAt:now,expiresAt:now+30*24*3600*1000};
-      await saveProfile(); updateAppGating(); renderSettings(); toast(p.name+" 구독이 시작됐어요"); go("settings");
+    if(res&&res.opened){ return; } // 결제창 열림 → 완료 시 Paddle 이벤트(applyPurchase)에서 처리
+    track("checkout_unavailable",{plan:id,price:value,source:source,reason:(res&&res.reason)||"준비중"});
+    if(res&&res.reason==="결제 설정 미완료"){
+      openModal("결제 준비 중","결제 연동 설정이 아직 완료되지 않았어요. 곧 이용하실 수 있도록 준비 중이에요.","확인",closeModal);
     } else {
-      track("checkout_unavailable",{plan:id,price:value,source:source,reason:res.reason||"준비중"});
-      openModal("결제 준비 중", "결제 모듈은 인증 완료 후 연결될 예정이에요. 지금은 어댑터만 준비돼 있어 실제 결제는 진행되지 않아요.\n("+esc(res.reason||"")+")", "확인", closeModal);
+      openModal("결제를 시작할 수 없어요","잠시 후 다시 시도해 주세요.\n("+esc((res&&res.reason)||"")+")","확인",closeModal);
     }
   }
 
