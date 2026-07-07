@@ -697,17 +697,24 @@
   })();
   function onPaddleEvent(ev){
     try{
-      if(!ev||ev.name!=="checkout.completed") return;
-      var d=ev.data||{}, cd=d.custom_data||d.customData||{};
-      applyPurchase(cd.plan||"basic", d);
-      try{ window.Paddle.Checkout.close&&window.Paddle.Checkout.close(); }catch(e){}
+      if(!ev) return;
+      if(window.__paddleDebug) console.log("[paddle]",ev.name,ev);
+      if(ev.name==="checkout.completed"){
+        var d=ev.data||{}, cd=d.custom_data||d.customData||{};
+        applyPurchase(cd.plan||"basic", d);
+        try{ window.Paddle.Checkout.close&&window.Paddle.Checkout.close(); }catch(e){}
+      } else if(ev.name==="checkout.error"){
+        var msg=(ev.data&&(ev.data.message||ev.data.error||ev.data.detail))||"결제 오류";
+        track("checkout_error",{reason:String(msg)});
+        console.warn("[paddle] checkout.error →",ev.data);
+      }
     }catch(e){ console.warn("paddle ev",e); }
   }
   async function applyPurchase(planId,data){
+    // 낙관적 UI 갱신 + GA. 정식 지급/판매 로그/푸시는 서버 웹훅(paddleWebhook)이 권한 있게 처리.
     var p=PLANS[planId]||PLANS.basic, value=p.price||0;
     track("purchase",{currency:"KRW",value:value,plan:planId,transaction_id:(data&&(data.transaction_id||data.id))||"",items:[{item_id:planId,item_name:p.name,price:value}]});
-    try{ PM.sale("subscription",p.name,value); }catch(e){}
-    if(profile){ var now=Date.now(); profile.membership={plan:planId,startedAt:now,expiresAt:now+30*24*3600*1000,provider:"paddle"}; await saveProfile(); updateAppGating(); renderSettings(); }
+    if(profile){ var now=Date.now(); profile.membership={plan:planId,startedAt:now,expiresAt:now+30*24*3600*1000,provider:"paddle",status:"active"}; await saveProfile(); updateAppGating(); renderSettings(); }
     toast(p.name+" 구독이 시작됐어요"); go("settings");
   }
   var Payment={ provider:PaddleAdapter, use:function(p){ this.provider=p; }, ready:function(){ return !!this.provider; },
@@ -1151,7 +1158,6 @@
     var p=PLANS[id], value=p.price||0;
     track("payment_intent",{plan:id,price:value,source:source,logged_in:true});
     track("begin_checkout",{currency:"KRW",value:value,source:source,items:[{item_id:id,item_name:p.name,price:value}]});
-    try{ PM.event("payment_intent","plan="+id+", price="+value+", source="+source); }catch(e){}
     var res=await Payment.checkout(p);
     if(res&&res.opened){ return; } // 결제창 열림 → 완료 시 Paddle 이벤트(applyPurchase)에서 처리
     track("checkout_unavailable",{plan:id,price:value,source:source,reason:(res&&res.reason)||"준비중"});
