@@ -667,31 +667,64 @@
      clientToken·priceId·environment 는 공개 가능한 값입니다(비밀 키/웹훅 시크릿은 서버에만). */
   var PADDLE={
     environment:"sandbox",                 // "sandbox"(테스트) 또는 "production"(실서비스)
-    clientToken:"test_REPLACE_ME",         // Paddle > Developer tools > Authentication > Client-side token
-    prices:{ basic:"pri_REPLACE_BASIC", premium:"pri_REPLACE_PREMIUM" }  // 요금제별 Price ID
+    clientToken:"",                        // Paddle > Developer tools > Authentication > Client-side token
+    prices:{}                              // { basic:"pri_...", premium:"pri_..." }
   };
-  try{ if(db) db.ref("apps/config/letter/payment").once("value").then(function(s){ var v=s.val()||{}; if(v.environment)PADDLE.environment=v.environment; if(v.clientToken)PADDLE.clientToken=v.clientToken; if(v.prices)PADDLE.prices=v.prices; }); }catch(e){}
-
-  function paddleConfigured(){
-    return !!(PADDLE.clientToken && PADDLE.clientToken.indexOf("REPLACE")<0 && PADDLE.prices && PADDLE.prices.basic && String(PADDLE.prices.basic).indexOf("REPLACE")<0);
+  var paddleCfgReady=(function(){
+    function apply(v){ if(!v)return false; if(v.environment)PADDLE.environment=v.environment; if(v.clientToken)PADDLE.clientToken=v.clientToken; if(v.prices)PADDLE.prices=v.prices; return !!v.clientToken; }
+    function read(){ return db.ref("apps/config/letter/payment").once("value").then(function(s){ return apply(s.val()); }); }
+    return new Promise(function(resolve){
+      if(!db){ resolve(false); return; }
+      read().then(function(ok){
+        if(ok){ resolve(true); return; }
+        resolve(false);
+      }).catch(function(e){ // 보안규칙상 로그인 전 읽기 불가 → 로그인 후 재시도
+        if(window.__paddleDebug) console.warn("[paddle] config read failed (pre-auth):",e&&e.message);
+        resolve(false);
+      });
+    });
+  })();
+  async function ensurePaddleConfig(){
+    if(PADDLE.clientToken) return true;
+    await paddleCfgReady;
+    if(PADDLE.clientToken) return true;
+    try{ // 로그인 이후 한 번 더 (RTDB 규칙이 auth 요구하는 경우)
+      var s=await db.ref("apps/config/letter/payment").once("value"); var v=s.val()||{};
+      if(v.environment)PADDLE.environment=v.environment; if(v.clientToken)PADDLE.clientToken=v.clientToken; if(v.prices)PADDLE.prices=v.prices;
+    }catch(e){ if(window.__paddleDebug) console.warn("[paddle] config read failed:",e&&e.message); }
+    return !!PADDLE.clientToken;
   }
+  function paddleConfigured(){ return !!(PADDLE.clientToken && PADDLE.prices && PADDLE.prices.basic); }
+
   var PaddleAdapter=(function(){
-    var initing=null;
+    var initing=null, initedToken=null;
     function loadScript(){ return new Promise(function(res,rej){ if(window.Paddle) return res(); var s=document.createElement("script"); s.src="https://cdn.paddle.com/paddle/v2/paddle.js"; s.onload=function(){res();}; s.onerror=function(){rej(new Error("paddle.js 로드 실패"));}; document.head.appendChild(s); }); }
-    function init(){ if(initing) return initing; initing=loadScript().then(function(){ try{ if(PADDLE.environment==="sandbox" && window.Paddle.Environment) window.Paddle.Environment.set("sandbox"); }catch(e){} window.Paddle.Initialize({ token:PADDLE.clientToken, eventCallback:onPaddleEvent }); }); return initing; }
+    function init(){
+      if(initing && initedToken===PADDLE.clientToken) return initing; // 토큰 바뀌면 재초기화
+      initedToken=PADDLE.clientToken;
+      initing=loadScript().then(function(){
+        try{ if(window.Paddle.Environment) window.Paddle.Environment.set(PADDLE.environment==="production"?"production":"sandbox"); }catch(e){}
+        window.Paddle.Initialize({ token:PADDLE.clientToken, eventCallback:onPaddleEvent });
+        if(window.__paddleDebug) console.log("[paddle] initialized",{env:PADDLE.environment,token:PADDLE.clientToken.slice(0,8)+"…",prices:PADDLE.prices});
+      });
+      return initing;
+    }
     async function checkout(plan){
+      await ensurePaddleConfig();
       if(!paddleConfigured()) return {ok:false,reason:"결제 설정 미완료"};
-      var pid=(PADDLE.prices||{})[plan.id]; if(!pid) return {ok:false,reason:"Price ID 없음"};
+      var tokEnv=(PADDLE.clientToken.indexOf("test_")===0)?"sandbox":(PADDLE.clientToken.indexOf("live_")===0?"production":"unknown");
+      if(tokEnv!=="unknown" && tokEnv!==PADDLE.environment) return {ok:false,reason:"환경 불일치: environment="+PADDLE.environment+" / token="+tokEnv};
+      var pid=(PADDLE.prices||{})[plan.id]; if(!pid) return {ok:false,reason:"Price ID 없음 ("+plan.id+")"};
       try{
         await init();
-        window.Paddle.Checkout.open({
-          settings:{ displayMode:"overlay", theme:"light", locale:"ko" },
+        var opts={ settings:{ displayMode:"overlay", theme:"light" },
           items:[{ priceId:pid, quantity:1 }],
-          customer: (user&&user.email)?{ email:user.email }:undefined,
-          customData:{ uid:(user?user.uid:""), plan:plan.id }
-        });
+          customData:{ uid:(user?user.uid:""), plan:plan.id, app:"letter" } };
+        if(user&&user.email) opts.customer={ email:user.email };
+        if(window.__paddleDebug) console.log("[paddle] Checkout.open",opts);
+        window.Paddle.Checkout.open(opts);
         return { opened:true };
-      }catch(e){ return {ok:false,reason:String(e&&e.message||e)}; }
+      }catch(e){ console.warn("[paddle] open failed",e); return {ok:false,reason:String(e&&e.message||e)}; }
     }
     return { name:"paddle", checkout:checkout, init:init };
   })();
@@ -707,6 +740,7 @@
         var msg=(ev.data&&(ev.data.message||ev.data.error||ev.data.detail))||"결제 오류";
         track("checkout_error",{reason:String(msg)});
         console.warn("[paddle] checkout.error →",ev.data);
+        toast("결제 오류: "+String(msg).slice(0,60));
       }
     }catch(e){ console.warn("paddle ev",e); }
   }
@@ -1162,7 +1196,7 @@
     if(res&&res.opened){ return; } // 결제창 열림 → 완료 시 Paddle 이벤트(applyPurchase)에서 처리
     track("checkout_unavailable",{plan:id,price:value,source:source,reason:(res&&res.reason)||"준비중"});
     if(res&&res.reason==="결제 설정 미완료"){
-      openModal("결제 준비 중","결제 연동 설정이 아직 완료되지 않았어요. 곧 이용하실 수 있도록 준비 중이에요.","확인",closeModal);
+      openModal("결제 준비 중","결제 설정을 불러오지 못했어요. (로그인 상태·DB 규칙 확인)\n브라우저 콘솔에서 window.__paddleDebug=true 후 재시도하면 원인이 표시돼요.","확인",closeModal);
     } else {
       openModal("결제를 시작할 수 없어요","잠시 후 다시 시도해 주세요.\n("+esc((res&&res.reason)||"")+")","확인",closeModal);
     }
