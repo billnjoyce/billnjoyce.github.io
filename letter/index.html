@@ -299,8 +299,6 @@
   .letterwrap{position:relative}
   .letter{background:repeating-linear-gradient(transparent 0,transparent 39px,#ECE3D0 39px,#ECE3D0 40px),linear-gradient(180deg,#FFFDF7,#FBF5E8);border:1px solid #E7DCC4;border-radius:8px;padding:clamp(26px,5vw,40px) clamp(22px,4.5vw,36px) 30px;box-shadow:var(--sh-2);position:relative;overflow:hidden;min-height:480px}
   .letter::before{content:"";position:absolute;left:24px;top:0;bottom:0;width:1px;background:rgba(176,80,74,.25)}
-  .letter .stamp{position:absolute;top:16px;right:18px;width:42px;height:50px;border:1px dashed #D8C9A9;border-radius:3px;display:grid;place-items:center;color:#C6B48D;font-size:8.5px;transform:rotate(3deg);text-align:center;line-height:1.25;font-family:var(--fs-disp)}
-  .letter .to{font-family:var(--fs-disp);font-size:clamp(14px,3vw,16px);color:var(--ink-2);margin-bottom:12px}
   .letter .body{white-space:pre-wrap;word-break:keep-all;font-size:clamp(20px,5.1vw,27px);line-height:1.95;color:#31364d;min-height:230px}
   .letter .sign{margin-top:22px;text-align:right}.letter .sign .frm{font-size:13.5px;color:var(--ink-3);font-family:var(--fs-disp)}
   .letter .sign .who{font-size:clamp(20px,4.5vw,25px);color:#31364d;margin-top:3px;display:inline-flex;align-items:center;gap:11px}
@@ -353,7 +351,6 @@
         <button class="btn btn-line btn-lg" data-go="pricingL">요금제 보기</button>
       </div>
       <div class="heromock">
-        <div class="stamp" style="position:absolute;top:16px;right:18px;font-size:9px;color:#C6B48D;border:1px dashed #D8C9A9;border-radius:3px;width:40px;height:48px;display:grid;place-items:center;text-align:center;font-family:var(--fs-disp)">이음편지<br>郵</div>
         <div class="to">김수진 어머니께</div>
         <div class="bd">우리 수진이는 이번 성적에서 국어와 사회가 특히 안정적이었어요. 어려운 문제도 끝까지 붙잡는 태도가 눈에 띄게 자랐습니다.</div>
         <div class="sg">김하늘 선생님</div>
@@ -433,7 +430,7 @@
   <section class="section" id="pricingL">
     <div class="wrap">
       <div class="sec-h reveal"><span class="k">PRICING</span><h2>요금제</h2><p>부담 없이 시작하고, 필요할 때 올리세요.</p></div>
-      <div class="plans" id="plansLanding"></div>
+      <div class="plans" id="plansLanding"></div><div class="export-note" style="margin-top:14px">‘무제한’은 정상적인 개인 이용 범위를 뜻해요. 서비스 안정을 위해 유료 요금제는 하루 1,000통 · 월 10,000통의 공정 사용 한도가 적용됩니다.</div>
     </div>
   </section>
 
@@ -519,7 +516,7 @@
 
         <section class="step" id="s3" data-locked="true">
           <div class="step-h"><span class="num">3</span><h2>편지 만들기</h2><span class="sub">AI가 읽고 씁니다</span></div>
-          <div class="lenwrap"><div class="lenhead"><label class="fld" style="margin:0">편지 길이</label><b id="lenOut">약 400자</b></div><input type="range" id="len" min="100" max="500" step="50" value="400" /><div class="lenticks"><span>100자</span><span>짧게</span><span>적당히</span><span>넉넉히</span></div></div>
+          <div class="lenwrap"><div class="lenhead"><label class="fld" style="margin:0">편지 길이</label><b id="lenOut">약 400자</b></div><input type="range" id="len" min="100" max="500" step="50" value="400" /><div class="lenticks"><span>100자</span><span>짧게</span><span>적당히</span><span>넉넉히</span></div><div class="export-note" id="lenHint" style="margin-top:4px"></div></div>
           <button class="btn btn-g btn-full" id="gen">✍️ 편지 초안 만들기</button>
           <div class="banner warn" id="warn"></div>
           <div class="acard" id="analysis" style="display:none"></div>
@@ -533,7 +530,7 @@
           <div class="cat">남성 느낌</div><div class="styles" id="stylesM"></div>
           <div class="cat">공용</div><div class="styles" id="stylesU"></div>
           <div class="export"><button class="btn btn-line btn-full" id="dlPng">🖼️ PNG 저장</button><button class="btn btn-g btn-full" id="dlPdf">📄 PDF 저장</button></div>
-          <div class="export-note">여러 명 선택 시 PNG는 지원되지 않아요. PDF는 모든 학생을 한 문서로 저장합니다.</div>
+          <div class="export-note">PNG는 선택한 학생마다 파일이 하나씩 저장돼요. PDF는 선택한 학생 전체를 한 문서로 묶어 저장합니다.</div>
         </section>
       </div>
 
@@ -542,14 +539,12 @@
         <div class="pager" id="pager"><button id="pgPrev" aria-label="이전">◀</button><span id="pgLabel"></span><button id="pgNext" aria-label="다음">▶</button></div>
         <div class="letterwrap">
           <div class="letter" id="letter">
-            <div class="stamp">이음편지<br>郵</div>
-            <div class="to" id="pvTo">○○ 어머니께</div>
             <div class="body" id="pvBody"><span class="ph">왼쪽에서 학생을 고르고 자료를 올리면, 이 자리에 손편지가 나타나요.</span></div>
             <div class="sign"><div class="who" id="pvWho"><span class="ph">선생님 이름</span></div></div>
           </div>
           <div class="wm" id="wm" aria-hidden="true"><div class="row" id="wmRow"></div></div>
         </div>
-        <div class="lock-note" id="freeLock" style="display:none"><b>무료 요금제</b><p>편지 초안을 하루 3개까지 미리보기로 볼 수 있어요. 저장(PNG·PDF)과 무제한 생성은 유료 요금제에서 이용할 수 있어요.</p><button class="btn btn-g btn-sm" data-go="pricing">요금제 보기</button></div>
+        <div class="lock-note" id="freeLock" style="display:none"><b>무료 요금제</b><p>편지 초안을 하루 2개까지(최대 300자) 미리보기로 볼 수 있어요. 저장(PNG·PDF)과 무제한 생성은 유료 요금제에서 이용할 수 있어요.</p><button class="btn btn-g btn-sm" data-go="pricing">요금제 보기</button></div>
         <p class="foot">학생 데이터는 계정에 안전하게 저장됩니다.</p>
       </div>
     </div>
@@ -559,7 +554,7 @@
 
 <!-- PRICING (logged in) -->
 <div class="view" id="view-pricing">
-  <div class="page"><div class="page-h"><h1>요금제</h1><p>현재 요금제가 강조돼 있어요.</p></div><div class="plans" id="plansApp"></div></div>
+  <div class="page"><div class="page-h"><h1>요금제</h1><p>현재 요금제가 강조돼 있어요.</p></div><div class="plans" id="plansApp"></div><div class="export-note" style="margin-top:14px">‘무제한’은 정상적인 개인 이용 범위를 뜻해요. 서비스 안정을 위해 유료 요금제는 하루 1,000통 · 월 10,000통의 공정 사용 한도가 적용됩니다.</div></div>
   <footer><div class="wrap foot-in"><div class="foot-links"><a href="https://joycestudios.kr/letter/ko/terms.html" target="_blank" rel="noopener">이용약관</a><a href="https://joycestudios.kr/letter/ko/terms.html" target="_blank" rel="noopener">개인정보 처리방침</a></div><div class="foot-cp">Copyrights @ Joyce Studios. All Right Reserved.</div></div></footer>
 </div>
 
@@ -581,6 +576,7 @@
         <div class="kv"><span class="k">시작일</span><span class="v" id="setStart">-</span></div>
         <div class="kv"><span class="k">종료일</span><span class="v" id="setEnd">-</span></div>
         <button class="btn btn-g btn-sm btn-full" data-go="pricing" style="margin-top:16px">요금제 변경</button>
+        <button class="btn btn-line btn-sm btn-full" id="cancelSubBtn" style="margin-top:8px;display:none">구독 해지</button>
         <button class="btn btn-line btn-sm btn-full" id="logoutBtn" style="margin-top:8px">로그아웃</button>
         <button class="linkbtn danger" id="withdrawBtn" style="width:100%;margin-top:14px">회원 탈퇴</button>
       </div>
@@ -648,9 +644,9 @@
   /* ---------- plans ---------- */
   var PLANS={
     free:{id:"free",name:"무료",price:0,students:3,img:false,pdf:false,tag:"체험",
-      feats:[["편지 초안 하루 3개 미리보기",1],["학생 등록 (체험 3명)",1],["파일 저장(PNG·PDF)",0],["무제한 생성",0],["일괄·PDF 병합",0]]},
-    basic:{id:"basic",name:"베이직",price:19900,students:50,img:true,pdf:false,tag:"가장 인기",hot:true,
-      feats:[["학생 최대 50명",1],["편지 생성 무제한",1],["이미지(PNG) 추출",1],["PDF 추출",0],["성적 자동 분석",1]]},
+      feats:[["편지 초안 하루 2개 (최대 300자)",1],["학생 등록 (체험 3명)",1],["파일 저장(PNG·PDF)",0],["무제한 생성",0],["일괄·PDF 병합",0]]},
+    basic:{id:"basic",name:"베이직",price:19900,students:15,img:true,pdf:false,tag:"가장 인기",hot:true,
+      feats:[["학생 최대 15명",1],["편지 생성 무제한",1],["이미지(PNG) 추출",1],["PDF 추출",0],["성적 자동 분석",1]]},
     premium:{id:"premium",name:"프리미엄",price:39900,students:Infinity,img:true,pdf:true,tag:"모든 기능",
       feats:[["학생 무제한",1],["편지 생성 무제한",1],["이미지(PNG) 추출",1],["PDF 추출",1],["성적 자동 분석",1]]}
   };
@@ -670,13 +666,31 @@
     clientToken:"",                        // Paddle > Developer tools > Authentication > Client-side token
     prices:{}                              // { basic:"pri_...", premium:"pri_..." }
   };
+  try{ if(/[?&]debug=1/.test(location.search)){ window.__paddleDebug=true;
+    window.addEventListener("load",function(){
+      var b=document.createElement("button");
+      b.textContent="🐞 결제 진단";
+      b.style.cssText="position:fixed;right:14px;bottom:14px;z-index:99999;background:#191F28;color:#fff;border:0;border-radius:999px;padding:12px 16px;font-size:14px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.25)";
+      b.onclick=function(){ window.paddleDiag&&window.paddleDiag(); };
+      document.body.appendChild(b);
+      var m=document.createElement("button");
+      m.textContent="🧪 최소옵션 결제";
+      m.style.cssText="position:fixed;right:14px;bottom:66px;z-index:99999;background:#00A85F;color:#fff;border:0;border-radius:999px;padding:12px 16px;font-size:14px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.25)";
+      m.onclick=function(){ window.paddleMinimal&&window.paddleMinimal("basic"); };
+      document.body.appendChild(m);
+    });
+  } }catch(e){}
+  // 라이브 도메인에서만 라이브 결제 설정을 바라본다. 그 외(로컬·미리보기·스테이징)는 샌드박스.
+  var LIVE_HOSTS=["www.joycestudios.kr","joycestudios.kr"];
+  var IS_LIVE=(function(){ try{ return LIVE_HOSTS.indexOf(location.hostname)>=0; }catch(e){ return false; } })();
+  var PAY_PATH="apps/config/letter/"+(IS_LIVE?"payment_live":"payment");
   var paddleCfgReady=(function(){
     function apply(v){ if(!v)return false; if(v.environment)PADDLE.environment=v.environment; if(v.clientToken)PADDLE.clientToken=v.clientToken; if(v.prices)PADDLE.prices=v.prices; return !!v.clientToken; }
-    function read(){ return db.ref("apps/config/letter/payment").once("value").then(function(s){ return apply(s.val()); }); }
+    function read(){ return db.ref(PAY_PATH).once("value").then(function(s){ return apply(s.val()); }); }
     return new Promise(function(resolve){
       if(!db){ resolve(false); return; }
       read().then(function(ok){
-        if(ok){ resolve(true); return; }
+        if(ok){ if(window.__paddleDebug) console.log("[paddle] config from",PAY_PATH,"(live="+IS_LIVE+")"); resolve(true); return; }
         resolve(false);
       }).catch(function(e){ // 보안규칙상 로그인 전 읽기 불가 → 로그인 후 재시도
         if(window.__paddleDebug) console.warn("[paddle] config read failed (pre-auth):",e&&e.message);
@@ -689,12 +703,41 @@
     await paddleCfgReady;
     if(PADDLE.clientToken) return true;
     try{ // 로그인 이후 한 번 더 (RTDB 규칙이 auth 요구하는 경우)
-      var s=await db.ref("apps/config/letter/payment").once("value"); var v=s.val()||{};
+      var s=await db.ref(PAY_PATH).once("value"); var v=s.val()||{};
       if(v.environment)PADDLE.environment=v.environment; if(v.clientToken)PADDLE.clientToken=v.clientToken; if(v.prices)PADDLE.prices=v.prices;
     }catch(e){ if(window.__paddleDebug) console.warn("[paddle] config read failed:",e&&e.message); }
     return !!PADDLE.clientToken;
   }
   function paddleConfigured(){ return !!(PADDLE.clientToken && PADDLE.prices && PADDLE.prices.basic); }
+  window.paddleMinimal=async function(planId){
+    planId=planId||"basic";
+    await ensurePaddleConfig();
+    try{ await PaddleAdapter.init(); }catch(e){ alert("init 실패: "+(e&&e.message)); return; }
+    var pid=(PADDLE.prices||{})[planId];
+    console.log("[paddleMinimal] opening with items only:",pid);
+    try{ window.Paddle.Checkout.open({ items:[{ priceId:pid, quantity:1 }] }); }
+    catch(e){ alert("open 예외: "+(e&&e.message)); }
+  };
+  window.paddleDiag=async function(){
+    var lines=[];
+    lines.push("로그인: "+(user?("O ("+(user.email||user.uid)+")"):"X — 먼저 로그인하세요"));
+    var ok=false; try{ ok=await ensurePaddleConfig(); }catch(e){ lines.push("설정 로드 예외: "+(e&&e.message)); }
+    lines.push("설정 로드: "+(ok?"O":"X — RTDB apps/config/letter/payment 읽기 실패(보안규칙/로그인 확인)"));
+    var tok=PADDLE.clientToken||"";
+    lines.push("도메인 환경: "+(IS_LIVE?"LIVE ("+location.hostname+")":"SANDBOX ("+location.hostname+")"));
+    lines.push("설정 경로: "+PAY_PATH);
+    lines.push("environment: "+(PADDLE.environment||"(없음)"));
+    lines.push("clientToken: "+(tok?tok.slice(0,10)+"…":"(없음)"));
+    var tokEnv=tok.indexOf("test_")===0?"sandbox":(tok.indexOf("live_")===0?"production":"unknown");
+    lines.push("토큰 환경: "+tokEnv+(tokEnv!=="unknown"&&tokEnv!==PADDLE.environment?"  ⚠ environment 와 불일치!":"  (일치)"));
+    lines.push("prices.basic: "+((PADDLE.prices||{}).basic||"(없음)"));
+    lines.push("prices.premium: "+((PADDLE.prices||{}).premium||"(없음)"));
+    lines.push("paddle.js: "+(window.Paddle?"로드됨":"아직 미로드(구독하기 클릭 시 로드)"));
+    var msg=lines.join("\n");
+    console.log("[paddleDiag]\n"+msg);
+    try{ openModal("결제 진단", msg, "확인", closeModal); }catch(e){ alert(msg); }
+    return msg;
+  };
 
   var PaddleAdapter=(function(){
     var initing=null, initedToken=null;
@@ -714,6 +757,8 @@
       if(!paddleConfigured()) return {ok:false,reason:"결제 설정 미완료"};
       var tokEnv=(PADDLE.clientToken.indexOf("test_")===0)?"sandbox":(PADDLE.clientToken.indexOf("live_")===0?"production":"unknown");
       if(tokEnv!=="unknown" && tokEnv!==PADDLE.environment) return {ok:false,reason:"환경 불일치: environment="+PADDLE.environment+" / token="+tokEnv};
+      if(IS_LIVE && PADDLE.environment!=="production") return {ok:false,reason:"라이브 도메인인데 결제 설정이 production이 아니에요"};
+      if(!IS_LIVE && PADDLE.environment==="production") return {ok:false,reason:"비-라이브 도메인에서는 실제(production) 결제를 열 수 없어요"};
       var pid=(PADDLE.prices||{})[plan.id]; if(!pid) return {ok:false,reason:"Price ID 없음 ("+plan.id+")"};
       try{
         await init();
@@ -740,7 +785,8 @@
         var msg=(ev.data&&(ev.data.message||ev.data.error||ev.data.detail))||"결제 오류";
         track("checkout_error",{reason:String(msg)});
         console.warn("[paddle] checkout.error →",ev.data);
-        toast("결제 오류: "+String(msg).slice(0,60));
+        if(window.__paddleDebug){ try{ openModal("Paddle checkout.error", JSON.stringify(ev.data,null,2).slice(0,1200), "확인", closeModal); }catch(e){} }
+        else toast("결제 오류: "+String(msg).slice(0,60));
       }
     }catch(e){ console.warn("paddle ev",e); }
   }
@@ -860,10 +906,11 @@
     profile={
       name:user.displayName||"선생님", email:user.email||"", photoURL:user.photoURL||"",
       teacher:user.displayName?user.displayName+" 선생님":"",
-      membership:{plan:"free",startedAt:now,expiresAt:null},
+      membership:{plan:"free",startedAt:now,expiresAt:null},   // 로컬 표시용 (서버가 실제 권한 보유)
       agreedAt:now, createdAt:now
     };
-    try{ await dataRef(user.uid,"profile").set(profile); }catch(e){ toast("저장 실패: "+(e.code||e.message)); return; }
+    // membership·usage 는 서버 전용이라 기록하지 않음
+    try{ await dataRef(user.uid,"profile").update({name:profile.name,email:profile.email,photoURL:profile.photoURL,teacher:profile.teacher,agreedAt:now,createdAt:now}); }catch(e){ toast("저장 실패: "+(e.code||e.message)); return; }
     track("sign_up");
     $("#welcomeName").textContent=(profile.name)+"님, 이제 이음편지와 함께 따뜻한 손편지를 시작해요.";
     go("welcome");
@@ -881,18 +928,17 @@
     go("app");
   }
   function saveStudents(){ if(user) dataRef(user.uid,"students").set(st.students).catch(function(){}); }
-  async function saveProfile(){ if(user) try{ await dataRef(user.uid,"profile").set(profile); }catch(e){} }
-
-  async function loadAiConfig(){
-    if(!db) return;
-    try{
-      var snap=await db.ref("apps/config/letter").once("value"); var v=snap.val()||{};
-      var key=v.api_key||v.apiKey||null;
-      if(key){ var prov=v.provider||(String(key).indexOf("sk-ant")===0?"anthropic":"openai");
-        aiCfg={apiKey:key,provider:prov,model:v.model||(prov==="anthropic"?"claude-sonnet-4-5":"gpt-4.1-mini"),maxTokens:v.maxTokens||v.max_tokens||null}; aiReady=true;
-      } else aiReady=false;
-    }catch(e){ aiReady=false; }
+  // 클라이언트는 자기 소유 필드만 갱신. membership·usage 는 서버(웹훅/letterGenerate)만 씁니다.
+  async function saveProfile(){
+    if(!user||!profile) return;
+    var patch={ name:profile.name||"", email:profile.email||"", photoURL:profile.photoURL||"",
+                teacher:profile.teacher||"", agreedAt:profile.agreedAt||null, createdAt:profile.createdAt||null };
+    try{ await dataRef(user.uid,"profile").update(patch); }catch(e){}
   }
+
+  // 편지 생성은 서버(letterGenerate)에서 수행합니다. AI 키는 클라이언트에 노출되지 않습니다.
+  var GEN_URL="https://us-central1-carfund-f5102.cloudfunctions.net/letterGenerate";
+  async function loadAiConfig(){ aiReady=true; }
 
   /* ---------- gating ---------- */
   function updateAppGating(){
@@ -942,17 +988,17 @@
   function toggleSelect(id){
     var i=st.selIds.indexOf(id);
     if(i>=0) st.selIds.splice(i,1); else st.selIds.push(id);
-    renderRoster(); refreshLocks(); resetResultsView();
+    renderRoster(); refreshResultsView();
   }
-  function removeStudent(id){ var s=st.students.filter(function(x){return x.id===id})[0]; if(s&&!confirm("'"+s.nick+"' 학생을 삭제할까요?"))return; st.students=st.students.filter(function(x){return x.id!==id}); var i=st.selIds.indexOf(id); if(i>=0)st.selIds.splice(i,1); delete st.results[id]; saveStudents(); renderRoster(); refreshLocks(); resetResultsView(); }
+  function removeStudent(id){ var s=st.students.filter(function(x){return x.id===id})[0]; if(s&&!confirm("'"+s.nick+"' 학생을 삭제할까요?"))return; st.students=st.students.filter(function(x){return x.id!==id}); var i=st.selIds.indexOf(id); if(i>=0)st.selIds.splice(i,1); delete st.results[id]; saveStudents(); renderRoster(); refreshResultsView(); }
   function resetAll(){ if(!st.students.length){toast("삭제할 학생이 없어요");return;} if(!confirm("저장된 학생 "+st.students.length+"명을 모두 삭제할까요?"))return; st.students=[];st.selIds=[];st.results={};saveStudents();renderRoster();refreshLocks();resetResultsView();toast("학생을 모두 삭제했어요"); }
-  function selectAll(){ if(st.selIds.length===st.students.length){ st.selIds=[]; } else { st.selIds=st.students.map(function(s){return s.id}); } renderRoster(); refreshLocks(); resetResultsView(); }
+  function selectAll(){ if(st.selIds.length===st.students.length){ st.selIds=[]; } else { st.selIds=st.students.map(function(s){return s.id}); } renderRoster(); refreshResultsView(); }
   $("#addStu").addEventListener("click",function(){
     var nick=$("#nick").value.trim(); if(!nick){toast("학생 이름을 입력해 주세요");$("#nick").focus();return;}
     var p=plan(); if(st.students.length>=p.students){ needUpgrade(p.id==="free"?"무료 요금제는 체험 3명까지예요. 더 등록하려면 요금제를 올려주세요.":"현재 요금제의 학생 수("+p.students+"명)를 초과했어요."); return; }
     var s={id:"s"+Date.now(),nick:nick,honor:$("#honor").value,memo:$("#memo").value.trim()};
     st.students.push(s); st.selIds=[s.id]; saveStudents(); $("#nick").value="";$("#memo").value="";
-    renderRoster(); refreshLocks(); resetResultsView(); toast(nick+" 학생을 추가했어요"); track("add_student");
+    renderRoster(); refreshResultsView(); toast(nick+" 학생을 추가했어요"); track("add_student");
   });
   $("#nick").addEventListener("keydown",function(e){ if(e.key==="Enter")$("#addStu").click(); });
   $("#honor").addEventListener("change",function(){
@@ -968,6 +1014,7 @@
   function hasInput(){ return st.inputMode==="sheet"?!!st.wb:!!st.img; }
   function hasResults(){ return Object.keys(st.results).length>0; }
   function refreshLocks(){
+    try{ applyLenLimit(); }catch(e){}
     var n=st.selIds.length;
     $("#s2").dataset.locked=n?"false":"true";
     $("#s3").dataset.locked=(n&&hasInput())?"false":"true";
@@ -1024,7 +1071,14 @@
 
   /* ---------- length ---------- */
   var lenEl=$("#len");
-  function syncLen(){st.len=parseInt(lenEl.value,10);$("#lenOut").textContent="약 "+st.len+"자";lenEl.style.setProperty("--pct",((st.len-100)/400*100)+"%");}
+  function maxLen(){ return plan().id==="free"?FREE_MAXLEN:500; }
+  function applyLenLimit(){
+    var mx=maxLen(); lenEl.max=String(mx);
+    if(parseInt(lenEl.value,10)>mx){ lenEl.value=String(mx); }
+    var hint=$("#lenHint"); if(hint) hint.textContent=(mx===FREE_MAXLEN)?"무료 요금제는 최대 300자예요":"";
+    syncLen();
+  }
+  function syncLen(){var mx=maxLen();st.len=Math.min(parseInt(lenEl.value,10),mx);$("#lenOut").textContent="약 "+st.len+"자";lenEl.style.setProperty("--pct",((st.len-100)/(mx-100)*100)+"%");}
   lenEl.addEventListener("input",syncLen);syncLen();
 
   /* ---------- generate ---------- */
@@ -1054,69 +1108,94 @@
     return t;
   }
   async function callAI(nick,honor,srcText,sheetMode){
-    var N=st.len, need=Math.round(N*4)+2500, maxTokens=Math.min(16000,Math.max(need,aiCfg.maxTokens||0,4000));
-    var sys=systemPrompt(N), ut=userText(nick,honor,srcText,sheetMode);
-    var dataUrl=(!sheetMode&&st.img)?("data:"+(st.mime||"image/jpeg")+";base64,"+st.img):"";
-    var isA=(aiCfg.provider==="anthropic");
-    var url=isA?"https://api.anthropic.com/v1/messages":"https://api.openai.com/v1/chat/completions";
-    var headers=isA?{"content-type":"application/json","x-api-key":aiCfg.apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"}:{"content-type":"application/json","authorization":"Bearer "+aiCfg.apiKey};
-    var body;
-    if(isA){
-      var aUser=sheetMode?[{type:"text",text:ut}]:[{type:"image",source:{type:"base64",media_type:st.mime||"image/jpeg",data:st.img}},{type:"text",text:ut}];
-      body=JSON.stringify({model:aiCfg.model,max_tokens:maxTokens,system:[{type:"text",text:sys,cache_control:{type:"ephemeral"}}],messages:[{role:"user",content:aUser}]});
-    }else{
-      var oUser=sheetMode?[{type:"text",text:ut}]:[{type:"text",text:ut},{type:"image_url",image_url:{url:dataUrl,detail:"high"}}];
-      body=JSON.stringify({model:aiCfg.model,max_tokens:maxTokens,temperature:0.7,frequency_penalty:0.2,presence_penalty:0.1,response_format:{type:"json_object"},messages:[{role:"system",content:sys},{role:"user",content:oUser}]});
-    }
+    var u=auth&&auth.currentUser; if(!u) return {error:"로그인이 필요해요"};
+    var body={ nick:nick, honor:honor, sheetMode:!!sheetMode, srcText:sheetMode?(srcText||""):"", len:st.len||400 };
+    if(!sheetMode && st.img) body.image={ mime:st.mime||"image/jpeg", data:st.img };
     var lastErr=null;
-    for(var attempt=1;attempt<=3;attempt++){
+    for(var attempt=1;attempt<=2;attempt++){
       try{
-        var resp=await fetch(url,{method:"POST",headers:headers,body:body});
-        if(!resp.ok){lastErr="HTTP "+resp.status;if(resp.status>=500||resp.status===429){await wait(700*attempt);continue;}return {error:lastErr};}
-        var data=await resp.json();
-        var txt=isA?(data.content||[]).filter(function(b){return b.type==="text"}).map(function(b){return b.text}).join("\n").trim():((data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content)||"").trim();
-        var parsed=parseJson(txt);
-        if(!parsed){var fin=isA?data.stop_reason:(data.choices&&data.choices[0]&&data.choices[0].finish_reason);lastErr=(fin==="length"||fin==="max_tokens")?"응답이 잘렸어요":"형식 오류";if(attempt<3){await wait(500);continue;}return {error:lastErr};}
-        return {data:parsed};
-      }catch(e){lastErr=String(e&&e.message||e);await wait(600*attempt);}
+        var token=await u.getIdToken();
+        var resp=await fetch(GEN_URL,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify(body)});
+        var j=null; try{ j=await resp.json(); }catch(e){}
+        if(resp.status===429){ return {quota:(j&&j.kind)||"daily", plan:(j&&j.plan)||plan().id}; }
+        if(resp.status===401){ return {error:"로그인이 만료됐어요. 다시 로그인해 주세요."}; }
+        if(!resp.ok){ lastErr=(j&&j.error)||("HTTP "+resp.status); if(resp.status>=500&&attempt<2){ await wait(800); continue; } return {error:lastErr}; }
+        if(j&&j.found===false) return {data:{found:false}};
+        if(j&&j.ok&&j.data) return {data:j.data};
+        lastErr="형식 오류";
+      }catch(e){ lastErr=String(e&&e.message||e); if(attempt<2) await wait(700); }
     }
     return {error:lastErr||"오류"};
   }
-  var FREE_DAILY=3;
+  var FREE_DAILY=2, PAID_DAILY=1000, PAID_MONTHLY=10000;  // 유료: 어뷰징 방지 공정 사용 상한
+  var FREE_MAXLEN=300;   // 무료: 편지 최대 글자수
   function todayKey(){var d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();}
+  function monthKey(){var d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1);}
   function usedToday(){var u=profile&&profile.usage;return (u&&u.date===todayKey())?(u.count||0):0;}
-  function addUsage(n){if(!profile)return;var t=todayKey();if(!profile.usage||profile.usage.date!==t)profile.usage={date:t,count:0};profile.usage.count+=n;saveProfile();}
+  function usedMonth(){var u=profile&&profile.usage;return (u&&u.month===monthKey())?(u.mcount||0):0;}
+  async function syncUsage(){ // 사용량의 기준은 서버. 최신 값을 읽어 UI에만 반영
+    try{ if(!user||!db) return; var s=await dataRef(user.uid,"profile/usage").once("value"); if(profile) profile.usage=s.val()||{}; }catch(e){}
+  }
+  // 요금제별 잔여 생성 가능 수 (무제한이어도 공정 사용 상한 적용)
+  function remainingQuota(){
+    if(plan().id==="free") return { n:Math.max(0,FREE_DAILY-usedToday()), kind:"free" };
+    var d=Math.max(0,PAID_DAILY-usedToday()), m=Math.max(0,PAID_MONTHLY-usedMonth());
+    return { n:Math.min(d,m), kind:(d<=m?"daily":"monthly") };
+  }
+  function showQuotaModal(kind){
+    track("quota_exceeded",{plan:plan().id,kind:kind});
+    if(plan().id==="free"){ needUpgrade("무료 요금제는 하루 "+FREE_DAILY+"개까지 편지 초안을 만들 수 있어요. 내일 다시 시도하거나 요금제를 올려 주세요."); return; }
+    openModal("잠시 후 다시 시도해 주세요", kind==="daily"
+      ? "정상적인 사용을 보호하기 위해 하루 "+PAID_DAILY.toLocaleString()+"통까지 편지를 만들 수 있어요.\n내일 다시 이용해 주세요."
+      : "정상적인 사용을 보호하기 위해 한 달 "+PAID_MONTHLY.toLocaleString()+"통까지 편지를 만들 수 있어요.\n다음 달에 다시 이용하시거나 문의해 주세요.\n\nibillkim@gmail.com","확인",closeModal);
+  }
   async function generate(){
     var sel=selectedStudents(); if(!sel.length||!hasInput())return;
     if(!aiReady){ $("#warn").style.display="block"; $("#warn").innerHTML="AI가 아직 연결되지 않았어요. 관리자에게 문의해 주세요."; return; }
     var isFree=(plan().id==="free"), capNote="";
-    if(isFree){
-      var remain=FREE_DAILY-usedToday();
-      if(remain<=0){ needUpgrade("무료 요금제는 하루 "+FREE_DAILY+"개까지 편지 초안을 만들 수 있어요. 내일 다시 시도하거나 요금제를 올려 주세요."); return; }
-      if(sel.length>remain){ sel=sel.slice(0,remain); capNote="무료 요금제는 하루 "+FREE_DAILY+"개까지라 "+remain+"명만 생성했어요. "; }
+    var q=remainingQuota();
+    if(q.n<=0){
+      if(isFree){ needUpgrade("무료 요금제는 하루 "+FREE_DAILY+"개까지 편지 초안을 만들 수 있어요. 내일 다시 시도하거나 요금제를 올려 주세요."); }
+      else{ openModal("잠시 후 다시 시도해 주세요", q.kind==="daily"
+          ? "정상적인 사용을 보호하기 위해 하루 "+PAID_DAILY.toLocaleString()+"통까지 편지를 만들 수 있어요.\n내일 다시 이용해 주세요."
+          : "정상적인 사용을 보호하기 위해 한 달 "+PAID_MONTHLY.toLocaleString()+"통까지 편지를 만들 수 있어요.\n다음 달에 다시 이용하시거나 문의해 주세요.\n\nibillkim@gmail.com","확인",closeModal);
+        track("quota_exceeded",{plan:plan().id,kind:q.kind}); }
+      return;
+    }
+    if(sel.length>q.n){
+      sel=sel.slice(0,q.n);
+      capNote=isFree
+        ? ("무료 요금제는 하루 "+FREE_DAILY+"개까지라 "+q.n+"명만 생성했어요. ")
+        : ("공정 사용 한도에 따라 "+q.n+"명만 생성했어요. ");
+      if(!isFree) track("quota_capped",{plan:plan().id,kind:q.kind});
     }
     var btn=$("#gen");btn.disabled=true;$("#warn").style.display="none";
-    var sheetMode=(st.inputMode==="sheet"); st.results={};
+    var quotaHit=null;
+    var sheetMode=(st.inputMode==="sheet"); // 기존 편지는 유지하고, 선택한 학생만 새로 생성/갱신
     var ok=0, fails=[];
     for(var i=0;i<sel.length;i++){
       var s=sel[i]; btn.innerHTML='<span class="spin"></span> '+(i+1)+' / '+sel.length+'명 생성 중…';
       var srcText=null;
       if(sheetMode){ srcText=sheetTextFor(s.nick); if(!srcText){ fails.push(s.nick+"(자료 없음)"); continue; } }
       var res=await callAI(s.nick,s.honor,srcText,sheetMode);
+      if(res.quota){ quotaHit=res.quota; break; }
       if(res.error){ fails.push(s.nick+"("+res.error+")"); continue; }
       if(res.data.found===false||!res.data.letter){ fails.push(s.nick+"(못 찾음)"); continue; }
       st.results[s.id]={r:res.data,letter:res.data.letter}; ok++;
     }
-    if(isFree && ok>0) addUsage(ok);
+    if(ok>0) await syncUsage();  // 사용량은 서버가 기록 → 최신 값만 다시 읽어옴
     btn.disabled=false; refreshLocks();
-    if(!ok){ $("#warn").style.display="block"; $("#warn").innerHTML=capNote+"편지를 만들지 못했어요."+(fails.length?" (<code>"+esc(fails.join(", "))+"</code>)":""); return; }
+    if(quotaHit){ showQuotaModal(quotaHit); }
+    if(!ok){ if(!quotaHit){ $("#warn").style.display="block"; $("#warn").innerHTML=capNote+"편지를 만들지 못했어요."+(fails.length?" (<code>"+esc(fails.join(", "))+"</code>)":""); } return; }
     if(capNote||fails.length){ $("#warn").style.display="block"; $("#warn").innerHTML=capNote+(fails.length?(ok+"명 완료 · 일부 실패: "+esc(fails.join(", "))):""); }
-    st.viewIndex=0; renderResultView();
+    var firstNew=sel.filter(function(s){return st.results[s.id]})[0];
+    var lst=resultsList(); st.viewIndex=firstNew?Math.max(0,lst.map(function(s){return s.id}).indexOf(firstNew.id)):0;
+    renderResultView();
     toast(ok+"명의 편지가 완성됐어요"); track("generate_letter",{plan:plan().id,mode:st.inputMode,count:ok});
   }
   function parseJson(t){try{return JSON.parse(t)}catch(e){}var a=t.indexOf("{"),b=t.lastIndexOf("}");if(a>=0&&b>a){try{return JSON.parse(t.slice(a,b+1))}catch(e){}}return null;}
   function chip(t,k){return '<span class="chip '+k+'">'+esc(t)+'</span>'}
-  function resultsList(){ return selectedStudents().filter(function(s){return st.results[s.id]}); }
+  function resultsList(){ return st.students.filter(function(s){return st.results[s.id]}); }
   function currentResultStudent(){ var l=resultsList(); if(!l.length)return null; if(st.viewIndex>=l.length)st.viewIndex=l.length-1; if(st.viewIndex<0)st.viewIndex=0; return l[st.viewIndex]; }
   function renderResultView(){
     var l=resultsList();
@@ -1134,6 +1213,8 @@
   }
   function updatePager(){ var l=resultsList(),pg=$("#pager"); if(l.length>1){pg.style.display="flex";$("#pgLabel").textContent=(st.viewIndex+1)+" / "+l.length+" · "+l[st.viewIndex].nick;} else pg.style.display="none"; }
   function resetResultsView(){ st.results={};st.viewIndex=0;$("#analysis").style.display="none";$("#letterWrap").style.display="none";$("#warn").style.display="none";refreshLocks();if(st.inputMode==="sheet")showSheetResult();renderPreview();updatePager(); }
+  // 선택(체크박스) 변경 시: 생성된 편지는 유지하고 화면만 갱신
+  function refreshResultsView(){ refreshLocks(); if(st.inputMode==="sheet")showSheetResult(); renderResultView(); }
   $("#pgPrev").addEventListener("click",function(){var l=resultsList();if(!l.length)return;st.viewIndex=(st.viewIndex-1+l.length)%l.length;renderResultView();});
   $("#pgNext").addEventListener("click",function(){var l=resultsList();if(!l.length)return;st.viewIndex=(st.viewIndex+1)%l.length;renderResultView();});
   $("#letterText").addEventListener("input",function(){var s=currentResultStudent();if(s&&st.results[s.id]){st.results[s.id].letter=this.value;renderPreview();}});
@@ -1141,23 +1222,50 @@
 
   /* ---------- styles + preview + watermark ---------- */
   function buildStyles(){var g={F:$("#stylesF"),M:$("#stylesM"),U:$("#stylesU")};if(g.F.childNodes.length)return;STYLES.forEach(function(sty){var b=document.createElement("button");b.type="button";b.className="sw";b.dataset.id=sty.id;b.setAttribute("aria-selected",sty.id===st.style.id?"true":"false");b.innerHTML='<div class="lab">'+esc(sty.name)+'</div><div class="prev" style="font-family:'+sty.font+'">사랑하는 마음을 담아</div>';b.addEventListener("click",function(){st.style=sty;$$(".sw").forEach(function(x){x.setAttribute("aria-selected",x.dataset.id===sty.id?"true":"false")});renderPreview();});g[sty.grp].appendChild(b);});}
-  function renderPreview(){var s=currentResultStudent(),res=s?st.results[s.id]:null,to=$("#pvTo"),bodyEl=$("#pvBody"),who=$("#pvWho"),ff=st.style.font;bodyEl.style.fontFamily=ff;who.style.fontFamily=ff;to.textContent=s?(s.nick+" "+s.honor+"께"):"○○ 어머니께";if(res&&res.letter){bodyEl.textContent=res.letter;$("#pvCount").textContent=res.letter.replace(/\s/g,"").length+"자";}else{bodyEl.innerHTML='<span class="ph">왼쪽에서 학생을 고르고 자료를 올린 뒤 편지를 만들면, 이 자리에 손편지가 나타나요.</span>';$("#pvCount").textContent="";}who.innerHTML=st.teacher?esc(st.teacher):'<span class="ph">선생님 이름</span>';}
+  function renderPreview(){var s=currentResultStudent(),res=s?st.results[s.id]:null,bodyEl=$("#pvBody"),who=$("#pvWho"),ff=st.style.font;bodyEl.style.fontFamily=ff;who.style.fontFamily=ff;if(res&&res.letter){bodyEl.textContent=res.letter;$("#pvCount").textContent=res.letter.replace(/\s/g,"").length+"자";}else{bodyEl.innerHTML='<span class="ph">왼쪽에서 학생을 고르고 자료를 올린 뒤 편지를 만들면, 이 자리에 손편지가 나타나요.</span>';$("#pvCount").textContent="";}who.innerHTML=st.teacher?esc(st.teacher):'<span class="ph">선생님 이름</span>';}
   function buildWatermark(){var line="이음편지";var one="";for(var i=0;i<8;i++)one+='<div>'+esc(line)+'</div>';$("#wmRow").innerHTML=one;}
 
   /* ---------- export (gated) ---------- */
   async function ensureFonts(){try{await document.fonts.ready;await Promise.all(STYLES.map(function(s){return document.fonts.load('27px '+s.font,'가나다라')}));}catch(e){}}
-  function setLetterDOM(s,letter){$("#pvTo").textContent=s.nick+" "+s.honor+"께";$("#pvBody").style.fontFamily=st.style.font;$("#pvBody").textContent=letter;$("#pvWho").style.fontFamily=st.style.font;$("#pvWho").innerHTML=st.teacher?esc(st.teacher):'<span class="ph">선생님 이름</span>';}
+  function setLetterDOM(s,letter){$("#pvBody").style.fontFamily=st.style.font;$("#pvBody").textContent=letter;$("#pvWho").style.fontFamily=st.style.font;$("#pvWho").innerHTML=st.teacher?esc(st.teacher):'<span class="ph">선생님 이름</span>';}
   async function snapLetter(){await ensureFonts();return await html2canvas($("#letter"),{scale:2,backgroundColor:"#FBF5E8",useCORS:true});}
+  // 내려받기 대상: 체크된 학생 중 편지가 있는 사람 (없으면 생성된 편지 전체)
+  function exportList(){ var sel=selectedStudents().filter(function(s){return st.results[s.id]}); return sel.length?sel:resultsList(); }
+  function canvasBlob(c){ return new Promise(function(res){ if(c.toBlob) c.toBlob(function(b){res(b);},"image/png"); else res(null); }); }
+  async function saveCanvasPng(c,filename){
+    var b=await canvasBlob(c);
+    var url=b?URL.createObjectURL(b):c.toDataURL("image/png");
+    var a=document.createElement("a"); a.href=url; a.download=filename; a.rel="noopener";
+    document.body.appendChild(a); a.click(); a.remove();
+    if(b) setTimeout(function(){ URL.revokeObjectURL(url); },4000);
+  }
   $("#dlPng").addEventListener("click",async function(){
     if(!plan().img){needUpgrade("무료 요금제에서는 미리보기만 가능해요. 이미지(PNG) 저장은 베이직 이상에서 이용할 수 있어요.");return;}
-    var l=resultsList(); if(!l.length){toast("먼저 편지를 만들어 주세요");return;}
-    if(l.length>1){ toast("여러 명일 때는 이미지 저장이 지원되지 않아요. PDF로 저장해 주세요."); return; }
-    var s=l[0]; setLetterDOM(s,st.results[s.id].letter); var c=await snapLetter(); renderPreview();
-    var a=document.createElement("a");a.href=c.toDataURL("image/png");a.download="이음편지_"+s.nick+".png";a.click();toast("PNG로 저장했어요");track("download_letter",{format:"png",plan:plan().id,count:1});
+    var l=exportList(); if(!l.length){toast("먼저 편지를 만들어 주세요");return;}
+    var btn=this, old=btn.innerHTML, ok=0, fails=[];
+    btn.disabled=true;
+    try{
+      await ensureFonts();
+      for(var i=0;i<l.length;i++){
+        var s=l[i];
+        if(l.length>1) btn.innerHTML='PNG 저장 중… '+(i+1)+'/'+l.length;
+        try{
+          setLetterDOM(s,st.results[s.id].letter); await wait(60);
+          var c=await html2canvas($("#letter"),{scale:2,backgroundColor:"#FBF5E8",useCORS:true});
+          await saveCanvasPng(c,"이음편지_"+s.nick+".png"); ok++;
+        }catch(e){ console.warn("[png]",s.nick,e); fails.push(s.nick); }
+        if(i<l.length-1) await wait(500); // 연속 다운로드 차단 방지
+      }
+    }catch(e){ console.warn("[png] fatal",e); }
+    finally{ renderPreview(); btn.disabled=false; btn.innerHTML=old; }
+    if(!ok){ toast("PNG 저장에 실패했어요"); return; }
+    if(fails.length) toast(ok+"명 저장 · 실패: "+fails.join(", "));
+    else toast(l.length>1?(l.length+"명의 편지를 PNG로 저장했어요"):(l[0].nick+" 학생의 편지를 PNG로 저장했어요"));
+    track("download_letter",{format:"png",plan:plan().id,count:ok});
   });
   $("#dlPdf").addEventListener("click",async function(){
     if(!plan().pdf){needUpgrade("PDF 저장은 프리미엄에서 가능해요.");return;}
-    var l=resultsList(); if(!l.length){toast("먼저 편지를 만들어 주세요");return;}
+    var l=exportList(); if(!l.length){toast("먼저 편지를 만들어 주세요");return;}
     var btn=this; btn.disabled=true; var old=btn.innerHTML;
     await ensureFonts(); var J=window.jspdf.jsPDF, pdf=null;
     for(var i=0;i<l.length;i++){ var s=l[i]; btn.innerHTML='PDF 만드는 중… '+(i+1)+'/'+l.length; setLetterDOM(s,st.results[s.id].letter); await wait(30);
@@ -1188,8 +1296,38 @@
   async function onSubscribe(id,source){
     source=source||"pricing";
     if(!user){ track("payment_intent",{plan:id,source:source,logged_in:false}); gLogin(); return; }
-    if(id==="free"){ track("select_free",{source:source}); toast("무료 요금제로 이용 중이에요"); return; }
+    if(id==="free"){
+      var curF=plan(), memF=(profile&&profile.membership)||{};
+      if(curF.id!=="free"){
+        track("select_free",{source:source,current:curF.id,status:memF.status||"active"});
+        var endTxt=memF.expiresAt?fmtDate(memF.expiresAt):"-";
+        openModal("현재 "+curF.name+" 이용 중",
+          (memF.status==="canceled")
+            ? curF.name+" 요금제를 이용 중이며 해지가 예약되어 있어요.\n"+endTxt+"까지 이용하실 수 있고, 이후 자동으로 무료 요금제로 전환돼요."
+            : curF.name+" 요금제를 이용 중이에요 ("+won(curF.price)+" /월).\n다음 결제일: "+endTxt+"\n\n무료 요금제로 돌아가려면 설정에서 구독을 해지해 주세요. 현재 결제 기간이 끝날 때까지는 "+curF.name+" 기능을 그대로 이용하실 수 있어요.",
+          "설정으로 이동", function(){ closeModal(); go("settings"); });
+        return;
+      }
+      track("select_free",{source:source}); toast("무료 요금제로 이용 중이에요"); return;
+    }
     var p=PLANS[id], value=p.price||0;
+    // 이미 유료 구독 중이면 새 결제창을 열지 않는다 (열면 구독이 하나 더 생겨 이중 청구됨)
+    var cur=plan(), curId=cur.id, RANK={free:0,basic:1,premium:2};
+    var mem=(profile&&profile.membership)||{};
+    var activePaid=(curId!=="free") && (mem.status!=="canceled");
+    if(activePaid){
+      if(id===curId){ toast("이미 "+p.name+" 요금제를 이용 중이에요"); return; }
+      var down=(RANK[id]<RANK[curId]);
+      track("plan_change_blocked",{from:curId,to:id,direction:down?"downgrade":"upgrade"});
+      openModal(
+        down?"요금제 낮추기 안내":"요금제 올리기 안내",
+        (down
+          ? "지금은 앱에서 바로 요금제를 낮출 수 없어요.\n\n결제한 기간에 대한 자동 환불은 제공되지 않아요. 현재 결제 기간이 끝날 때까지 "+cur.name+" 기능을 그대로 이용하시고, 구독을 해지하시면 다음 결제부터 청구되지 않아요. 이후 원하시는 요금제로 다시 구독하시면 됩니다."
+          : "지금은 앱에서 바로 요금제를 올릴 수 없어요.\n\n결제 메일의 '구독 관리' 링크에서 해지하신 뒤 원하시는 요금제로 다시 구독하시거나, 아래 이메일로 요청해 주세요. 남은 기간에 대해 도와드릴게요.")
+        +"\n\n문의: ibillkim@gmail.com",
+        "확인", closeModal);
+      return;
+    }
     track("payment_intent",{plan:id,price:value,source:source,logged_in:true});
     track("begin_checkout",{currency:"KRW",value:value,source:source,items:[{item_id:id,item_name:p.name,price:value}]});
     var res=await Payment.checkout(p);
@@ -1209,7 +1347,18 @@
     $("#setJoined").textContent=fmtDate(profile.createdAt);$("#setTeacher").value=profile.teacher||"";
     $("#setPlan").textContent=p.name;$("#setPrice").textContent=p.price?won(p.price)+" /월":"0원";
     $("#setStart").textContent=fmtDate(m.startedAt);$("#setEnd").textContent=m.expiresAt?fmtDate(m.expiresAt):(p.id==="free"?"무기한":"-");
+    var cb=$("#cancelSubBtn"), paid=(p.id!=="free");
+    cb.style.display=(paid && m.status!=="canceled")?"block":"none";
+    if(m.status==="canceled") $("#setPlan").textContent=p.name+" (해지 예정)";
   }
+  $("#cancelSubBtn").addEventListener("click",function(){
+    var m=(profile&&profile.membership)||{};
+    openModal("구독 해지","해지하시면 현재 결제 기간이 끝날 때까지는 그대로 이용하실 수 있고, 이후 자동 결제되지 않아요.\n\n계속하시겠어요?","해지 페이지 열기",function(){
+      closeModal(); track("cancel_subscription_click",{plan:m.plan||""});
+      if(m.cancelUrl){ window.open(m.cancelUrl,"_blank","noopener"); }
+      else { openModal("해지 요청","결제 안내 메일의 '구독 관리' 링크에서 해지하시거나, 아래 이메일로 요청해 주세요.\n\nibillkim@gmail.com","확인",closeModal); }
+    },true);
+  });
   $("#saveTeacher").addEventListener("click",async function(){ profile.teacher=$("#setTeacher").value.trim();st.teacher=profile.teacher;$("#teacher").value=profile.teacher;await saveProfile();renderPreview();toast("이름을 저장했어요"); });
   $("#withdrawBtn").addEventListener("click",confirmWithdraw);
 
