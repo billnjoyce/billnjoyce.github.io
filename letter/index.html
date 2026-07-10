@@ -440,6 +440,7 @@
       <a href="https://www.joycestudios.kr/letter/ko/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a>
       <a href="https://www.joycestudios.kr/letter/ko/terms.html#a15" target="_blank" rel="noopener">환불 정책</a>
     </div>
+    <div class="foot-biz" style="color:var(--ink-3);font-size:12px;line-height:1.7;margin-top:6px">Joyce Studios · 대표 김정훈 · 사업자등록번호 292-07-01534 · 통신판매업신고 2026-서울서초-2288<br>서울특별시 서초구 서운로 13, 지하1동 126-자82호(서초동, 중앙로얄오피스텔) · 문의 <a href="mailto:ibillkim@gmail.com" style="color:inherit;text-decoration:underline">ibillkim@gmail.com</a> · 결제대행 포트원(PortOne)·KCP</div>
     <div class="foot-cp">Copyrights @ Joyce Studios. All Right Reserved.</div>
   </div></footer>
 </div>
@@ -550,13 +551,13 @@
       </div>
     </div>
   </div>
-  <footer><div class="wrap foot-in"><div class="foot-links"><a href="https://www.joycestudios.kr/letter/ko/terms.html" target="_blank" rel="noopener">이용약관</a><a href="https://www.joycestudios.kr/letter/ko/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a><a href="https://www.joycestudios.kr/letter/ko/terms.html#a15" target="_blank" rel="noopener">환불 정책</a></div><div class="foot-cp">Copyrights @ Joyce Studios. All Right Reserved.</div></div></footer>
+  <footer><div class="wrap foot-in"><div class="foot-links"><a href="https://www.joycestudios.kr/letter/ko/terms.html" target="_blank" rel="noopener">이용약관</a><a href="https://www.joycestudios.kr/letter/ko/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a><a href="https://www.joycestudios.kr/letter/ko/terms.html#a15" target="_blank" rel="noopener">환불 정책</a></div><div class="foot-biz" style="color:var(--ink-3);font-size:12px;line-height:1.7;margin-top:6px">Joyce Studios · 대표 김정훈 · 사업자등록번호 292-07-01534 · 통신판매업신고 2026-서울서초-2288<br>서울특별시 서초구 서운로 13, 지하1동 126-자82호(서초동, 중앙로얄오피스텔) · 문의 <a href="mailto:ibillkim@gmail.com" style="color:inherit;text-decoration:underline">ibillkim@gmail.com</a> · 결제대행 포트원(PortOne)·KCP</div><div class="foot-cp">Copyrights @ Joyce Studios. All Right Reserved.</div></div></footer>
 </div>
 
 <!-- PRICING (logged in) -->
 <div class="view" id="view-pricing">
   <div class="page"><div class="page-h"><h1>요금제</h1><p>현재 요금제가 강조돼 있어요.</p></div><div class="plans" id="plansApp"></div><div class="export-note" style="margin-top:14px">‘무제한’은 정상적인 개인 이용 범위를 뜻해요. 서비스 안정을 위해 유료 요금제는 하루 1,000통 · 월 10,000통의 공정 사용 한도가 적용됩니다.</div></div>
-  <footer><div class="wrap foot-in"><div class="foot-links"><a href="https://www.joycestudios.kr/letter/ko/terms.html" target="_blank" rel="noopener">이용약관</a><a href="https://www.joycestudios.kr/letter/ko/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a><a href="https://www.joycestudios.kr/letter/ko/terms.html#a15" target="_blank" rel="noopener">환불 정책</a></div><div class="foot-cp">Copyrights @ Joyce Studios. All Right Reserved.</div></div></footer>
+  <footer><div class="wrap foot-in"><div class="foot-links"><a href="https://www.joycestudios.kr/letter/ko/terms.html" target="_blank" rel="noopener">이용약관</a><a href="https://www.joycestudios.kr/letter/ko/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a><a href="https://www.joycestudios.kr/letter/ko/terms.html#a15" target="_blank" rel="noopener">환불 정책</a></div><div class="foot-biz" style="color:var(--ink-3);font-size:12px;line-height:1.7;margin-top:6px">Joyce Studios · 대표 김정훈 · 사업자등록번호 292-07-01534 · 통신판매업신고 2026-서울서초-2288<br>서울특별시 서초구 서운로 13, 지하1동 126-자82호(서초동, 중앙로얄오피스텔) · 문의 <a href="mailto:ibillkim@gmail.com" style="color:inherit;text-decoration:underline">ibillkim@gmail.com</a> · 결제대행 포트원(PortOne)·KCP</div><div class="foot-cp">Copyrights @ Joyce Studios. All Right Reserved.</div></div></footer>
 </div>
 
 <!-- SETTINGS -->
@@ -659,146 +660,143 @@
   try{ firebase.initializeApp(firebaseConfig); auth=firebase.auth(); db=firebase.database(); fbOK=true; }catch(e){ console.warn("firebase",e); }
   function dataRef(uid,sub){ return db.ref("apps/config/letter/data/"+uid+(sub?"/"+sub:"")); }
 
-  /* ---------- payment: Paddle Billing (paddle.js v2) ----------
-     설정값은 아래 PADDLE에 채우거나, RTDB apps/config/letter/payment 로 덮어쓸 수 있어요.
-     clientToken·priceId·environment 는 공개 가능한 값입니다(비밀 키/웹훅 시크릿은 서버에만). */
-  var PADDLE={
-    environment:"sandbox",                 // "sandbox"(테스트) 또는 "production"(실서비스)
-    clientToken:"",                        // Paddle > Developer tools > Authentication > Client-side token
-    prices:{}                              // { basic:"pri_...", premium:"pri_..." }
-  };
-  try{ if(/[?&]debug=1/.test(location.search)){ window.__paddleDebug=true;
+
+  /* ---------- payment: PortOne V2 + KCP 빌링(자동결제) ----------
+     설정값은 RTDB apps/config/letter/payment(_live) 로 관리합니다.
+     storeId·channelKey·prices 는 공개 가능한 값. V2 API Secret 은 서버 전용(payment_secret). */
+  var PORTONE={ environment:"sandbox", storeId:"", channelKey:"", prices:{} }; // prices:{basic:19900,premium:39900} (표시/검증용, 실제 청구는 서버 기준)
+  try{ if(/[?&]debug=1/.test(location.search)){ window.__payDebug=true;
     window.addEventListener("load",function(){
       var b=document.createElement("button");
       b.textContent="🐞 결제 진단";
       b.style.cssText="position:fixed;right:14px;bottom:14px;z-index:99999;background:#191F28;color:#fff;border:0;border-radius:999px;padding:12px 16px;font-size:14px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.25)";
-      b.onclick=function(){ window.paddleDiag&&window.paddleDiag(); };
+      b.onclick=function(){ window.payDiag&&window.payDiag(); };
       document.body.appendChild(b);
-      var m=document.createElement("button");
-      m.textContent="🧪 최소옵션 결제";
-      m.style.cssText="position:fixed;right:14px;bottom:66px;z-index:99999;background:#00A85F;color:#fff;border:0;border-radius:999px;padding:12px 16px;font-size:14px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.25)";
-      m.onclick=function(){ window.paddleMinimal&&window.paddleMinimal("basic"); };
-      document.body.appendChild(m);
     });
   } }catch(e){}
-  // 라이브 도메인에서만 라이브 결제 설정을 바라본다. 그 외(로컬·미리보기·스테이징)는 샌드박스.
+  // 라이브 도메인에서만 라이브 결제 설정을 바라본다. 그 외(로컬·미리보기·스테이징)는 테스트.
   var LIVE_HOSTS=["www.joycestudios.kr","joycestudios.kr"];
   var IS_LIVE=(function(){ try{ return LIVE_HOSTS.indexOf(location.hostname)>=0; }catch(e){ return false; } })();
   var PAY_PATH="apps/config/letter/"+(IS_LIVE?"payment_live":"payment");
-  var paddleCfgReady=(function(){
-    function apply(v){ if(!v)return false; if(v.environment)PADDLE.environment=v.environment; if(v.clientToken)PADDLE.clientToken=v.clientToken; if(v.prices)PADDLE.prices=v.prices; return !!v.clientToken; }
-    function read(){ return db.ref(PAY_PATH).once("value").then(function(s){ return apply(s.val()); }); }
+  var PAY_CONFIRM_URL="https://us-central1-carfund-f5102.cloudfunctions.net/portoneConfirmBilling";
+  function applyPayCfg(v){ if(!v)return false; if(v.environment)PORTONE.environment=v.environment; if(v.storeId)PORTONE.storeId=v.storeId; if(v.channelKey)PORTONE.channelKey=v.channelKey; if(v.prices)PORTONE.prices=v.prices; return !!(PORTONE.storeId&&PORTONE.channelKey); }
+  var payCfgReady=(function(){
     return new Promise(function(resolve){
       if(!db){ resolve(false); return; }
-      read().then(function(ok){
-        if(ok){ if(window.__paddleDebug) console.log("[paddle] config from",PAY_PATH,"(live="+IS_LIVE+")"); resolve(true); return; }
-        resolve(false);
-      }).catch(function(e){ // 보안규칙상 로그인 전 읽기 불가 → 로그인 후 재시도
-        if(window.__paddleDebug) console.warn("[paddle] config read failed (pre-auth):",e&&e.message);
-        resolve(false);
-      });
+      db.ref(PAY_PATH).once("value").then(function(s){
+        var ok=applyPayCfg(s.val());
+        if(ok && window.__payDebug) console.log("[portone2] config from",PAY_PATH,"(live="+IS_LIVE+")");
+        resolve(ok);
+      }).catch(function(e){ if(window.__payDebug) console.warn("[portone2] config read failed (pre-auth):",e&&e.message); resolve(false); });
     });
   })();
-  async function ensurePaddleConfig(){
-    if(PADDLE.clientToken) return true;
-    await paddleCfgReady;
-    if(PADDLE.clientToken) return true;
-    try{ // 로그인 이후 한 번 더 (RTDB 규칙이 auth 요구하는 경우)
-      var s=await db.ref(PAY_PATH).once("value"); var v=s.val()||{};
-      if(v.environment)PADDLE.environment=v.environment; if(v.clientToken)PADDLE.clientToken=v.clientToken; if(v.prices)PADDLE.prices=v.prices;
-    }catch(e){ if(window.__paddleDebug) console.warn("[paddle] config read failed:",e&&e.message); }
-    return !!PADDLE.clientToken;
+  async function ensurePayConfig(){
+    if(PORTONE.storeId&&PORTONE.channelKey) return true;
+    await payCfgReady;
+    if(PORTONE.storeId&&PORTONE.channelKey) return true;
+    try{ var s=await db.ref(PAY_PATH).once("value"); applyPayCfg(s.val()); }catch(e){ if(window.__payDebug) console.warn("[portone2] config read failed:",e&&e.message); }
+    return !!(PORTONE.storeId&&PORTONE.channelKey);
   }
-  function paddleConfigured(){ return !!(PADDLE.clientToken && PADDLE.prices && PADDLE.prices.basic); }
-  window.paddleMinimal=async function(planId){
-    planId=planId||"basic";
-    await ensurePaddleConfig();
-    try{ await PaddleAdapter.init(); }catch(e){ alert("init 실패: "+(e&&e.message)); return; }
-    var pid=(PADDLE.prices||{})[planId];
-    console.log("[paddleMinimal] opening with items only:",pid);
-    try{ window.Paddle.Checkout.open({ items:[{ priceId:pid, quantity:1 }] }); }
-    catch(e){ alert("open 예외: "+(e&&e.message)); }
-  };
-  window.paddleDiag=async function(){
+  function payConfigured(){ return !!(PORTONE.storeId&&PORTONE.channelKey); }
+  var _portoneSdk=null;
+  function loadPortoneSdk(){ return new Promise(function(res,rej){
+    if(window.PortOne){ _portoneSdk=window.PortOne; return res(_portoneSdk); }
+    var s=document.createElement("script"); s.src="https://cdn.portone.io/v2/browser-sdk.js";
+    s.onload=function(){ _portoneSdk=window.PortOne; _portoneSdk?res(_portoneSdk):rej(new Error("PortOne SDK 초기화 실패")); };
+    s.onerror=function(){ rej(new Error("PortOne SDK 로드 실패")); };
+    document.head.appendChild(s);
+  }); }
+
+  window.payDiag=async function(){
     var lines=[];
     lines.push("로그인: "+(user?("O ("+(user.email||user.uid)+")"):"X — 먼저 로그인하세요"));
-    var ok=false; try{ ok=await ensurePaddleConfig(); }catch(e){ lines.push("설정 로드 예외: "+(e&&e.message)); }
-    lines.push("설정 로드: "+(ok?"O":"X — RTDB apps/config/letter/payment 읽기 실패(보안규칙/로그인 확인)"));
-    var tok=PADDLE.clientToken||"";
-    lines.push("도메인 환경: "+(IS_LIVE?"LIVE ("+location.hostname+")":"SANDBOX ("+location.hostname+")"));
+    var ok=false; try{ ok=await ensurePayConfig(); }catch(e){ lines.push("설정 로드 예외: "+(e&&e.message)); }
+    lines.push("설정 로드: "+(ok?"O":"X — RTDB "+PAY_PATH+" 읽기 실패(보안규칙/로그인 확인)"));
+    lines.push("도메인 환경: "+(IS_LIVE?"LIVE ("+location.hostname+")":"TEST ("+location.hostname+")"));
     lines.push("설정 경로: "+PAY_PATH);
-    lines.push("environment: "+(PADDLE.environment||"(없음)"));
-    lines.push("clientToken: "+(tok?tok.slice(0,10)+"…":"(없음)"));
-    var tokEnv=tok.indexOf("test_")===0?"sandbox":(tok.indexOf("live_")===0?"production":"unknown");
-    lines.push("토큰 환경: "+tokEnv+(tokEnv!=="unknown"&&tokEnv!==PADDLE.environment?"  ⚠ environment 와 불일치!":"  (일치)"));
-    lines.push("prices.basic: "+((PADDLE.prices||{}).basic||"(없음)"));
-    lines.push("prices.premium: "+((PADDLE.prices||{}).premium||"(없음)"));
-    lines.push("paddle.js: "+(window.Paddle?"로드됨":"아직 미로드(구독하기 클릭 시 로드)"));
-    var msg=lines.join("\n");
-    console.log("[paddleDiag]\n"+msg);
+    lines.push("environment: "+(PORTONE.environment||"(없음)"));
+    lines.push("storeId: "+(PORTONE.storeId?PORTONE.storeId.slice(0,14)+"…":"(없음)"));
+    lines.push("channelKey: "+(PORTONE.channelKey?PORTONE.channelKey.slice(0,14)+"…":"(없음)"));
+    lines.push("prices.basic: "+((PORTONE.prices||{}).basic||"(없음)"));
+    lines.push("prices.premium: "+((PORTONE.prices||{}).premium||"(없음)"));
+    lines.push("PortOne V2 SDK: "+(window.PortOne?"로드됨":"아직 미로드(구독 시 로드)"));
+    var msg=lines.join("\n"); console.log("[payDiag]\n"+msg);
     try{ openModal("결제 진단", msg, "확인", closeModal); }catch(e){ alert(msg); }
     return msg;
   };
 
-  var PaddleAdapter=(function(){
-    var initing=null, initedToken=null;
-    function loadScript(){ return new Promise(function(res,rej){ if(window.Paddle) return res(); var s=document.createElement("script"); s.src="https://cdn.paddle.com/paddle/v2/paddle.js"; s.onload=function(){res();}; s.onerror=function(){rej(new Error("paddle.js 로드 실패"));}; document.head.appendChild(s); }); }
-    function init(){
-      if(initing && initedToken===PADDLE.clientToken) return initing; // 토큰 바뀌면 재초기화
-      initedToken=PADDLE.clientToken;
-      initing=loadScript().then(function(){
-        try{ if(window.Paddle.Environment) window.Paddle.Environment.set(PADDLE.environment==="production"?"production":"sandbox"); }catch(e){}
-        window.Paddle.Initialize({ token:PADDLE.clientToken, eventCallback:onPaddleEvent });
-        if(window.__paddleDebug) console.log("[paddle] initialized",{env:PADDLE.environment,token:PADDLE.clientToken.slice(0,8)+"…",prices:PADDLE.prices});
-      });
-      return initing;
-    }
-    async function checkout(plan){
-      await ensurePaddleConfig();
-      if(!paddleConfigured()) return {ok:false,reason:"결제 설정 미완료"};
-      var tokEnv=(PADDLE.clientToken.indexOf("test_")===0)?"sandbox":(PADDLE.clientToken.indexOf("live_")===0?"production":"unknown");
-      if(tokEnv!=="unknown" && tokEnv!==PADDLE.environment) return {ok:false,reason:"환경 불일치: environment="+PADDLE.environment+" / token="+tokEnv};
-      if(IS_LIVE && PADDLE.environment!=="production") return {ok:false,reason:"라이브 도메인인데 결제 설정이 production이 아니에요"};
-      if(!IS_LIVE && PADDLE.environment==="production") return {ok:false,reason:"비-라이브 도메인에서는 실제(production) 결제를 열 수 없어요"};
-      var pid=(PADDLE.prices||{})[plan.id]; if(!pid) return {ok:false,reason:"Price ID 없음 ("+plan.id+")"};
-      try{
-        await init();
-        var opts={ settings:{ displayMode:"overlay", theme:"light" },
-          items:[{ priceId:pid, quantity:1 }],
-          customData:{ uid:(user?user.uid:""), plan:plan.id, app:"letter" } };
-        if(user&&user.email) opts.customer={ email:user.email };
-        if(window.__paddleDebug) console.log("[paddle] Checkout.open",opts);
-        window.Paddle.Checkout.open(opts);
-        return { opened:true };
-      }catch(e){ console.warn("[paddle] open failed",e); return {ok:false,reason:String(e&&e.message||e)}; }
-    }
-    return { name:"paddle", checkout:checkout, init:init };
-  })();
-  function onPaddleEvent(ev){
+  // 서버에 빌링키 결제 확정 요청 (billingKey + plan). customerId=uid.
+  async function confirmBilling(plan, billingKey){
+    var u=auth&&auth.currentUser; if(!u) return {ok:false,error:"로그인이 필요해요"};
     try{
-      if(!ev) return;
-      if(window.__paddleDebug) console.log("[paddle]",ev.name,ev);
-      if(ev.name==="checkout.completed"){
-        var d=ev.data||{}, cd=d.custom_data||d.customData||{};
-        applyPurchase(cd.plan||"basic", d);
-        try{ window.Paddle.Checkout.close&&window.Paddle.Checkout.close(); }catch(e){}
-      } else if(ev.name==="checkout.error"){
-        var msg=(ev.data&&(ev.data.message||ev.data.error||ev.data.detail))||"결제 오류";
-        track("checkout_error",{reason:String(msg)});
-        console.warn("[paddle] checkout.error →",ev.data);
-        if(window.__paddleDebug){ try{ openModal("Paddle checkout.error", JSON.stringify(ev.data,null,2).slice(0,1200), "확인", closeModal); }catch(e){} }
-        else toast("결제 오류: "+String(msg).slice(0,60));
-      }
-    }catch(e){ console.warn("paddle ev",e); }
+      var token=await u.getIdToken();
+      var resp=await fetch(PAY_CONFIRM_URL,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({plan:plan,billingKey:billingKey})});
+      var j=null; try{ j=await resp.json(); }catch(e){}
+      if(resp.ok && j && j.ok) return {ok:true,data:j};
+      return {ok:false,error:(j&&j.error)||("HTTP "+resp.status)};
+    }catch(e){ return {ok:false,error:String(e&&e.message||e)}; }
   }
+
+  var PortOneAdapter=(function(){
+    async function checkout(plan){
+      await ensurePayConfig();
+      if(!payConfigured()) return {ok:false,reason:"결제 설정 미완료"};
+      if(IS_LIVE && PORTONE.environment!=="production") return {ok:false,reason:"라이브 도메인인데 결제 설정이 production이 아니에요"};
+      if(!IS_LIVE && PORTONE.environment==="production") return {ok:false,reason:"비-라이브 도메인에서는 실제 결제를 열 수 없어요"};
+      var u=auth&&auth.currentUser; if(!u) return {ok:false,reason:"로그인이 필요해요"};
+      try{
+        var PortOne=await loadPortoneSdk();
+        var issueId="letter_"+u.uid+"_"+Date.now();
+        var req={
+          storeId: PORTONE.storeId,
+          channelKey: PORTONE.channelKey,
+          billingKeyMethod: "CARD",
+          issueId: issueId,
+          issueName: (plan.id==="premium"?"이음편지 프리미엄":"이음편지 베이직"),
+          customer: {
+            customerId: u.uid,                         // 고객사 고객 고유번호 = uid
+            fullName: ((profile&&profile.name)||undefined),
+            email: (u.email||undefined)
+          },
+          redirectUrl: location.origin+location.pathname+"?portone=return&plan="+encodeURIComponent(plan.id)  // 모바일 복귀
+        };
+        if(window.__payDebug) console.log("[portone2] requestIssueBillingKey",req);
+        var rsp=await PortOne.requestIssueBillingKey(req);   // PC: 결과 반환 / 모바일: redirectUrl 로 이동
+        if(rsp && rsp.code!=null){ return {ok:false,reason:(rsp.message||"빌링키 발급 실패")}; }  // 실패/취소
+        var billingKey=rsp && rsp.billingKey;
+        if(!billingKey){ return {ok:false,reason:"빌링키를 받지 못했어요"}; }
+        var r=await confirmBilling(plan.id, billingKey);    // 서버에서 첫 결제
+        if(r.ok){ await applyPurchase(plan.id, r.data); return {opened:true}; }
+        return {ok:false,reason:r.error};
+      }catch(e){ console.warn("[portone2] checkout failed",e); return {ok:false,reason:String(e&&e.message||e)}; }
+    }
+    return { name:"portone2", checkout:checkout };
+  })();
+
+  function cleanPortoneParams(){ try{ history.replaceState(null,"",location.origin+location.pathname); }catch(e){} }
+  async function handlePortoneReturn(){   // 모바일 리다이렉트 복귀 처리
+    var q; try{ q=new URLSearchParams(location.search); }catch(e){ return; }
+    if(q.get("portone")!=="return") return;
+    var billingKey=q.get("billingKey"), code=q.get("code"), plan=q.get("plan")||"basic";
+    cleanPortoneParams();
+    if(code!=null && code!==""){ toast("결제가 취소되었어요"); return; }
+    if(!billingKey){ return; }
+    var u=auth&&auth.currentUser; if(!u){ toast("로그인 후 다시 시도해 주세요"); return; }
+    try{ if(typeof showLoading==="function") showLoading("결제를 확인하고 있어요…"); }catch(e){}
+    var r=await confirmBilling(plan, billingKey);
+    if(r.ok){ await applyPurchase(plan, r.data); }
+    else { openModal("결제 확인 실패", r.error||"결제 확인 중 문제가 발생했어요. 다시 시도해 주세요.","확인",closeModal); }
+    try{ if(typeof hideLoading==="function") hideLoading(); }catch(e){}
+  }
+
   async function applyPurchase(planId,data){
-    // 낙관적 UI 갱신 + GA. 정식 지급/판매 로그/푸시는 서버 웹훅(paddleWebhook)이 권한 있게 처리.
+    // 낙관적 UI 갱신 + GA. 정식 지급/판매 로그/푸시는 서버(portoneConfirmBilling→payments_core)가 권한 있게 처리.
     var p=PLANS[planId]||PLANS.basic, value=p.price||0;
-    track("purchase",{currency:"KRW",value:value,plan:planId,transaction_id:(data&&(data.transaction_id||data.id))||"",items:[{item_id:planId,item_name:p.name,price:value}]});
-    if(profile){ var now=Date.now(); profile.membership={plan:planId,startedAt:now,expiresAt:now+30*24*3600*1000,provider:"paddle",status:"active"}; await saveProfile(); updateAppGating(); renderSettings(); }
+    track("purchase",{currency:"KRW",value:value,plan:planId,transaction_id:(data&&(data.transactionId||data.paymentId))||"",items:[{item_id:planId,item_name:p.name,price:value}]});
+    if(profile){ var now=Date.now(); profile.membership={plan:planId,startedAt:now,expiresAt:now+31*24*3600*1000,provider:"portone",status:"active"}; await saveProfile(); updateAppGating(); renderSettings(); }
     toast(p.name+" 구독이 시작됐어요"); go("settings");
   }
-  var Payment={ provider:PaddleAdapter, use:function(p){ this.provider=p; }, ready:function(){ return !!this.provider; },
+  var Payment={ provider:PortOneAdapter, use:function(p){ this.provider=p; }, ready:function(){ return !!this.provider; },
     checkout:async function(plan){ if(!this.provider) return {ok:false,reason:"결제 모듈 미연결"}; try{ return await this.provider.checkout(plan); }catch(e){ return {ok:false,reason:String(e&&e.message||e)}; } } };
 
   /* ---------- app state ---------- */
@@ -857,6 +855,7 @@
     }catch(e){ profile=null; }
     if(!profile || !profile.agreedAt){ showSignup(); return; }
     await afterLogin();
+    try{ await handlePortoneReturn(); }catch(e){}
   });
 
   /* ---------- account deletion (회원 탈퇴) ---------- */
@@ -1332,10 +1331,10 @@
     track("payment_intent",{plan:id,price:value,source:source,logged_in:true});
     track("begin_checkout",{currency:"KRW",value:value,source:source,items:[{item_id:id,item_name:p.name,price:value}]});
     var res=await Payment.checkout(p);
-    if(res&&res.opened){ return; } // 결제창 열림 → 완료 시 Paddle 이벤트(applyPurchase)에서 처리
+    if(res&&res.opened){ return; } // 처리 완료(PC) 또는 모바일 리다이렉트 → 복귀 시 handlePortoneReturn
     track("checkout_unavailable",{plan:id,price:value,source:source,reason:(res&&res.reason)||"준비중"});
     if(res&&res.reason==="결제 설정 미완료"){
-      openModal("결제 준비 중","결제 설정을 불러오지 못했어요. (로그인 상태·DB 규칙 확인)\n브라우저 콘솔에서 window.__paddleDebug=true 후 재시도하면 원인이 표시돼요.","확인",closeModal);
+      openModal("결제 준비 중","결제 설정을 불러오지 못했어요. (로그인 상태·DB 규칙 확인)\nURL 뒤에 ?debug=1 을 붙여 접속하면 결제 진단 버튼이 표시돼요.","확인",closeModal);
     } else {
       openModal("결제를 시작할 수 없어요","잠시 후 다시 시도해 주세요.\n("+esc((res&&res.reason)||"")+")","확인",closeModal);
     }
@@ -1354,10 +1353,20 @@
   }
   $("#cancelSubBtn").addEventListener("click",function(){
     var m=(profile&&profile.membership)||{};
-    openModal("구독 해지","해지하시면 현재 결제 기간이 끝날 때까지는 그대로 이용하실 수 있고, 이후 자동 결제되지 않아요.\n\n계속하시겠어요?","해지 페이지 열기",function(){
+    openModal("구독 해지","해지하시면 현재 결제 기간이 끝날 때까지는 그대로 이용하실 수 있고, 이후 자동 결제되지 않아요.\n\n계속하시겠어요?","해지하기",async function(){
       closeModal(); track("cancel_subscription_click",{plan:m.plan||""});
-      if(m.cancelUrl){ window.open(m.cancelUrl,"_blank","noopener"); }
-      else { openModal("해지 요청","결제 안내 메일의 '구독 관리' 링크에서 해지하시거나, 아래 이메일로 요청해 주세요.\n\nibillkim@gmail.com","확인",closeModal); }
+      var u=auth&&auth.currentUser; if(!u){ toast("로그인이 필요해요"); return; }
+      try{
+        var token=await u.getIdToken();
+        var resp=await fetch("https://us-central1-carfund-f5102.cloudfunctions.net/portoneCancel",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({})});
+        var j=null; try{ j=await resp.json(); }catch(e){}
+        if(resp.ok && j && j.ok){
+          if(profile&&profile.membership){ profile.membership.status="canceled"; }
+          renderSettings(); openModal("해지 완료","구독이 해지되었어요. 현재 결제 기간이 끝나면 자동으로 무료 요금제로 전환돼요.","확인",closeModal);
+        } else {
+          openModal("해지 실패",(j&&j.error==="no_subscription"?"활성 구독을 찾지 못했어요.":"해지 처리 중 문제가 발생했어요.")+"\n\n문의: ibillkim@gmail.com","확인",closeModal);
+        }
+      }catch(e){ openModal("해지 오류","네트워크 문제로 해지에 실패했어요. 잠시 후 다시 시도하거나 이메일로 문의해 주세요.\n\nibillkim@gmail.com","확인",closeModal); }
     },true);
   });
   $("#saveTeacher").addEventListener("click",async function(){ profile.teacher=$("#setTeacher").value.trim();st.teacher=profile.teacher;$("#teacher").value=profile.teacher;await saveProfile();renderPreview();toast("이름을 저장했어요"); });
