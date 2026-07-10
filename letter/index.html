@@ -576,7 +576,8 @@
         <div class="kv"><span class="k">현재 요금제</span><span class="v"><span class="planpill" id="setPlan">무료</span></span></div>
         <div class="kv"><span class="k">월 요금</span><span class="v" id="setPrice">0원</span></div>
         <div class="kv"><span class="k">시작일</span><span class="v" id="setStart">-</span></div>
-        <div class="kv"><span class="k">종료일</span><span class="v" id="setEnd">-</span></div>
+        <div class="kv"><span class="k" id="setEndLabel">종료일</span><span class="v" id="setEnd">-</span></div>
+        <div id="setSubNote" style="display:none;margin-top:10px;padding:12px 14px;border-radius:12px;background:#F0FBF5;border:1px solid #C6EED9;color:#0B7A46;font-size:13px;line-height:1.55"></div>
         <button class="btn btn-g btn-sm btn-full" data-go="pricing" style="margin-top:16px">요금제 변경</button>
         <button class="btn btn-line btn-sm btn-full" id="cancelSubBtn" style="margin-top:8px;display:none">구독 해지</button>
         <button class="btn btn-line btn-sm btn-full" id="logoutBtn" style="margin-top:8px">로그아웃</button>
@@ -808,7 +809,13 @@
   ];
   var user=null, profile=null, aiCfg=null, aiReady=false;
   var st={students:[],selIds:[],results:{},viewIndex:0,img:null,mime:null,style:STYLES[0],teacher:"",len:400,inputMode:"sheet",wb:null,wbName:""};
-  function plan(){ return planOf(profile&&profile.membership&&profile.membership.plan); }
+  function plan(){
+    var m=profile&&profile.membership;
+    if(!m) return planOf(null);
+    // 유료 요금제라도 만료일이 지났으면 무료로 간주(해지 후 기간 종료 시 자동 무료 전환)
+    if(m.plan && m.plan!=="free" && m.expiresAt && Date.now()>m.expiresAt) return planOf("free");
+    return planOf(m.plan);
+  }
 
   /* ---------- routing ---------- */
   function go(view){
@@ -1343,17 +1350,36 @@
   /* ---------- settings ---------- */
   function renderSettings(){
     if(!profile)return;var m=profile.membership||{plan:"free"},p=planOf(m.plan);
+    // 만료 지난 유료 → 무료로 표시
+    var expired=(m.plan&&m.plan!=="free"&&m.expiresAt&&Date.now()>m.expiresAt);
+    if(expired)p=planOf("free");
     $("#setAvatar").src=profile.photoURL||"";$("#setName").textContent=profile.name||"선생님";$("#setEmail").textContent=profile.email||"";
     $("#setJoined").textContent=fmtDate(profile.createdAt);$("#setTeacher").value=profile.teacher||"";
     $("#setPlan").textContent=p.name;$("#setPrice").textContent=p.price?won(p.price)+" /월":"0원";
-    $("#setStart").textContent=fmtDate(m.startedAt);$("#setEnd").textContent=m.expiresAt?fmtDate(m.expiresAt):(p.id==="free"?"무기한":"-");
-    var cb=$("#cancelSubBtn"), paid=(p.id!=="free");
-    cb.style.display=(paid && m.status!=="canceled")?"block":"none";
-    if(m.status==="canceled") $("#setPlan").textContent=p.name+" (해지 예정)";
+    $("#setStart").textContent=fmtDate(m.startedAt);
+    var canceled=(m.status==="canceled" && !expired), paid=(p.id!=="free");
+    var endLabel=$("#setEndLabel"), endEl=$("#setEnd"), note=$("#setSubNote");
+    if(canceled){
+      endLabel.textContent="이용 종료일";
+      endEl.textContent=m.expiresAt?fmtDate(m.expiresAt):"-";
+      $("#setPlan").textContent=p.name+" (해지 예정)";
+      note.style.display="block";
+      note.innerHTML="<b>"+(m.expiresAt?fmtDate(m.expiresAt):"현재 기간 종료일")+"</b>까지 "+esc(p.name)+" 요금제를 그대로 이용할 수 있어요.<br>이후에는 자동으로 무료 요금제로 전환되며, <b>다시 자동 결제되지 않아요.</b>";
+    } else {
+      endLabel.textContent=paid?"다음 결제일":"종료일";
+      endEl.textContent=m.expiresAt?fmtDate(m.expiresAt):(p.id==="free"?"무기한":"-");
+      if(paid){
+        note.style.display="block";
+        note.innerHTML="매월 <b>"+(m.expiresAt?fmtDate(m.expiresAt):"결제일")+"</b>에 자동으로 결제돼요. 해지하면 이 날짜까지 이용 후 무료로 전환돼요.";
+      } else { note.style.display="none"; note.innerHTML=""; }
+    }
+    var cb=$("#cancelSubBtn");
+    cb.style.display=(paid && !canceled)?"block":"none";
   }
   $("#cancelSubBtn").addEventListener("click",function(){
     var m=(profile&&profile.membership)||{};
-    openModal("구독 해지","해지하시면 현재 결제 기간이 끝날 때까지는 그대로 이용하실 수 있고, 이후 자동 결제되지 않아요.\n\n계속하시겠어요?","해지하기",async function(){
+    var endTxt=m.expiresAt?fmtDate(m.expiresAt):"현재 결제 기간 종료일";
+    openModal("구독 해지","<b>"+endTxt+"</b>까지는 지금 요금제를 그대로 이용할 수 있어요.\n환불 없이 다음 결제만 중단되며, 이후 무료 요금제로 전환돼요. 그때부터는 다시 자동 결제되지 않아요.\n\n해지하시겠어요?","해지하기",async function(){
       closeModal(); track("cancel_subscription_click",{plan:m.plan||""});
       var u=auth&&auth.currentUser; if(!u){ toast("로그인이 필요해요"); return; }
       try{
@@ -1362,7 +1388,9 @@
         var j=null; try{ j=await resp.json(); }catch(e){}
         if(resp.ok && j && j.ok){
           if(profile&&profile.membership){ profile.membership.status="canceled"; }
-          renderSettings(); openModal("해지 완료","구독이 해지되었어요. 현재 결제 기간이 끝나면 자동으로 무료 요금제로 전환돼요.","확인",closeModal);
+          renderSettings();
+          var endTxt2=(profile&&profile.membership&&profile.membership.expiresAt)?fmtDate(profile.membership.expiresAt):"현재 결제 기간 종료일";
+          openModal("해지 완료","<b>"+endTxt2+"</b>까지 이용할 수 있어요.\n이후 자동으로 무료 요금제로 전환되며, 다시 자동 결제되지 않아요.","확인",closeModal);
         } else {
           openModal("해지 실패",(j&&j.error==="no_subscription"?"활성 구독을 찾지 못했어요.":"해지 처리 중 문제가 발생했어요.")+"\n\n문의: ibillkim@gmail.com","확인",closeModal);
         }
@@ -1374,7 +1402,10 @@
 
   /* ---------- modal ---------- */
   var modalOkFn=null;
-  function openModal(t,p,ok,fn,danger){$("#modalT").textContent=t;$("#modalP").textContent=p;$("#modalOk").textContent=ok||"확인";$("#modalOk").className="btn btn-full "+(danger?"btn-danger":"btn-g");modalOkFn=fn;$("#modal").classList.add("on");$("#scrim").classList.add("on");}
+  function openModal(t,p,ok,fn,danger){$("#modalT").textContent=t;
+    var html=esc(String(p==null?"":p)).replace(/&lt;b&gt;/g,"<b>").replace(/&lt;\/b&gt;/g,"</b>").replace(/\n/g,"<br>");
+    $("#modalP").innerHTML=html;
+    $("#modalOk").textContent=ok||"확인";$("#modalOk").className="btn btn-full "+(danger?"btn-danger":"btn-g");modalOkFn=fn;$("#modal").classList.add("on");$("#scrim").classList.add("on");}
   function closeModal(){$("#modal").classList.remove("on");$("#scrim").classList.remove("on");}
   $("#modalCancel").addEventListener("click",closeModal);
   $("#scrim").addEventListener("click",closeModal);
