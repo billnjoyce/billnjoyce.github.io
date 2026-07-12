@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <meta name="format-detection" content="telephone=no"/>
 <meta name="theme-color" content="#5B4FE9"/>
-<title>POD Studio · 교보문고 POD 표지·내지를 단 3분 만에</title>
-<meta name="description" content="교보문고 바로출판 POD 규격에 딱 맞는 표지·내지 PDF·DOCX를 AI로 자동 생성. 재단여백·책등·판권까지 자동 계산."/>
+<title>POD Studio · 어떤 원고든 원하는 책 규격으로, 교보 POD 내지 PDF 자동 변환</title>
+<meta name="description" content="어떤 포맷으로 쓴 원고든 원하는 책 규격으로. 교보문고 바로출판 POD 업로드용 내지 PDF를 30초 만에 자동 생성"/>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YX94DTPHCC"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YX94DTPHCC');</script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -19,7 +19,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Gowun+Batang:wght@400;700&family=Black+Han+Sans&family=Song+Myung&family=Do+Hyeon&family=Gaegu:wght@400;700&family=Nanum+Pen+Script&family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@400;500;700;900&family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Gothic:wght@400;700;800&family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&family=Song+Myung&family=Hahmlet:wght@400;500;600;700&family=Gothic+A1:wght@400;500;600;700;900&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Black+Han+Sans&family=Do+Hyeon&family=Jua&family=Gugi&family=Gaegu:wght@400;700&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
 <style>
 :root{
   --brand:#5B4FE9; --brand-2:#7C6CF6; --brand-3:#9D8DFF; --brand-d:#463BD1; --brand-dd:#372CB0;
@@ -258,7 +258,9 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
 .platcard{flex:1;min-width:230px;border:2px solid var(--line-2);border-radius:16px;padding:20px;cursor:pointer;transition:.2s;position:relative;background:#fff;display:flex;align-items:center;gap:15px;}
 .platcard.sel{border-color:var(--brand);background:linear-gradient(135deg,var(--brand-tint2),#fff);box-shadow:0 12px 28px rgba(91,79,233,.18);}
 .platcard.dis{opacity:.5;cursor:not-allowed;filter:grayscale(.5);}
-.platcard .klogo{width:54px;height:54px;border-radius:13px;background:#4B47B5;display:grid;place-items:center;flex:none;box-shadow:0 6px 14px rgba(75,71,181,.32);}
+.platcard .klogo{width:54px;height:54px;border-radius:13px;background:#4B47B5;display:grid;place-items:center;flex:none;box-shadow:0 6px 14px rgba(75,71,181,.32);overflow:hidden;}
+.platcard .klogo.has-img{background:#fff;border:1px solid var(--line);box-shadow:0 6px 14px rgba(0,0,0,.08);}
+.platcard .klogo.has-img img{width:100%;height:100%;object-fit:contain;display:block;padding:7px;}
 .platcard .klogo svg{width:34px;height:34px;}
 .platcard .pinfo b{font-size:16px;color:var(--ink);display:block;}
 .platcard .pinfo span{font-size:12.5px;color:var(--ink-3);}
@@ -298,6 +300,108 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
 
 /* upload */
 .drop{border:2px dashed var(--line-2);border-radius:14px;padding:22px;text-align:center;cursor:pointer;transition:.15s;background:var(--bg-2);}
+.drop.dragover{border-color:var(--brand);background:var(--brand-tint);transform:scale(1.01);}
+.seg{display:flex;gap:6px;background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:5px;}
+.seg .segbtn{flex:1;border:0;background:transparent;color:var(--ink-2);font-weight:700;font-size:13.5px;padding:9px 8px;border-radius:8px;cursor:pointer;transition:.15s;}
+.seg .segbtn.on{background:var(--brand);color:#fff;box-shadow:0 2px 8px rgba(75,71,181,.28);}
+.catgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px;}
+.catchip{border:1.5px solid var(--line);background:var(--bg);border-radius:11px;padding:11px 6px;text-align:center;cursor:pointer;transition:.15s;font-weight:700;font-size:12.5px;color:var(--ink-2);}
+.catchip .ce{display:block;font-size:19px;margin-bottom:3px;}
+.catchip:hover{border-color:var(--brand);}
+.catchip.on{border-color:var(--brand);background:var(--brand-tint);color:var(--brand);box-shadow:0 2px 8px rgba(75,71,181,.16);}
+.qnarrow{max-width:680px;margin:0 auto;}
+.qsub{color:var(--ink-2);font-size:15px;line-height:1.6;margin-top:6px;}
+.qcard{display:flex;gap:14px;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.03);}
+.qcard .qnum{flex:none;width:30px;height:30px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;display:grid;place-items:center;font-size:15px;}
+.qcard .qbody{flex:1;min-width:0;}
+.qcard h3{font-size:16px;margin:2px 0 12px;}
+.qcard h3 .req{font-size:11px;font-weight:700;color:#fff;background:var(--err,#F04438);border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle;}
+.qcard h3 .opt{font-size:12px;font-weight:600;color:var(--ink-3);margin-left:6px;}
+.qinfo{margin-top:10px;background:var(--brand-tint);border:1px solid var(--brand);border-radius:10px;padding:10px 12px;font-size:13px;font-weight:600;color:var(--brand);}
+.qtoggle{display:flex;gap:9px;align-items:flex-start;margin-top:12px;font-size:13.5px;line-height:1.5;cursor:pointer;background:var(--bg-2);border-radius:10px;padding:11px 12px;}
+.qtoggle input{margin-top:2px;flex:none;width:17px;height:17px;accent-color:var(--brand);}
+.qrow2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.qmore{margin-top:12px;border-top:1px solid var(--line);padding-top:10px;}
+.qmore summary{cursor:pointer;font-size:13.5px;font-weight:600;color:var(--brand);}
+.sizegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.sizechip{border:1.5px solid var(--line);background:var(--bg);border-radius:11px;padding:10px 6px;text-align:center;cursor:pointer;transition:.15s;}
+.sizechip b{display:block;font-size:13px;color:var(--ink);}
+.sizechip span{display:block;font-size:11.5px;color:var(--ink-2);font-weight:600;margin-top:2px;}
+.sizechip em{display:block;font-size:10.5px;color:var(--ink-3);font-style:normal;margin-top:1px;}
+.sizechip:hover{border-color:var(--brand);}
+.sizechip.on{border-color:var(--brand);background:var(--brand-tint);box-shadow:0 2px 8px rgba(75,71,181,.16);}
+.sizechip.on b{color:var(--brand);}
+.qspec{margin-top:12px;background:var(--bg-2);border-radius:10px;padding:11px 12px;font-size:12.5px;line-height:1.7;}
+@media(max-width:560px){.sizegrid{grid-template-columns:repeat(2,1fr);}}
+.paygrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.paycard{border:1.5px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;transition:.15s;position:relative;background:var(--bg);}
+.paycard:hover{border-color:var(--brand);transform:translateY(-1px);}
+.paycard.rec{border-color:var(--brand);background:var(--brand-tint);}
+.paycard .pb{position:absolute;top:-9px;left:12px;background:var(--brand);color:#fff;font-size:10.5px;font-weight:800;border-radius:6px;padding:2px 7px;}
+.paycard .pt{font-size:21px;font-weight:800;color:var(--ink);}
+.paycard .pt span{font-size:12px;color:var(--ink-3);font-weight:600;margin-left:3px;}
+.paycard .pd{font-size:12.5px;color:var(--ink-2);margin-top:3px;font-weight:600;}
+.paycard .pf{list-style:none;padding:0;margin:9px 0 0;}
+.paycard .pf li{font-size:12px;color:var(--ink-2);padding:2px 0 2px 14px;position:relative;}
+.paycard .pf li:before{content:'✓';position:absolute;left:0;color:var(--ok,#12B76A);font-weight:800;}
+@media(max-width:560px){.paygrid{grid-template-columns:1fr;}}
+.qbig{width:100%;font-size:16px;padding:15px;margin-top:6px;border-radius:14px;}
+.qnarrow{padding-bottom:120px;}
+.qrebanner{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,#12B76A,#0E9F5B);color:#fff;border-radius:16px;padding:16px 18px;margin-bottom:16px;box-shadow:0 6px 20px rgba(18,183,106,.28);}
+.qrebanner .rbi{flex:none;width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:22px;}
+.qrebanner .rbc{flex:1;min-width:0;}
+.qrebanner .rbt{font-size:14px;font-weight:800;letter-spacing:-.2px;}
+.qrebanner .rbtime{font-size:24px;font-weight:900;letter-spacing:-.6px;margin:3px 0 2px;font-variant-numeric:tabular-nums;}
+.qrebanner .rbd{font-size:12.5px;font-weight:600;opacity:.94;line-height:1.55;}
+.qrebanner.warn-x{background:linear-gradient(135deg,#F5A524,#E08600);box-shadow:0 6px 20px rgba(224,134,0,.28);}
+.qrebanner.prem{background:linear-gradient(135deg,#5B4FE9,#4038C7);box-shadow:0 6px 20px rgba(91,79,233,.3);}
+/* 추출 버튼 옆 미니 리마인더 */
+.qrehint{text-align:center;font-size:12.5px;font-weight:700;margin-top:10px;padding:9px 12px;border-radius:10px;background:#E7F8F0;color:#0B7A48;border:1px solid #9AE0BF;}
+.qrehint.warn-x{background:#FFF4E5;color:#8A5200;border-color:#F5C97E;}
+.qrehint.prem{background:var(--brand-tint);color:var(--brand);border-color:#C3BDF5;}
+.qfoot{text-align:center;margin-top:12px;}
+.qlink{color:var(--ink-3);font-size:13px;cursor:pointer;text-decoration:underline;}
+@media(max-width:560px){.qrow2{grid-template-columns:1fr;}}
+/* ===== 만들기 화면 모바일 대응 ===== */
+@media(max-width:560px){
+  .qnarrow{padding-left:14px;padding-right:14px;padding-bottom:90px;}
+  .qcard{padding:14px;gap:11px;border-radius:14px;}
+  .qcard .qnum{width:26px;height:26px;font-size:13px;}
+  .qcard h3{font-size:15px;margin-bottom:10px;}
+  .qcard h3 .opt{display:block;margin:3px 0 0;font-size:11.5px;}
+  .drop{padding:18px 12px;}
+  .drop .dt{font-size:13.5px;}
+  .drop .ds{font-size:11.5px;}
+  /* 배너: 세로로 쌓고 타이머 강조 */
+  .qrebanner{gap:11px;padding:14px;border-radius:14px;}
+  .qrebanner .rbi{width:38px;height:38px;font-size:19px;border-radius:10px;}
+  .qrebanner .rbt{font-size:13px;}
+  .qrebanner .rbtime{font-size:20px;}
+  .qrebanner .rbd{font-size:11.5px;}
+  .qrehint{font-size:12px;padding:8px 10px;}
+  /* 세그먼트 버튼: 좁으면 세로 배치 */
+  .seg{flex-direction:column;gap:4px;}
+  .seg .segbtn{font-size:13px;padding:10px 8px;}
+  /* 판형/카테고리 그리드: 2열 */
+  .sizegrid{grid-template-columns:repeat(2,1fr);gap:7px;}
+  .sizechip{padding:9px 5px;}
+  .sizechip b{font-size:12.5px;}
+  .sizechip span{font-size:11px;}
+  .sizechip em{font-size:10px;}
+  .catgrid{grid-template-columns:repeat(2,1fr);}
+  .qspec{font-size:11.5px;padding:10px;}
+  .qbig{font-size:15px;padding:14px;}
+}
+@media(max-width:560px){
+  .modal{padding:20px 16px;max-height:90vh;}
+  .paycard{padding:12px;}
+  .paycard .pt{font-size:19px;}
+}
+@media(max-width:380px){
+  .sizegrid{grid-template-columns:1fr 1fr;}
+  .qcard{flex-direction:column;gap:8px;}
+  .qrebanner{flex-direction:column;text-align:center;}
+}
 .drop:hover{border-color:var(--brand-3);background:var(--brand-tint2);}
 .drop .di{font-size:26px;margin-bottom:6px;}
 .drop .dt{font-size:14px;font-weight:700;color:var(--ink);}
@@ -386,7 +490,7 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
 /* modal / toast */
 .scrim{position:fixed;inset:0;background:rgba(20,18,31,.5);opacity:0;pointer-events:none;transition:.2s;z-index:80;backdrop-filter:blur(2px);}
 .scrim.on{opacity:1;pointer-events:auto;}
-.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%);opacity:0;pointer-events:none;transition:.24s;z-index:81;background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-3);width:min(460px,92vw);padding:28px;}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%);opacity:0;pointer-events:none;transition:.24s;z-index:81;background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-3);width:min(460px,92vw);padding:28px;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .modal.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%);}
 .modal h3{font-size:20px;margin-bottom:10px;}
 .modal p{font-size:14.5px;color:var(--ink-2);line-height:1.6;white-space:pre-line;margin-bottom:22px;}
@@ -483,7 +587,7 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
     <button class="btn-g btn-sm" id="loginNav"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0012 23z"/><path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 010-4.2V7.06H2.18a11 11 0 000 9.88l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1a11 11 0 00-9.82 6.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/></svg>로그인</button>
   </div>
   <div class="navlinks" id="navUser" style="display:none">
-    <a class="navlink hideM" data-go="app">만들기</a>
+    <a class="navlink hideM" data-go="quick">책 만들기</a>
     <a class="navlink hideM" data-go="pricing">요금제</a>
     <a class="navlink" data-go="settings">설정</a>
     <img class="avatar" id="navAvatar" alt="프로필" data-go="settings"/>
@@ -498,18 +602,18 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
     <div class="hero-bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
     <div class="container hero-grid">
       <div class="hero-left">
-        <div class="hero-kick"><span class="dot"></span>교보문고 바로출판 POD 전용 · 반려 걱정 없는 규격</div>
-        <h1>교보문고 POD 표지와 내지를<br><span class="grad">단 3분</span> 만에 <span class="u">완성</span>하세요</h1>
-        <p class="lead">판형·페이지·제본만 고르면 <b>재단여백·책등·판권까지 자동 계산</b>. AI가 표지 문구와 소개글을 제안하고, 교보 규격에 딱 맞는 <b>표지·내지 PDF·DOCX</b>를 한 번에 만들어 드려요.</p>
+        <div class="hero-kick"><span class="dot"></span>한글·워드·인디자인 어떤 원고든 · 규격 반려 걱정 끝</div>
+        <h1>어떤 포맷으로 쓴 원고든<br><span class="grad">원하는 책 규격</span>으로 <span class="u">딸깍</span></h1>
+        <p class="lead">한글·워드·구글독스·인디자인… <b>무엇으로 만든 PDF든 상관없어요.</b> 원하는 판형만 고르면 <b>교보 공식 규격에 100% 맞춰</b> 내용이 재단선 밖으로 나가지 않게 자동 조정하고, <b>판권</b>까지 넣어 바로 업로드할 내지 PDF로 만들어 드립니다.</p>
         <div class="hero-cta">
           <button class="btn btn-p btn-lg" id="heroStart">지금 바로 시작하기 →</button>
-          <button class="btn btn-line btn-lg" data-scroll="how">사용법 10초 보기</button>
+          <button class="btn btn-line btn-lg" data-scroll="how">30초면 끝나요</button>
         </div>
         <div class="hero-trust">
-          <div class="it"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>재단여백 3mm 자동 채움</div>
-          <div class="it"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>10종 판형·3종 제본</div>
-          <div class="it"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF·DOCX ZIP 추출</div>
-          <div class="it"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>원고 100% 로컬 저장</div>
+          <div class="it"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>포맷·크기 상관없음</div>
+          <div class="it"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>원하는 판형 10종</div>
+          <div class="it"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>30초면 PDF 완성</div>
+          <div class="it"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>원고 100% 로컬 처리</div>
         </div>
       </div>
       <div class="hero-right">
@@ -526,8 +630,8 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
               <div class="face pages"></div>
             </div>
           </div>
-          <div class="chip c1"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h10M4 17h13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>책등 12.4mm 계산됨</div>
-          <div class="chip c2"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 21l-4.9 2.6.9-5.5-4-3.9 5.5-.8z" fill="currentColor"/></svg>AI 표지 문구 완성</div>
+          <div class="chip c1"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h10M4 17h13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>A4 원고도 OK</div>
+          <div class="chip c2"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 21l-4.9 2.6.9-5.5-4-3.9 5.5-.8z" fill="currentColor"/></svg>판권 자동 삽입</div>
           <div class="chip c3"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>교보 규격 통과</div>
         </div>
       </div>
@@ -540,13 +644,13 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
           <div class="m"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>무선·날개·양장 제본</div>
           <div class="m"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>판권지 자동 구성</div>
           <div class="m"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>재단선·안전영역 자동</div>
-          <div class="m"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>표지·내지 PDF+DOCX</div>
+          <div class="m"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>내지 PDF 추출</div>
           <div class="m"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>신국판 152×225</div>
           <div class="m"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>크라운판 176×248</div>
           <div class="m"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>무선·날개·양장 제본</div>
           <div class="m"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>판권지 자동 구성</div>
           <div class="m"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>재단선·안전영역 자동</div>
-          <div class="m"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>표지·내지 PDF+DOCX</div>
+          <div class="m"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>내지 PDF 추출</div>
         </div>
       </div>
     </div>
@@ -565,28 +669,28 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
           <div class="pn">1</div>
           <svg class="picon" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           <h4>도서 정보 입력</h4>
-          <p>판형·페이지·제본·제목·저자만 입력하세요.</p>
+          <p>한글·워드·인디자인 무엇으로 만든 PDF든 OK.</p>
           <div class="bar"></div>
         </div>
         <div class="pstep" data-i="1">
           <div class="pn">2</div>
           <svg class="picon" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 16l-4.9 2.2.9-5.5-4-3.9 5.5-.8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-          <h4>AI 표지·문구 생성</h4>
-          <p>스타일만 고르면 표지와 소개글을 AI가 제안.</p>
+          <h4>원하는 판형 선택</h4>
+          <p>신국판·A5·크라운판… 원하는 책 크기를 고르세요.</p>
           <div class="bar"></div>
         </div>
         <div class="pstep" data-i="2">
           <div class="pn">3</div>
           <svg class="picon" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="1.8"/><path d="M4 9h16M9 9v11" stroke="currentColor" stroke-width="1.8"/></svg>
-          <h4>교보 규격 자동 계산</h4>
-          <p>재단여백·책등·판권·안전영역을 정확히 반영.</p>
+          <h4>규격 자동 변환</h4>
+          <p>어떤 크기 원고든 고른 판형에 딱 맞게 재구성.</p>
           <div class="bar"></div>
         </div>
         <div class="pstep" data-i="3">
           <div class="pn">4</div>
           <svg class="picon" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <h4>ZIP으로 추출</h4>
-          <p>표지·내지 PDF·DOCX를 하나의 zip으로 다운로드.</p>
+          <h4>바로 업로드</h4>
+          <p>교보에 그대로 올리면 되는 내지 PDF 완성.</p>
           <div class="bar"></div>
         </div>
       </div>
@@ -602,23 +706,23 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
         <p>교보문고 바로출판 POD의 까다로운 제작 가이드를 그대로 엔진에 담았습니다.</p>
       </div>
       <div class="feats">
-        <div class="fcard"><div class="fi"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="1.8"/><path d="M4 9h16M9 9v11" stroke="currentColor" stroke-width="1.8"/></svg></div><h4>규격 엔진 내장</h4><p>10종 판형과 무선·날개·양장 제본의 표지 전개도, 책등, 날개, 재단여백을 자동 계산합니다.</p></div>
-        <div class="fcard"><div class="fi"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 16l-4.9 2.2.9-5.5-4-3.9 5.5-.8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div><h4>AI 표지·카피</h4><p>스타일 키워드만 입력하면 제목 배치·색감·소개글·추천사까지 감각적으로 제안합니다.</p></div>
+        <div class="fcard"><div class="fi"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="1.8"/><path d="M4 9h16M9 9v11" stroke="currentColor" stroke-width="1.8"/></svg></div><h4>포맷 무관 · 크기 무관</h4><p>A4로 썼든 레터 크기든, 한글·워드·구글독스·인디자인 무엇으로 만들었든 상관없어요. 어떤 원고를 넣어도 <b>고른 판형의 교보 공식 규격</b>으로 모든 페이지를 통일합니다.</p></div>
+        <div class="fcard"><div class="fi"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 16l-4.9 2.2.9-5.5-4-3.9 5.5-.8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div><h4>내용은 안전하게</h4><p>이미 규격에 맞는 원고는 <b>100% 원본 그대로</b> 유지하고, 규격을 넘치는 원고만 <b>재단선 안쪽</b>으로 필요한 만큼만 줄여 글자가 잘리지 않게 합니다.</p></div>
         <div class="fcard"><div class="fi"><svg viewBox="0 0 24 24" fill="none"><path d="M3 7l9-4 9 4-9 4-9-4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M21 10v6l-9 4-9-4v-6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div><h4>판권지 자동 구성</h4><p>교보 표준 판권지에 책 제목·발행일·지은이만 정확히 교체. 앞/뒤/없음 위치까지 선택.</p></div>
         <div class="fcard"><div class="fi"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h4>반려 방지 설계</h4><p>여백 없이 판형에 딱 맞게, 재단여백 3mm까지 컬러/이미지로 꽉 채워 검수 반려를 예방합니다.</p></div>
-        <div class="fcard"><div class="fi"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h4>PDF + DOCX 동시</h4><p>바로 등록할 인쇄용 PDF와, Word로 다듬을 수 있는 편집용 DOCX를 함께 제공합니다.</p></div>
-        <div class="fcard"><div class="fi"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><h4>실시간 미리보기</h4><p>재단선·안전영역·책등 경계를 눈으로 확인하며 안심하고 최종 파일을 뽑을 수 있어요. 확대/축소로 구석구석 검토도 가능해요.</p></div>
+        <div class="fcard"><div class="fi"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h4>판권 자동 생성</h4><p>교보 공식 판권 양식 그대로. 제목·저자·발행일만 넣으면 본문 앞이나 뒤에 자동으로 붙습니다. 글꼴도 고를 수 있어요.</p></div>
+        <div class="fcard"><div class="fi"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><h4>규격 자가검증</h4><p>추출 직전 완성된 PDF의 실제 페이지 크기를 다시 읽어 교보 규격과 대조합니다. 전 페이지 일치 여부를 리포트로 확인하고 안심하고 올리세요.</p></div>
       </div>
 
       <!-- 로컬 저장 강조 -->
       <div class="kyobo-strip" style="margin-top:20px;background:linear-gradient(135deg,#0e2a22,#123a2c)">
         <h3 style="display:flex;align-items:center;gap:10px"><svg viewBox="0 0 24 24" fill="none" style="width:26px;height:26px"><path d="M12 2l7 4v6c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-4z" stroke="#7CE38B" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#7CE38B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>내 원고는 내 컴퓨터에만 — 100% 로컬 저장</h3>
-        <p class="ksub">저작권 보호와 유출 방지를 위해, <b style="color:#fff">원고·이미지·표지 등 모든 창작물은 서버에 업로드되지 않고 브라우저(로컬)에만 저장</b>됩니다. 서버에는 로그인·결제·이용통계만 안전하게 보관돼요. 파일 생성·추출도 전부 사용자의 브라우저 안에서 처리됩니다.</p>
+        <p class="ksub">저작권 보호와 유출 방지를 위해, <b style="color:#fff">원고 PDF 등 모든 창작물은 서버에 업로드되지 않고 브라우저(로컬)에서만 처리</b>됩니다. 서버에는 로그인·결제·이용통계만 안전하게 보관돼요. 파일 생성·추출도 전부 사용자의 브라우저 안에서 처리됩니다.</p>
         <div class="kchecks">
           <div class="kcheck"><span class="kc"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>서버 업로드 없음</b> — 원고·이미지가 외부로 전송되지 않아요</div></div>
-          <div class="kcheck"><span class="kc"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>온디바이스 생성</b> — 표지·내지 PDF·DOCX를 브라우저 내부에서 제작</div></div>
+          <div class="kcheck"><span class="kc"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>온디바이스 생성</b> — 내지 PDF를 브라우저 내부에서 제작</div></div>
           <div class="kcheck"><span class="kc"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>로컬 프로젝트</b> — 작업 목록을 내 브라우저에 저장하고 자유롭게 편집·추출</div></div>
-          <div class="kcheck"><span class="kc"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>저작권 안심</b> — 미공개 원고도 걱정 없이 표지 작업</div></div>
+          <div class="kcheck"><span class="kc"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>저작권 안심</b> — 미공개 원고도 걱정 없이 변환</div></div>
         </div>
       </div>
     </div>
@@ -633,7 +737,7 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
         <div class="kchecks">
           <div class="kcheck"><span class="kc"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>재단여백 3mm</b> 상하좌우 추가, 여백까지 컬러·이미지로 꽉 채움</div></div>
           <div class="kcheck"><span class="kc"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>안전영역</b> 안쪽 배치로 로고·글씨가 잘려나가지 않도록 보호</div></div>
-          <div class="kcheck"><span class="kc"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>표지 전개도</b> 뒷표지·책등·앞표지·날개 구성 자동 배치</div></div>
+          <div class="kcheck"><span class="kc"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>페이지 통일</b> 모든 페이지를 교보 규격 하나로 정렬</div></div>
           <div class="kcheck"><span class="kc"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>내지 규격</b> 첫 페이지 오른쪽, 판권 위치, 안쪽 여백 반영</div></div>
         </div>
       </div>
@@ -650,8 +754,8 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
       </div>
       <div class="plans" id="plansLanding"></div>
       <div class="foot-links">
-        <a href="terms.html" target="_blank">이용약관</a>
-        <a href="privacy.html" target="_blank">개인정보 처리방침</a>
+        <a href="https://www.joycestudios.kr/podstudio/ko/terms.html" target="_blank">이용약관</a>
+        <a href="https://www.joycestudios.kr/podstudio/ko/privacy.html" target="_blank">개인정보 처리방침</a>
       </div>
     </div>
   </section>
@@ -661,11 +765,11 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
       <div class="fgrid">
         <div>
           <div class="brand" style="margin-bottom:12px"><div class="logo"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5A2.5 2.5 0 016.5 3H19a1 1 0 011 1v14a1 1 0 01-1 1H6.5A2.5 2.5 0 004 21V5.5z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8h7M9 11h5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div><div class="nm">POD <b>Studio</b></div></div>
-          <p style="font-size:13.5px;color:#a8a2c8;max-width:300px;line-height:1.7">교보문고 바로출판 POD 표지·내지를 단 3분 만에. 규격 걱정 없이 나만의 책을 완성하세요.</p>
+          <p style="font-size:13.5px;color:#a8a2c8;max-width:300px;line-height:1.7">어떤 포맷의 원고든 원하는 책 규격으로. 30초면 교보 업로드용 내지 PDF 완성.</p>
         </div>
-        <div class="fcol"><h5>서비스</h5><a data-go="app">파일 만들기</a><a data-go="pricing">요금제</a><a data-scroll="how">사용법</a></div>
-        <div class="fcol"><h5>약관</h5><a href="terms.html" target="_blank">이용약관</a><a href="privacy.html" target="_blank">개인정보 처리방침</a></div>
-        <div class="fcol"><h5>결제</h5><a href="terms.html" target="_blank">결제·환불 정책</a><span style="color:#a8a2c8;font-size:12.5px">PG: 포트원(PortOne)·KCP</span></div>
+        <div class="fcol"><h5>서비스</h5><a data-go="quick">파일 만들기</a><a data-go="pricing">요금제</a><a data-scroll="how">사용법</a></div>
+        <div class="fcol"><h5>약관</h5><a href="https://www.joycestudios.kr/podstudio/ko/terms.html" target="_blank">이용약관</a><a href="https://www.joycestudios.kr/podstudio/ko/privacy.html" target="_blank">개인정보 처리방침</a></div>
+        <div class="fcol"><h5>결제</h5><a href="https://www.joycestudios.kr/podstudio/ko/terms.html" target="_blank">결제·환불 정책</a><span style="color:#a8a2c8;font-size:12.5px">PG: 포트원(PortOne)·KCP</span></div>
       </div>
       <div class="fbot">
         <b>POD Studio</b> · 결제대행: 포트원(PortOne) / KCP · 판매자: Joyce Studios(김정훈)<br>
@@ -710,314 +814,76 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
 </div>
 
 <!-- ============ APP (WIZARD) ============ -->
-<div class="view" id="view-app">
-  <div class="container">
+<div class="view" id="view-quick">
+  <div class="container qnarrow">
     <div class="app-head">
       <div class="crumb">교보문고 바로출판 POD</div>
-      <h1>표지·내지 만들기</h1>
-      <div class="planline" id="appPlanLine"></div>
+      <h1>어떤 원고든, 원하는 책 규격으로.</h1>
+      <p class="qsub">한글·워드·인디자인 <b>무엇으로 만든 PDF든</b> 괜찮아요. 원하는 판형만 고르면 <b>교보 규격에 100% 맞춰</b> 내용을 재단선 안쪽으로 안전하게 조정하고, <b>판권</b>까지 넣어 바로 업로드할 <b>내지 PDF</b>를 만들어드려요.</p>
     </div>
 
-    <div class="projbar" id="projbar">
-      <div class="projbar-head">
-        <span class="pb-title">📁 내 프로젝트 <span class="pb-note">브라우저 로컬에만 저장</span></span>
-        <div>
-          <button class="btn btn-line btn-sm" id="newProj">＋ 새 프로젝트</button>
-          <button class="btn btn-ghost btn-sm" id="saveProj">현재 저장</button>
-        </div>
-      </div>
-      <div class="projlist" id="projList"></div>
-    </div>
+    <div id="qReBanner" class="qrebanner" style="display:none"></div>
 
-    <div class="stepper" id="stepper">
-      <div class="stpill" data-s="0"><span class="n">1</span>플랫폼</div>
-      <div class="stpill" data-s="1"><span class="n">2</span>책 규격</div>
-      <div class="stpill" data-s="2"><span class="n">3</span>제본</div>
-      <div class="stpill" data-s="3"><span class="n">4</span>책 정보</div>
-      <div class="stpill" data-s="4"><span class="n">5</span>판권</div>
-      <div class="stpill" data-s="5"><span class="n">6</span>표지</div>
-      <div class="stpill" data-s="6"><span class="n">7</span>생성·추출</div>
-    </div>
-
-    <div class="app-grid">
-      <!-- LEFT: form -->
-      <div class="app-form">
-
-        <!-- STEP 1: platform -->
-        <div class="card wstep" data-step="0">
-          <div class="card-h"><span class="cn">1</span><h3>POD 플랫폼 선택</h3><span class="hint">현재 교보문고만 지원</span></div>
-          <div class="plat">
-            <div class="platcard sel" id="platKyobo">
-              <div class="klogo"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="13" r="6.5" fill="#fff"/><path d="M20 13c3.5-4 9-4 12 0-3 5-9 6-12 3z" fill="#FFD54A"/><path d="M6 30c2-6 8-9 14-9s12 3 14 9c-4 3-9 4.5-14 4.5S10 33 6 30z" fill="#fff"/><circle cx="17.5" cy="12" r="1.3" fill="#4B47B5"/></svg></div>
-              <div class="pinfo"><b>교보문고 바로출판 POD</b><span>KYOBO eBook · 소량 주문형 출판</span></div>
-              <div class="pcheck"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            </div>
-            <div class="platcard dis">
-              <div class="klogo" style="background:#cbd5e1"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h12v18H6z" stroke="#fff" stroke-width="1.8"/></svg></div>
-              <div class="pinfo"><b>기타 플랫폼</b><span>추후 확장 예정</span></div>
-              <div class="soon">준비중</div>
-            </div>
-          </div>
-          <p class="helptx">교보문고 바로출판 POD 규격에 최적화되어 있습니다. 다른 플랫폼은 추후 순차 지원 예정이에요.</p>
-        </div>
-
-        <!-- STEP 2: size / bleed / paper -->
-        <div class="card wstep" data-step="1" style="display:none">
-          <div class="card-h"><span class="cn">2</span><h3>책 규격 결정</h3><span class="hint">판형·재단여백·용지</span></div>
-          <label class="fld">판형<span class="req">*</span></label>
-          <div class="sizes" id="sizeGrid"></div>
-          <div class="row c2" style="margin-top:18px">
-            <div>
-              <label class="fld">재단여백 (bleed) · <b id="bleedOut">3mm</b></label>
-              <input type="range" id="bleed" min="3" max="10" step="0.5" value="3" style="width:100%;accent-color:var(--brand)"/>
-              <div class="helptx">최소 3mm 기본 · 최대 10mm까지 여유롭게. 표지·내지 모두 사방에 적용돼요.</div>
-            </div>
-            <div><label class="fld">용지</label>
-              <div class="choices" id="paperChoices" style="gap:8px">
-                <div class="choice sel" data-paper="white"><b>백색모조지</b><span>선명한 흰 바탕</span></div>
-                <div class="choice" data-paper="ivory"><b>미색모조지</b><span>눈이 편한 미색 바탕</span></div>
-              </div>
-              <div class="helptx">용지에 따라 <b>내지 바탕색</b>(미색=아이보리)과 <b>예상 책등 두께</b>가 달라져요. 미리보기 내지에 바로 반영됩니다.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- STEP 3: binding -->
-        <div class="card wstep" data-step="2" style="display:none">
-          <div class="card-h"><span class="cn">3</span><h3>제본 방식</h3><span class="hint">표지 전개도 자동 반영</span></div>
-          <div class="choices" id="bindingChoices">
-            <div class="choice sel" data-bind="flapless"><b>무선제본</b><span>일반도서·소프트커버</span></div>
-            <div class="choice" data-bind="flap"><b>무선 날개</b><span>날개(플랩) 있음</span></div>
-            <div class="choice" data-bind="hard"><b>양장제본</b><span>두꺼운 하드커버</span></div>
-          </div>
-          <p class="helptx" id="bindHint">판형에 따라 일부 제본은 제한될 수 있어요. (A4는 양장·날개 불가, 정사각·가로판은 날개 불가) 오른쪽 표지 미리보기가 제본에 맞춰 실시간으로 바뀝니다.</p>
-        </div>
-
-        <!-- STEP 4: book info -->
-        <div class="card wstep" data-step="3" style="display:none">
-          <div class="card-h"><span class="cn">4</span><h3>책 정보</h3></div>
-          <div class="mb"><label class="fld">책 제목<span class="req">*</span></label><input type="text" class="inp" id="title" placeholder="예) 겨울의 정적" autocomplete="off"/></div>
-          <div class="row c2 mb">
-            <div><label class="fld">부제목</label><input type="text" class="inp" id="subtitle" placeholder="예) 조용한 계절의 기록" autocomplete="off"/></div>
-            <div><label class="fld">저자<span class="req">*</span></label><input type="text" class="inp" id="author" placeholder="예) 홍길동" autocomplete="off"/></div>
-          </div>
-          <div class="mb"><label class="fld">출판사</label><input type="text" class="inp" id="publisher" value="퍼플" readonly style="background:var(--bg-2);color:var(--ink-3)"/><div class="helptx">현재 교보문고 POD 전용으로 출판사는 <b>퍼플</b>로 고정됩니다.</div></div>
-          <div class="mb"><label class="fld">예상 쪽수 <span style="color:var(--ink-3);font-weight:600">(책등 두께 계산 · 원고 업로드 시 자동)</span></label>
-            <input type="number" class="inp" id="pages" min="20" max="1000" step="2" value="120"/>
-            <div class="helptx">교보 규격상 <b>책등 두께 = 쪽수 기반</b>이라, 정확한 쪽수를 넣어야 표지가 반려되지 않아요. 내지 원고 PDF를 올리면 실제 쪽수로 자동 설정됩니다.</div>
-          </div>
-          <label class="fld">내지 원고 PDF (선택)</label>
-          <div class="drop" id="innerDrop"><div class="di">📄</div><div class="dt">내지 본문 PDF 올리기</div><div class="ds">실제 본문 원고를 그대로 사용해요 · 브라우저 로컬에서만 처리</div></div>
-          <input type="file" id="innerFile" accept="application/pdf" hidden/>
-          <div class="thumbrow" id="innerThumb" style="display:none"><span style="font-size:26px">📄</span><div style="flex:1"><b id="innerName" style="font-size:13px"></b><div class="helptx" id="innerMeta" style="margin:0"></div></div><button class="btn btn-line btn-sm" id="innerClear">제거</button></div>
-          <div class="helptx">업로드하면 미리보기에서 <b>앞/뒤 판권 + 원고 첫 장·마지막 장</b>을 보여주고 중간은 “생략”으로 표시해요. 추출 시 판권과 원고가 하나의 내지 PDF로 합쳐집니다.</div>
-        </div>
-
-        <!-- STEP 5: copyright -->
-        <div class="card wstep" data-step="4" style="display:none">
-          <div class="card-h"><span class="cn">5</span><h3>판권 (내지)</h3><span class="hint">위치 선택 + 발행일</span></div>
-          <label class="fld">판권지 위치</label>
-          <div class="choices" id="copyChoices">
-            <div class="choice" data-copy="none"><b>없음</b><span>판권지 미포함</span></div>
-            <div class="choice sel" data-copy="front"><b>앞 판권</b><span>제목 다음 페이지</span></div>
-            <div class="choice" data-copy="back"><b>뒤 판권</b><span>책 마지막 페이지</span></div>
-          </div>
-          <div class="row c2" style="margin-top:16px" id="copyFields">
-            <div><label class="fld">발행일</label><input type="date" class="inp" id="pubdate"/></div>
-            <div><label class="fld">지은이 (자동)</label><input type="text" class="inp" id="copyAuthor" readonly style="background:var(--bg-2);color:var(--ink-3)"/><div class="helptx">저자명과 자동으로 동일하게 표기돼요.</div></div>
-          </div>
-          <p class="helptx">교보 표준 판권지에서 <b style="color:var(--err)">책 제목 · 발행일 · 지은이</b>만 입력값으로 정확히 교체하고, 나머지 등록정보는 그대로 구성합니다. 오른쪽 <b>내지 미리보기</b>에서 앞/뒤 판권을 모두 확인할 수 있어요.</p>
-        </div>
-
-        <!-- STEP 6: cover -->
-        <div class="card wstep" data-step="5" style="display:none">
-          <div class="card-h"><span class="cn">6</span><h3>표지 디자인</h3><span class="hint">실시간 반영</span></div>
-
-          <label class="fld">전체 글꼴</label>
-          <select class="inp" id="fontFamily" style="margin-bottom:14px">
-            <option value="">스타일 기본 글꼴</option>
-            <option value="'Pretendard'">프리텐다드 (고딕·모던)</option>
-            <option value="'Nanum Myeongjo'">나눔명조 (명조·클래식)</option>
-            <option value="'Gowun Batang'">고운바탕 (바탕·우아)</option>
-            <option value="'Song Myung'">송명 (세리프·차분)</option>
-            <option value="'Gowun Dodum'">고운돋움 (부드러운 고딕)</option>
-            <option value="'Black Han Sans'">검은고딕 (강렬·임팩트)</option>
-            <option value="'Do Hyeon'">도현 (두꺼운 고딕)</option>
-            <option value="'Jua'">주아 (둥근·친근)</option>
-            <option value="'Gaegu'">개구 (손글씨·귀여운)</option>
-            <option value="'Nanum Pen Script'">나눔펜 (손글씨·감성)</option>
-          </select>
-          <label class="fld">표지 스타일 <span style="color:var(--ink-3);font-weight:600">(100+ · solid·그라데이션·듀오톤)</span></label>
-          <input type="text" class="inp" id="styleSearch" placeholder="🔍 스타일 검색 (예: 블루, 그라데이션, 다크)" style="margin-bottom:10px"/>
-          <div class="stylegrid" id="styleGrid"></div>
-          <div class="row c2" style="margin-top:12px;align-items:center">
-            <div><label class="fld">내 색상 직접 선택</label>
-              <div style="display:flex;gap:8px;align-items:center">
-                <input type="color" id="customColor" value="#5B4FE9" style="width:46px;height:38px;border:1px solid var(--line-2);border-radius:10px;background:none;cursor:pointer"/>
-                <button class="btn btn-line btn-sm" id="applyColor">이 색으로 solid</button>
-                <button class="btn btn-line btn-sm" id="applyGrad">그라데이션</button>
-              </div>
-            </div>
-            <div><label class="fld">글자 색</label>
-              <div style="display:flex;gap:8px;align-items:center">
-                <input type="color" id="fgColor" value="#ffffff" style="width:46px;height:38px;border:1px solid var(--line-2);border-radius:10px;background:none;cursor:pointer"/>
-                <span class="helptx" style="margin:0">자동(밝기 기준)으로도 지정돼요</span>
-              </div>
-            </div>
-          </div>
-
-          <label class="fld" style="margin-top:18px">앞표지 배경 이미지 (선택)</label>
-          <div class="drop" id="coverDrop">
-            <div class="di">🖼️</div><div class="dt">앞표지 이미지 올리기</div><div class="ds">규격에 자동 맞춤 · 뒤/옆/날개 색상톤도 자동 매칭</div>
-          </div>
-          <input type="file" id="coverFile" accept="image/png,image/jpeg,image/webp" hidden />
-          <div class="thumbrow" id="coverThumb" style="display:none"><img id="coverThumbImg" alt=""/><button class="btn btn-line btn-sm" id="coverClear">이미지 제거</button></div>
-          <div class="helptx" id="coverImgNote" style="display:none">앞표지에 이미지를 넣으면 제목·부제·저자 텍스트는 <b>앞표지에 표시되지 않고 책등(옆)</b>에 표시돼요. 아래 ‘책등 텍스트’에서 조정하세요.</div>
-          <div class="flapcard" id="coverMarginBox" style="margin-top:10px;display:none">
-            <div class="flaphd">이미지 여백 (mm) — 표지 안쪽으로 들여넣기</div>
-            <div class="flaprow"><span>위</span><input type="range" id="cmTop" min="0" max="40" step="1" value="0"/><b id="cmTopV" style="min-width:34px;text-align:right">0</b></div>
-            <div class="flaprow"><span>아래</span><input type="range" id="cmBottom" min="0" max="40" step="1" value="0"/><b id="cmBottomV" style="min-width:34px;text-align:right">0</b></div>
-            <div class="flaprow"><span>왼쪽</span><input type="range" id="cmLeft" min="0" max="40" step="1" value="0"/><b id="cmLeftV" style="min-width:34px;text-align:right">0</b></div>
-            <div class="flaprow" style="margin-bottom:0"><span>오른쪽</span><input type="range" id="cmRight" min="0" max="40" step="1" value="0"/><b id="cmRightV" style="min-width:34px;text-align:right">0</b></div>
-          </div>
-
-          <label class="fld" style="margin-top:18px">퍼플 로고 <span style="color:var(--ink-3);font-weight:600">(위치 다중 선택 · 최소 1곳)</span></label>
-          <div class="choices" id="logoChoices" style="gap:8px">
-            <div class="choice sel" data-logo="front"><b>앞표지</b></div>
-            <div class="choice" data-logo="spine"><b>책등(옆)</b></div>
-            <div class="choice" data-logo="back"><b>뒷표지</b></div>
-          </div>
-          <div style="display:flex;gap:12px;align-items:center;margin-top:10px;flex-wrap:wrap">
-            <button class="btn btn-line btn-sm" id="logoUploadBtn">로고 PNG 이미지 올리기</button>
-            <input type="file" id="logoFile" accept="image/png,image/jpeg,image/webp" hidden/>
-            <button class="btn btn-line btn-sm" id="logoImgClear" style="display:none">로고 이미지 제거</button>
-            <span class="helptx" id="logoImgState" style="margin:0">기본은 ‘퍼플’ 워드마크. PNG를 올리면 그 이미지가 그대로 사용돼요.</span>
-          </div>
-          <div class="flapcard" style="margin-top:10px">
-            <div class="flaprow" style="flex-wrap:wrap;margin-bottom:0">
-              <label class="pv-toggle" style="min-width:78px"><input type="checkbox" id="logoColorOn"/> 색 직접지정</label>
-              <span>색<input type="color" id="logoColor" value="#ffffff"/></span>
-              <span>크기<input type="range" id="logoSize" min="6" max="30" step="0.5" value="12"/></span>
-              <span class="helptx" style="margin:0">미지정 시 배경 밝기에 맞춰 자동(검정/흰색)</span>
-            </div>
-          </div>
-
-          <label class="fld" style="margin-top:18px">책등(옆) 텍스트</label>
-          <div class="flapcard">
-            <div class="flaprow" style="flex-wrap:wrap">
-              <label class="pv-toggle" style="min-width:56px"><input type="checkbox" id="spineTitle" checked/> 제목</label>
-              <span>색<input type="color" id="spineTitleColor" value="#ffffff"/></span>
-              <span>크기<input type="range" id="spineTitleSize" min="6" max="22" step="0.5" value="11"/></span>
-              <span>상하<input type="range" id="spineTitleY" min="0" max="100" step="1" value="45"/></span>
-            </div>
-            <div class="flaprow" style="flex-wrap:wrap;margin-bottom:0">
-              <label class="pv-toggle" style="min-width:56px"><input type="checkbox" id="spineAuthor"/> 저자</label>
-              <span>색<input type="color" id="spineAuthorColor" value="#ffffff"/></span>
-              <span>크기<input type="range" id="spineAuthorSize" min="6" max="18" step="0.5" value="10"/></span>
-              <span>상하<input type="range" id="spineAuthorY" min="0" max="100" step="1" value="72"/></span>
-            </div>
-          </div>
-
-          <label class="fld" style="margin-top:18px">뒷표지</label>
-          <div class="pv-tabs" id="backModeTabs" style="border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:10px">
-            <div class="pv-tab on" data-back="text">텍스트 입력</div>
-            <div class="pv-tab" data-back="image">이미지 업로드</div>
-          </div>
-          <div id="backText_wrap"><textarea class="inp" id="backText" placeholder="책 소개, 추천사, 저자 소개 등 — 자유롭게 작성"></textarea></div>
-          <div id="backImage_wrap" style="display:none">
-            <div class="drop" id="backDrop"><div class="di">🖼️</div><div class="dt">뒷표지 이미지 올리기</div><div class="ds">규격에 자동 맞춤</div></div>
-            <input type="file" id="backFile" accept="image/png,image/jpeg,image/webp" hidden/>
-            <div class="thumbrow" id="backThumb" style="display:none"><img id="backThumbImg" alt=""/><button class="btn btn-line btn-sm" id="backClear">제거</button></div>
-          </div>
-
-          <div id="flapFields" style="display:none;margin-top:18px">
-            <label class="fld">날개(플랩) 내용 — 타이틀·내용 개별 설정</label>
-            <div class="row c2">
-              <div class="flapcard">
-                <div class="flaphd">왼쪽 날개</div>
-                <input type="text" class="inp" id="flapLTitle" placeholder="타이틀 (예: 저자 소개)" style="margin-bottom:6px"/>
-                <div class="flaprow"><span>타이틀 크기</span><input type="range" id="flapLTitleSize" min="10" max="48" step="0.5" value="18"/><input type="color" id="flapLTitleColor" value="#ffffff"/></div>
-                <div class="flaprow"><span>타이틀 상하</span><input type="range" id="flapLTitleY" min="0" max="100" step="1" value="14"/></div>
-                <textarea class="inp" id="flapLBody" placeholder="내용" style="margin-bottom:6px"></textarea>
-                <div class="flaprow"><span>내용 크기</span><input type="range" id="flapLBodySize" min="8" max="34" step="0.5" value="13"/><input type="color" id="flapLBodyColor" value="#ffffff"/></div>
-                <div class="flaprow" style="margin-bottom:0"><span>내용 상하</span><input type="range" id="flapLBodyY" min="0" max="100" step="1" value="34"/></div>
-              </div>
-              <div class="flapcard">
-                <div class="flaphd">오른쪽 날개</div>
-                <input type="text" class="inp" id="flapRTitle" placeholder="타이틀 (예: 시리즈 안내)" style="margin-bottom:6px"/>
-                <div class="flaprow"><span>타이틀 크기</span><input type="range" id="flapRTitleSize" min="10" max="48" step="0.5" value="18"/><input type="color" id="flapRTitleColor" value="#ffffff"/></div>
-                <div class="flaprow"><span>타이틀 상하</span><input type="range" id="flapRTitleY" min="0" max="100" step="1" value="14"/></div>
-                <textarea class="inp" id="flapRBody" placeholder="내용" style="margin-bottom:6px"></textarea>
-                <div class="flaprow"><span>내용 크기</span><input type="range" id="flapRBodySize" min="8" max="34" step="0.5" value="13"/><input type="color" id="flapRBodyColor" value="#ffffff"/></div>
-                <div class="flaprow" style="margin-bottom:0"><span>내용 상하</span><input type="range" id="flapRBodyY" min="0" max="100" step="1" value="34"/></div>
-              </div>
-            </div>
-            <div class="helptx">색상 미지정 시 배경 밝기에 맞춰 자동으로 정해져요.</div>
-          </div>
-        </div>
-
-        <!-- STEP 7: generate / export -->
-        <div class="card wstep" data-step="6" style="display:none">
-          <div class="card-h"><span class="cn">7</span><h3>생성 &amp; 추출</h3></div>
-          <div class="specbox" id="specBox"></div>
-          <div class="genbar" style="margin-top:16px">
-            <button class="btn btn-line btn-full" id="saveProj2">💾 프로젝트 저장</button>
-          </div>
-          <div class="genbar" style="margin-top:10px">
-            <button class="btn btn-p btn-full" id="genExport">📦 파일 추출 (pod_assets.zip)</button>
-          </div>
-          <div class="lock-note" id="exportLock" style="display:none">
-            <b>ℹ️ 파일 추출 안내</b>
-            <p>표지·내지 파일 추출은 <b>연간 프리미엄 회원권</b>에서 무제한 제공돼요. 지금은 <b>테스트 기간</b>이라 결제 없이 “건당 바로 추출”로 받아보실 수 있어요.</p>
-            <div class="genbar">
-              <button class="btn btn-p btn-sm" id="buySingleInline">건당 바로 추출 (테스트)</button>
-              <button class="btn btn-line btn-sm" id="viewMembership">연간 회원권 보기</button>
-            </div>
-          </div>
-          <p class="helptx" style="margin-top:12px">추출 파일: <b>cover.pdf · cover.docx · inner.pdf · inner.docx</b> (하나의 pod_assets.zip)</p>
-        </div>
-
-        <!-- nav buttons -->
-        <div class="genbar" style="margin-top:6px">
-          <button class="btn btn-line" id="prevStep" style="flex:none;display:none">← 이전</button>
-          <button class="btn btn-p" id="nextStep">다음 →</button>
-        </div>
-      </div>
-
-      <!-- RIGHT: preview -->
-      <div class="pv-sticky">
-        <div class="pv-card">
-          <div class="pv-tabs">
-            <div class="pv-tab on" data-pv="cover">표지 미리보기</div>
-            <div class="pv-tab" data-pv="inner">내지 미리보기</div>
-          </div>
-          <div class="pv-zoombar">
-            <button class="zbtn" id="zoomOut" title="축소">−</button>
-            <button class="zbtn" id="zoomIn" title="확대">＋</button>
-            <button class="zbtn wide" id="zoomFit" title="맞춤">맞춤</button>
-            <span class="zlabel" id="zoomLabel">100%</span>
-            <button class="zbtn wide" id="fullView" title="크게 보기">⛶ 크게 보기</button>
-          </div>
-          <div class="pv-body" id="pvBody">
-            <div class="pv-viewport" id="pvViewport"><div id="pvHost"></div></div>
-          </div>
-          <div class="pv-foot">
-            <label class="pv-toggle"><input type="checkbox" id="guideToggle" checked/> 재단선·안전영역 표시</label>
-            <div class="pgnav" id="pgNav" style="display:none"><button id="pgPrev">◀</button><span id="pgLabel">1 / 1</span><button id="pgNext">▶</button></div>
-          </div>
-        </div>
-        <p class="helptx" style="text-align:center;margin-top:10px">미리보기는 <b>추출물과 동일한 결과</b>예요. 재단선·안전영역 안내선만 추출 파일에서 제외됩니다.</p>
+    <div class="qcard">
+      <div class="qnum">1</div>
+      <div class="qbody">
+        <h3>내지 원고 PDF 올리기 <span class="req">필수</span></h3>
+        <div class="drop" id="qInnerDrop"><div class="di">📄</div><div class="dt">내지 원고 PDF를 여기로 끌어다 놓기 <span style="color:var(--ink-3);font-weight:600">(또는 클릭)</span></div><div class="ds">한글·워드·구글독스·인디자인 등 <b>어떤 포맷으로 만든 PDF든 OK</b> · 브라우저 로컬 처리</div></div>
+        <input type="file" id="qInnerFile" accept="application/pdf" hidden/>
+        <div id="qInnerInfo" class="qinfo" style="display:none"></div>
+        <div class="helptx" style="margin-top:8px">💡 원고는 <b>왼쪽=짝수 / 오른쪽=홀수</b> 순서, 총 페이지 수는 <b>짝수</b>로 준비해 주세요.</div>
       </div>
     </div>
+
+    <div class="qcard">
+      <div class="qnum">2</div>
+      <div class="qbody">
+        <h3>책 규격(판형) 선택 <span class="opt">원고에서 자동 감지 · 바꿀 수 있어요</span></h3>
+        <div class="sizegrid" id="qSizeGrid"></div>
+        <div class="qspec" id="qSpecLine"></div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="qnum">3</div>
+      <div class="qbody">
+        <h3>판권 정보 <span class="opt">판권 페이지에 들어갈 내용</span></h3>
+        <div class="qrow2">
+          <div><label class="fld">제목</label><input type="text" class="inp" id="qTitle" placeholder="예: 50일 안에 토스 미니앱 50개 찍어내기"/></div>
+          <div><label class="fld">저자</label><input type="text" class="inp" id="qAuthor" placeholder="예: Bill Kim"/></div>
+        </div>
+        <div class="qrow2" style="margin-top:10px">
+          <div><label class="fld">발행일</label><input type="date" class="inp" id="qPubdate"/></div>
+          <div><label class="fld">판권 위치</label>
+            <select class="inp" id="qCopyPos">
+              <option value="front">앞쪽 (본문 앞)</option>
+              <option value="back">뒤쪽 (본문 뒤)</option>
+              <option value="none">넣지 않음</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:10px">
+          <label class="fld">판권 글꼴 <span style="color:var(--ink-3);font-weight:600">(기본: 교보 템플릿과 동일 계열)</span></label>
+          <select class="inp" id="qCrFont"></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="qinfo" style="margin:0 0 6px;background:var(--bg-2);border-color:var(--line);color:var(--ink-2);font-weight:500;line-height:1.75">
+      <b style="color:var(--ink)">📖 페이지 번호는 알아서 처리해요</b><br>
+      원고를 분석해 <b>이미 번호가 있으면 그대로</b> 두고, <b>없으면 교보 규칙대로 자동으로 넣어드려요</b> (홀수=오른쪽 / 짝수=왼쪽 바깥쪽). 본문과 겹치지 않게 하단 공간을 확보하니 안심하세요.
+    </div>
+
+    <button class="btn btn-p qbig" id="qGenerate">✨ 규격 맞춰 내지 PDF 만들기</button>
+    <div id="qReHint" class="qrehint" style="display:none"></div>
   </div>
 </div>
 
-<!-- ============ PRICING ============ -->
 <div class="view" id="view-pricing">
   <div class="container">
     <div class="app-head"><h1>요금제</h1><div class="planline" id="pricingPlanLine"></div></div>
     <div class="plans" id="plansApp" style="margin-top:24px"></div>
-    <div class="foot-links"><a href="terms.html" target="_blank">이용약관</a><a href="privacy.html" target="_blank">개인정보 처리방침</a></div>
+    <div class="foot-links"><a href="https://www.joycestudios.kr/podstudio/ko/terms.html" target="_blank">이용약관</a><a href="https://www.joycestudios.kr/podstudio/ko/privacy.html" target="_blank">개인정보 처리방침</a></div>
   </div>
 </div>
 
@@ -1044,7 +910,7 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
         <button class="btn btn-line btn-sm btn-full" id="withdrawBtn" style="margin-top:8px;color:var(--err);border-color:#fecaca">회원 탈퇴</button>
       </div>
     </div>
-    <div class="foot-links"><a href="terms.html" target="_blank">이용약관</a><a href="privacy.html" target="_blank">개인정보 처리방침</a></div>
+    <div class="foot-links"><a href="https://www.joycestudios.kr/podstudio/ko/terms.html" target="_blank">이용약관</a><a href="https://www.joycestudios.kr/podstudio/ko/privacy.html" target="_blank">개인정보 처리방침</a></div>
   </div>
 </div>
 
@@ -1076,7 +942,17 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
 <script>
 (function(){
 "use strict";
-var $=function(s,r){return (r||document).querySelector(s)},$$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var _NULLEL=null;
+function _stubEl(){
+  if(_NULLEL)return _NULLEL;
+  var d=document.createElement('div');
+  d.style.display='none';
+  try{Object.defineProperty(d,'checked',{get:function(){return false;},set:function(){},configurable:true});}catch(e){}
+  _NULLEL=d;return d;
+}
+// 제거된(구 마법사) 요소를 참조해도 안전하도록: 없으면 비활성 스텁 반환
+var $=function(s,r){var el=(r||document).querySelector(s);if(el)return el;return (typeof s==='string'&&s.charAt(0)==='#')?_stubEl():null;},
+    $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function won(n){return Number(n).toLocaleString('ko-KR')+'원'}
 function track(n,p){try{if(window.gtag)window.gtag('event',n,p||{})}catch(e){}}
@@ -1101,6 +977,7 @@ var firebaseConfig={apiKey:"AIzaSyBS2lq8G5AAL41hYDFxG2NX-VfYWZl8aAA",authDomain:
 var fbOK=false,auth=null,db=null;
 try{firebase.initializeApp(firebaseConfig);auth=firebase.auth();db=firebase.database();fbOK=true;}catch(e){console.warn('firebase',e);}
 var APP_NAME='podstudio';
+var BUILD_ID='2026-07-12-fix-race';   // 새 파일 확인용
 // 사용자 데이터: jsapps/podstudio/data/{uid}, jsapps/podstudio/users/{uid}, 결제: jsapps/podstudio/payment/{uid}
 function dataRef(uid,sub){return db.ref('jsapps/'+APP_NAME+'/data/'+uid+(sub?'/'+sub:''))}
 function userRef(uid){return db.ref('jsapps/'+APP_NAME+'/users/'+uid)}
@@ -1207,8 +1084,10 @@ function coverSpec(o){
     note:'무선: 재단여백 '+bl+'mm 사방 · 전면 채움'};
 }
 function innerSpec(o){
-  var s=SIZES[o.sizeId],bl=o.bleed||BLEED;
-  return {trimW:s.w,trimH:s.h,workW:+(s.w+bl*2).toFixed(1),workH:+(s.h+bl*2).toFixed(1),bleed:bl,
+  var s=SIZES[o.sizeId];
+  // 교보 제출 규격 = 판형 크기 그대로 (실제 심사 통과본 기준: 신국판 → 152×225mm)
+  // 교보 내지 템플릿이 이미 재단여백을 포함해 제작되어 있으므로, 별도로 3mm를 더하지 않음.
+  return {trimW:s.w,trimH:s.h,workW:s.w,workH:s.h,bleed:0,
     margins:{top:18,bottom:18,outer:16,inner:22}};
 }
 
@@ -1216,6 +1095,8 @@ function innerSpec(o){
 function hexLum(hex){hex=(hex||'#888').replace('#','');if(hex.length===3)hex=hex.split('').map(function(c){return c+c}).join('');var r=parseInt(hex.slice(0,2),16)/255,g=parseInt(hex.slice(2,4),16)/255,b=parseInt(hex.slice(4,6),16)/255;function f(c){return c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4)}return 0.2126*f(r)+0.7152*f(g)+0.0722*f(b);}
 function isLightBg(hex){return hexLum(hex)>0.55;}
 function fgFor(hex){return isLightBg(hex)?'#1a1a1a':'#ffffff';}
+function hexA(hex,a){hex=(hex||'#000').replace('#','');if(hex.length===3)hex=hex.split('').map(function(c){return c+c}).join('');var r=parseInt(hex.slice(0,2),16),g=parseInt(hex.slice(2,4),16),b=parseInt(hex.slice(4,6),16);return 'rgba('+r+','+g+','+b+','+a+')';}
+function mix(a,b,t){function rb(h){h=(h||'#000').replace('#','');if(h.length===3)h=h.split('').map(function(c){return c+c}).join('');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}var ca=rb(a),cb=rb(b);return '#'+[0,1,2].map(function(i){var v=Math.round(ca[i]+(cb[i]-ca[i])*t);return('0'+Math.max(0,Math.min(255,v)).toString(16)).slice(-2);}).join('');}
 function shade(hex,amt){hex=hex.replace('#','');if(hex.length===3)hex=hex.split('').map(function(c){return c+c}).join('');var r=parseInt(hex.slice(0,2),16),g=parseInt(hex.slice(2,4),16),b=parseInt(hex.slice(4,6),16);r=Math.max(0,Math.min(255,Math.round(r+amt)));g=Math.max(0,Math.min(255,Math.round(g+amt)));b=Math.max(0,Math.min(255,Math.round(b+amt)));return '#'+[r,g,b].map(function(x){return('0'+x.toString(16)).slice(-2)}).join('');}
 
 /* ---------- 표지 스타일 100+ 생성 (solid · 그라데이션 · 듀오톤) ---------- */
@@ -1274,11 +1155,11 @@ function effStyle(){
 /* ---------- 요금제 ---------- */
 var PLANS={
   free:{id:'free',name:'무료',price:0,tag:'미리보기',export:false,cycle:'',
-    feats:[['모든 판형·제본 미리보기',1],['재단선·안전영역 확인',1],['AI 표지·문구 제안',1],['워터마크 미리보기',1],['파일 추출(zip)',0]]},
-  single:{id:'single',name:'건당 추출',price:9900,tag:'한 권만',export:'credit',cycle:'/회',hot:false,
-    feats:[['표지·내지 PDF 추출',1],['표지·내지 DOCX 추출',1],['pod_assets.zip 다운로드',1],['워터마크 없음',1],['추출 1회권',1]]},
-  premium:{id:'premium',name:'프리미엄',price:99000,tag:'가장 인기 · 연간',export:'unlimited',cycle:'/년',hot:true,
-    feats:[['무제한 추출 (공정 사용)',1],['표지·내지 PDF+DOCX',1],['pod_assets.zip 다운로드',1],['워터마크 없음',1],['우선 지원',1]]}
+    feats:[['모든 판형 규격 자동 변환 미리보기',1],['재단선·안전영역 확인',1],['판권 자동 생성 미리보기',1],['규격 자가검증',1],['내지 PDF 추출',0]]},
+  single:{id:'single',name:'건당 추출',price:3300,tag:'한 권만',export:'credit',cycle:'/회',hot:false,
+    feats:[['내지 PDF 규격 변환·추출',1],['판권 자동 삽입',1],['재단선 안전 자동 축소',1],['워터마크 없음',1],['추출 1회권',1]]},
+  premium:{id:'premium',name:'프리미엄',price:22000,tag:'가장 인기 · 연간',export:'unlimited',cycle:'/년',hot:true,
+    feats:[['무제한 추출 (공정 사용)',1],['내지 PDF 규격 변환·추출',1],['판권 자동 삽입',1],['워터마크 없음',1],['우선 지원',1]]}
 };
 function planOf(id){return PLANS[id]||PLANS.free;}
 
@@ -1382,20 +1263,52 @@ async function applyPurchase(planId,data){
   var p=PLANS[planId]||PLANS.premium,now=Date.now();
   var txn=(data&&(data.transactionId||data.paymentId))||('tx_'+now);
   track('purchase',{currency:'KRW',value:p.price||0,plan:planId,transaction_id:txn});
-  try{PM.sale('subscription',p.name,p.price||0);}catch(e){}
+  try{PM.sale(planId==='premium'?'subscription':'one_time',p.name,p.price||0);}catch(e){}
   if(!profile)profile={};
-  // 프리미엄 = 연간 구독
-  profile.membership={plan:'premium',status:'active',startedAt:now,expiresAt:now+365*24*3600*1000,provider:'portone'};
-  try{
-    if(user){
-      await dataRef(user.uid,'profile').update({membership:profile.membership,updatedAt:now});
-      await payRef(user.uid,txn).set({plan:planId,price:p.price||0,txn:txn,at:now,provider:'portone'});
-    }
-  }catch(e){}
-  updateGating();renderSettings();
-  toast('프리미엄 연간 회원권이 시작됐어요 🎉');
+  var single=(planId!=='premium');
+  // ★ credits / reexportUntil / membership 은 서버(portoneConfirmBilling)가 기록합니다.
+  //   클라이언트는 결제 후 서버 값을 다시 읽어오기만 합니다(위변조 방지).
+  try{ if(user) await payRef(user.uid,txn).set({plan:planId,price:p.price||0,txn:txn,at:now,provider:'portone'}); }catch(e){}
+  await refreshEntitlements();
+  renderSettings();
+  toast(single?'추출권 1회가 적립됐어요 🎉':'프리미엄 연간 회원권이 시작됐어요 🎉');
   closeModal();
-  if(pendingExport){pendingExport=false;setTimeout(function(){if(isPremiumActive())runExport();},400);}
+  if(pendingExport){pendingExport=false;setTimeout(function(){if(isPremiumActive()||hasCredit())runExport();},400);}
+}
+function hasCredit(){return (Number(profile&&profile.credits)||0)>0;}
+var REEXPORT_MS=24*3600*1000;   // 결제 후 24시간 동안 무제한 재추출
+function reexportLeft(){
+  var t=Number(profile&&profile.reexportUntil)||0;
+  var left=t-Date.now();
+  return left>0?left:0;
+}
+function canReexport(){return reexportLeft()>0;}
+function fmtLeft(ms){
+  var h=Math.floor(ms/3600000), m=Math.floor((ms%3600000)/60000);
+  if(h>0)return h+'시간 '+m+'분';
+  return m+'분';
+}
+// 재추출 기간·크레딧은 '서버'가 결제 검증 후 기록합니다(클라이언트 쓰기 금지).
+// 여기서는 서버가 쓴 값을 다시 읽어오기만 합니다.
+async function refreshEntitlements(){
+  if(!user)return;
+  try{
+    var snap=await db.ref('apps/config/'+APP_NAME+'/data/'+user.uid+'/profile').once('value');
+    var v=snap.val()||{};
+    if(!profile)profile={};
+    // 서버가 기록한 값만 병합. 읽기 실패/권한오류 시 기존 profile(가입정보)은 절대 건드리지 않음.
+    if(v.credits!=null)profile.credits=Number(v.credits)||0;
+    if(v.reexportUntil!=null)profile.reexportUntil=Number(v.reexportUntil)||0;
+    if(v.membership)profile.membership=v.membership;
+  }catch(e){}
+  updateGating();
+  try{renderReBanner();}catch(e){}
+}
+// 크레딧 차감도 서버가 담당해야 안전하지만, 현재 추출은 브라우저에서 수행됩니다.
+// 최소 구조: 서버가 부여한 24시간 재추출 기간(reexportUntil) 안에서만 추출을 허용합니다.
+async function useCredit(){
+  await refreshEntitlements();
+  return canReexport();
 }
 var Payment={provider:PortOneAdapter,checkout:async function(plan){if(!this.provider)return {ok:false,reason:'결제 모듈 미연결'};try{return await this.provider.checkout(plan);}catch(e){return {ok:false,reason:String(e&&e.message||e)};}}};
 
@@ -1447,9 +1360,12 @@ function freshState(){return {
   platform:'kyobo',sizeId:'sinuk',pages:120,paperId:'white',binding:'flapless',bleed:3,
   title:'',subtitle:'',author:'',publisher:'퍼플',
   copyPos:'front',pubdate:todayISO(),copyAuthor:'',
+  crFont:'notosans',
+  pageNum:'none',pageNumPos:'outer',pageNumSize:9,pageNumStart:1,pageNumSkip:0,
   coverImg:null,coverTone:null,backImg:null,backTone:null,styleId:'s0',customBg:null,customBase:null,fgColor:null,fontFamily:'',
-  coverImgMargin:{top:0,right:0,bottom:0,left:0},
-  styleText:'',backMode:'text',backText:'',
+  coverMode:'auto',category:'self',layoutId:null,layoutSeed:0,
+  coverImgMargin:{top:0,right:0,bottom:0,left:0},coverImgScale:1,
+  styleText:'',backMode:'text',backText:'',backTextSize:null,backTextY:12,
   logoPos:['front'],logoImg:null,logoColorOn:false,logoColor:'#ffffff',logoSize:12,
   // 날개: 타이틀/내용 별도 + 각각 폰트 크기·색
   flapL:{title:'',body:'',titleSize:18,titleColor:'',bodySize:13,bodyColor:'',titleY:14,bodyY:34},
@@ -1473,14 +1389,16 @@ function canExport(){
 
 /* ================= 라우팅 ================= */
 function go(view){
-  if(view==='app'&&!requireAgree())return;
+  if(view==='quick'&&!requireAgree())return;
   $$('.view').forEach(function(v){v.classList.remove('on')});
-  var el=$('#view-'+view);if(el)el.classList.add('on');
-  if(view==='pricingL'){$('#view-landing').classList.add('on');var t=$('#pricingL');if(t)t.scrollIntoView({behavior:'smooth'});}
+  var el=document.getElementById('view-'+view);
+  if(!el){view='landing';el=document.getElementById('view-landing');}
+  if(el)el.classList.add('on');
+  if(view==='pricingL'){var lv=document.getElementById('view-landing');if(lv)lv.classList.add('on');var t=$('#pricingL');if(t)t.scrollIntoView({behavior:'smooth'});}
   else window.scrollTo(0,0);
   if(view==='pricing')renderPlans($('#plansApp'),true);
   if(view==='settings')renderSettings();
-  if(view==='app'){renderProjList();updateGating();renderStep();renderPreview();}
+  if(view==='quick'){try{updateGating();hydrateQuick();}catch(e){console.warn('quick init',e);}}
   track('view',{name:view});
 }
 $$('[data-go]').forEach(function(b){b.addEventListener('click',function(){go(b.dataset.go)})});
@@ -1489,6 +1407,9 @@ $('#navBrand').addEventListener('click',function(){go('landing')});
 
 /* ================= AUTH ================= */
 var SESSION_MS=24*3600*1000;
+var profileLoaded=false, _profileResolve=null;
+var profileReady=new Promise(function(res){_profileResolve=res;});
+function markProfileLoaded(){profileLoaded=true;if(_profileResolve){_profileResolve();_profileResolve=null;}}
 if(fbOK){try{auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);}catch(e){}}
 function gLogin(){
   if(!fbOK){toast('로그인 모듈을 불러오지 못했어요');return;}
@@ -1496,7 +1417,7 @@ function gLogin(){
   auth.signInWithPopup(provider).catch(function(e){toast('로그인 실패: '+(e.code||e.message));});
 }
 $('#loginNav').addEventListener('click',gLogin);
-$('#heroStart').addEventListener('click',function(){if(user){go('app');}else{gLogin();}});
+$('#heroStart').addEventListener('click',function(){if(user){go('quick');}else{gLogin();}});
 $('#logoutBtn').addEventListener('click',function(){auth.signOut();});
 $('#cancelSignup').addEventListener('click',function(){auth.signOut();});
 
@@ -1504,17 +1425,56 @@ function navState(loggedIn){$('#navGuest').style.display=loggedIn?'none':'flex';
 var loadedUid=null;
 if(fbOK)auth.onAuthStateChanged(async function(u){
   user=u;
-  if(!u){loadedUid=null;profile=null;navState(false);go('landing');return;}
+  if(!u){loadedUid=null;profile=null;markProfileLoaded();navState(false);go('landing');return;}
   var last=(u.metadata&&u.metadata.lastSignInTime)?new Date(u.metadata.lastSignInTime).getTime():0;
   if(last&&(Date.now()-last)>SESSION_MS){toast('세션이 만료돼 다시 로그인해 주세요');auth.signOut();return;}
   $('#navAvatar').src=u.photoURL||'';
   if(u.uid===loadedUid)return;
   loadedUid=u.uid;navState(true);
-  try{var snap=await dataRef(u.uid,'profile').once('value');profile=snap.val();}catch(e){profile=null;}
-  // 서버 웹훅이 apps/config/podstudio 에 남긴 멤버십을 병합 (있으면 우선)
-  try{var m=await db.ref('apps/config/'+APP_NAME+'/data/'+u.uid+'/profile/membership').once('value');var mv=m.val();if(mv){profile=profile||{};profile.membership=mv;}}catch(e){}
-  if(!profile||!profile.agreedAt){showSignup();return;}
-  await afterLogin();
+  var _profErr=null;
+  try{
+    var snap=await dataRef(u.uid,'profile').once('value');
+    profile=snap.val();
+    if(!IS_LIVE)console.log('[POD] profile 읽기 성공:', 'jsapps/'+APP_NAME+'/data/'+u.uid+'/profile', profile);
+  }catch(e){
+    profile=null;_profErr=e;
+    if(!IS_LIVE)console.error('[POD] profile 읽기 실패 (jsapps/'+APP_NAME+'/data/'+u.uid+'/profile)', e&&(e.code||e.message||e));
+  }
+  // 서버가 apps/config/podstudio 에 남긴 멤버십 병합 (실패해도 무시)
+  try{var m=await db.ref('apps/config/'+APP_NAME+'/data/'+u.uid+'/profile/membership').once('value');var mv=m.val();if(mv){profile=profile||{};profile.membership=mv;}}catch(e){if(!IS_LIVE)console.warn('[POD] membership 읽기 스킵',e&&(e.code||e.message));}
+
+  markProfileLoaded();
+  if(_profErr){
+    // 프로필을 못 읽었을 때: 가입화면으로 잘못 보내지 않는다(계정 유실 방지)
+    var _code=(_profErr&&(_profErr.code||_profErr.message))||'unknown';
+    if(!IS_LIVE){
+      // 샌드박스/로컬에서만 원인을 자세히 노출
+      openModal('데이터를 불러올 수 없어요 (개발용 진단)',
+        '경로: jsapps/'+APP_NAME+'/data/'+u.uid+'/profile\n오류: '+_code+
+        '\n\nFirebase 보안 규칙에서 이 경로의 읽기/쓰기가 허용되어 있는지 확인해 주세요.',
+        '확인',closeModal);
+    }else{
+      toast('일시적인 오류로 정보를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.');
+    }
+    return;
+  }
+  markProfileLoaded();
+  if(!profile||!profile.agreedAt){
+    if(!IS_LIVE){
+      console.log('[POD] agreedAt 없음 → 가입 화면');
+      console.log('[POD] 로그인 uid =',u.uid);
+      console.log('[POD] 읽은 경로 =','jsapps/'+APP_NAME+'/data/'+u.uid+'/profile');
+      console.log('[POD] 읽은 값 =',profile);
+      var _dbg=document.createElement('div');
+      _dbg.style.cssText='position:fixed;left:8px;bottom:8px;z-index:99999;background:#7a1020;color:#fff;font:11px/1.5 monospace;padding:8px 10px;border-radius:8px;max-width:60vw;word-break:break-all;';
+      _dbg.textContent='[진단] uid='+u.uid+' | profile='+(profile?JSON.stringify(profile).slice(0,120):'null');
+      (document.body||document.documentElement).appendChild(_dbg);
+    }
+    showSignup();return;
+  }
+  markProfileLoaded();
+  try{await refreshEntitlements();}catch(e){}   // 서버가 기록한 구독·크레딧·재추출 기간 로드
+  await afterLogin(false);   // 세션 복원 — 보고 있던 화면 그대로 유지
   try{await handlePortoneReturn();}catch(e){}
 });
 
@@ -1535,17 +1495,30 @@ $('#doSignup').addEventListener('click',async function(){
   try{
     await dataRef(user.uid,'profile').update({name:profile.name,email:profile.email,photoURL:profile.photoURL,author:profile.author,agreedAt:now,createdAt:now,credits:0});
     await userRef(user.uid).update({name:profile.name,email:profile.email,createdAt:now,platform:'web'});
-  }catch(e){toast('저장 실패: '+(e.code||e.message));return;}
+  }catch(e){
+    var _c=(e&&(e.code||e.message))||'unknown';
+    if(!IS_LIVE){
+      console.error('[POD] 가입 저장 실패 (jsapps/'+APP_NAME+'/data/'+user.uid+'/profile)', _c);
+      openModal('가입 정보를 저장하지 못했어요 (개발용 진단)',
+        '경로: jsapps/'+APP_NAME+'/data/'+user.uid+'/profile\n오류: '+_c+
+        '\n\n이 경로에 쓰기 권한이 없으면 가입이 완료되지 않아 계속 가입 화면이 나옵니다.',
+        '확인',closeModal);
+    }else{
+      toast('저장 실패: '+_c);
+    }
+    return;
+  }
   track('sign_up');PM.event('sign_up',user.email||'');
   $('#welcomeName').textContent=(profile.name)+'님, 이제 POD Studio와 함께 나만의 책을 만들어봐요.';
   go('welcome');
 });
-$('#goApp').addEventListener('click',function(){afterLogin();});
+$('#goApp').addEventListener('click',function(){afterLogin(true);});
 
-async function afterLogin(){
+async function afterLogin(navigate){
   st.author=st.author||profile.author||'';
   st.publisher='퍼플';
-  hydrateInputs();renderProjList();updateGating();go('app');
+  updateGating();
+  if(navigate)go('quick');   // 새로고침(세션 복원) 시에는 현재 화면 유지
 }
 async function saveProfile(patch){
   if(!user||!profile)return;
@@ -1578,20 +1551,7 @@ function renderSizeGrid(){
     host.appendChild(el);
   });
 }
-function renderStyleGrid(){
-  var host=$('#styleGrid');if(!host)return;host.innerHTML='';
-  var q=($('#styleSearch')&&$('#styleSearch').value||'').trim().toLowerCase();
-  var list=STYLES.filter(function(s){return !q||s.kw.indexOf(q)>=0||s.name.toLowerCase().indexOf(q)>=0;});
-  if(!list.length){host.innerHTML='<div style="grid-column:1/-1;padding:20px;text-align:center;color:var(--ink-3);font-size:13px">검색 결과가 없어요</div>';return;}
-  list.forEach(function(s){
-    var el=document.createElement('div');el.className='swatch'+(!st.customBg&&s.id===st.styleId?' sel':'');
-    el.style.background=s.bg;el.title=s.name;
-    var lt=isLightBg(s.base);
-    el.innerHTML='<span class="sname" style="color:'+(lt?'#111':'#fff')+';background:'+(lt?'rgba(255,255,255,.6)':'rgba(0,0,0,.32)')+'">'+esc(s.name)+'</span>';
-    el.addEventListener('click',function(){st.styleId=s.id;st.customBg=null;st.customBase=null;st.fgColor=null;$('#fgColor').value=s.fg;renderStyleGrid();renderPreview();autosave();});
-    host.appendChild(el);
-  });
-}
+function renderStyleGrid(){}
 function enforceBinding(){
   $$('#bindingChoices .choice').forEach(function(c){
     var b=c.dataset.bind,ok=bindingAllowed(st.sizeId,b);
@@ -1622,9 +1582,16 @@ function setBackMode(m){
 }
 function hydrateInputs(){
   $('#title').value=st.title;$('#subtitle').value=st.subtitle;$('#author').value=st.author;
+  renderCatGrid();
+  $$('#coverModeSeg .segbtn').forEach(function(b){b.classList.toggle('on',b.dataset.cmode===(st.coverMode||'auto'));});
+  var acb=$('#autoCoverBox');if(acb)acb.style.display=((st.coverMode||'auto')==='auto')?'block':'none';
+  var sgd=$('#styleGrid');if(sgd)sgd.style.display=((st.coverMode||'auto')==='auto')?'none':'';
+  updateLayoutName();
   $('#publisher').value=st.publisher||'퍼플';
   $('#pubdate').value=st.pubdate;$('#copyAuthor').value=st.author;
   $('#backText').value=st.backText;
+  if($('#backTextSize')){$('#backTextSize').value=st.backTextSize||12;$('#backTextSizeV').textContent=st.backTextSize?st.backTextSize+'px':'자동';}
+  if($('#backTextY')){$('#backTextY').value=st.backTextY!=null?st.backTextY:12;$('#backTextYV').textContent=(st.backTextY!=null?st.backTextY:12)+'%';}
   var L=st.flapL||{},R=st.flapR||{};
   $('#flapLTitle').value=L.title||'';$('#flapLBody').value=L.body||'';$('#flapLTitleSize').value=L.titleSize||18;$('#flapLBodySize').value=L.bodySize||13;
   $('#flapLTitleColor').value=L.titleColor||'#ffffff';$('#flapLBodyColor').value=L.bodyColor||'#ffffff';
@@ -1633,7 +1600,6 @@ function hydrateInputs(){
   $('#flapRTitleColor').value=R.titleColor||'#ffffff';$('#flapRBodyColor').value=R.bodyColor||'#ffffff';
   $('#flapRTitleY').value=R.titleY!=null?R.titleY:14;$('#flapRBodyY').value=R.bodyY!=null?R.bodyY:34;
   $('#bleed').value=st.bleed;$('#bleedOut').textContent=st.bleed+'mm';
-  var pf=$('#pages');if(pf)pf.value=st.pages||120;
   $('#spineTitle').checked=st.spineShowTitle!==false;$('#spineAuthor').checked=!!st.spineShowAuthor;
   $('#spineTitleColor').value=st.spineTitleColor||'#ffffff';$('#spineTitleSize').value=st.spineTitleSize||11;$('#spineTitleY').value=st.spineTitleY!=null?st.spineTitleY:45;
   $('#spineAuthorColor').value=st.spineAuthorColor||'#ffffff';$('#spineAuthorSize').value=st.spineAuthorSize||10;$('#spineAuthorY').value=st.spineAuthorY!=null?st.spineAuthorY:72;
@@ -1643,12 +1609,15 @@ function hydrateInputs(){
   $$('#paperChoices .choice').forEach(function(c){c.classList.toggle('sel',c.dataset.paper===st.paperId)});
   $$('#copyChoices .choice').forEach(function(c){c.classList.toggle('sel',c.dataset.copy===st.copyPos)});
   if(st.coverImg){$('#coverThumbImg').src=st.coverImg;$('#coverThumb').style.display='flex';$('#coverImgNote').style.display='block';$('#coverMarginBox').style.display='block';}else{$('#coverThumb').style.display='none';$('#coverImgNote').style.display='none';$('#coverMarginBox').style.display='none';}
+  if($('#cmScale')){$('#cmScale').value=st.coverImgScale||1;$('#cmScaleV').textContent=Math.round((st.coverImgScale||1)*100)+'%';}
+  if(st.coverImg&&!st._coverBlur)makeBlur(st.coverImg,function(){try{renderPreview();}catch(e){}},'_coverBlur');
+  if(st.backImg&&!st._backBlur)makeBlur(st.backImg,function(){try{renderPreview();}catch(e){}},'_backBlur');
+  updateImgNotice();
   var cm=st.coverImgMargin||{top:0,right:0,bottom:0,left:0};
   ['Top','Right','Bottom','Left'].forEach(function(k){var lo=k.toLowerCase();var el=$('#cm'+k);if(el){el.value=cm[lo]||0;$('#cm'+k+'V').textContent=(cm[lo]||0);}});
   if(st.backImg){$('#backThumbImg').src=st.backImg;$('#backThumb').style.display='flex';}else if($('#backThumb')){$('#backThumb').style.display='none';}
-  if(st.logoImg){$('#logoImgState').textContent='로고 이미지 적용됨';$('#logoImgClear').style.display='inline-flex';}else{$('#logoImgState').textContent='기본은 ‘퍼플’ 워드마크. PNG를 올리면 그 이미지가 그대로 사용돼요.';$('#logoImgClear').style.display='none';}
   $('#logoColorOn').checked=!!st.logoColorOn;$('#logoColor').value=st.logoColor||'#ffffff';$('#logoSize').value=st.logoSize||12;
-  refreshLogoCache();
+  refreshLogoCache().then(function(){try{renderPreview();}catch(e){}});
   if(st.innerPdf){$('#innerName').textContent=st.innerPdfName||'내지.pdf';$('#innerThumb').style.display='flex';}else if($('#innerThumb')){$('#innerThumb').style.display='none';}
   syncLogoUI();setBackMode(st.backMode||'text');
   renderSizeGrid();renderStyleGrid();enforceBinding();
@@ -1657,8 +1626,9 @@ function hydrateInputs(){
 function bindInput(id,key){var e=$('#'+id);if(!e)return;e.addEventListener('input',function(){st[key]=this.value;if(key==='author'){$('#copyAuthor').value=this.value;}renderPreview();renderSpec();autosave();});}
 ['title','subtitle','author'].forEach(function(k){bindInput(k,k);});
 bindInput('backText','backText');
+$('#backTextSize')&&$('#backTextSize').addEventListener('input',function(){st.backTextSize=parseFloat(this.value);$('#backTextSizeV').textContent=this.value+'px';renderPreview();autosave();});
+$('#backTextY')&&$('#backTextY').addEventListener('input',function(){st.backTextY=parseFloat(this.value);$('#backTextYV').textContent=this.value+'%';renderPreview();autosave();});
 $('#pubdate').addEventListener('change',function(){st.pubdate=this.value;renderPreview();autosave();});
-$('#pages')&&$('#pages').addEventListener('input',function(){var v=parseInt(this.value)||120;st.pages=Math.max(20,Math.min(1000,v));renderPreview(true);renderSpec();autosave();});
 $('#bleed').addEventListener('input',function(){st.bleed=parseFloat(this.value);$('#bleedOut').textContent=st.bleed+'mm';renderPreview();renderSpec();autosave();});
 $('#styleSearch').addEventListener('input',function(){renderStyleGrid();});
 $('#applyColor').addEventListener('click',function(){var v=$('#customColor').value;st.customBg=v;st.customBase=v;st.fgColor=null;$('#fgColor').value=fgFor(v);renderStyleGrid();renderPreview();autosave();});
@@ -1666,6 +1636,173 @@ $('#applyGrad').addEventListener('click',function(){var v=$('#customColor').valu
 $('#customColor').addEventListener('input',function(){if(st.customBg){var v=this.value;st.customBg=/gradient/.test(st.customBg)?'linear-gradient(150deg,'+v+','+shade(v,isLightBg(v)?-40:48)+')':v;st.customBase=v;renderPreview();}});
 $('#fgColor').addEventListener('input',function(){st.fgColor=this.value;renderPreview();autosave();});
 $('#fontFamily')&&$('#fontFamily').addEventListener('change',function(){st.fontFamily=this.value;renderPreview();autosave();});
+
+/* ===== AI 자동 표지 구성 (B 컨셉) ===== */
+function renderCatGrid(){}
+function updateLayoutName(){}
+function setCoverMode(){}
+$$('#coverModeSeg .segbtn').forEach(function(b){b.addEventListener('click',function(){setCoverMode(this.dataset.cmode);});});
+$('#autoGenBtn')&&$('#autoGenBtn').addEventListener('click',function(){
+  // 이미지가 있으면 톤 재추출 후 대표 레이아웃으로 자동 구성
+  st.layoutId=null;st.layoutSeed=0;
+  if(st.coverImg){deriveTone(st.coverImg,function(){renderPreview();updateLayoutName();},'coverTone');}
+  else{renderPreview();updateLayoutName();}
+  toast('카테고리에 맞춰 표지를 구성했어요');autosave();
+});
+$('#variantBtn')&&$('#variantBtn').addEventListener('click',function(){
+  var cat=CATEGORIES[st.category]||CATEGORIES.self;
+  st.layoutSeed=((st.layoutSeed||0)+1)%cat.layouts.length;
+  st.layoutId=cat.layouts[st.layoutSeed];
+  renderPreview(true);updateLayoutName();autosave();
+});
+
+/* ===== 간편 제작(Quick) 화면 ===== */
+function renderQSizeGrid(){
+  var g=$('#qSizeGrid');if(!g||!g.parentNode)return;g.innerHTML='';
+  Object.keys(SIZES).sort(function(a,b){return SIZES[a].order-SIZES[b].order;}).forEach(function(k){
+    var s=SIZES[k];
+    var d=document.createElement('div');
+    d.className='sizechip'+(st.sizeId===k?' on':'');
+    d.innerHTML='<b>'+s.name+'</b><span>'+s.w+'×'+s.h+'mm</span><em>'+s.use+'</em>';
+    d.addEventListener('click',function(){st.sizeId=k;st._sizeManual=true;renderQSizeGrid();updateQSpecLine();autosave();});
+    g.appendChild(d);
+  });
+  updateQSpecLine();
+}
+function updateQSpecLine(){
+  var el=$('#qSpecLine');if(!el||!el.parentNode)return;
+  var w=innerSpec(st),s=SIZES[st.sizeId];
+  var detected=(st._pdfMmW&&st._pdfMmH)?('업로드 원고 '+st._pdfMmW+'×'+st._pdfMmH+'mm → '):'';
+  el.innerHTML='📐 '+detected+'<b>출력 규격 '+w.workW+'×'+w.workH+'mm</b> '+
+    '<span style="color:var(--ink-3)">('+s.name+' 실제 책 크기 — 교보 제출 규격)</span>';
+}
+function matchSizeToPdf(){
+  if(!st._pdfMmW||!st._pdfMmH)return null;
+  var w=st._pdfMmW,h=st._pdfMmH,best=null,bd=1e9;
+  Object.keys(SIZES).forEach(function(k){var s=SIZES[k];
+    [[s.w,s.h],[s.w+2*st.bleed,s.h+2*st.bleed]].forEach(function(dim){
+      var d=Math.abs(dim[0]-w)+Math.abs(dim[1]-h);if(d<bd){bd=d;best=k;}
+    });
+  });
+  if(best&&bd<=10)st.sizeId=best;
+  return {id:best,dist:bd};
+}
+async function qHandleInner(f){
+  if(!f)return;
+  if(f.type!=='application/pdf'&&!/\.pdf$/i.test(f.name||'')){toast('PDF 파일만 올릴 수 있어요');return;}
+  var r=new FileReader();
+  r.onload=async function(){
+    st.innerPdf=r.result;st.innerPdfName=f.name;
+    var nn=$('#innerName');if(nn)nn.textContent=f.name;var it=$('#innerThumb');if(it)it.style.display='flex';
+    await preparePdfPreview();
+    var m=st._sizeManual?null:matchSizeToPdf();var s=SIZES[st.sizeId];
+    var info=$('#qInnerInfo');
+    if(info){info.style.display='block';
+      info.innerHTML='✅ <b>'+(st._pdfPages||'?')+'쪽</b> · 판형 자동 감지: <b>'+s.name+' '+s.w+'×'+s.h+'mm</b>'+((m&&m.dist>10)?' <span style="color:var(--err)">(표준 판형과 정확히 일치하지 않아 가장 가까운 값 · 세부 편집에서 변경 가능)</span>':'');}
+    var im=$('#innerMeta');if(im)im.textContent=(st._pdfPages?st._pdfPages+'페이지':'')+' · 로컬 처리';
+    renderQSizeGrid();autosave();
+  };
+  r.readAsDataURL(f);
+}
+$('#qInnerDrop')&&$('#qInnerDrop').addEventListener('click',function(){$('#qInnerFile').click();});
+$('#qInnerFile')&&$('#qInnerFile').addEventListener('change',function(){qHandleInner(this.files&&this.files[0]);});
+(function(){var dz=$('#qInnerDrop');if(!dz)return;['dragenter','dragover'].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.add('dragover');});});['dragleave','dragend','drop'].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.remove('dragover');});});dz.addEventListener('drop',function(e){e.preventDefault();qHandleInner(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0]);});})();
+
+function applyQCoverImageMode(){}
+function qSetCoverTab(){}
+function renderQCatGrid(){}
+$('#qTitle')&&$('#qTitle').addEventListener('input',function(){st.title=this.value;autosave();});
+$('#qAuthor')&&$('#qAuthor').addEventListener('input',function(){st.author=this.value;autosave();});
+$('#qPubdate')&&$('#qPubdate').addEventListener('change',function(){st.pubdate=this.value;autosave();});
+$('#qCopyPos')&&$('#qCopyPos').addEventListener('change',function(){st.copyPos=this.value;autosave();});
+$('#qCrFont')&&$('#qCrFont').addEventListener('change',function(){st.crFont=this.value;autosave();});
+$('#qGenerate')&&$('#qGenerate').addEventListener('click',function(){
+  if(!requireAgree())return;
+  if(!st.innerPdf){toast('먼저 원고 PDF를 올려주세요');var d=$('#qInnerDrop');if(d)d.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  if(!st.title||!st.title.trim()){toast('책 제목을 입력해 주세요');var qt=$('#qTitle');if(qt)qt.focus();return;}
+  if(!st.author||!st.author.trim()){toast('저자를 입력해 주세요');var qa=$('#qAuthor');if(qa)qa.focus();return;}
+  applyQCoverImageMode();
+  if(!user){gLogin();return;}
+  if(isPremiumActive()){runExport();return;}         // 구독 중이면 바로 추출
+  if(canReexport()){runExport();return;}             // 24시간 재추출 기간 내
+  if(hasCredit()){runExport();return;}               // 건당 추출권 보유 시
+  showMembershipModal();                             // 아니면 건당/구독 선택
+});
+function fmtDateK(ms){
+  try{var d=new Date(ms);return d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일';}catch(e){return '';}
+}
+function renderReBanner(){
+  var el=$('#qReBanner');var hint=$('#qReHint');
+  var hasEl=el&&el.parentNode, hasHint=hint&&hint.parentNode;
+  if(!hasEl&&!hasHint)return;
+  function paint(cls,icon,title,big,desc,hintTxt){
+    if(hasEl){
+      el.style.display='flex';
+      el.className='qrebanner'+(cls?' '+cls:'');
+      el.innerHTML='<div class="rbi">'+icon+'</div><div class="rbc">'+
+        '<div class="rbt">'+title+'</div>'+
+        (big?'<div class="rbtime">'+big+'</div>':'')+
+        '<div class="rbd">'+desc+'</div></div>';
+    }
+    if(hasHint){
+      hint.style.display='block';
+      hint.className='qrehint'+(cls?' '+cls:'');
+      hint.innerHTML=hintTxt;
+    }
+  }
+  function hide(){ if(hasEl)el.style.display='none'; if(hasHint)hint.style.display='none'; }
+
+  // ── 프리미엄 ──
+  if(isPremiumActive()){
+    var exp=Number(profile&&profile.membership&&profile.membership.expiresAt)||0;
+    if(!exp){paint('prem','✨','프리미엄 구독 중','','언제든 무제한으로 추출할 수 있어요.','✨ 프리미엄 구독 중 — 무제한 추출');return;}
+    var daysLeft=Math.ceil((exp-Date.now())/86400000);
+    if(daysLeft<=30){
+      paint('warn-x','⏳','프리미엄 만료 임박',daysLeft+'일 남음',
+        '<b>'+fmtDateK(exp)+'</b>에 자동 갱신됩니다. 원하지 않으시면 설정에서 해지할 수 있어요.',
+        '⏳ 프리미엄 만료 <b>'+daysLeft+'일</b> 전 · '+fmtDateK(exp)+' 자동 갱신');
+    }else{
+      paint('prem','✨','프리미엄 구독 중','무제한 추출',
+        '<b>'+fmtDateK(exp)+'</b>까지 몇 번이든 자유롭게 추출할 수 있어요.',
+        '✨ 프리미엄 구독 중 — 무제한 추출 (<b>'+fmtDateK(exp)+'</b>까지)');
+    }
+    return;
+  }
+  // ── 건당 결제 후 24시간 재추출 ──
+  var left=reexportLeft();
+  if(left>0){
+    paint('','🔄','재추출 무료 기간',fmtLeft(left)+' 남음',
+      '추가 결제 없이 <b>몇 번이든 다시 추출</b>할 수 있어요. 판형·판권을 바꿔 마음에 들 때까지 만들어 보세요.',
+      '🔄 무료 재추출 가능 — <b>'+fmtLeft(left)+'</b> 남음');
+    return;
+  }
+  hide();
+}
+// [샌드박스 전용] 빌드 스탬프 — 이 배지가 안 보이면 브라우저가 옛 파일을 캐시 중입니다.
+(function(){
+  try{
+    if(IS_LIVE)return;
+    var b=document.createElement('div');
+    b.textContent='BUILD '+BUILD_ID;
+    b.style.cssText='position:fixed;right:8px;bottom:8px;z-index:99999;background:#191F28;color:#0f0;font:11px/1.4 monospace;padding:4px 8px;border-radius:6px;opacity:.85;pointer-events:none';
+    (document.body||document.documentElement).appendChild(b);
+    console.log('[POD] BUILD',BUILD_ID);
+  }catch(e){}
+})();
+var _reTimer=setInterval(function(){try{renderReBanner();}catch(e){}},30000);
+function hydrateQuick(){
+  renderReBanner();
+  var qt=$('#qTitle');if(qt)qt.value=st.title||'';var qa=$('#qAuthor');if(qa)qa.value=st.author||'';
+  var qp=$('#qPubdate');if(qp&&qp.parentNode)qp.value=st.pubdate||'';
+  var qc=$('#qCopyPos');if(qc&&qc.parentNode)qc.value=st.copyPos||'front';
+  var qf=$('#qCrFont');
+  if(qf&&qf.parentNode&&!qf.options.length){
+    Object.keys(CR_FONTS).forEach(function(k){var o=document.createElement('option');o.value=k;o.textContent=CR_FONTS[k].name;qf.appendChild(o);});
+  }
+  if(qf&&qf.parentNode)qf.value=st.crFont||'notosans';
+  renderQSizeGrid();
+  if(st.innerPdf&&st._pdfPages){var s=SIZES[st.sizeId];var info=$('#qInnerInfo');if(info){info.style.display='block';info.innerHTML='✅ <b>'+st._pdfPages+'쪽</b> · 판형: <b>'+s.name+' '+s.w+'×'+s.h+'mm</b>';}}
+}
 // 날개 편집 (타이틀/내용 각각 크기·색)
 function bindFlap(side){
   var o=(side==='L')?'flapL':'flapR';
@@ -1690,9 +1827,6 @@ $('#spineAuthorColor').addEventListener('input',function(){st.spineAuthorColor=t
 $('#spineAuthorSize').addEventListener('input',function(){st.spineAuthorSize=parseFloat(this.value);renderPreview();autosave();});
 $('#spineAuthorY').addEventListener('input',function(){st.spineAuthorY=parseFloat(this.value);renderPreview();autosave();});
 $$('#logoChoices .choice').forEach(function(c){c.addEventListener('click',function(){setLogo(c.dataset.logo);renderPreview();autosave();})});
-$('#logoUploadBtn').addEventListener('click',function(){$('#logoFile').click();});
-$('#logoFile').addEventListener('change',function(){var f=this.files&&this.files[0];if(!f)return;var r=new FileReader();r.onload=async function(){st.logoImg=r.result;$('#logoImgState').textContent='로고 이미지 적용됨';$('#logoImgClear').style.display='inline-flex';await refreshLogoCache();renderPreview();autosave();};r.readAsDataURL(f);});
-$('#logoImgClear').addEventListener('click',async function(){st.logoImg=null;$('#logoFile').value='';$('#logoImgState').textContent='기본은 ‘퍼플’ 워드마크. PNG를 올리면 그 이미지가 그대로 사용돼요.';this.style.display='none';await refreshLogoCache();renderPreview();autosave();});
 $('#logoColorOn').addEventListener('change',async function(){st.logoColorOn=this.checked;await refreshLogoCache();renderPreview();autosave();});
 $('#logoColor').addEventListener('input',async function(){st.logoColor=this.value;if(st.logoColorOn){await refreshLogoCache();}renderPreview();autosave();});
 $('#logoSize').addEventListener('input',function(){st.logoSize=parseFloat(this.value);renderPreview();autosave();});
@@ -1703,22 +1837,50 @@ $$('#copyChoices .choice').forEach(function(c){c.addEventListener('click',functi
 
 // 앞표지 이미지 업로드 → 규격 자동맞춤 + 톤 추출(뒤/옆/날개 자동 매칭)
 $('#coverDrop').addEventListener('click',function(){$('#coverFile').click();});
-$('#coverFile').addEventListener('change',function(){var f=this.files&&this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){st.coverImg=r.result;$('#coverThumbImg').src=r.result;$('#coverThumb').style.display='flex';$('#coverImgNote').style.display='block';$('#coverMarginBox').style.display='block';deriveTone(r.result,function(){renderPreview();autosave();});};r.readAsDataURL(f);});
+$('#coverFile').addEventListener('change',function(){var f=this.files&&this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){st.coverImg=r.result;$('#coverThumbImg').src=r.result;$('#coverThumb').style.display='flex';$('#coverImgNote').style.display='block';$('#coverMarginBox').style.display='block';updateImgNotice();deriveTone(r.result,function(){makeBlur(r.result,function(){renderPreview();autosave();},'_coverBlur');},'coverTone');};r.readAsDataURL(f);});
 
-$('#coverClear').addEventListener('click',function(){st.coverImg=null;st.coverTone=null;$('#coverThumb').style.display='none';$('#coverImgNote').style.display='none';$('#coverMarginBox').style.display='none';$('#coverFile').value='';renderPreview();autosave();});
+$('#coverClear').addEventListener('click',function(){st.coverImg=null;st.coverTone=null;st._coverBlur=null;$('#coverThumb').style.display='none';$('#coverImgNote').style.display='none';$('#coverMarginBox').style.display='none';$('#coverFile').value='';updateImgNotice();renderPreview();autosave();});
 ['Top','Right','Bottom','Left'].forEach(function(k){var lo=k.toLowerCase();var el=$('#cm'+k);if(!el)return;el.addEventListener('input',function(){if(!st.coverImgMargin)st.coverImgMargin={top:0,right:0,bottom:0,left:0};st.coverImgMargin[lo]=parseFloat(this.value)||0;$('#cm'+k+'V').textContent=this.value;renderPreview();autosave();});});
+$('#cmScale')&&$('#cmScale').addEventListener('input',function(){st.coverImgScale=parseFloat(this.value)||1;$('#cmScaleV').textContent=Math.round(st.coverImgScale*100)+'%';renderPreview();autosave();});
+function updateImgNotice(){}
 $('#backDrop').addEventListener('click',function(){$('#backFile').click();});
-$('#backFile').addEventListener('change',function(){var f=this.files&&this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){st.backImg=r.result;$('#backThumbImg').src=r.result;$('#backThumb').style.display='flex';deriveTone(r.result,function(){renderPreview();autosave();},'backTone');};r.readAsDataURL(f);});
-$('#backClear').addEventListener('click',function(){st.backImg=null;st.backTone=null;$('#backThumb').style.display='none';$('#backFile').value='';renderPreview();autosave();});
+$('#backFile').addEventListener('change',function(){var f=this.files&&this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){st.backImg=r.result;$('#backThumbImg').src=r.result;$('#backThumb').style.display='flex';deriveTone(r.result,function(){makeBlur(r.result,function(){renderPreview();autosave();},'_backBlur');},'backTone');};r.readAsDataURL(f);});
+$('#backClear').addEventListener('click',function(){st.backImg=null;st.backTone=null;st._backBlur=null;$('#backThumb').style.display='none';$('#backFile').value='';renderPreview();autosave();});
 // 앞표지 이미지 평균색 추출
+// 업로드 이미지의 축소(블러) 버전 → 전개도 전체 배경으로 사용(가장 자연스러운 매칭, 추출 안전)
+function makeBlur(dataUrl,cb,key){
+  try{var im=new Image();im.onload=function(){
+    var w=40,h=Math.max(10,Math.round(40*(im.naturalHeight||1)/(im.naturalWidth||1)));
+    var cv=document.createElement('canvas');cv.width=w;cv.height=h;var cx=cv.getContext('2d');
+    cx.drawImage(im,0,0,w,h);
+    try{st[key]=cv.toDataURL('image/png');}catch(e){}
+    cb&&cb();
+  };im.onerror=function(){cb&&cb();};im.src=dataUrl;}catch(e){cb&&cb();}
+}
 function deriveTone(dataUrl,cb,key){
   key=key||'coverTone';
-  try{var im=new Image();im.onload=function(){var cv=document.createElement('canvas');cv.width=24;cv.height=32;var cx=cv.getContext('2d');cx.drawImage(im,0,0,24,32);var d=cx.getImageData(0,0,24,32).data;var r=0,g=0,b=0,n=0;for(var i=0;i<d.length;i+=4){r+=d[i];g+=d[i+1];b+=d[i+2];n++;}r=Math.round(r/n);g=Math.round(g/n);b=Math.round(b/n);st[key]='#'+[r,g,b].map(function(x){return('0'+x.toString(16)).slice(-2)}).join('');cb&&cb();};im.onerror=function(){cb&&cb();};im.src=dataUrl;}catch(e){cb&&cb();}
+  try{var im=new Image();im.onload=function(){var W=40,H=56;var cv=document.createElement('canvas');cv.width=W;cv.height=H;var cx=cv.getContext('2d');cx.drawImage(im,0,0,W,H);var d=cx.getImageData(0,0,W,H).data;
+    function at(x,y){var i=(y*W+x)*4;return [d[i],d[i+1],d[i+2]];}
+    var sm=[],x,y;for(x=0;x<W;x++){sm.push(at(x,0));sm.push(at(x,1));sm.push(at(x,H-1));sm.push(at(x,H-2));}for(y=0;y<H;y++){sm.push(at(0,y));sm.push(at(1,y));sm.push(at(W-1,y));sm.push(at(W-2,y));}
+    var r=0,g=0,b=0;sm.forEach(function(p){r+=p[0];g+=p[1];b+=p[2];});var n=sm.length;r=Math.round(r/n);g=Math.round(g/n);b=Math.round(b/n);
+    st[key]='#'+[r,g,b].map(function(x){return('0'+x.toString(16)).slice(-2)}).join('');cb&&cb();};im.onerror=function(){cb&&cb();};im.src=dataUrl;}catch(e){cb&&cb();}
 }
-// 내지 원고 PDF 업로드
+// 내지 원고 PDF 업로드 (클릭 + 드래그앤드롭)
 $('#innerDrop').addEventListener('click',function(){$('#innerFile').click();});
-$('#innerFile').addEventListener('change',function(){var f=this.files&&this.files[0];if(!f)return;if(f.type!=='application/pdf'){toast('PDF 파일만 올릴 수 있어요');return;}var r=new FileReader();r.onload=async function(){st.innerPdf=r.result;st.innerPdfName=f.name;$('#innerName').textContent=f.name;$('#innerThumb').style.display='flex';await preparePdfPreview();$('#innerMeta').textContent=(st._pdfPages?st._pdfPages+'페이지':'')+' · 로컬 처리';st.pvMode='inner';$$('[data-pv]').forEach(function(x){x.classList.toggle('on',x.dataset.pv==='inner')});renderPreview(true);autosave();};r.readAsDataURL(f);});
-$('#innerClear').addEventListener('click',function(){st.innerPdf=null;st.innerPdfName='';st._pdfFirst=null;st._pdfLast=null;st._pdfPages=0;$('#innerThumb').style.display='none';$('#innerFile').value='';renderPreview();autosave();});
+async function handleInnerFile(f){
+  if(!f)return;
+  if(f.type!=='application/pdf'&&!/\.pdf$/i.test(f.name||'')){toast('PDF 파일만 올릴 수 있어요');return;}
+  var r=new FileReader();
+  r.onload=async function(){st.innerPdf=r.result;st.innerPdfName=f.name;$('#innerName').textContent=f.name;$('#innerThumb').style.display='flex';await preparePdfPreview();$('#innerMeta').textContent=(st._pdfPages?st._pdfPages+'페이지':'')+' · 로컬 처리';st.pvMode='inner';$$('[data-pv]').forEach(function(x){x.classList.toggle('on',x.dataset.pv==='inner')});renderPreview(true);renderExportInfo();autosave();};
+  r.readAsDataURL(f);
+}
+$('#innerFile').addEventListener('change',function(){handleInnerFile(this.files&&this.files[0]);});
+(function(){var dz=$('#innerDrop');if(!dz)return;
+  ['dragenter','dragover'].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();e.stopPropagation();dz.classList.add('dragover');});});
+  ['dragleave','dragend'].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();e.stopPropagation();dz.classList.remove('dragover');});});
+  dz.addEventListener('drop',function(e){e.preventDefault();e.stopPropagation();dz.classList.remove('dragover');var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];handleInnerFile(f);});
+})();
+$('#innerClear').addEventListener('click',function(){st.innerPdf=null;st.innerPdfName='';st._pdfFirst=null;st._pdfLast=null;st._pdfPages=0;$('#innerThumb').style.display='none';$('#innerFile').value='';renderPreview();renderExportInfo();autosave();});
 // PDF 첫/마지막 페이지 미리보기 준비 (pdf.js)
 async function preparePdfPreview(){
   try{
@@ -1728,7 +1890,7 @@ async function preparePdfPreview(){
     var pdf=await pdfjsLib.getDocument({data:arr}).promise;
     st._pdfPages=pdf.numPages;
     // 실제 원고 쪽수를 책등 계산에 반영 (규격 정확도)
-    st.pages=pdf.numPages;var pf=$('#pages');if(pf)pf.value=pdf.numPages;
+    st.pages=pdf.numPages;
     // 업로드 원고 1쪽 크기(pt→mm) 저장 → 내지 병합 시 판권도 이 크기로 맞춤
     try{var p1=await pdf.getPage(1);var vp1=p1.getViewport({scale:1});st._pdfPtW=vp1.width;st._pdfPtH=vp1.height;st._pdfMmW=+(vp1.width/2.83465).toFixed(1);st._pdfMmH=+(vp1.height/2.83465).toFixed(1);}catch(e){}
     st._pdfFirst=await renderPdfPage(pdf,1);
@@ -1745,41 +1907,25 @@ async function renderPdfPage(pdf,num){
 
 /* ================= STEP 네비게이션 ================= */
 var LAST_STEP=6;
-function renderStep(){
-  $$('.wstep').forEach(function(c){c.style.display=(+c.dataset.step===st.step)?'block':'none';});
-  $$('#stepper .stpill').forEach(function(p){var s=+p.dataset.s;p.classList.toggle('cur',s===st.step);p.classList.toggle('done',s<st.step);});
-  $('#prevStep').style.display=st.step>0?'inline-flex':'none';
-  var nx=$('#nextStep');
-  if(st.step===LAST_STEP){nx.style.display='none';}else{nx.style.display='inline-flex';nx.textContent='다음 →';}
-  if(st.step===LAST_STEP){renderSpec();updateGating();}
-  st.pvMode=(st.step===4||(st.step===3&&st.innerPdf))?'inner':'cover';
-  $$('[data-pv]').forEach(function(t){t.classList.toggle('on',t.dataset.pv===st.pvMode)});
-  renderPreview(true);
-}
-function validStep(s){
-  if(s===3){if(!st.title.trim()){toast('책 제목을 입력해 주세요');return false;}if(!st.author.trim()){toast('저자를 입력해 주세요');return false;}}
-  return true;
-}
+function renderStep(){}
+function validStep(){return true;}
 $('#nextStep').addEventListener('click',function(){if(!requireAgree())return;if(!validStep(st.step))return;if(st.step<LAST_STEP){st.step++;renderStep();window.scrollTo({top:0,behavior:'smooth'});}});
 $('#prevStep').addEventListener('click',function(){if(st.step>0){st.step--;renderStep();window.scrollTo({top:0,behavior:'smooth'});}});
 $$('#stepper .stpill').forEach(function(p){p.addEventListener('click',function(){var s=+p.dataset.s;if(s<=st.step||validStep(st.step)){st.step=s;renderStep();}})});
 
 /* ================= 규격 readout ================= */
-function renderSpec(){
-  var box=$('#specBox');if(!box)return;
-  var c=coverSpec(st),inner=innerSpec(st),s=SIZES[st.sizeId];
-  box.innerHTML=
-    row('판형',s.name+' ('+s.w+'×'+s.h+'mm)')+
-    row('제본',BINDINGS[st.binding].name+' · '+PAPER[st.paperId].name)+
-    row('재단여백(bleed)',st.bleed+'mm 사방')+
-    row('예상 책등(세네카)',c.spine+'mm')+
-    row('표지 전개도',c.fullW+'×'+c.fullH+'mm')+
-    (c.flap?row('날개(각)',c.flap+'mm'):'')+
-    row('내지 작업 크기',inner.workW+'×'+inner.workH+'mm (재단 '+st.bleed+'mm 포함)')+
-    row('판권지',(st.copyPos==='none'?'미포함':(st.copyPos==='front'?'앞 판권':'뒤 판권')))+
-    '<div class="specnote">※ 책등은 예상값입니다. 실제 인쇄 사양은 교보문고 파트너시스템 “가격책정 미리보기”에서 최종 확인하세요.</div>';
-  function row(k,v){return '<div class="specrow"><span class="k">'+esc(k)+'</span><span class="v">'+esc(v)+'</span></div>';}
+function renderExportInfo(){renderSpec();}
+function estPageInfo(){
+  var copyN=(st.copyPos&&st.copyPos!=='none')?1:0;
+  if(st.innerPdf&&st._pdfPages){
+    var total=st._pdfPages+copyN;
+    var odd=(total%2!==0);
+    return {text:'원고 '+st._pdfPages+'쪽 + 판권 '+copyN+'쪽 = <b>총 '+total+'쪽</b>'+(odd?' <span style="color:var(--err)">(홀수! 짝수로 맞춰 주세요)</span>':''),total:total};
+  }
+  var est=st.pages||120;
+  return {text:'약 <b>'+est+'쪽</b> (원고 PDF 업로드 시 실제 쪽수로 자동 계산)',total:est};
 }
+function renderSpec(){}
 
 /* ================= 게이팅 ================= */
 function updateGating(){
@@ -1791,6 +1937,15 @@ function updateGating(){
 /* ================= 약관 동의 게이트 (동의 전 기능 차단) ================= */
 function requireAgree(){
   if(profile&&profile.agreedAt)return true;
+  // ★ 프로필을 아직 불러오는 중이면 가입화면으로 보내지 않는다(경쟁 상태 방지)
+  if(user&&!profileLoaded){
+    toast('정보를 불러오는 중이에요…');
+    profileReady.then(function(){
+      if(profile&&profile.agreedAt)go('quick');
+      else showSignup();
+    });
+    return false;
+  }
   if(user){toast('먼저 이용약관에 동의해 주세요');showSignup();}
   else{toast('로그인 후 이용약관 동의가 필요해요');gLogin();}
   return false;
@@ -1809,9 +1964,8 @@ var IDB=(function(){
     del:function(id){return tx('readwrite',function(s){s.delete(id);});}
   };
 })();
-function projSnapshot(){var o=Object.assign({},st);['step','pvMode','pvPage','guides','ai','_pdfFirst','_pdfLast','_pdfPages'].forEach(function(k){delete o[k];});return o;}
-var _asT;
-function autosave(){clearTimeout(_asT);_asT=setTimeout(function(){if(!st.title&&!st.projId)return;persistProject(false);},700);}
+function projSnapshot(){var o=Object.assign({},st);['step','pvMode','pvPage','guides','ai','_pdfFirst','_pdfLast','_pdfPages','_coverBlur','_backBlur'].forEach(function(k){delete o[k];});return o;}
+function autosave(){}
 async function persistProject(announce){
   var now=Date.now();
   if(!st.projId)st.projId='p_'+now+'_'+Math.random().toString(36).slice(2,7);
@@ -1874,17 +2028,12 @@ function renderPlans(host,isApp){
 async function buyPlan(id){
   if(!user){gLogin();return;}
   await cfgReady;
-  if(id!=='premium'){
-    // 건당 추출은 파일 추출 단계에서 처리 (현재 테스트 기간: 무료 즉시 추출)
-    openModal('건당 추출','건당 추출은 “파일 추출” 단계에서 진행돼요. 지금은 테스트 기간이라 “건당 바로 추출”로 결제 없이 받아보실 수 있어요.','확인',closeModal);
-    return;
-  }
   await ensurePayConfig();
   if(!PortOneAdapter.configured()){
-    openModal('결제 준비 중','관리자 결제 설정('+PAY_PATH+')이 완료되면 바로 구매하실 수 있어요.\n\nPortOne storeId·channelKey(공개값)와 서버 전용 payment_secret(apiSecret)을 설정해 주세요.','확인',closeModal);
+    openModal('결제 준비 중','관리자 결제 설정('+PAY_PATH+')이 완료되면 바로 구매하실 수 있어요.\n\nPortOne storeId·channelKey(공개값)와 서버 전용 payment_secret(apiSecret)을 설정해 주세요.\n\n지금은 테스트 기간이라 “테스트로 바로 추출”을 이용해 주세요.','확인',closeModal);
     return;
   }
-  var r=await Payment.checkout('premium');
+  var r=await Payment.checkout(id==='premium'?'premium':'single');
   if(r&&r.ok===false)toast('결제 열기 실패: '+r.reason);
 }
 
@@ -1927,6 +2076,7 @@ function safeInset(c){return c.bleed + (c.binding==='hard'?0:5);}
 
 // 퍼플 로고: 업로드된 공식 로고 이미지가 있으면 사용, 없으면 '퍼플' 워드마크. 배경 밝기 따라 자동 색.
 // PNG를 지정 색으로 틴트(알파 유지) → 데이터URL. export 안전.
+var PURPLE_LOGO='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAABXCAYAAABRJIaRAAAFtklEQVR4nO2bXYhVVRTHf2dGc3Qajb4wRbMvIyspe5CKdNA+qMiHqDQKioJeI6Sg0AgffOmlgp4sCBIqMIICJ6IojcIUQ8woM4ecSC3RTNO0nFk9rH04e/bZd5975p575xw5f9icc/fH2vt/9t5rrf1xIxHhbEbXeDeg3agJVh01waqjJlh11ASrjppg1VETrDomFCTnTeAJT/xm4GNgN3AK2Gves3ANcBkwDbgZuBu40pNvBfBeSFBRBKc0iF8EzAf+BM4AQ8B3wDfADuBHk28qMA+4CSW2AJgJ9AAzAu2clNWwogj2BNLOMwHgKmCpeR8CvgYOAjcAN6I9lgcdIxiZpwAD6HC00Y02/gpglombbYIP+4A9wHEj08YctIfxpKVQFMFYWb0NPAMcM5VH5jkBOBclNw94EljikfMa8AU6V/cBJ0x8LAt02H9m3iMyUBTB+EseA4540oeB08BhdO5tQQm+is7fL4GX0YafzKjrCDBCkxagaDOR+UUNBoE3gG3m90cmZJGD0cMyc4iOF8EYE80zz85X1ODdi6IJ5mnoZMLatxCMpyfTA/Sa9zy6YFyGaJfzbAaTSOxYHoJRnvqKInjYPI/mKNNDQjDTYFs4DRww739nZS7KTKwDvgc+yVGml2QOnpOj3M/Ac8B01NcNoiiCX5mQB72oogF1AprFf8D6ZjOHCF4LXIR/ItuuWeQ8u9Chuss0xi4TyzyA9tp24FbgF9TLuYTEcc9SIJGVJwL2Az+lcolIo/C5iJweQ/hXRLaLyGJH3i0issmkD4jIEhFZKCLLRGSmiDwuIrtN+ljqHfDxCBFsFY848lY46Xc66WsKqDPFo5120PUy3CHn/s7rBTWFEMHfWpB7gnwmA+CPFuoDXYGkEFIyT6ETfwrwNHCpid8CvGXeFwMPW2U2oCuC30lr1awe+gA4hC6OlwP9Vto6VCEJ8BKqjECd9XdQJ33QK9U3bj1hvTXOV1vx9zpz4P6AjIecvHcE8q608p0SVVBx2gYrbU1W25u1g42+vhvv/p5qggCXN1lXnjoydchYDH2zymAWsArdgxlB92PGikYOdse2LHyYiW7rTW1jHZlo54K3m/Z8wNIseA8C76PmphWTA6OJlGaI7kXn4AXm9wPAC02WDTkFjch60SxB22m2hQ5nlBsyAfxb741g1zFC417Lqj9IcB5wMdCHbr/HWEBihN29zUXott5R0qsJdzq4X78PPZPoRc8jYvQAt5OsHa+20hYC96EL3/34zj0CRnKziAw3cGqHReRMIO1bEel35C138rnO9qMisqeFOj/Na+hvC6SFlFMXes4wI5AH0j04l/AwzqpzaaOEdiHvLb+RdjQi1IOr0K/qW72DX5vFcYPAVkfeVmC1kbkLPUazsRF17Kfj15qh5ZWge0IpRBK+TtntEepqtMiKj3+HtNsE9KzQ2x6SbUGfqfCtMeM4b51ZBCuPdhp6F9PQ9aOtfNyh7Rv+cbxveti98ys6zEehkz14F/A6egjaDvyA2u5R6OTZxPm0jxyok5BCfY2kQOwAXiH50u6mcRwH6fnmalBf2k5fpZ3WovF5RKN1nEs2z1biSTwnxLWZ6DD6gQdJ1pC+oeq+x9gJrHUFlq0H1wLPj7HscTz7P2XTopOzszREny+ybAQzV+h5UbY5uBEdZheSzDGfiYhQbXxPlsCyzUFQUxKvYuID1RHS9rAHvbU4xyqbMitl68EIPc62Lwi5J8gxeungbcOi8BiwkuT0KISJNLFrXjaC84HrihRYNi1auEIoG8FW4L0UVLYhamMIeJfkUmwIXeiCN4WyEbTV/IfAi+jVrTGjbATtOTib5Ma+b03oljsE/OUmlI2gjWXoXwz+aSJvBGwCnnUTykbQ7aHrc5Sdi4dg2bRoK2bC+5+LshEsHGV0tgvFWd+DNcGqoyZYddQEq46aYNVRE6w6znqC/wN2pyHscr5pOgAAAABJRU5ErkJggg==';
 function tintPng(dataUrl,hex){
   return new Promise(function(res){
     try{var im=new Image();im.onload=function(){
@@ -1940,12 +2090,12 @@ function tintPng(dataUrl,hex){
 var _logoCache={}; // {hex: tintedDataUrl}
 async function refreshLogoCache(){
   _logoCache={};
-  if(!st.logoImg)return;
+  var base=PURPLE_LOGO; // 내장 퍼플 로고(업로드 불필요)
   var colors=['#ffffff','#141414'];
   if(st.logoColorOn&&st.logoColor)colors.push(st.logoColor.toLowerCase());
-  for(var i=0;i<colors.length;i++){_logoCache[colors[i]]=await tintPng(st.logoImg,colors[i]);}
+  for(var i=0;i<colors.length;i++){_logoCache[colors[i]]=await tintPng(base,colors[i]);}
 }
-function logoSrcFor(hex){if(!st.logoImg)return null;return _logoCache[hex.toLowerCase()]||st.logoImg;}
+function logoSrcFor(hex){return _logoCache[hex.toLowerCase()]||PURPLE_LOGO;}
 
 function purpleLogo(color, sizePx, imgSrc, vertical){
   var el=document.createElement('div');
@@ -1968,6 +2118,151 @@ function purpleLogo(color, sizePx, imgSrc, vertical){
 }
 
 // 표지 전개도 element. mode: 'preview'|'export'
+/* ============ AI 프로 표지 레이아웃 엔진 (B 컨셉) ============ */
+var CATEGORIES={
+  self:  {name:'자기계발·실용', emoji:'💡', baseBg:'#1b2a4a', accent:'#F5B301', serif:false, layouts:['modernBold','topBand','split']},
+  biz:   {name:'경제·경영',    emoji:'📈', baseBg:'#12233d', accent:'#E8B23A', serif:false, layouts:['modernBold','split','topBand']},
+  novel: {name:'소설·문학',    emoji:'📖', baseBg:'#2a2320', accent:'#C0472B', serif:true,  layouts:['centerFrame','photoFull','classic']},
+  essay: {name:'에세이',      emoji:'🍃', baseBg:'#38473d', accent:'#9DBBA6', serif:true,  layouts:['photoFull','minimal','centerFrame']},
+  poem:  {name:'시·시집',     emoji:'🕊️', baseBg:'#f2eee5', accent:'#9C7A54', serif:true,  layouts:['minimal','classic','centerFrame']},
+  human: {name:'인문·교양',    emoji:'🏛️', baseBg:'#ece7dc', accent:'#7A5C3E', serif:true,  layouts:['classic','minimal','centerFrame']},
+  sci:   {name:'과학·기술',    emoji:'🔬', baseBg:'#0f2230', accent:'#39C0CF', serif:false, layouts:['topBand','modernBold','split']},
+  kid:   {name:'아동·청소년',  emoji:'🧸', baseBg:'#ffcf3f', accent:'#FF5A5F', serif:false, layouts:['photoFull','topBand','split']},
+  travel:{name:'여행·라이프',  emoji:'✈️', baseBg:'#1f3a4d', accent:'#F2A65A', serif:false, layouts:['photoFull','topBand','centerFrame']},
+  relig: {name:'종교·명상',    emoji:'🕯️', baseBg:'#2b2740', accent:'#C9A54E', serif:true,  layouts:['minimal','centerFrame','classic']},
+  acad:  {name:'학술·전문',    emoji:'🎓', baseBg:'#1c2a39', accent:'#4A7CB5', serif:false, layouts:['classic','modernBold','topBand']}
+};
+function coverPalette(){
+  var cat=CATEGORIES[st.category]||CATEGORIES.self;
+  var base=st.coverTone||cat.baseBg;
+  var dark=hexLum(base)<0.52;
+  return {dark:dark,bg:base,fg:dark?'#ffffff':'#17191f',sub:dark?'rgba(255,255,255,.82)':'rgba(20,22,28,.72)',accent:cat.accent,cat:cat};
+}
+function titleFontFor(cat){
+  if(st.fontFamily)return st.fontFamily;
+  return cat.serif?"'Noto Serif KR', serif":"'Noto Sans KR', sans-serif";
+}
+function hiTitle(title,accent){ // 마지막 단어를 강조색으로
+  title=String(title||'제목을 입력하세요');
+  var parts=title.split(' ');
+  if(parts.length<2)return esc(title);
+  var last=parts.pop();
+  return esc(parts.join(' '))+' <span style="color:'+accent+'">'+esc(last)+'</span>';
+}
+// 프로 앞표지 렌더 (레이아웃별). wrap에 직접 append.
+function buildProFront(wrap,front,fRect,c,si,seedOverride){
+  var pal=coverPalette();var cat=pal.cat;
+  var layouts=cat.layouts;var seed=(seedOverride!=null?seedOverride:(st.layoutSeed||0));
+  var layoutId=st.layoutId||layouts[seed%layouts.length];
+  var tFont=titleFontFor(cat), uiFont="'Noto Sans KR', sans-serif";
+  var img=st.coverImg;
+  var fullW=px(fRect.w), fullLeft=px(fRect.x0);
+  var Wmm=front.w, Wpx=px(front.w);
+  var padMM=c.bleed+Math.max(9,front.w*0.085);
+  var title=st.title||'제목을 입력하세요', sub=st.subtitle||'', author=st.author||'저자', pub=st.publisher||'퍼플';
+  var label=(st.styleText||cat.name).toUpperCase().slice(0,26);
+  var TS=Wpx*0.132;                       // 제목 기준 크기(px)
+  // 컨테이너: 앞표지 전체(도련 포함)
+  var fp=document.createElement('div');
+  fp.style.cssText="position:absolute;top:0;height:"+px(c.fullH)+";left:"+fullLeft+";width:"+fullW+";overflow:hidden;font-family:"+tFont+";";
+  wrap.appendChild(fp);
+  function el(css,html){var d=document.createElement('div');d.style.cssText=css;if(html!=null)d.innerHTML=html;fp.appendChild(d);return d;}
+  function solidBg(col){el("position:absolute;inset:0;background:"+col+";");}
+  function imgFull(scrim){
+    var im=document.createElement('img');im.src=img;im.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;";fp.appendChild(im);
+    if(scrim)el(scrim);
+  }
+  function imgBand(topPct,hPct){
+    var b=document.createElement('div');b.style.cssText="position:absolute;left:0;right:0;top:"+topPct+"%;height:"+hPct+"%;overflow:hidden;";
+    var im=document.createElement('img');im.src=img;im.style.cssText="width:100%;height:100%;object-fit:cover;display:block;";b.appendChild(im);fp.appendChild(b);
+  }
+  var padL="left:"+px(padMM)+";right:"+px(padMM)+";";
+  var lab=function(col){return "font:700 "+(TS*0.19)+"px "+uiFont+";letter-spacing:.22em;color:"+col+";";};
+  var ttl=function(col){return "font-weight:800;font-size:"+TS+"px;line-height:1.16;color:"+col+";";};
+  var subS=function(col){return "font:400 "+(TS*0.30)+"px "+tFont+";color:"+col+";line-height:1.5;";};
+  var authS=function(col){return "font:italic 500 "+(TS*0.26)+"px "+tFont+";color:"+col+";";};
+  var rule=function(col){return "width:"+px(16)+";height:3px;background:"+col+";border-radius:2px;";};
+
+  function L_modernBold(){
+    solidBg(pal.dark?("linear-gradient(150deg,"+shade(pal.bg,14)+","+pal.bg+" 55%,"+shade(pal.bg,-16)+")"):pal.bg);
+    if(img){imgFull("position:absolute;inset:0;background:linear-gradient(180deg,"+hexA(pal.bg,.62)+","+hexA(pal.bg,.82)+");");}
+    el("position:absolute;"+padL+"top:"+px(c.bleed+padMM*0.5)+";"+lab(pal.accent),esc(label));
+    var block=el("position:absolute;"+padL+"top:22%;");
+    block.innerHTML='<div style="'+ttl(pal.fg)+'">'+hiTitle(title,pal.accent)+'</div>'+
+      '<div style="'+rule(pal.accent)+';margin:'+px(7)+' 0 '+px(7)+'"></div>'+
+      (sub?'<div style="'+subS(pal.sub)+'">'+esc(sub)+'</div>':'');
+    el("position:absolute;"+padL+"bottom:"+px(c.bleed+padMM*0.7)+";"+authS(pal.fg),esc(author)+'　·　'+esc(pub));
+  }
+  function L_photoFull(){
+    solidBg(pal.bg);
+    if(img)imgFull("position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15) 30%,rgba(0,0,0,.72));");
+    el("position:absolute;"+padL+"top:"+px(c.bleed+padMM*0.5)+";"+lab('#fff')+"opacity:.92",esc(label));
+    var block=el("position:absolute;"+padL+"bottom:"+px(c.bleed+padMM*1.1)+";text-align:left;");
+    block.innerHTML='<div style="'+ttl('#fff')+';text-shadow:0 2px 16px rgba(0,0,0,.55)">'+hiTitle(title,pal.accent)+'</div>'+
+      (sub?'<div style="'+subS('rgba(255,255,255,.9)')+';margin-top:'+px(5)+';text-shadow:0 1px 8px rgba(0,0,0,.5)">'+esc(sub)+'</div>':'')+
+      '<div style="'+authS('#fff')+';margin-top:'+px(8)+'">'+esc(author)+'　·　'+esc(pub)+'</div>';
+  }
+  function L_topBand(){
+    solidBg(pal.bg);
+    if(img)imgBand(0,58); else el("position:absolute;left:0;right:0;top:0;height:58%;background:"+shade(pal.bg,pal.dark?24:-18)+";");
+    var band=el("position:absolute;left:0;right:0;bottom:0;height:42%;background:"+pal.bg+";");
+    el("position:absolute;"+padL+"top:62%;"+lab(pal.accent),esc(label));
+    var block=el("position:absolute;"+padL+"top:68%;");
+    block.innerHTML='<div style="'+ttl(pal.fg)+';font-size:'+(TS*0.86)+'px">'+hiTitle(title,pal.accent)+'</div>'+
+      (sub?'<div style="'+subS(pal.sub)+';margin-top:'+px(4)+'">'+esc(sub)+'</div>':'');
+    el("position:absolute;"+padL+"bottom:"+px(c.bleed+padMM*0.7)+";"+authS(pal.fg),esc(author)+'　·　'+esc(pub));
+  }
+  function L_split(){
+    solidBg(pal.bg);
+    el("position:absolute;left:0;right:0;top:0;height:46%;background:"+pal.bg+";");
+    if(img)imgBand(46,54); else el("position:absolute;left:0;right:0;top:46%;height:54%;background:"+shade(pal.bg,pal.dark?26:-16)+";");
+    el("position:absolute;"+padL+"top:"+px(c.bleed+padMM*0.6)+";"+lab(pal.accent),esc(label));
+    var block=el("position:absolute;"+padL+"top:15%;");
+    block.innerHTML='<div style="'+ttl(pal.fg)+'">'+hiTitle(title,pal.accent)+'</div>'+
+      '<div style="'+rule(pal.accent)+';margin:'+px(6)+' 0"></div>'+
+      (sub?'<div style="'+subS(pal.sub)+'">'+esc(sub)+'</div>':'');
+    el("position:absolute;"+padL+"bottom:"+px(c.bleed+padMM*0.7)+";"+authS(pal.dark?'#fff':'#fff'),esc(author)+'　·　'+esc(pub));
+  }
+  function L_centerFrame(){
+    var cream=pal.dark?pal.bg:mix(pal.bg,'#ffffff',0.35);
+    solidBg(cream);
+    var fx=px(padMM*1.15), fy=px(c.bleed+padMM*1.1);
+    if(img){var fr=document.createElement('div');fr.style.cssText="position:absolute;left:"+fx+";right:"+fx+";top:"+fy+";height:46%;border:3px solid "+pal.accent+";padding:"+px(3)+";overflow:hidden;";
+      var im=document.createElement('img');im.src=img;im.style.cssText="width:100%;height:100%;object-fit:cover;display:block;";fr.appendChild(im);fp.appendChild(fr);}
+    var block=el("position:absolute;"+padL+"top:56%;text-align:center;");
+    block.innerHTML='<div style="'+lab(pal.accent)+';margin-bottom:'+px(6)+'">'+esc(label)+'</div>'+
+      '<div style="'+ttl(pal.fg)+';font-size:'+(TS*0.92)+'px">'+esc(title)+'</div>'+
+      (sub?'<div style="'+subS(pal.sub)+';margin-top:'+px(5)+'">'+esc(sub)+'</div>':'');
+    el("position:absolute;left:0;right:0;text-align:center;bottom:"+px(c.bleed+padMM*0.8)+";"+authS(pal.fg),esc(author)+'　·　'+esc(pub));
+  }
+  function L_minimal(){
+    var lightbg=pal.dark?pal.bg:mix(pal.bg,'#ffffff',0.5);
+    solidBg(lightbg);var fg=hexLum(lightbg)<0.52?'#fff':'#1a1c22';
+    el("position:absolute;left:18%;right:18%;top:30%;height:1px;background:"+pal.accent+";opacity:.7");
+    var block=el("position:absolute;"+padL+"top:34%;text-align:center;");
+    block.innerHTML='<div style="font:700 '+(TS*0.17)+'px '+uiFont+';letter-spacing:.3em;color:'+pal.accent+';margin-bottom:'+px(8)+'">'+esc(label)+'</div>'+
+      '<div style="'+ttl(fg)+';font-size:'+(TS*0.9)+'px;letter-spacing:.02em">'+esc(title)+'</div>'+
+      (sub?'<div style="'+subS(hexLum(lightbg)<0.52?'rgba(255,255,255,.8)':'rgba(20,22,28,.7)')+';margin-top:'+px(8)+'">'+esc(sub)+'</div>':'');
+    el("position:absolute;left:18%;right:18%;top:auto;bottom:31%;height:1px;background:"+pal.accent+";opacity:.7");
+    el("position:absolute;left:0;right:0;text-align:center;bottom:"+px(c.bleed+padMM*0.9)+";"+authS(fg),esc(author)+'　·　'+esc(pub));
+  }
+  function L_classic(){
+    var cream=pal.dark?mix(pal.bg,'#efe7d6',0.5):mix(pal.bg,'#fbf7ee',0.45);
+    solidBg(cream);var fg='#25211a';
+    if(img){var fr=document.createElement('div');fr.style.cssText="position:absolute;left:"+px(padMM*1.4)+";right:"+px(padMM*1.4)+";top:"+px(c.bleed+padMM*1.5)+";height:38%;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.18);";
+      var im=document.createElement('img');im.src=img;im.style.cssText="width:100%;height:100%;object-fit:cover;display:block;";fr.appendChild(im);fp.appendChild(fr);}
+    var topY=img?'52%':'26%';
+    var block=el("position:absolute;"+padL+"top:"+topY+";text-align:center;");
+    block.innerHTML='<div style="width:'+px(28)+';height:2px;background:'+pal.accent+';margin:0 auto '+px(10)+'"></div>'+
+      '<div style="'+ttl(fg)+';font-size:'+(TS*0.9)+'px">'+esc(title)+'</div>'+
+      (sub?'<div style="'+subS('rgba(37,33,26,.72)')+';margin-top:'+px(6)+'">'+esc(sub)+'</div>':'')+
+      '<div style="width:'+px(28)+';height:2px;background:'+pal.accent+';margin:'+px(10)+' auto 0"></div>';
+    el("position:absolute;left:0;right:0;text-align:center;bottom:"+px(c.bleed+padMM*0.9)+";"+authS(fg),esc(author)+'　·　'+esc(pub));
+  }
+  var MAP={modernBold:L_modernBold,photoFull:L_photoFull,topBand:L_topBand,split:L_split,centerFrame:L_centerFrame,minimal:L_minimal,classic:L_classic};
+  (MAP[layoutId]||L_modernBold)();
+  return layoutId;
+}
 function buildCover(mode){
   var c=coverSpec(st),sy=effStyle();
   var ai=st.ai||{};
@@ -1983,7 +2278,12 @@ function buildCover(mode){
   var wrap=document.createElement('div');wrap.className='coverdoc';
   var font=st.fontFamily||sy.font;
   wrap.style.cssText="width:"+px(c.fullW)+";height:"+px(c.fullH)+";position:relative;overflow:hidden;";wrap.style.fontFamily=font;
-  var bg=document.createElement('div');bg.className='cover-bleed';bg.style.background=wrapBg;wrap.appendChild(bg);
+  var bg=document.createElement('div');bg.className='cover-bleed';bg.style.cssText="position:absolute;inset:0;overflow:hidden;";
+  if(hasImg&&imgTone){
+    // 업로드 이미지의 '배경색'을 그대로 가져와 나머지 영역을 solid로 채움 (가장 자연스러운 연결)
+    bg.style.background=toneBase;
+  }else{ bg.style.background=wrapBg; }
+  wrap.appendChild(bg);
 
   var x=0;c.segs.forEach(function(sg){sg.x0=x;x+=sg.w;sg.x1=x;});
   function segIndex(type){for(var i=0;i<c.segs.length;i++)if(c.segs[i].t===type)return i;return -1;}
@@ -1993,23 +2293,29 @@ function buildCover(mode){
   function extend(range,idx){var r={x0:range.x0,w:range.w};var prev=c.segs[idx-1],next=c.segs[idx+1];if(prev&&prev.t==='edge'){r.x0=prev.x0;r.w+=prev.w;}if(next&&next.t==='edge'){r.w+=next.w;}return r;}
   var fRect=extend(front,segIndex('front')),bRect=extend(back,segIndex('back'));
 
-  function panelImg(src,rect,margin){
-    var m=margin||{top:0,right:0,bottom:0,left:0};
+  function panelImg(src,rect,margin,scale){
+    var m=margin||{top:0,right:0,bottom:0,left:0};scale=scale||1;
     var box=document.createElement('div');
     box.style.cssText="position:absolute;overflow:hidden;top:"+px(m.top||0)+";bottom:"+px(m.bottom||0)+";left:"+px(rect.x0+(m.left||0))+";width:"+px(rect.w-(m.left||0)-(m.right||0))+";";
-    var im=document.createElement('img');im.src=src;im.style.cssText="width:100%;height:100%;object-fit:cover;display:block;";box.appendChild(im);
-    var hasM=(m.top||m.right||m.bottom||m.left);
-    var ov=document.createElement('div');ov.style.cssText="position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,"+(hasM?'.18':'.42')+"),rgba(0,0,0,.06));";box.appendChild(ov);
+    var im=document.createElement('img');im.src=src;
+    // 원본 비율 절대 유지(contain) + 가운데 정렬 + 전체 크기(scale) 조정
+    im.style.cssText="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:"+(scale*100)+"%;height:"+(scale*100)+"%;object-fit:contain;display:block;";
+    box.appendChild(im);
     wrap.appendChild(box);
   }
-  if(frontImg)panelImg(st.coverImg,fRect,st.coverImgMargin);
-  if(backImgOn)panelImg(st.backImg,bRect);
+  var proMode=(st.coverMode==='auto');
+  if(proMode){
+    st.layoutId=buildProFront(wrap,front,fRect,c,si);
+  }else{
+    if(frontImg)panelImg(st.coverImg,fRect,st.coverImgMargin,st.coverImgScale||1);
+  }
+  if(backImgOn)panelImg(st.backImg,bRect,null,1);
 
   var frontFg=frontImg?'#fff':sy.fg, backFg=backImgOn?'#fff':panelFg;
   var txtShadow=frontImg?'text-shadow:0 2px 12px rgba(0,0,0,.55);':'';
 
-  // 앞표지 텍스트 — 이미지 업로드 시 제목/부제/저자 숨김 (책등으로 이동)
-  if(!frontImg){
+  // 앞표지 텍스트 — 이미지 업로드 시 제목/부제/저자 숨김 (책등으로 이동). 프로 모드는 엔진이 처리.
+  if(!frontImg && !proMode){
     var fp=document.createElement('div');
     fp.style.cssText="position:absolute;top:"+px(si)+";height:"+px(c.frontH-si*2)+";display:flex;flex-direction:column;justify-content:space-between;text-align:center;color:"+frontFg+";font-family:"+font+";";
     fp.style.left=px(front.x0+si);fp.style.width=px(front.w-si*2);
@@ -2029,8 +2335,9 @@ function buildCover(mode){
   bpEl.style.left=px(back.x0+si);bpEl.style.width=px(back.w-si*2);
   var backTxt=(st.backText&&st.backText.trim())?st.backText:'';
   if(st.backMode==='image')backTxt=st.backImg?'':'뒷표지 이미지를 업로드하세요.';
-  var bsz=Math.max(9,Math.min(15,back.w*0.045));
-  if(backTxt)bpEl.innerHTML='<div style="font-size:'+bsz+'px;line-height:1.7;opacity:.95;white-space:pre-line;margin-top:10%">'+esc(backTxt)+'</div>';
+  var bsz=(st.backTextSize)?st.backTextSize:Math.max(9,Math.min(15,back.w*0.045));
+  var byy=(st.backTextY!=null)?st.backTextY:12;
+  if(backTxt)bpEl.innerHTML='<div style="position:absolute;left:0;right:0;top:'+byy+'%;font-size:'+bsz+'px;line-height:1.7;opacity:.95;white-space:pre-line;">'+esc(backTxt)+'</div>';
   wrap.appendChild(bpEl);
 
   // 책등(세네카) — 제목/저자 개별(색·크기·상하위치), 절대 잘리지 않게 자동 축소
@@ -2077,7 +2384,7 @@ function buildCover(mode){
         d.textContent=text;fl.appendChild(d);
       }
       if(!data.title&&!data.body){
-        var ph=document.createElement('div');ph.style.cssText="position:absolute;top:14%;left:0;right:0;font-size:10px;color:"+autoFlapColor+";opacity:.5;";ph.textContent=(idx===0?'뒷날개':'앞날개');fl.appendChild(ph);
+        if(mode==='preview'){var ph=document.createElement('div');ph.style.cssText="position:absolute;top:14%;left:0;right:0;font-size:10px;color:"+autoFlapColor+";opacity:.5;";ph.textContent=(idx===0?'뒷날개':'앞날개');fl.appendChild(ph);}
       }else{
         flapPart(data.title,(data.titleSize||18),tC,'800',(data.titleY!=null?data.titleY:14),1.3);
         flapPart(data.body,(data.bodySize||13),bC,'400',(data.bodyY!=null?data.bodyY:34),1.6);
@@ -2133,32 +2440,50 @@ function buildCover(mode){
 }
 
 /* ---------- 판권지 (교보 표준, 빨간 필드=제목·발행일·지은이 교체) ---------- */
+// 교보 판권 템플릿 실측 기준
+//  제목 13pt / 본문 8pt (비율 1.625) · 제목→발행일 10.95em · 일반행간 2.31em
+//  그룹간격(발행처→출판등록, 홈페이지→©, ©→하단문구) 4.56em · 하단문구 2줄
+var CR_FONTS={
+  notosans:{name:'본고딕 (Noto Sans KR) — 템플릿 기본',css:"'Noto Sans KR', sans-serif"},
+  notoserif:{name:'본명조 (Noto Serif KR)',css:"'Noto Serif KR', serif"},
+  nanumgothic:{name:'나눔고딕',css:"'Nanum Gothic', sans-serif"},
+  nanummyeongjo:{name:'나눔명조',css:"'Nanum Myeongjo', serif"},
+  gothica1:{name:'고딕 A1',css:"'Gothic A1', sans-serif"},
+  ibmplex:{name:'IBM Plex Sans KR',css:"'IBM Plex Sans KR', sans-serif"},
+  gowunbatang:{name:'고운바탕',css:"'Gowun Batang', serif"},
+  gowundodum:{name:'고운돋움',css:"'Gowun Dodum', sans-serif"},
+  pretendard:{name:'프리텐다드',css:"'Pretendard', sans-serif"}
+};
+function crFontCss(){var f=CR_FONTS[st.crFont||'notosans'];return (f?f.css:CR_FONTS.notosans.css);}
 function copyrightPageEl(work){
   var d=st.pubdate?new Date(st.pubdate):new Date();
   var y=d.getFullYear(),mo=('0'+(d.getMonth()+1)).slice(-2),da=('0'+d.getDate()).slice(-2);
   var pub=st.publisher||'퍼플';
-  var author=st.author||'지은이';  // 판권 지은이는 저자와 자동 동일
+  var author=st.author||'지은이';
   var el=document.createElement('div');
-  el.style.cssText="width:"+px(work.workW)+";height:"+px(work.workH)+";background:"+paperBg()+";position:relative;font-family:'Pretendard';color:#111;overflow:hidden;";
-  var pad=work.margins.inner;
+  el.style.cssText="width:"+px(work.workW)+";height:"+px(work.workH)+";background:#ffffff;position:relative;font-family:"+crFontCss()+";color:#111;overflow:hidden;";
+  // 템플릿(A4 210mm 폭 기준 본문 8pt)에 비례 → 어떤 판형에서도 같은 비율로 보임
+  var base=(work.trimW/210)*8;              // pt
+  var basePx=base*(96/72);                  // pt → px
+  var pad=work.bleed+work.margins.inner;
   var inner=document.createElement('div');
-  inner.style.cssText="position:absolute;left:"+px(pad)+";right:"+px(work.margins.outer)+";top:38%;font-size:"+Math.max(9,work.trimW*0.058)+"px;line-height:2.0;";
-  function rowP(k,v){return '<div style="display:flex;gap:'+px(6)+'"><span style="display:inline-block;width:'+px(20)+';color:#111;font-weight:600">'+esc(k)+'</span><span>'+esc(v)+'</span></div>';}
+  inner.style.cssText="position:absolute;left:"+px(pad)+";right:"+px(work.bleed+work.margins.outer)+";top:"+((415/842)*100)+"%;font-size:"+basePx+"px;line-height:1.45;";
+  function rowP(k,v){return '<div style="display:flex;margin-top:1.31em"><span style="display:inline-block;width:6.4em;flex:none">'+esc(k)+'</span><span style="flex:1">'+esc(v)+'</span></div>';}
   inner.innerHTML=
-    '<div style="font-size:'+Math.max(12,work.trimW*0.085)+'px;font-weight:800;color:#111;margin-bottom:'+px(10)+'">'+esc(st.title||'제목')+(st.subtitle?' '+esc(st.subtitle):'')+'</div>'+
-    '<div style="height:'+px(8)+'"></div>'+
-    rowP('발행일',y+'년 '+mo+'월 '+da+'일 초판 1쇄 발행')+
-    rowP('지은이',author)+
-    rowP('발행처',pub)+
-    '<div style="height:'+px(6)+'"></div>'+
-    rowP('출판등록','제300-2012-167호 (2012년 09월 07일)')+
-    rowP('주 소','서울시 종로구 종로1가 1번지')+
-    rowP('대표전화','1544-1900')+
-    rowP('홈페이지','www.kyobobook.co.kr')+
-    '<div style="height:'+px(10)+'"></div>'+
-    '<div>Copyright © '+esc(author)+' '+y+'</div>'+
-    '<div style="height:'+px(8)+'"></div>'+
-    '<div style="font-size:0.85em;color:#333;line-height:1.7">본 책 내용의 전부 또는 일부를 재사용하려면 반드시 저작권자의 동의를 받아야 합니다. 잘못 만들어진 책은 구입처에서 교환해 드립니다.</div>';
+    '<div style="font-size:1.625em;font-weight:700;line-height:1.3">'+esc(st.title||'제목')+'</div>'+
+    '<div style="margin-top:9.6em">'+                                  // 제목 → 발행일 (템플릿 10.95em - 제목높이)
+      '<div style="display:flex"><span style="display:inline-block;width:6.4em;flex:none">발행일</span><span style="flex:1">'+y+'년 '+mo+'월 '+da+'일</span></div>'+
+      rowP('지은이',author)+
+      rowP('발행처',pub)+
+    '</div>'+
+    '<div style="margin-top:3.25em">'+                                 // 그룹 간격 4.56em - 1.31em
+      '<div style="display:flex"><span style="display:inline-block;width:6.4em;flex:none">출판등록</span><span style="flex:1">제300-2012-167호 (2012년 09월 07일)</span></div>'+
+      rowP('주 소','서울시 종로구 종로1가 1번지')+
+      rowP('대표전화','1544-1900')+
+      rowP('홈페이지','www.kyobobook.co.kr')+
+    '</div>'+
+    '<div style="margin-top:4.58em">Copyright © '+esc(author)+' '+y+'</div>'+
+    '<div style="margin-top:4.56em;line-height:1.55;max-width:20em">본 책 내용의 전부 또는 일부를 재사용하려면<br>반드시 저작권자의 동의를 받아야 합니다.</div>';
   el.appendChild(inner);
   return el;
 }
@@ -2238,49 +2563,8 @@ function paginateBody(text,work,sy){
 
 /* ================= 미리보기 렌더 (줌 레벨 유지) ================= */
 var _innerCache=null;
-function renderPreview(fit){
-  var host=$('#pvHost');if(!host)return;host.innerHTML='';
-  var pgNav=$('#pgNav');var natW,natH;
-  if(st.pvMode==='cover'){
-    pgNav.style.display='none';
-    var built=buildCover('preview');
-    host.appendChild(built.el);
-    natW=built.spec.fullW*MM;natH=built.spec.fullH*MM;
-  }else{
-    _innerCache=buildInnerPages();var pages=_innerCache.pages;
-    if(st.pvPage>=pages.length)st.pvPage=0;
-    pgNav.style.display=pages.length>1?'flex':'none';
-    $('#pgLabel').textContent=(st.pvPage+1)+' / '+pages.length+(pages[st.pvPage].label?(' · '+pages[st.pvPage].label):'');
-    var w=_innerCache.work;
-    var pageWrap=document.createElement('div');pageWrap.style.cssText="position:relative;box-shadow:0 6px 20px rgba(0,0,0,.16);width:"+px(w.workW)+";height:"+px(w.workH)+";";
-    pageWrap.appendChild(pages[st.pvPage].el);
-    if(st.guides){
-      var trim=document.createElement('div');trim.className='guide trim';
-      trim.style.cssText="position:absolute;left:"+px(w.bleed)+";top:"+px(w.bleed)+";width:"+px(w.trimW)+";height:"+px(w.trimH)+";pointer-events:none;";pageWrap.appendChild(trim);
-      var safe=document.createElement('div');safe.className='guide safe';
-      safe.style.cssText="position:absolute;left:"+px(w.bleed+w.margins.inner)+";top:"+px(w.bleed+w.margins.top)+";right:"+px(w.margins.outer)+";bottom:"+px(w.margins.bottom)+";pointer-events:none;";pageWrap.appendChild(safe);
-      var lt=document.createElement('div');lt.className='glabel';lt.style.cssText="left:"+px(w.bleed+2)+";top:"+px(w.bleed+2)+";background:#F04438;";lt.textContent='재단선';pageWrap.appendChild(lt);
-    }
-    host.appendChild(pageWrap);
-    natW=w.workW*MM;natH=w.workH*MM;
-  }
-  var prevNatW=pv.natW;
-  pv.natW=natW;pv.natH=natH;
-  host.style.width=natW+'px';host.style.height=natH+'px';
-  // 줌 레벨 유지: fit 요청이거나 최초 렌더일 때만 맞춤. 그 외에는 현재 scale/pan 보존.
-  var doFit = fit || !pv.inited;
-  computeFit(doFit);
-  pv.inited=true;
-}
-function computeFit(reset){
-  var box=$('#pvBody');if(!box||!pv.natW)return;
-  var pad=28;
-  var fit=Math.min((box.clientWidth-pad)/pv.natW,(box.clientHeight-pad)/pv.natH);
-  if(!isFinite(fit)||fit<=0)fit=1;
-  pv.fit=fit;
-  if(reset){pv.scale=fit;centerPv();}
-  applyPvTransform();
-}
+function renderPreview(){}
+function computeFit(){}
 function centerPv(){var box=$('#pvBody');if(!box)return;pv.tx=(box.clientWidth-pv.natW*pv.scale)/2;pv.ty=(box.clientHeight-pv.natH*pv.scale)/2;}
 function applyPvTransform(){var host=$('#pvHost');if(!host)return;host.style.transform='translate('+pv.tx+'px,'+pv.ty+'px) scale('+pv.scale+')';var lab=$('#zoomLabel');if(lab)lab.textContent=Math.round((pv.scale/(pv.fit||1))*100)+'%';}
 function zoomBy(factor,cx,cy){
@@ -2305,9 +2589,60 @@ $('#zoomFit').addEventListener('click',function(){pv.scale=pv.fit;centerPv();app
   vp.addEventListener('dblclick',function(e){var r=vp.getBoundingClientRect();var atFit=Math.abs(pv.scale-pv.fit)<0.01;if(atFit){zoomBy((pv.fit*2)/pv.scale,e.clientX-r.left,e.clientY-r.top);}else{pv.scale=pv.fit;centerPv();applyPvTransform();}});
   vp.addEventListener('wheel',function(e){e.preventDefault();var r=vp.getBoundingClientRect();zoomBy(e.deltaY<0?1.12:0.89,e.clientX-r.left,e.clientY-r.top);},{passive:false});
 })();
-window.addEventListener('resize',function(){if($('#view-app').classList.contains('on'))computeFit(true);});
 
 /* ================= 전체화면 미리보기 + 돋보기 ================= */
+// 크게 보기 → 별도 브라우저 창에서 고해상도로 편하게 (확대/이동/PNG 저장) + 실시간 갱신
+var _pvWin=null,_pvwT=null;
+async function buildCurrentPreviewPng(){
+  var el,wmm,hmm,label;
+  if((st.pvMode||'cover')==='inner'){
+    var ib=buildInnerPages();var idx=st.pvPage||0;if(idx>=ib.pages.length)idx=0;
+    el=ib.pages[idx].el;wmm=ib.work.workW;hmm=ib.work.workH;label='내지'+(ib.pages.length>1?'_'+(idx+1)+'p':'');
+  }else{
+    var b=buildCover('export');el=b.el;wmm=b.spec.fullW;hmm=b.spec.fullH;label='표지';
+  }
+  var canvas=await elToCanvas(el,wmm,hmm);
+  return {url:canvas.toDataURL('image/png'),label:label};
+}
+function openPreviewWindow(){}
+// 만들기 화면에서 무언가 바뀌면 열려있는 크게보기 창도 자동 갱신
+function refreshPreviewWindow(){}
+function previewDocHtml(url,label){
+  var css='*{box-sizing:border-box}body{margin:0;background:#2b2f37;font-family:system-ui,-apple-system,"Apple SD Gothic Neo",sans-serif;overflow:hidden}'
+   +'.bar{position:fixed;top:0;left:0;right:0;height:54px;display:flex;align-items:center;gap:8px;padding:0 14px;background:rgba(18,20,25,.94);color:#fff;z-index:10;box-shadow:0 2px 14px rgba(0,0,0,.35)}'
+   +'.bar .t{font-weight:800;margin-right:auto;font-size:15px;letter-spacing:-.2px}'
+   +'.bar button{background:#3a3f4a;color:#fff;border:0;border-radius:9px;padding:9px 13px;font-size:14px;cursor:pointer;font-weight:600}'
+   +'.bar button:hover{background:#4b5162}.bar .lvl{min-width:58px;text-align:center;font-variant-numeric:tabular-nums;font-weight:700}.bar a{text-decoration:none}'
+   +'.stage{position:absolute;inset:54px 0 0 0;overflow:hidden;cursor:grab;background:conic-gradient(from 90deg,#dfe4ea 90deg,#eef1f5 0 180deg,#dfe4ea 0 270deg,#eef1f5 0) 0 0/30px 30px}'
+   +'.stage.drag{cursor:grabbing}.stage img{position:absolute;left:0;top:0;transform-origin:0 0;box-shadow:0 12px 46px rgba(0,0,0,.4);user-select:none;-webkit-user-drag:none}';
+  var body='<div class="bar"><span class="t">'+label+' 미리보기 · POD Studio</span>'
+   +'<button id="zo">−</button><span class="lvl" id="lv">100%</span><button id="zi">+</button>'
+   +'<button id="ft">맞춤</button><button id="hd">100%</button>'
+   +'<a id="dl" download="podstudio_'+label+'.png"><button>PNG 저장</button></a></div>'
+   +'<div class="stage" id="stg"><img id="im" alt="" src="'+url+'"></div>';
+  var js='(function(){var im=document.getElementById("im"),stg=document.getElementById("stg"),lv=document.getElementById("lv");'
+   +'var sc=1,tx=0,ty=0,fit=1;document.getElementById("dl").href=im.src;'
+   +'function NW(){return im.naturalWidth||1;}function NH(){return im.naturalHeight||1;}'
+   +'function clamp(v,a,b){return v<a?a:(v>b?b:v);}'
+   +'function apply(){im.style.transform="translate("+tx+"px,"+ty+"px) scale("+sc+")";lv.textContent=Math.round(sc*100)+"%";}'
+   +'function calcFit(){fit=Math.min((stg.clientWidth-48)/NW(),(stg.clientHeight-48)/NH());if(!isFinite(fit)||fit<=0)fit=1;}'
+   +'function center(){tx=(stg.clientWidth-NW()*sc)/2;ty=(stg.clientHeight-NH()*sc)/2;}'
+   +'function doFit(){calcFit();sc=fit;center();apply();}function actual(){sc=1;center();apply();}'
+   +'function zoomAt(f,cx,cy){var ns=clamp(sc*f,fit*0.5,10);var k=ns/sc;tx=cx-(cx-tx)*k;ty=cy-(cy-ty)*k;sc=ns;apply();}'
+   +'function ready(){doFit();}if(im.complete&&im.naturalWidth)ready();else im.onload=ready;'
+   +'window.addEventListener("resize",function(){var r=sc/fit;calcFit();sc=fit*r;apply();});'
+   +'document.getElementById("zi").onclick=function(){var r=stg.getBoundingClientRect();zoomAt(1.25,r.width/2,r.height/2);};'
+   +'document.getElementById("zo").onclick=function(){var r=stg.getBoundingClientRect();zoomAt(0.8,r.width/2,r.height/2);};'
+   +'document.getElementById("ft").onclick=doFit;document.getElementById("hd").onclick=actual;'
+   +'stg.addEventListener("wheel",function(e){e.preventDefault();var r=stg.getBoundingClientRect();zoomAt(e.deltaY<0?1.15:0.87,e.clientX-r.left,e.clientY-r.top);},{passive:false});'
+   +'var drag=false,sx,sy,ox,oy;stg.addEventListener("pointerdown",function(e){drag=true;stg.classList.add("drag");sx=e.clientX;sy=e.clientY;ox=tx;oy=ty;stg.setPointerCapture&&stg.setPointerCapture(e.pointerId);});'
+   +'stg.addEventListener("pointermove",function(e){if(!drag)return;tx=ox+(e.clientX-sx);ty=oy+(e.clientY-sy);apply();});'
+   +'function up(){drag=false;stg.classList.remove("drag");}stg.addEventListener("pointerup",up);stg.addEventListener("pointercancel",up);'
+   +'stg.addEventListener("dblclick",function(e){var r=stg.getBoundingClientRect();if(Math.abs(sc-fit)<0.01)zoomAt((fit*3)/sc,e.clientX-r.left,e.clientY-r.top);else doFit();});})();';
+  return '<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>'+label+' 미리보기 · POD Studio</title>'
+   +'<meta name="viewport" content="width=device-width,initial-scale=1"><style>'+css+'</style></head><body>'
+   +body+'<'+'script>'+js+'<'+'/script></body></html>';
+}
 var pv2={scale:1,tx:0,ty:0,fit:1,natW:0,natH:0,mode:'cover',page:0};
 function openFull(mode){
   pv2.mode=mode||st.pvMode||'cover';pv2.page=st.pvPage||0;
@@ -2330,10 +2665,30 @@ function renderFull(fit){
   pv2.natW=natW;pv2.natH=natH;host.style.width=natW+'px';host.style.height=natH+'px';
   computeFitFull(fit||!pv2._inited);pv2._inited=true;
 }
-function computeFitFull(reset){var box=$('#fBody');if(!box||!pv2.natW)return;var fit=Math.min((box.clientWidth-40)/pv2.natW,(box.clientHeight-40)/pv2.natH);if(!isFinite(fit)||fit<=0)fit=1;pv2.fit=fit;if(reset){pv2.scale=fit;pv2.tx=(box.clientWidth-pv2.natW*fit)/2;pv2.ty=(box.clientHeight-pv2.natH*fit)/2;}applyFull();}
+function computeFitFull(){}
 function applyFull(){var host=$('#fHost');if(!host)return;host.style.transform='translate('+pv2.tx+'px,'+pv2.ty+'px) scale('+pv2.scale+')';var l=$('#fZoomLabel');if(l)l.textContent=Math.round((pv2.scale/(pv2.fit||1))*100)+'%';}
 function zoomFull(f,cx,cy){var box=$('#fBody');if(!box)return;if(cx==null){cx=box.clientWidth/2;cy=box.clientHeight/2;}var ns=Math.max(pv2.fit*0.5,Math.min(pv2.fit*10,pv2.scale*f));var r=ns/pv2.scale;pv2.tx=cx-(cx-pv2.tx)*r;pv2.ty=cy-(cy-pv2.ty)*r;pv2.scale=ns;applyFull();}
-$('#fullView').addEventListener('click',function(){openFull(st.pvMode);});
+$('#fullView').addEventListener('click',openPreviewWindow);
+// 슬라이더 미세조정 UX: 조절 중 값 말풍선 표시 + 모든 입력 실시간 반영(안전망)
+(function(){
+  var rb,rbt,rt;
+  function bubble(el){
+    if(!rb){rb=document.createElement('div');rb.style.cssText='position:fixed;z-index:99999;background:#191F28;color:#fff;font-size:12px;font-weight:800;padding:3px 9px;border-radius:8px;pointer-events:none;transform:translate(-50%,-115%);box-shadow:0 4px 14px rgba(0,0,0,.28);transition:opacity .25s;opacity:0';document.body.appendChild(rb);}
+    var mn=parseFloat(el.min||'0'),mx=parseFloat(el.max||'100'),v=parseFloat(el.value);
+    var frac=(mx-mn)?(v-mn)/(mx-mn):0.5;var r=el.getBoundingClientRect();
+    var unit='';var id=el.id||'';
+    if(/Y$/.test(id))unit='%';else if(/Scale/.test(id))unit='%',v=Math.round(v*100);else if(/Size$/.test(id))unit='px';else if(id==='bleed')unit='mm';else if(/^cm(Top|Right|Bottom|Left)$/.test(id))unit='mm';
+    rb.textContent=(/Scale/.test(id)?v:el.value)+unit;
+    rb.style.left=(r.left+frac*r.width)+'px';rb.style.top=r.top+'px';rb.style.opacity='1';
+    clearTimeout(rbt);rbt=setTimeout(function(){rb.style.opacity='0';},1100);
+  }
+  var app=document.getElementById('app')||document.body;
+  app.addEventListener('input',function(e){
+    var el=e.target;if(!el)return;
+    if(el.type==='range')bubble(el);
+    if(el.matches&&el.matches('input,textarea,select')){clearTimeout(rt);rt=setTimeout(function(){try{renderPreview();}catch(_){}},120);}
+  },true);
+})();
 $('#fClose').addEventListener('click',closeFull);
 $$('.pvf-tab').forEach(function(t){t.addEventListener('click',function(){pv2.mode=t.dataset.pvf;pv2.page=0;$$('.pvf-tab').forEach(function(x){x.classList.toggle('on',x===t)});renderFull(true);});});
 $('#fZoomIn').addEventListener('click',function(){zoomFull(1.25);});
@@ -2416,7 +2771,20 @@ async function elToCanvas(el,wmm,hmm){
   // 이미지가 모두 로드된 뒤 렌더 (표지 반쪽 렌더 방지)
   var imgs=Array.prototype.slice.call(box.querySelectorAll('img'));
   await Promise.all(imgs.map(function(im){return (im.complete&&im.naturalWidth)?Promise.resolve():new Promise(function(res){im.onload=res;im.onerror=res;setTimeout(res,3000);});}));
-  try{if(document.fonts&&document.fonts.ready)await Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,1500);})]);}catch(e){}
+  try{if(document.fonts){
+    // 판권에 실제로 쓰이는 글꼴을 반드시 먼저 로드 (미로드 시 한글이 깨져 렌더됨)
+    var _fams=[];
+    try{ if(typeof crFontCss==='function') _fams.push(crFontCss().split(',')[0]); }catch(e){}
+    if(st.fontFamily)_fams.push(st.fontFamily.split(',')[0]);
+    for(var _fi=0;_fi<_fams.length;_fi++){
+      var _fn=_fams[_fi];
+      try{ await Promise.race([
+        Promise.all([document.fonts.load('400 20px '+_fn),document.fonts.load('700 20px '+_fn),document.fonts.load('800 20px '+_fn)]),
+        new Promise(function(r){setTimeout(r,4000);})
+      ]); }catch(e){}
+    }
+    if(document.fonts.ready)await Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,2500);})]);
+  }}catch(e){}
   await new Promise(function(r){setTimeout(r,30);});
   var canvas=await html2canvas(box,{scale:EXPORT_SCALE,useCORS:true,allowTaint:false,backgroundColor:'#ffffff',logging:false,width:wmm*MM,height:hmm*MM,imageTimeout:5000});
   stage.innerHTML='';return canvas;
@@ -2433,129 +2801,295 @@ $('#genExport').addEventListener('click',function(){
   if(isPremiumActive()){runExport();return;}
   showMembershipModal();
 });
-function showMembershipModal(){
-  var p=PLANS.premium;
-  $('#modalTitle').textContent='연간 프리미엄 회원권';
-  var feats=p.feats.map(function(f){return '<div style="display:flex;gap:8px;align-items:center;font-size:13.5px;color:var(--ink-2);padding:3px 0"><svg viewBox="0 0 24 24" fill="none" style="width:16px;height:16px;color:var(--ok);flex:none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'+esc(f[0])+'</div>';}).join('');
-  $('#modalBody').innerHTML='<div style="text-align:center;margin-bottom:14px"><div style="font-size:30px;font-weight:800;color:var(--ink)">'+Number(p.price).toLocaleString('ko-KR')+'<span style="font-size:15px;color:var(--ink-3)">원 / 년</span></div><div style="font-size:12.5px;color:var(--ink-3)">무제한 추출 · 표지·내지 PDF·DOCX</div></div>'+feats+'<div style="margin-top:12px;font-size:12px;color:var(--ink-3);background:var(--bg-2);border-radius:10px;padding:10px">지금은 테스트 기간이라 결제 없이 “건당 바로 추출”로도 받아보실 수 있어요.</div>';
+async function showMembershipModal(){
+  // 서버(RTDB) 가격을 먼저 반영 — 샌드박스/상용 각각의 설정값이 그대로 표시됨
+  try{
+    await ensurePayConfig();
+    if(PORTONE.prices){
+      if(PORTONE.prices.premium!=null)PLANS.premium.price=Number(PORTONE.prices.premium);
+      if(PORTONE.prices.single!=null)PLANS.single.price=Number(PORTONE.prices.single);
+    }
+  }catch(e){}
+  var ps=PLANS.single,pp=PLANS.premium;
+  $('#modalTitle').textContent='어떻게 추출할까요?';
+  function card(id,badge,price,cycle,desc,feats,primary){
+    return '<div class="paycard'+(primary?' rec':'')+'" data-pay="'+id+'">'+
+      (badge?'<div class="pb">'+badge+'</div>':'')+
+      '<div class="pt">'+esc(price)+'<span>'+esc(cycle)+'</span></div>'+
+      '<div class="pd">'+esc(desc)+'</div>'+
+      '<ul class="pf">'+feats.map(function(f){return '<li>'+esc(f)+'</li>';}).join('')+'</ul>'+
+      '<button class="btn '+(primary?'btn-p':'btn-line')+' btn-sm" style="width:100%;margin-top:10px">'+(primary?'구독하고 추출':'건당 결제하고 추출')+'</button>'+
+    '</div>';
+  }
+  $('#modalBody').innerHTML=
+    '<div style="font-size:12.5px;color:var(--ink-2);background:var(--brand-tint);border-radius:10px;padding:10px 12px;margin-bottom:12px;line-height:1.7">💡 <b>건당 결제는 24시간 동안 무제한 재추출</b>이 가능해요. 결과가 마음에 들지 않으면 설정을 바꿔 몇 번이든 다시 뽑을 수 있어요.</div>'+
+    '<div class="paygrid">'+
+      card('single','',Number(ps.price).toLocaleString('ko-KR')+'원','/ 1회','이번 한 권만 추출',
+        ['내지 PDF 1회 추출','판권 자동 삽입','규격 자동 변환','24시간 무제한 재추출 ★'],false)+
+      card('premium','가장 인기',Number(pp.price).toLocaleString('ko-KR')+'원','/ 년','1년 동안 무제한 추출',
+        ['1년간 무제한 추출','원고 수정·재추출 자유','여러 권 작업 가능','우선 지원'],true)+
+    '</div>'+
+    (IS_LIVE?'':'<div style="margin-top:12px;font-size:12px;color:var(--ink-3);background:var(--bg-2);border-radius:10px;padding:10px">지금은 <b>테스트 환경</b>이에요. 아래 <b>“바로 추출하기”</b>를 누르면 결제 없이 내지 PDF를 받을 수 있어요.</div>');
   var btns=$('#modalBtns');btns.innerHTML='';
-  var bt=document.createElement('button');bt.className='btn btn-line btn-sm';bt.textContent='건당 바로 추출 (테스트)';bt.onclick=function(){closeModal();runExport(true);};
-  var bp=document.createElement('button');bp.className='btn btn-p btn-sm';bp.textContent='연간 회원권 결제';bp.onclick=function(){pendingExport=true;buyPlan('premium');};
-  btns.appendChild(bt);btns.appendChild(bp);
+  if(!IS_LIVE){   // 샌드박스/로컬에서만 노출. 실제 도메인 배포 시 숨김
+    var bt=document.createElement('button');bt.className='btn btn-p';bt.textContent='⬇ 바로 추출하기 (테스트 무료)';
+    bt.style.cssText='width:100%;font-size:15px;padding:13px;';
+    bt.onclick=function(){closeModal();runExport(true);};
+    btns.appendChild(bt);
+  }
+  $$('.paycard').forEach(function(c){
+    c.addEventListener('click',function(){
+      var id=c.dataset.pay;
+      closeModal();
+      pendingExport=true;
+      buyPlan(id);          // 건당·구독 모두 실제 결제로 진행
+    });
+  });
   $('#scrim').classList.add('on');$('#modal').classList.add('on');
 }
 $('#buySingleInline').addEventListener('click',function(){if(!requireAgree())return;closeModal();runExport(true);});
 $('#viewMembership')&&$('#viewMembership').addEventListener('click',function(){if(!requireAgree())return;showMembershipModal();});
+// 원고의 '잉크 영역'(글자·이미지·선 + 페이지번호 포함) 감지 → 빈 여백만큼 축소율 개선
+// 여러 페이지를 샘플링해 합집합을 구하고, 전 페이지에 동일 배치를 적용(일관성 유지)
+// 원고에 이미 페이지 번호가 있는지 자동 감지 (하단 영역의 '숫자만 있는 짧은 텍스트')
+async function detectPageNumbers(dataUrl){
+  try{
+    if(!window.pdfjsLib)return {has:false};
+    var raw=atob(dataUrl.split(',')[1]);var arr=new Uint8Array(raw.length);
+    for(var i=0;i<raw.length;i++)arr[i]=raw.charCodeAt(i);
+    var pdf=await pdfjsLib.getDocument({data:arr}).promise;
+    var N=pdf.numPages, idxs=[], MAXS=Math.min(12,N);
+    for(var k=0;k<MAXS;k++){var v=Math.max(1,Math.round((k+1)*N/(MAXS+1)));if(idxs.indexOf(v)<0)idxs.push(v);}
+    var hits=0,checked=0;
+    for(var j=0;j<idxs.length;j++){
+      var page=await pdf.getPage(idxs[j]);
+      var vp=page.getViewport({scale:1});
+      var tc=await page.getTextContent();
+      checked++;
+      var found=false;
+      for(var t=0;t<tc.items.length;t++){
+        var it=tc.items[t];var s=(it.str||'').trim();
+        if(!s||s.length>5)continue;
+        if(!/^[-·\s]*\d{1,4}[-·\s]*$/.test(s))continue;   // 숫자(장식 포함)만
+        var ty=it.transform&&it.transform[5];              // PDF 좌표(bottom-left)
+        if(ty==null)continue;
+        if(ty < vp.height*0.14){ found=true; break; }      // 하단 14% 이내
+      }
+      if(found)hits++;
+      if(page.cleanup)page.cleanup();
+    }
+    return {has:(checked>0 && hits/checked>=0.5), hits:hits, checked:checked};
+  }catch(e){console.warn('pn detect fail',e);return {has:false};}
+}
+async function detectInkBox(dataUrl,onProg){
+  try{
+    if(!window.pdfjsLib)return null;
+    var raw=atob(dataUrl.split(',')[1]);var arr=new Uint8Array(raw.length);
+    for(var i=0;i<raw.length;i++)arr[i]=raw.charCodeAt(i);
+    var pdf=await pdfjsLib.getDocument({data:arr}).promise;
+    var N=pdf.numPages;
+    var idxs=[],MAXS=Math.min(20,N);
+    for(var k=0;k<MAXS;k++)idxs.push(1+Math.round(k*(N-1)/Math.max(1,MAXS-1)));
+    idxs=idxs.filter(function(v,ix,a){return a.indexOf(v)===ix;});
+    var L=1e9,T=1e9,R=-1e9,B=-1e9,pw=0,ph=0,found=false;
+    var SC=0.5;
+    for(var j=0;j<idxs.length;j++){
+      if(onProg)onProg(j+1,idxs.length);
+      var page=await pdf.getPage(idxs[j]);
+      var vp=page.getViewport({scale:SC});
+      pw=vp.width/SC; ph=vp.height/SC;
+      var cv=document.createElement('canvas');cv.width=Math.ceil(vp.width);cv.height=Math.ceil(vp.height);
+      var cx=cv.getContext('2d',{willReadFrequently:true});
+      cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);
+      await page.render({canvasContext:cx,viewport:vp}).promise;
+      var d=cx.getImageData(0,0,cv.width,cv.height).data;
+      for(var y=0;y<cv.height;y++){
+        for(var x=0;x<cv.width;x++){
+          var p=(y*cv.width+x)*4;
+          if(d[p]<246||d[p+1]<246||d[p+2]<246){
+            found=true;
+            if(x<L)L=x; if(x>R)R=x; if(y<T)T=y; if(y>B)B=y;
+          }
+        }
+      }
+      if(page.cleanup)page.cleanup();
+    }
+    if(!found)return null;
+    var pad=1;
+    var box={x0:Math.max(0,L/SC-pad),y0:Math.max(0,T/SC-pad),
+             x1:Math.min(pw,(R+1)/SC+pad),y1:Math.min(ph,(B+1)/SC+pad),pw:pw,ph:ph};
+    box.w=box.x1-box.x0; box.h=box.y1-box.y0;
+    if(box.w<=0||box.h<=0)return null;
+    return box;
+  }catch(e){console.warn('ink detect fail',e);return null;}
+}
 async function runExport(isTest){
+  if(!isTest && !isPremiumActive() && !canReexport()){
+    var _ok=await useCredit();          // 서버 값 재확인
+    if(!_ok){showMembershipModal();return;}
+  }
   if(_exporting)return;_exporting=true;
   showGenProgress();
   try{
     if(!window.jspdf||!window.jspdf.jsPDF)throw new Error('PDF 라이브러리 로드 실패 (새로고침 후 다시 시도)');
     var jsPDF=window.jspdf.jsPDF;
-    if(st.logoImg)await refreshLogoCache(); // 로고 틴트 캐시 보장
+    await refreshLogoCache(); // 로고 틴트 캐시 보장
 
-    // ---- COVER ----
+    // ---- INNER (내지 전용 서비스) ----
     setGenStep(0);
-    var cov=buildCover('export');
-    var covCanvas=await elToCanvas(cov.el,cov.spec.fullW,cov.spec.fullH);
-    var covB64=canvasToB64(covCanvas, st.coverImg?'image/jpeg':'image/png', 0.94);
-    // cover.pdf
-    setGenStep(1);
-    var cpdf=new jsPDF({unit:'mm',orientation:cov.spec.fullW>=cov.spec.fullH?'landscape':'portrait',format:[cov.spec.fullW,cov.spec.fullH]});
-    cpdf.addImage('data:image/'+(st.coverImg?'jpeg':'png')+';base64,'+covB64,st.coverImg?'JPEG':'PNG',0,0,cov.spec.fullW,cov.spec.fullH,undefined,'FAST');
-    var coverPdfBlob=cpdf.output('blob');
-    // cover.docx (full-page image)
-    var coverDocxZip=await buildDocx([{type:'image',dataB64:covB64,widthMM:cov.spec.fullW,heightMM:cov.spec.fullH,align:'left'}],{pageWmm:cov.spec.fullW,pageHmm:cov.spec.fullH,margins:{top:0,right:0,bottom:0,left:0},landscape:cov.spec.fullW>=cov.spec.fullH});
-    var coverDocxBlob=await coverDocxZip.generateAsync({type:'blob'});
-
-    // ---- INNER ----
-    setGenStep(2);
     var work=innerSpec(st);
     var innerPdfBlob,innerDocxBlob;
+    var fitReport=null;
     if(st.innerPdf&&window.PDFLib){
-      // 업로드된 원고 PDF + 앞/뒤 판권 병합 (모든 페이지 규격 완전 일치 → 심의 반려 방지)
-      setGenStep(2,'원고 PDF 병합');
+      setGenStep(1,'원고 규격 변환');
       try{
         var PDFLib=window.PDFLib;
+        var PT=72/25.4;
+        // 목표 페이지 = 교보 규격(트림 + 사방 3mm 재단여백). 공식 가이드: "사방여백 3mm 포함 크기로 제작"
+        var pageW=work.workW*PT, pageH=work.workH*PT;
+        // 안전영역(재단선 안쪽 SAFE mm) — 내용이 이 박스를 넘으면 그만큼만 축소
+        var SAFE=st.safeMM!=null?st.safeMM:5;
+        var safeL=(work.bleed+SAFE)*PT, safeT=(work.bleed+SAFE)*PT;
+        var safeW=pageW-safeL*2, safeH=pageH-safeT*2;
         var rawc=atob(st.innerPdf.split(',')[1]);var ua=new Uint8Array(rawc.length);for(var k=0;k<rawc.length;k++)ua[k]=rawc.charCodeAt(k);
         var userDoc=await PDFLib.PDFDocument.load(ua,{ignoreEncryption:true});
-        // 기준 페이지 크기 = 업로드 원고 1쪽 크기(pt). 판권도 이 크기로 정확히 맞춤.
-        var p0=userDoc.getPage(0);var PW=p0.getWidth(),PH=p0.getHeight();
         var merged=await PDFLib.PDFDocument.create();
-        // 판권 이미지를 기준 크기 페이지에 정확히 채워 넣기
+        // 판권: 목표 규격 페이지에 정확히 생성
         async function copyrightPageExact(){
           var cvs=await elToCanvas(copyrightPageEl(work),work.workW,work.workH);
           var pngBytes=await (await fetch(cvs.toDataURL('image/png'))).arrayBuffer();
           var img=await merged.embedPng(pngBytes);
-          var pg=merged.addPage([PW,PH]);
-          pg.drawImage(img,{x:0,y:0,width:PW,height:PH});
+          var pg=merged.addPage([pageW,pageH]);
+          pg.drawImage(img,{x:0,y:0,width:pageW,height:pageH});
         }
+        // ── 잉크영역 감지: 빈 여백을 제외한 실제 내용 크기로 축소율을 최소화 (시인성 최대) ──
+        setGenStep(1,'원고 분석 중');
+        var ink=await detectInkBox(st.innerPdf,function(a,b){setGenStep(1,'원고 분석 '+a+' / '+b);});
+
         if(st.copyPos==='front')await copyrightPageExact();
-        // 업로드 원고: 각 페이지를 기준 크기 페이지에 임베드해 정확히 배치 (크기 편차 제거)
         var idxs=userDoc.getPageIndices();
         var embedded=await merged.embedPdf(userDoc,idxs);
-        for(var ei=0;ei<embedded.length;ei++){
-          var ep=embedded[ei];var pg2=merged.addPage([PW,PH]);
-          pg2.drawPage(ep,{x:0,y:0,width:PW,height:PH});
+
+        // 페이지 번호: 원고를 분석해 자동 판단 (있으면 그대로 / 없으면 자동 삽입)
+        setGenStep(1,'페이지 번호 확인');
+        var pnDet=await detectPageNumbers(st.innerPdf);
+        var pnMode=pnDet.has?'none':'add';        // 자동
+        var pnAuto=pnDet.has;                      // 리포트용
+        var pnFont=null;
+        if(pnMode==='add'){
+          try{pnFont=await merged.embedFont(PDFLib.StandardFonts.Helvetica);}catch(e){pnFont=null;}
         }
+        var PN_BASE=9.5;                 // 기준 글자 크기(pt) — 축소율에 따라 조정됨
+        var PN_MIN=7.0, PN_MAX=11.0;     // 시인성 하한 / 규격 상한
+        var PN_GAP=5;                    // 본문과 번호 사이 최소 간격(pt)
+        var pnSize=PN_BASE;
+        var pnStart=1;
+        var pnSkip=0;
+
+        // ── 배치 배율 + 번호 크기 (상호 의존이라 2단계로 계산) ──
+        var e0=embedded[0]||{width:pageW,height:pageH};
+        var ew0=e0.width||pageW, eh0=e0.height||pageH;
+        var contentW=(ink&&ink.w>0)?ink.w:ew0, contentH=(ink&&ink.h>0)?ink.h:eh0;
+        var s=1, useInk=false, band=0, fitH=safeH;
+
+        function solveFit(pnPt){
+          var b=(pnFont?(pnPt+PN_GAP):0);
+          var fh=safeH-b;
+          var sI=Math.min(safeW/contentW, fh/contentH, 1);
+          var sP=Math.min(safeW/ew0, fh/eh0, 1);
+          var useI=(ink && sI>sP+0.001);
+          return {band:b, fitH:fh, s:(useI?sI:sP), useInk:useI};
+        }
+        // 1차: 기준 크기로 축소율 산출
+        var r1=solveFit(PN_BASE);
+        // 2차: 본문 축소율(s)에 맞춰 번호 크기도 함께 축소 → 본문과 균형 유지
+        //      단, 너무 작아 안 보이거나(하한) 너무 커서 규격을 침범하지 않게(상한) 제한
+        if(pnFont){
+          pnSize=Math.max(PN_MIN, Math.min(PN_MAX, PN_BASE*r1.s));
+          pnSize=Math.round(pnSize*10)/10;
+        }
+        var r2=solveFit(pnSize);
+        s=r2.s; useInk=r2.useInk; band=r2.band; fitH=r2.fitH;
+        // 안전장치: 번호 띠가 안전영역을 넘지 않도록 (본문 높이가 음수/과소가 되는 것 방지)
+        if(fitH < safeH*0.5){ pnSize=PN_MIN; var r3=solveFit(pnSize); s=r3.s; useInk=r3.useInk; band=r3.band; fitH=r3.fitH; }
+        var shrunk=0,kept=0;
+
+        for(var ei=0;ei<embedded.length;ei++){
+          setGenStep(1,'규격 변환 '+(ei+1)+' / '+embedded.length+'p');
+          var ep=embedded[ei];
+          var ew=ep.width||pageW, eh=ep.height||pageH;
+          var dW=ew*s, dH=eh*s;
+          var x,y;
+          var areaBottom=safeT+band;     // 본문 배치 영역 하단(번호 띠 위)
+          if(useInk&&ink){
+            // 잉크영역 중심을 '본문 영역'(번호 띠 제외) 중심에 맞춤
+            var cx=(ink.x0+ink.x1)/2;
+            var cyTop=(ink.y0+ink.y1)/2;                       // pdf.js: top-left 기준
+            var cyBL=eh-cyTop;                                 // pdf-lib: bottom-left 기준
+            x=pageW/2 - cx*s;
+            y=(areaBottom+fitH/2) - cyBL*s;
+          }else{
+            x=(pageW-dW)/2;
+            y=areaBottom+(fitH-dH)/2;
+          }
+          if(s<0.999)shrunk++; else kept++;
+          var pg2=merged.addPage([pageW,pageH]);
+          pg2.drawPage(ep,{x:x,y:y,width:dW,height:dH});
+
+          // ── 페이지 번호 자동 삽입 (좌=짝수 / 우=홀수, 바깥쪽 정렬) ──
+          if(pnFont && ei>=pnSkip){
+            var num=pnStart+(ei-pnSkip);
+            if(num>0){
+              var txt=String(num);
+              var tw=pnFont.widthOfTextAtSize(txt,pnSize);
+              var isOdd=(num%2===1);                    // 홀수 = 오른쪽 페이지
+              var mx=safeL+8*PT;                        // 바깥 여백 기준
+              var px2;
+              if(isOdd) px2=pageW-mx-tw;                // 오른쪽(홀수) → 우측 정렬
+              else      px2=mx;                         // 왼쪽(짝수) → 좌측 정렬
+              // ★ 규격(안전영역) 밖으로 절대 나가지 않게 클램프
+              var minX=safeL, maxX=pageW-safeL-tw;
+              if(px2<minX)px2=minX;
+              if(px2>maxX)px2=maxX;
+              var py=safeT+3;                           // 안전영역 하단 안쪽
+              var maxY=safeT+band-pnSize;               // 번호 띠를 벗어나지 않게
+              if(maxY>safeT && py>maxY)py=maxY;
+              if(py<safeT)py=safeT;
+              pg2.drawText(txt,{x:px2,y:py,size:pnSize,font:pnFont,color:PDFLib.rgb(0.15,0.15,0.15)});
+            }
+          }
+        }
+        var minScale=s;
         if(st.copyPos==='back')await copyrightPageExact();
+        fitReport={total:embedded.length,shrunk:shrunk,kept:kept,minScale:minScale,useInk:useInk,pn:(pnFont?embedded.length-pnSkip:0),pnKept:pnAuto};
         var mergedBytes=await merged.save();
         innerPdfBlob=new Blob([mergedBytes],{type:'application/pdf'});
       }catch(mergeErr){
-        // 병합 실패 시: 업로드한 PDF 원본을 그대로 사용 (추출은 계속 진행)
-        console.warn('pdf merge fallback',mergeErr);
+        console.warn('pdf convert fallback',mergeErr);
         var raw2=atob(st.innerPdf.split(',')[1]);var ub=new Uint8Array(raw2.length);for(var j=0;j<raw2.length;j++)ub[j]=raw2.charCodeAt(j);
         innerPdfBlob=new Blob([ub],{type:'application/pdf'});
-        toast('원고 PDF는 원본 그대로 포함했어요');
+        toast('규격 변환에 실패해 원본을 그대로 포함했어요');
       }
-      // docx: 판권(편집용) + 안내
-      var dpar=[];
-      if(st.copyPos==='front')pushCopyrightDocx(dpar,false);
-      dpar.push({text:'※ 본문 원고는 첨부된 inner PDF 파일을 참고하세요. (업로드하신 원고가 판권과 함께 병합되어 있습니다.)',size:11,color:'444444',spacingAfter:8,pageBreakBefore:(st.copyPos==='front')});
-      if(st.copyPos==='back')pushCopyrightDocx(dpar,true);
-      if(!dpar.length)dpar.push({text:'본문 원고는 inner PDF를 참고하세요.',size:11});
-      innerDocxBlob=await (await buildDocx(dpar,{pageWmm:work.workW,pageHmm:work.workH,margins:{top:work.bleed+work.margins.top,right:work.bleed+work.margins.outer,bottom:work.bleed+work.margins.bottom,left:work.bleed+work.margins.inner}})).generateAsync({type:'blob'});
     }else{
-      // 원고 미업로드: 생성형 내지 (이미지 페이지 PDF + 편집형 DOCX)
-      var innerBuilt=buildInnerPages();var pages=innerBuilt.pages;
-      var ipdf=new jsPDF({unit:'mm',orientation:work.workW>=work.workH?'landscape':'portrait',format:[work.workW,work.workH]});
-      var docxParas=[];
-      docxParas.push({text:st.title||'제목',bold:true,size:22,align:'center',font:'맑은 고딕',spacingAfter:6});
-      if(st.subtitle)docxParas.push({text:st.subtitle,size:13,align:'center',color:'555555',spacingAfter:8});
-      docxParas.push({text:(st.author||'저자')+' 지음',size:12,align:'center',color:'333333',spacingAfter:12});
-      for(var i=0;i<pages.length;i++){
-        setGenStep(2,(i+1)+' / '+pages.length+' 페이지');
-        var pcanvas=await elToCanvas(pages[i].el,work.workW,work.workH);
-        var pB64=canvasToB64(pcanvas,'image/png');
-        if(i>0)ipdf.addPage([work.workW,work.workH],work.workW>=work.workH?'landscape':'portrait');
-        ipdf.addImage('data:image/png;base64,'+pB64,'PNG',0,0,work.workW,work.workH,undefined,'FAST');
-      }
-      var bodyTxt=(st.backText&&st.backText.trim())?st.backText:(st.ai&&st.ai.back?st.ai.back:'');
-      if(st.copyPos==='front')pushCopyrightDocx(docxParas,true);
-      if(bodyTxt.trim()){bodyTxt.split(/\n\s*\n/).forEach(function(p){docxParas.push({text:p,size:11,align:'left',spacingAfter:8});});}
-      if(st.copyPos==='back')pushCopyrightDocx(docxParas,true);
-      innerPdfBlob=ipdf.output('blob');
-      innerDocxBlob=await (await buildDocx(docxParas,{pageWmm:work.workW,pageHmm:work.workH,margins:{top:work.bleed+work.margins.top,right:work.bleed+work.margins.outer,bottom:work.bleed+work.margins.bottom,left:work.bleed+work.margins.inner}})).generateAsync({type:'blob'});
+      throw new Error('내지 원고 PDF를 먼저 올려주세요');
     }
 
-    // ---- ZIP ---- (파일명에 판형 크기 표기 → 규격 식별)
-    setGenStep(3);
+    // ---- 규격 자가검증 ----
+    setGenStep(2,'규격 검증');
+    var specReport=await verifySpec(null,innerPdfBlob,null,work);
+
+    // ---- 내지 PDF 단일 다운로드 ----
     var sizeTag=SIZES[st.sizeId].w+'_'+SIZES[st.sizeId].h; // 예: 152_225
-    var zip=new JSZip();
-    zip.file('cover_'+sizeTag+'.pdf',coverPdfBlob);
-    zip.file('cover_'+sizeTag+'.docx',coverDocxBlob);
-    zip.file('inner_'+sizeTag+'.pdf',innerPdfBlob);
-    zip.file('inner_'+sizeTag+'.docx',innerDocxBlob);
-    zip.file('README.txt',makeReadme(cov.spec,work));
-    var zipBlob=await zip.generateAsync({type:'blob'});
-    downloadBlob(zipBlob,'pod_assets_'+sizeTag+'.zip');
+    var fname='inner_'+sizeTag+'.pdf';
+    downloadBlob(innerPdfBlob,fname);
 
     // 개인정보/저작권 보호: 도서 제목·원고·이미지는 서버에 저장하지 않음 (추출 카운트만)
     try{await payRef(user.uid,'exports').push({at:Date.now(),size:SIZES[st.sizeId].name,binding:st.binding,test:!!isTest});}catch(e){}
     PM.event('export',SIZES[st.sizeId].name+(isTest?' (test)':''));try{PM.sale('export_use',SIZES[st.sizeId].name,0);}catch(e){}
     track('export',{size:st.sizeId,binding:st.binding,test:!!isTest});
     updateGating();
-    setGenDone();
+    try{renderReBanner();}catch(e){}
+    setGenDone(specReport,fitReport,fname);
   }catch(e){
     console.error('export error',e);closeModal();
     var msg=(e&&e.message)?e.message:String(e);
@@ -2564,20 +3098,56 @@ async function runExport(isTest){
   _exporting=false;
 }
 
+function docxFont(){
+  // st.fontFamily("'Noto Serif KR', serif")에서 실제 폰트명만 추출. 없으면 기본.
+  var f=(st.fontFamily||'').split(',')[0].replace(/['"]/g,'').trim();
+  return f||'맑은 고딕';
+}
 function pushCopyrightDocx(arr,pb){
   var d=st.pubdate?new Date(st.pubdate):new Date();
   var y=d.getFullYear(),mo=('0'+(d.getMonth()+1)).slice(-2),da=('0'+d.getDate()).slice(-2);
   var author=st.copyAuthor||st.author||'지은이',pub=st.publisher||'퍼플';
-  arr.push({text:(st.title||'제목'),bold:true,size:15,align:'left',spacingAfter:10,pageBreakBefore:!!pb});
-  arr.push({text:'발행일    '+y+'년 '+mo+'월 '+da+'일 초판 1쇄 발행',size:10,spacingAfter:3});
-  arr.push({text:'지은이    '+author,size:10,spacingAfter:3});
-  arr.push({text:'발행처    '+pub,size:10,spacingAfter:8});
-  arr.push({text:'출판등록  제300-2012-167호 (2012년 09월 07일)',size:10,spacingAfter:3});
-  arr.push({text:'주 소     서울시 종로구 종로1가 1번지',size:10,spacingAfter:3});
-  arr.push({text:'대표전화  1544-1900',size:10,spacingAfter:3});
-  arr.push({text:'홈페이지  www.kyobobook.co.kr',size:10,spacingAfter:10});
-  arr.push({text:'Copyright © '+author+' '+y,size:10,spacingAfter:8});
-  arr.push({text:'본 책 내용의 전부 또는 일부를 재사용하려면 반드시 저작권자의 동의를 받아야 합니다. 잘못 만들어진 책은 구입처에서 교환해 드립니다.',size:9,color:'444444',spacingAfter:6});
+  var F=docxFont();
+  arr.push({text:(st.title||'제목'),bold:true,size:15,align:'left',spacingAfter:10,pageBreakBefore:!!pb,font:F});
+  arr.push({text:'발행일    '+y+'년 '+mo+'월 '+da+'일',size:10,spacingAfter:3,font:F});
+  arr.push({text:'지은이    '+author,size:10,spacingAfter:3,font:F});
+  arr.push({text:'발행처    '+pub,size:10,spacingAfter:8,font:F});
+  arr.push({text:'출판등록  제300-2012-167호 (2012년 09월 07일)',size:10,spacingAfter:3,font:F});
+  arr.push({text:'주 소     서울시 종로구 종로1가 1번지',size:10,spacingAfter:3,font:F});
+  arr.push({text:'대표전화  1544-1900',size:10,spacingAfter:3,font:F});
+  arr.push({text:'홈페이지  www.kyobobook.co.kr',size:10,spacingAfter:10,font:F});
+  arr.push({text:'Copyright © '+author+' '+y,size:10,spacingAfter:8,font:F});
+  arr.push({text:'본 책 내용의 전부 또는 일부를 재사용하려면 반드시 저작권자의 동의를 받아야 합니다.',size:9,color:'444444',spacingAfter:6,font:F});
+}
+// ===== 규격 자가검증: 추출된 PDF의 실제 페이지 mm를 교보 기준과 대조 =====
+async function pdfSizesMM(blob){
+  try{ if(!window.PDFLib) return null;
+    var buf=new Uint8Array(await blob.arrayBuffer());
+    var doc=await window.PDFLib.PDFDocument.load(buf,{ignoreEncryption:true});
+    return doc.getPages().map(function(p){return {w:+(p.getWidth()/2.83465).toFixed(1), h:+(p.getHeight()/2.83465).toFixed(1)};});
+  }catch(e){return null;}
+}
+async function verifySpec(coverBlob,innerBlob,cspec,work){
+  var tol=0.6;
+  function ok(a,b){return Math.abs(a-b)<=tol;}
+  var lines=[],allok=true;
+  var is=await pdfSizesMM(innerBlob);
+  if(is&&is.length){
+    // 1) 규격 일치
+    var bad=is.filter(function(p){return !(ok(p.w,work.workW)&&ok(p.h,work.workH));});
+    var g2=bad.length===0;allok=allok&&g2;
+    lines.push((g2?'✅':'⚠️')+' 페이지 규격 <b>'+work.workW+'×'+work.workH+'mm</b> — '+(is.length-bad.length)+'/'+is.length+'쪽 일치'+(bad.length?' <span style="color:#F04438">(불일치 '+bad.length+'쪽)</span>':''));
+    // 2) 전 페이지 동일 크기(균일성)
+    var b0=is[0];
+    var uni=is.every(function(p){return ok(p.w,b0.w)&&ok(p.h,b0.h);});
+    lines.push((uni?'✅':'⚠️')+' 전 페이지 크기 동일 <b>'+(uni?'예':'아니오')+'</b>');
+    // 3) 총 페이지 수 (짝수 권장)
+    var even=(is.length%2===0);
+    lines.push((even?'✅':'⚠️')+' 총 <b>'+is.length+'쪽</b>'+(even?' (짝수 — 제본 OK)':' <span style="color:#B54708">(홀수 — 교보에서 빈 페이지가 추가될 수 있어요)</span>'));
+    allok=allok&&uni;
+    lines.push('<span style="color:#8B95A1">= '+SIZES[st.sizeId].name+' 규격 (교보 제출 기준)</span>');
+  }
+  return {allok:allok,linesHtml:lines.join('<br>'),linesTxt:lines.map(function(l){return l.replace(/<[^>]+>/g,'');}).join('\n')};
 }
 function makeReadme(cspec,work){
   return 'POD Studio — 교보문고 바로출판 POD 파일 패키지\n'+
@@ -2599,7 +3169,7 @@ function makeReadme(cspec,work){
 function downloadBlob(blob,name){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);}
 
 /* ---- 진행 모달 ---- */
-var GEN_STEPS=['표지 렌더링','표지 PDF·DOCX 생성','내지 페이지 렌더링','ZIP 패키징'];
+var GEN_STEPS=['원고 분석','규격 변환','규격 검증'];
 function showGenProgress(){
   $('#modalTitle').textContent='파일 만드는 중…';
   var html='<div class="genprog"><div class="ring"></div><div class="plist" id="genPlist">';
@@ -2613,9 +3183,36 @@ function setGenStep(i,extra){
     var d=el.querySelector('.d');if(g<i)d.textContent='✓';else if(g===i)d.textContent='◆';else d.textContent='•';
     if(g===i&&extra)el.innerHTML='<span class="d">◆</span>'+esc(GEN_STEPS[i])+' ('+esc(extra)+')';});
 }
-function setGenDone(){
-  $('#modalTitle').textContent='완성됐어요! 🎉';
-  $('#modalBody').innerHTML='<p style="text-align:center">pod_assets.zip 다운로드가 시작됐어요.<br>표지·내지 PDF·DOCX가 모두 담겨 있어요.</p>';
+function setGenDone(report,fit,fname){
+  $('#modalTitle').textContent='내지 PDF 완성! 🎉';
+  var v='';
+  if(fit){
+    var f='';
+    var pct=Math.round(fit.minScale*100);
+    if(fit.shrunk===0){f='<div style="color:#12B76A;font-weight:800;margin:10px 0 4px">✔ 글자 크기 100% 원본 유지</div><div style="font-size:13px;line-height:1.8">원고가 규격 안에 들어와 <b>축소 없이 원본 그대로</b> 변환했어요.</div>';}
+    else{f='<div style="color:'+(pct>=90?'#12B76A':'#B54708')+';font-weight:800;margin:10px 0 4px">✔ 글자 크기 '+pct+'% 유지</div><div style="font-size:13px;line-height:1.8">규격에 맞추기 위해 '+pct+'%로 조정했어요.'+(fit.useInk?' <b>여백을 제외한 본문 기준</b>으로 배치해 글자를 최대한 크게 유지했습니다.':'')+(pct<85?'<br><span style="color:#B54708">더 큰 판형(크라운판·B5)을 고르면 글자가 더 커져요.</span>':'')+'</div>';}
+    if(fit.pnKept)f+='<div style="font-size:13px;line-height:1.8;margin-top:6px;color:#12B76A;font-weight:700">✔ 원고에 페이지 번호가 있어 그대로 유지했어요</div>';
+    else if(fit.pn>0)f+='<div style="font-size:13px;line-height:1.8;margin-top:6px;color:#12B76A;font-weight:700">✔ 페이지 번호가 없어 '+fit.pn+'쪽에 자동으로 넣었어요 (홀수=오른쪽 / 짝수=왼쪽)</div>';
+    v+='<div style="text-align:left;background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:6px">'+f+'</div>';
+  }
+  if(report){var head=report.allok?'<div style="color:#12B76A;font-weight:800;margin:10px 0 4px">✔ 규격 자가검증 통과</div>':'<div style="color:#B54708;font-weight:800;margin:10px 0 4px">⚠ 규격 확인 필요</div>';
+    v+='<div style="text-align:left;background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.9;margin-top:8px">'+head+report.linesHtml+'<div style="color:#8B95A1;font-size:11.5px;margin-top:8px">교보 파트너시스템에 이 PDF를 그대로 업로드하세요.</div></div>';}
+  v+='<details style="margin-top:10px;text-align:left"><summary style="cursor:pointer;font-size:13px;font-weight:700;color:var(--brand)">내가 직접 확인하는 법 (30초)</summary>'+
+     '<div style="font-size:12.5px;line-height:1.85;color:var(--ink-2);background:var(--bg-2);border-radius:10px;padding:11px 13px;margin-top:8px">'+
+     '<b>1. 페이지 크기</b> — PDF를 열고 <b>⌘I</b>(Mac 미리보기: 도구 &gt; 속성 / Acrobat: 파일 &gt; 속성)<br>'+
+     '<span style="color:#8B95A1">※ “프린트” 창의 Paper Size(A4)는 <b>프린터 용지</b>라 무관해요. 반드시 속성 창에서 확인!</span><br>'+
+     '<b>2. 펼침면</b> — 뷰어에서 <b>두 페이지 보기</b> → 홀수가 오른쪽 / 짝수가 왼쪽인지<br>'+
+     '<b>3. 글자 잘림</b> — 첫·중간·마지막 쪽을 확대해 가장자리 글자 확인<br>'+
+     '<b>4. 최종</b> — 교보 파트너시스템에 업로드하면 규격 불일치 시 바로 경고가 떠요'+
+     '</div></details>';
+  var reHtml='';
+  var _left=(typeof reexportLeft==='function')?reexportLeft():0;
+  if(!isPremiumActive()&&_left>0){
+    reHtml='<div style="margin-top:10px;background:#E7F8F0;border:1px solid #12B76A;border-radius:12px;padding:11px 13px;font-size:13px;line-height:1.75;color:#0B7A48;text-align:left">'+
+      '🔄 <b>앞으로 '+fmtLeft(_left)+' 동안 무료로 다시 추출</b>할 수 있어요.<br>'+
+      '<span style="color:#3F7A63">결과가 마음에 들지 않으면 판형·판권을 바꿔 <b>추가 결제 없이</b> 몇 번이든 다시 만들어 보세요.</span></div>';
+  }
+  $('#modalBody').innerHTML='<p style="text-align:center"><b>'+esc(fname||'inner.pdf')+'</b> 다운로드가 시작됐어요.<br>교보문고 바로출판에 바로 업로드할 수 있어요.</p>'+v+reHtml;
   $('#modalBtns').innerHTML='';
   var ok=document.createElement('button');ok.className='btn btn-p btn-sm';ok.textContent='확인';ok.onclick=closeModal;$('#modalBtns').appendChild(ok);
 }
@@ -2630,13 +3227,15 @@ st.step=0;
 
 // 접근성: 키보드로 스텝 이동
 document.addEventListener('keydown',function(e){
-  if(!$('#view-app').classList.contains('on'))return;
+  if(!$('#view-quick').classList.contains('on'))return;
   if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT')return;
   if(e.key==='ArrowRight'&&st.step<LAST_STEP&&validStep(st.step)){st.step++;renderStep();}
   if(e.key==='ArrowLeft'&&st.step>0){st.step--;renderStep();}
 });
 
+try{window.__test={go:go,renderReBanner:renderReBanner,setProfile:function(p){profile=p;},runExport:runExport,setAuth:function(u,p){user=u;profile=p;},st:st,SIZES:SIZES,innerSpec:innerSpec,coverSpec:coverSpec,hydrateQuick:hydrateQuick,renderQSizeGrid:renderQSizeGrid,updateQSpecLine:updateQSpecLine,matchSizeToPdf:matchSizeToPdf,copyrightPageEl:copyrightPageEl,buildDocx:(typeof buildDocx!=='undefined'?buildDocx:null)};}catch(e){}
 })();
+
 </script>
 </body>
 </html>
