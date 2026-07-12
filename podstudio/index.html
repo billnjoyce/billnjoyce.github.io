@@ -110,16 +110,17 @@ nav.top{position:sticky;top:0;z-index:40;height:var(--nav-h);display:flex;align-
 /* ---- animated book mockup (hero visual) ---- */
 .stage{position:relative;height:clamp(340px,44vw,460px);perspective:1400px;}
 .bookwrap{position:absolute;inset:0;display:grid;place-items:center;transform-style:preserve-3d;}
+.book3d{will-change:transform;}
 .book3d{position:relative;width:clamp(200px,26vw,270px);aspect-ratio:100/145;transform-style:preserve-3d;transform:rotateY(-24deg) rotateX(6deg);animation:bookspin 9s ease-in-out infinite;}
 @keyframes bookspin{0%,100%{transform:rotateY(-24deg) rotateX(6deg) translateY(0)}50%{transform:rotateY(-14deg) rotateX(4deg) translateY(-14px)}}
-.book3d .face{position:absolute;inset:0;border-radius:6px 12px 12px 6px;overflow:hidden;box-shadow:0 40px 70px rgba(50,35,110,.4);}
-.book3d .cover{background:linear-gradient(150deg,#2b2350,#5B4FE9 55%,#9D8DFF);display:flex;flex-direction:column;justify-content:space-between;padding:26px 22px;color:#fff;}
+.book3d .face{position:absolute;inset:0;border-radius:6px 12px 12px 6px;overflow:hidden;box-shadow:0 40px 70px rgba(50,35,110,.4);backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.book3d .cover{background:linear-gradient(150deg,#2b2350,#5B4FE9 55%,#9D8DFF);display:flex;flex-direction:column;justify-content:space-between;padding:26px 22px;color:#fff;transform:translateZ(1px);z-index:2;}
 .book3d .cover .ct{font-family:var(--disp);font-size:clamp(20px,3vw,27px);font-weight:800;line-height:1.25;letter-spacing:-.02em;}
 .book3d .cover .cs{font-size:12px;opacity:.85;letter-spacing:.02em;}
 .book3d .cover .au{font-size:12.5px;opacity:.9;font-weight:600;}
 .book3d .cover .deco{position:absolute;right:-30px;top:40%;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,110,199,.6),transparent 70%);filter:blur(6px);}
-.book3d .spine{position:absolute;left:0;top:0;width:26px;height:100%;background:linear-gradient(#372CB0,#5B4FE9);transform:translateX(-26px) rotateY(90deg);transform-origin:right;}
-.book3d .pages{position:absolute;right:0;top:2%;width:20px;height:96%;background:repeating-linear-gradient(#fff,#fff 1px,#e9e7f5 3px);transform:translateX(20px) rotateY(90deg);transform-origin:left;border-radius:0 3px 3px 0;}
+.book3d .spine{position:absolute;left:0;top:0;width:26px;height:100%;background:linear-gradient(#372CB0,#5B4FE9);transform:translateX(-26px) rotateY(90deg);transform-origin:right;backface-visibility:hidden;-webkit-backface-visibility:hidden;z-index:1;}
+.book3d .pages{position:absolute;right:0;top:2%;width:20px;height:96%;background:repeating-linear-gradient(90deg,#f7f6fb,#f7f6fb 1px,#e2dff2 2px,#e2dff2 3px);transform:translateX(20px) rotateY(90deg);transform-origin:left;border-radius:0 3px 3px 0;backface-visibility:hidden;-webkit-backface-visibility:hidden;z-index:0;}
 .chip{position:absolute;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh-2);padding:9px 13px;font-size:12.5px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:7px;animation:floaty 5s ease-in-out infinite;z-index:3;}
 .chip svg{width:15px;height:15px;}
 .chip.c1{top:8%;left:-2%;color:var(--brand-d);animation-delay:0s;}
@@ -1194,15 +1195,29 @@ var cfgReady=(async function(){
     var products=await PM.getConfig('products');
     if(products){['single','premium'].forEach(function(k){if(products[k]&&products[k].price!=null)PLANS[k].price=Number(products[k].price);});}
     // 가격은 결제 config(prices)에서도 덮어쓸 수 있음
-    if(PORTONE.prices){if(PORTONE.prices.premium!=null)PLANS.premium.price=Number(PORTONE.prices.premium);if(PORTONE.prices.single!=null)PLANS.single.price=Number(PORTONE.prices.single);}
+    applyServerPrices();
   }catch(e){}
+  try{refreshAllPlans();}catch(e){}   // 서버 가격 반영 후 화면 요금제 다시 그리기
   return true;
 })();
+function applyServerPrices(){
+  if(PORTONE.prices){
+    if(PORTONE.prices.premium!=null)PLANS.premium.price=Number(PORTONE.prices.premium);
+    if(PORTONE.prices.single!=null)PLANS.single.price=Number(PORTONE.prices.single);
+  }
+}
+// 홈(랜딩)·요금제 화면의 가격 표시를 서버 값으로 동기화
+function refreshAllPlans(){
+  applyServerPrices();
+  var l=$('#plansLanding');if(l&&l.parentNode)renderPlans(l,false);
+  var a=$('#plansApp');if(a&&a.parentNode&&a.children.length)renderPlans(a,true);
+}
 async function ensurePayConfig(){
   if(PORTONE.storeId&&PORTONE.channelKey)return true;
   await cfgReady;
   if(PORTONE.storeId&&PORTONE.channelKey)return true;
   try{var s=await db.ref(PAY_PATH).once('value');applyPayCfg(s.val());}catch(e){}
+  try{refreshAllPlans();}catch(e){}
   return !!(PORTONE.storeId&&PORTONE.channelKey);
 }
 function payConfigured(){return !!(PORTONE.storeId&&PORTONE.channelKey);}
@@ -1398,7 +1413,8 @@ function canExport(){
 }
 
 /* ================= 라우팅 ================= */
-function go(view){
+var _navLock=false;   // 해시 갱신 중 popstate 재진입 방지
+function go(view,fromHash){
   if(view==='quick'&&!requireAgree())return;
   $$('.view').forEach(function(v){v.classList.remove('on')});
   var el=document.getElementById('view-'+view);
@@ -1409,7 +1425,29 @@ function go(view){
   if(view==='pricing')renderPlans($('#plansApp'),true);
   if(view==='settings')renderSettings();
   if(view==='quick'){try{updateGating();hydrateQuick();}catch(e){console.warn('quick init',e);}}
+  // ── 브라우저 뒤로가기 지원: 화면 이동을 히스토리에 기록 ──
+  if(!fromHash){
+    try{
+      var h='#'+view;
+      if(location.hash!==h){_navLock=true;history.pushState({view:view},'',h);_navLock=false;}
+    }catch(e){}
+  }
   track('view',{name:view});
+}
+// 뒤로/앞으로 가기 → 해당 화면으로 복원
+window.addEventListener('popstate',function(e){
+  if(_navLock)return;
+  var v=(e.state&&e.state.view)||(location.hash?location.hash.slice(1):'landing');
+  if(!document.getElementById('view-'+v))v='landing';
+  // signup/welcome 은 흐름상 되돌아가면 안 되므로 랜딩으로
+  if(v==='signup'||v==='welcome')v='landing';
+  go(v,true);
+});
+// 첫 진입 시 주소창의 해시로 화면 복원(새로고침·링크 공유 대응)
+function initRoute(){
+  var v=location.hash?location.hash.slice(1):'';
+  if(!v||!document.getElementById('view-'+v)||v==='signup'||v==='welcome')return;
+  go(v,true);
 }
 $$('[data-go]').forEach(function(b){b.addEventListener('click',function(){go(b.dataset.go)})});
 $$('[data-scroll]').forEach(function(b){b.addEventListener('click',function(){var t=$('#'+b.dataset.scroll);if($('#view-landing').classList.contains('on')&&t)t.scrollIntoView({behavior:'smooth'});else{go('landing');setTimeout(function(){var e=$('#'+b.dataset.scroll);if(e)e.scrollIntoView({behavior:'smooth'})},250);}})});
@@ -1485,6 +1523,7 @@ if(fbOK)auth.onAuthStateChanged(async function(u){
   markProfileLoaded();
   try{await refreshEntitlements();}catch(e){}   // 서버가 기록한 구독·크레딧·재추출 기간 로드
   await afterLogin(false);   // 세션 복원 — 보고 있던 화면 그대로 유지
+  try{initRoute();}catch(e){}   // 주소창 해시(#quick 등)로 화면 복원
   try{await handlePortoneReturn();}catch(e){}
 });
 
