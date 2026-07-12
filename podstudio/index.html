@@ -750,7 +750,7 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
       <div class="sec-head">
         <span class="sec-tag">PRICING</span>
         <h2>필요한 만큼만, 합리적으로</h2>
-        <p>가볍게 한 권만 만들 땐 건당, 여러 권을 계속 만든다면 프리미엄으로.</p>
+        <p>하루면 충분할 땐 1일권, 여러 권을 계속 만든다면 프리미엄으로.</p>
       </div>
       <div class="plans" id="plansLanding"></div>
       <div class="foot-links">
@@ -1167,10 +1167,10 @@ function effStyle(){
 var PLANS={
   free:{id:'free',name:'무료',price:0,tag:'미리보기',export:false,cycle:'',
     feats:[['모든 판형 규격 자동 변환 미리보기',1],['재단선·안전영역 확인',1],['판권 자동 생성 미리보기',1],['규격 자가검증',1],['내지 PDF 추출',0]]},
-  single:{id:'single',name:'건당 추출',price:3300,tag:'한 권만',export:'credit',cycle:'/회',hot:false,
-    feats:[['내지 PDF 규격 변환·추출',1],['판권 자동 삽입',1],['재단선 안전 자동 축소',1],['워터마크 없음',1],['추출 1회권',1]]},
+  single:{id:'single',name:'1일권',price:3300,tag:'24시간 무제한',export:'credit',cycle:'/ 1일',hot:false,
+    feats:[['24시간 동안 무제한 추출',1],['내지 PDF 규격 변환',1],['판권 자동 삽입',1],['재단선 안전 자동 축소',1],['수정·재추출 자유',1]]},
   premium:{id:'premium',name:'프리미엄',price:22000,tag:'가장 인기 · 연간',export:'unlimited',cycle:'/년',hot:true,
-    feats:[['무제한 추출 (공정 사용)',1],['내지 PDF 규격 변환·추출',1],['판권 자동 삽입',1],['워터마크 없음',1],['우선 지원',1]]}
+    feats:[['1년간 무제한 추출',1],['내지 PDF 규격 변환·추출',1],['판권 자동 삽입',1],['여러 권 작업 가능',1],['우선 지원',1]]}
 };
 function planOf(id){return PLANS[id]||PLANS.free;}
 
@@ -1742,7 +1742,7 @@ $('#qGenerate')&&$('#qGenerate').addEventListener('click',function(){
   if(!user){gLogin();return;}
   if(isPremiumActive()){runExport();return;}         // 구독 중이면 바로 추출
   if(canReexport()){runExport();return;}             // 24시간 재추출 기간 내
-  if(hasCredit()){runExport();return;}               // 건당 추출권 보유 시
+  if(hasCredit()){runExport();return;}               // 1일권(크레딧) 보유 시
   showMembershipModal();                             // 아니면 건당/구독 선택
 });
 function fmtDateK(ms){
@@ -1785,12 +1785,12 @@ function renderReBanner(){
     }
     return;
   }
-  // ── 건당 결제 후 24시간 재추출 ──
+  // ── 1일권(결제 후 24시간) 이용 중 ──
   var left=reexportLeft();
   if(left>0){
-    paint('','🔄','재추출 무료 기간',fmtLeft(left)+' 남음',
-      '추가 결제 없이 <b>몇 번이든 다시 추출</b>할 수 있어요. 판형·판권을 바꿔 마음에 들 때까지 만들어 보세요.',
-      '🔄 무료 재추출 가능 — <b>'+fmtLeft(left)+'</b> 남음');
+    paint('','🔄','1일권 이용 중',fmtLeft(left)+' 남음',
+      '남은 시간 동안 <b>추가 결제 없이 무제한</b>으로 추출할 수 있어요. 판형·판권을 바꿔 마음에 들 때까지 만들어 보세요.',
+      '🔄 1일권 이용 중 — <b>'+fmtLeft(left)+'</b> 남음 · 무제한 추출');
     return;
   }
   hide();
@@ -2037,10 +2037,10 @@ function renderPlans(host,isApp){
     var feats=p.feats.map(function(f){return '<li'+(f[1]?'':' class="no"')+'>'+(f[1]?'<svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>':'<svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>')+'<span>'+esc(f[0])+'</span></li>';}).join('');
     el.innerHTML=(p.tag?'<div class="tag">'+esc(p.tag)+'</div>':'')+
       '<h3>'+esc(p.name)+'</h3>'+
-      '<div class="pdesc">'+(id==='single'?'딱 한 권만 만들 때. 결제 즉시 1회 추출권.':'여러 권을 계속 만드는 작가님께. 1년 자동 구독.')+'</div>'+
+      '<div class="pdesc">'+(id==='single'?'결제 후 24시간 동안 무제한 추출. 마음에 들 때까지 수정·재추출.':'여러 권을 계속 만드는 작가님께. 1년 자동 구독.')+'</div>'+
       '<div class="price">'+Number(p.price).toLocaleString('ko-KR')+'<small>원</small><span class="cyc">'+(p.cycle||'')+'</span></div>'+
       '<ul>'+feats+'</ul>'+
-      '<button class="btn '+(p.hot?'btn-p':'btn-line')+' btn-full">'+(cur?'구독 중':(id==='single'?'건당 구매':'구독 시작'))+'</button>'+
+      '<button class="btn '+(p.hot?'btn-p':'btn-line')+' btn-full">'+(cur?'구독 중':(id==='single'?'1일권 구매':'구독 시작'))+'</button>'+
       (cur?'<div class="curlab">현재 이용 중인 요금제예요</div>':'');
     var btn=el.querySelector('button');
     btn.addEventListener('click',function(){buyPlan(id);});
@@ -2841,14 +2841,14 @@ async function showMembershipModal(){
       '<div class="pt">'+esc(price)+'<span>'+esc(cycle)+'</span></div>'+
       '<div class="pd">'+esc(desc)+'</div>'+
       '<ul class="pf">'+feats.map(function(f){return '<li>'+esc(f)+'</li>';}).join('')+'</ul>'+
-      '<button class="btn '+(primary?'btn-p':'btn-line')+' btn-sm" style="width:100%;margin-top:10px">'+(primary?'구독하고 추출':'건당 결제하고 추출')+'</button>'+
+      '<button class="btn '+(primary?'btn-p':'btn-line')+' btn-sm" style="width:100%;margin-top:10px">'+(primary?'구독하고 추출':'1일권 결제하고 추출')+'</button>'+
     '</div>';
   }
   $('#modalBody').innerHTML=
-    '<div style="font-size:12.5px;color:var(--ink-2);background:var(--brand-tint);border-radius:10px;padding:10px 12px;margin-bottom:12px;line-height:1.7">💡 <b>건당 결제는 24시간 동안 무제한 재추출</b>이 가능해요. 결과가 마음에 들지 않으면 설정을 바꿔 몇 번이든 다시 뽑을 수 있어요.</div>'+
+    '<div style="font-size:12.5px;color:var(--ink-2);background:var(--brand-tint);border-radius:10px;padding:10px 12px;margin-bottom:12px;line-height:1.7">💡 <b>1일권은 결제 후 24시간 동안 무제한</b>으로 추출할 수 있어요. 판형·판권을 바꿔 몇 번이든 다시 뽑을 수 있어요.</div>'+
     '<div class="paygrid">'+
-      card('single','',Number(ps.price).toLocaleString('ko-KR')+'원','/ 1회','이번 한 권만 추출',
-        ['내지 PDF 1회 추출','판권 자동 삽입','규격 자동 변환','24시간 무제한 재추출 ★'],false)+
+      card('single','24시간 무제한',Number(ps.price).toLocaleString('ko-KR')+'원','/ 1일','하루 동안 자유롭게',
+        ['24시간 동안 무제한 추출','판권 자동 삽입','규격 자동 변환','수정·재추출 자유'],false)+
       card('premium','가장 인기',Number(pp.price).toLocaleString('ko-KR')+'원','/ 년','1년 동안 무제한 추출',
         ['1년간 무제한 추출','원고 수정·재추출 자유','여러 권 작업 가능','우선 지원'],true)+
     '</div>'+
