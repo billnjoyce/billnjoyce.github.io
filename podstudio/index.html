@@ -914,8 +914,7 @@ textarea.inp{resize:vertical;min-height:90px;line-height:1.6;}
       <div class="card">
         <div class="card-h"><h3>이용 &amp; 결제</h3></div>
         <div class="kv"><span class="k">현재 요금제</span><span class="v"><span class="planpill" id="setPlan">무료</span></span></div>
-        <div class="kv"><span class="k">보유 추출권</span><span class="v" id="setCredits">0회</span></div>
-        <div class="kv"><span class="k">구독 상태</span><span class="v" id="setSub">-</span></div>
+        <div class="kv"><span class="k">이용 상태</span><span class="v" id="setSub">-</span></div>
         <button class="btn btn-p btn-sm btn-full" data-go="pricing" style="margin-top:14px">요금제 보기 / 구매</button>
         <button class="btn btn-line btn-sm btn-full" id="logoutBtn" style="margin-top:8px">로그아웃</button>
         <button class="btn btn-line btn-sm btn-full" id="withdrawBtn" style="margin-top:8px;color:var(--err);border-color:#fecaca">회원 탈퇴</button>
@@ -1282,7 +1281,7 @@ async function applyPurchase(planId,data){
   try{ if(user) await payRef(user.uid,txn).set({plan:planId,price:p.price||0,txn:txn,at:now,provider:'portone'}); }catch(e){}
   await refreshEntitlements();
   renderSettings();
-  toast(single?'추출권 1회가 적립됐어요 🎉':'프리미엄 연간 회원권이 시작됐어요 🎉');
+  toast(single?'1일권이 시작됐어요! 24시간 동안 무제한 추출 🎉':'프리미엄 연간 회원권이 시작됐어요 🎉');
   closeModal();
   if(pendingExport){pendingExport=false;setTimeout(function(){if(isPremiumActive()||hasCredit())runExport();},400);}
 }
@@ -1953,7 +1952,15 @@ function renderSpec(){}
 /* ================= 게이팅 ================= */
 function updateGating(){
   var p=curPlan();
-  var line=$('#appPlanLine');if(line)line.innerHTML='현재 요금제 <span class="planpill">'+esc(p.name)+'</span>'+((profile&&profile.credits)?' · 추출권 '+profile.credits+'회':'')+(canExport()?'':' · 추출은 결제 후');
+  var line=$('#appPlanLine');
+  if(line){
+    var extra='';
+    if(!isPremiumActive()){
+      var lf=(typeof reexportLeft==='function')?reexportLeft():0;
+      if(lf>0)extra=' · 1일권 '+fmtLeft(lf)+' 남음';
+    }
+    line.innerHTML='현재 요금제 <span class="planpill">'+esc(p.name)+'</span>'+extra+(canExport()?'':' · 추출은 결제 후');
+  }
   var lock=$('#exportLock');if(lock)lock.style.display=canExport()?'none':'block';
 }
 
@@ -2070,10 +2077,26 @@ function renderSettings(){
   $('#setPub2').textContent=profile.publisher||'-';
   $('#setAuthor').value=profile.author||'';
   var p=curPlan();$('#setPlan').textContent=p.name;
-  $('#setCredits').textContent=(profile.credits||0)+'회';
   var sub=profile.membership;
   var active=(sub&&sub.plan==='premium'&&sub.status==='active');
-  $('#setSub').innerHTML=active?('프리미엄 · '+fmtDate(sub.expiresAt)+'까지 <button class="btn btn-line btn-sm" id="cancelSubBtn" style="margin-left:8px">구독 해지</button>'):(sub&&sub.status==='canceled'?'해지 예정 (기간 만료 후 무료 전환)':'없음');
+  var elSub=$('#setSub');
+  if(elSub&&elSub.parentNode){
+    var html;
+    if(active){
+      html='<b style="color:var(--brand)">프리미엄 구독 중</b> · '+fmtDate(sub.expiresAt)+'까지 무제한'+
+           ' <button class="btn btn-line btn-sm" id="cancelSubBtn" style="margin-left:8px">구독 해지</button>';
+    }else if(sub&&sub.status==='canceled'){
+      html='해지 예정 (기간 만료 후 무료 전환)';
+    }else{
+      var lf=(typeof reexportLeft==='function')?reexportLeft():0;
+      if(lf>0){
+        html='<b style="color:#12B76A">1일권 이용 중</b> · <b>'+fmtLeft(lf)+'</b> 남음 (무제한 추출)';
+      }else{
+        html='<span style="color:var(--ink-3)">무료 — 추출하려면 1일권 또는 구독이 필요해요</span>';
+      }
+    }
+    elSub.innerHTML=html;
+  }
   var cb=$('#cancelSubBtn');if(cb)cb.addEventListener('click',cancelSubscription);
 }
 async function cancelSubscription(){
@@ -3256,7 +3279,7 @@ document.addEventListener('keydown',function(e){
   if(e.key==='ArrowLeft'&&st.step>0){st.step--;renderStep();}
 });
 
-try{window.__test={go:go,renderReBanner:renderReBanner,setProfile:function(p){profile=p;},runExport:runExport,setAuth:function(u,p){user=u;profile=p;},st:st,SIZES:SIZES,innerSpec:innerSpec,coverSpec:coverSpec,hydrateQuick:hydrateQuick,renderQSizeGrid:renderQSizeGrid,updateQSpecLine:updateQSpecLine,matchSizeToPdf:matchSizeToPdf,copyrightPageEl:copyrightPageEl,buildDocx:(typeof buildDocx!=='undefined'?buildDocx:null)};}catch(e){}
+try{window.__test={go:go,renderSettings:renderSettings,renderReBanner:renderReBanner,setProfile:function(p){profile=p;},runExport:runExport,setAuth:function(u,p){user=u;profile=p;},st:st,SIZES:SIZES,innerSpec:innerSpec,coverSpec:coverSpec,hydrateQuick:hydrateQuick,renderQSizeGrid:renderQSizeGrid,updateQSpecLine:updateQSpecLine,matchSizeToPdf:matchSizeToPdf,copyrightPageEl:copyrightPageEl,buildDocx:(typeof buildDocx!=='undefined'?buildDocx:null)};}catch(e){}
 })();
 
 </script>
