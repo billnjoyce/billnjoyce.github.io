@@ -12,7 +12,7 @@
   gtag('js',new Date());gtag('config','G-YX94DTPHCC');
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;600;700;800;900&family=Gowun+Batang:wght@400;700&family=Nanum+Pen+Script&family=Nanum+Brush+Script&family=Gamja+Flower&family=Hi+Melody&family=Single+Day&family=Dokdo&family=Gaegu:wght@400;700&family=Poor+Story&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;600;700;800;900&family=Gowun+Batang:wght@400;700&family=Nanum+Pen+Script&family=Nanum+Brush+Script&family=Gamja+Flower&family=Hi+Melody&family=Single+Day&family=Dokdo&family=Gaegu:wght@400;700&family=Poor+Story&family=Nanum+Myeongjo:wght@400;700;800&family=Song+Myung&family=Noto+Serif+KR:wght@400;500;600;700&family=Gowun+Dodum&family=Hahmlet:wght@400;500;600;700&family=Gasoek+One&family=Nanum+Gothic:wght@400;700;800&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Do+Hyeon&family=Jua&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -70,15 +70,29 @@
   .hero p{font-size:clamp(15px,2.6vw,19px);color:var(--ink-2);max-width:560px;margin:0 auto 30px}
   .hero .cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
   .heromock{max-width:520px;margin:52px auto 0;background:var(--paper);border:1px solid #E7DCC4;border-radius:20px;box-shadow:var(--sh-3);padding:34px 30px;text-align:left;position:relative}
-  .heromock .to{font-family:var(--fs-disp);color:var(--ink-2);font-size:15px;margin-bottom:10px}
-  .heromock .bd{font-family:'Nanum Pen Script';font-size:26px;color:#31364d;line-height:1.85;white-space:pre-wrap}
-  .heromock .sg{text-align:right;font-family:'Nanum Pen Script';font-size:24px;color:#31364d;margin-top:14px}
+  .heromock .to{font-family:'Gowun Batang',serif;color:var(--ink-2);font-size:16px;margin-bottom:14px;font-weight:700}
+  .heromock .bd{font-family:'Gowun Batang',serif;font-size:19px;color:#2b3040;line-height:2.05;white-space:pre-wrap;letter-spacing:-.01em}
+  .heromock .sg{text-align:right;font-family:'Gowun Batang',serif;font-size:17px;color:#2b3040;margin-top:18px;font-weight:700}
 
   .section{padding:64px 0}.section.alt{background:var(--bg-2)}
   .sec-h{text-align:center;margin-bottom:44px}
   .sec-h .k{color:var(--green-d);font-weight:800;font-size:14px;letter-spacing:.02em}
   .sec-h h2{font-size:clamp(24px,4vw,34px);font-weight:800;letter-spacing:-.02em;margin:8px 0 0}
   .sec-h p{color:var(--ink-2);margin:12px 0 0;font-size:16px}
+  /* why it matters */
+  .why{background:linear-gradient(180deg,#FBF7EF,#F4FBF6)}
+  .why-in{max-width:900px;margin:0 auto;text-align:center}
+  .why-eyebrow{color:var(--green-d);font-weight:800;font-size:14px;letter-spacing:.04em;margin:0}
+  .why-h{font-family:'Gowun Batang',serif;font-size:clamp(26px,4.6vw,40px);font-weight:700;line-height:1.35;letter-spacing:-.02em;margin:12px 0 0;color:var(--ink)}
+  .why-lead{font-size:clamp(15px,2.4vw,18px);color:var(--ink-2);line-height:1.9;margin:20px auto 0;max-width:680px}
+  .why-lead b{color:var(--ink);font-weight:700}
+  .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:40px 0 0;text-align:left}
+  .why-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px 22px;box-shadow:var(--sh-1)}
+  .why-ic{font-size:26px;margin-bottom:12px}
+  .why-card h4{font-family:'Gowun Batang',serif;font-size:17px;font-weight:700;margin:0 0 8px;color:var(--ink);line-height:1.5}
+  .why-card p{font-size:14px;color:var(--ink-2);line-height:1.75;margin:0}
+  .why-cta{margin-top:36px}
+  @media(max-width:720px){.why-grid{grid-template-columns:1fr}}
   .feats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   @media(max-width:820px){.feats{grid-template-columns:1fr}}
   .feat{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:26px}
@@ -152,15 +166,15 @@
   /* v3 letter */
   .mini-letter{width:80%;background:linear-gradient(180deg,#FFFDF7,#FBF5E8);border:1px solid #E7DCC4;border-radius:10px;box-shadow:var(--sh-2);padding:20px 22px}
   .ml-to{font-family:var(--fs-disp);font-size:12.5px;color:var(--ink-2);margin-bottom:9px}
-  .ml-body span{display:block;font-family:'Nanum Pen Script';font-size:21px;color:#31364d;line-height:1.55;opacity:0}
+  .ml-body span{display:block;font-family:'Gowun Batang',serif;font-size:17px;color:#2b3040;line-height:1.9;letter-spacing:-.01em;opacity:0}
   .in .ml-body span{animation:writein .6s ease forwards}
   .in .ml-body span:nth-child(1){animation-delay:.3s}.in .ml-body span:nth-child(2){animation-delay:.7s}.in .ml-body span:nth-child(3){animation-delay:1.1s}
-  .ml-sign{text-align:right;font-family:'Nanum Pen Script';font-size:19px;color:#31364d;margin-top:9px;opacity:0}
+  .ml-sign{text-align:right;font-family:'Gowun Batang',serif;font-size:16px;font-weight:700;color:#2b3040;margin-top:14px;opacity:0}
   .in .ml-sign{animation:writein .6s ease forwards 1.6s}
   @keyframes writein{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
   .ml-swatch{position:absolute;top:12px;right:12px;display:flex;gap:5px}
   .ml-swatch i{width:22px;height:22px;border-radius:6px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-size:13px;color:#31364d;font-style:normal}
-  .ml-swatch i:nth-child(1){font-family:'Nanum Pen Script'}.ml-swatch i:nth-child(2){font-family:'Gaegu'}.ml-swatch i:nth-child(3){font-family:'Dokdo'}
+  .ml-swatch i:nth-child(1){font-family:'Gowun Batang',serif}.ml-swatch i:nth-child(2){font-family:'Nanum Myeongjo',serif}.ml-swatch i:nth-child(3){font-family:'Nanum Pen Script'}
   .in .ml-swatch i{animation:pop .4s ease forwards;opacity:0}
   .in .ml-swatch i:nth-child(2){animation-delay:.15s}.in .ml-swatch i:nth-child(3){animation-delay:.3s}
 
@@ -343,17 +357,17 @@
 <div class="view on" id="view-landing">
   <div class="wrap">
     <section class="hero">
-      <span class="badge">선생님은 평가만, 나머지는 이음편지가</span>
-      <h1>평가만 하세요.<br><span class="g">이음편지</span>가 대신 씁니다.</h1>
-      <p>성적 파일이나 평가 노트를 올리면, 성적을 정리·분석해 학부모께 보낼 따뜻한 손편지로 바꿔 드려요.</p>
+      <span class="badge">한 아이도 놓치고 싶지 않은 선생님께</span>
+      <h1>진심은,<br><span class="g">글로 전할 때</span> 오래 남습니다.</h1>
+      <p>말로 다 못 한 마음을, 한 아이 한 아이에게 정성껏.<br>성적표엔 담기지 않는 그 아이의 이야기를, 학부모님께 손편지로 전하세요.</p>
       <div class="cta">
-        <button class="btn btn-g btn-lg" id="heroStart">지금 바로 시작하기</button>
+        <button class="btn btn-g btn-lg" id="heroStart">한 통, 지금 써보기</button>
         <button class="btn btn-line btn-lg" data-go="pricingL">요금제 보기</button>
       </div>
       <div class="heromock">
-        <div class="to">김수진 어머니께</div>
-        <div class="bd">우리 수진이는 이번 성적에서 국어와 사회가 특히 안정적이었어요. 어려운 문제도 끝까지 붙잡는 태도가 눈에 띄게 자랐습니다.</div>
-        <div class="sg">김하늘 선생님</div>
+        <div class="to">수진이 어머니께</div>
+        <div class="bd">수진이는 어려운 문제 앞에서도 끝까지 연필을 놓지 않는 아이입니다. 그 단단한 마음이, 이번 학기 내내 저에게도 큰 울림이었습니다. 어머니께 꼭 전하고 싶었어요.</div>
+        <div class="sg">담임 김하늘 드림</div>
       </div>
     </section>
   </div>
@@ -398,15 +412,15 @@
           <div class="fcopy">
             <div class="stepno"><span class="dot">3</span>HANDWRITTEN</div>
             <h3>손글씨와 편지지로<br>바로 정성스러운 편지를</h3>
-            <p>다양한 손글씨체와 편지지 중에서 고르면, 마치 직접 쓴 듯한 손편지가 완성돼요. 이미지·PDF로 바로 내려받아 그대로 출력해 건네 보세요.</p>
-            <ul class="flist"><li>손글씨체 8종 · 편지지 디자인</li><li>클릭 한 번에 완성</li><li>PNG·PDF 다운로드</li></ul>
+            <p>격식 있는 명조체부터 정감 있는 손글씨체까지, 편지지와 함께 고르면, 마치 직접 쓴 듯한 손편지가 완성돼요. 이미지·PDF로 바로 내려받아 그대로 출력해 건네 보세요.</p>
+            <ul class="flist"><li>손글씨체·격식체 18종 · 편지지 디자인</li><li>클릭 한 번에 완성</li><li>PNG·PDF 다운로드</li></ul>
           </div>
           <div class="fvis">
             <div class="ml-swatch"><i>가</i><i>가</i><i>가</i></div>
             <div class="mini-letter">
-              <div class="ml-to">김수진 어머니께</div>
-              <div class="ml-body"><span>우리 수진이는 이번 성적에서</span><span>국어와 사회가 특히 안정적이었어요.</span><span>끝까지 붙잡는 태도가 자랐습니다.</span></div>
-              <div class="ml-sign">마음을 담아, 김하늘 선생님</div>
+              <div class="ml-to">수진이 어머니께</div>
+              <div class="ml-body"><span>수진이는 어려운 문제 앞에서도</span><span>끝까지 연필을 놓지 않는 아이입니다.</span><span>그 마음을 꼭 전하고 싶었어요.</span></div>
+              <div class="ml-sign">담임 김하늘 드림</div>
             </div>
           </div>
         </div>
@@ -423,6 +437,22 @@
           </div>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <section class="section why">
+    <div class="wrap">
+      <div class="why-in reveal">
+        <p class="why-eyebrow">WHY IT MATTERS</p>
+        <h2 class="why-h">성적표는 잊혀도,<br>편지 한 통은 오래 남습니다.</h2>
+        <p class="why-lead">부모님은 아이의 점수보다, <b>선생님이 우리 아이를 어떻게 바라보는지</b>를 알고 싶어 합니다.<br>진심이 담긴 편지 한 통은 때때로, 학원과 학교를 떠나려던 마음까지 돌려세웁니다.</p>
+        <div class="why-grid">
+          <div class="why-card"><div class="why-ic">✉️</div><h4>마음이 전해지면, 관계가 남습니다</h4><p>“우리 아이를 진짜 알아봐 주시는구나.” 그 한 번의 감동이 신뢰가 되고, 오래가는 인연이 됩니다.</p></div>
+          <div class="why-card"><div class="why-ic">🕯️</div><h4>바빠서 못 썼던 그 마음, 대신 꺼내 드려요</h4><p>쓰고 싶은 마음은 늘 있었지만 시간이 없었죠. 자료만 올리면, 그 아이만을 위한 진심 어린 편지가 완성돼요.</p></div>
+          <div class="why-card"><div class="why-ic">🌱</div><h4>한 아이도, 놓치지 않도록</h4><p>반 전체에게 한 명 한 명 손편지를. 진심은 결국, 사람의 마음을 움직입니다.</p></div>
+        </div>
+        <div class="why-cta"><button class="btn btn-g btn-lg" id="whyStart">지금, 첫 편지를 써보세요</button></div>
       </div>
     </div>
   </section>
@@ -531,6 +561,7 @@
           <div class="cat">여성 느낌</div><div class="styles" id="stylesF"></div>
           <div class="cat">남성 느낌</div><div class="styles" id="stylesM"></div>
           <div class="cat">공용</div><div class="styles" id="stylesU"></div>
+          <div class="cat">격식·정중 (학부모용 추천)</div><div class="styles" id="stylesS"></div>
           <div class="export"><button class="btn btn-line btn-full" id="dlPng">🖼️ PNG 저장</button><button class="btn btn-g btn-full" id="dlPdf">📄 PDF 저장</button></div>
           <div class="export-note">PNG는 선택한 학생마다 파일이 하나씩 저장돼요. PDF는 선택한 학생 전체를 한 문서로 묶어 저장합니다.</div>
         </section>
@@ -806,10 +837,21 @@
     {id:"pen",name:"여리여리 펜글씨",font:"'Nanum Pen Script'",grp:"F"},{id:"gamja",name:"동글동글",font:"'Gamja Flower'",grp:"F"},
     {id:"melody",name:"산뜻한",font:"'Hi Melody'",grp:"F"},{id:"single",name:"가늘고 정갈한",font:"'Single Day'",grp:"F"},
     {id:"dokdo",name:"힘 있는 매직펜",font:"'Dokdo'",grp:"M"},{id:"brush",name:"굵은 붓글씨",font:"'Nanum Brush Script'",grp:"M"},
-    {id:"gaegu",name:"담백한 연필",font:"'Gaegu'",grp:"U"},{id:"poor",name:"자연스러운 일상",font:"'Poor Story'",grp:"U"}
+    {id:"gaegu",name:"담백한 연필",font:"'Gaegu'",grp:"U"},{id:"poor",name:"자연스러운 일상",font:"'Poor Story'",grp:"U"},
+    {id:"myeongjo",name:"정통 명조",font:"'Nanum Myeongjo'",grp:"S"},
+    {id:"notoserif",name:"진중한 본명조",font:"'Noto Serif KR'",grp:"S"},
+    {id:"songmyung",name:"단아한 송명",font:"'Song Myung'",grp:"S"},
+    {id:"gowunbatang",name:"고운 바탕",font:"'Gowun Batang'",grp:"S"},
+    {id:"hahmlet",name:"기품 있는 세리프",font:"'Hahmlet'",grp:"S"},
+    {id:"gowundodum",name:"정갈한 고딕",font:"'Gowun Dodum'",grp:"S"},
+    {id:"nanumgothic",name:"신뢰감 있는 고딕",font:"'Nanum Gothic'",grp:"S"},
+    {id:"plexkr",name:"현대적 단정함",font:"'IBM Plex Sans KR'",grp:"S"},
+    {id:"gothica1",name:"차분한 고딕",font:"'Gothic A1'",grp:"S"},
+    {id:"dohyeon",name:"또렷한 정자체",font:"'Do Hyeon'",grp:"S"}
   ];
   var user=null, profile=null, aiCfg=null, aiReady=false;
-  var st={students:[],selIds:[],results:{},viewIndex:0,img:null,mime:null,style:STYLES[0],teacher:"",len:400,inputMode:"sheet",wb:null,wbName:""};
+  var DEFAULT_STYLE=(function(){for(var i=0;i<STYLES.length;i++){if(STYLES[i].id==="gowunbatang")return STYLES[i];}return STYLES[0];})();
+  var st={students:[],selIds:[],results:{},viewIndex:0,img:null,mime:null,style:DEFAULT_STYLE,teacher:"",len:400,inputMode:"sheet",wb:null,wbName:""};
   function plan(){
     var m=profile&&profile.membership;
     if(!m) return planOf(null);
@@ -843,6 +885,7 @@
   }
   $("#loginNav").addEventListener("click",gLogin);
   $("#heroStart").addEventListener("click",function(){ if(user){go("app");}else{gLogin();} });
+  (function(){var w=$("#whyStart"); if(w) w.addEventListener("click",function(){ if(user){go("app");}else{gLogin();} });})();
   $("#logoutBtn").addEventListener("click",function(){ auth.signOut(); });
   $("#cancelSignup").addEventListener("click",function(){ auth.signOut(); });
 
@@ -1229,7 +1272,7 @@
   $("#teacher").addEventListener("input",function(){st.teacher=this.value;renderPreview()});
 
   /* ---------- styles + preview + watermark ---------- */
-  function buildStyles(){var g={F:$("#stylesF"),M:$("#stylesM"),U:$("#stylesU")};if(g.F.childNodes.length)return;STYLES.forEach(function(sty){var b=document.createElement("button");b.type="button";b.className="sw";b.dataset.id=sty.id;b.setAttribute("aria-selected",sty.id===st.style.id?"true":"false");b.innerHTML='<div class="lab">'+esc(sty.name)+'</div><div class="prev" style="font-family:'+sty.font+'">사랑하는 마음을 담아</div>';b.addEventListener("click",function(){st.style=sty;$$(".sw").forEach(function(x){x.setAttribute("aria-selected",x.dataset.id===sty.id?"true":"false")});renderPreview();});g[sty.grp].appendChild(b);});}
+  function buildStyles(){var g={F:$("#stylesF"),M:$("#stylesM"),U:$("#stylesU"),S:$("#stylesS")};if(g.F.childNodes.length)return;STYLES.forEach(function(sty){var b=document.createElement("button");b.type="button";b.className="sw";b.dataset.id=sty.id;b.setAttribute("aria-selected",sty.id===st.style.id?"true":"false");b.innerHTML='<div class="lab">'+esc(sty.name)+'</div><div class="prev" style="font-family:'+sty.font+'">사랑하는 마음을 담아</div>';b.addEventListener("click",function(){st.style=sty;$$(".sw").forEach(function(x){x.setAttribute("aria-selected",x.dataset.id===sty.id?"true":"false")});renderPreview();});g[sty.grp].appendChild(b);});}
   function renderPreview(){var s=currentResultStudent(),res=s?st.results[s.id]:null,bodyEl=$("#pvBody"),who=$("#pvWho"),ff=st.style.font;bodyEl.style.fontFamily=ff;who.style.fontFamily=ff;if(res&&res.letter){bodyEl.textContent=res.letter;$("#pvCount").textContent=res.letter.replace(/\s/g,"").length+"자";}else{bodyEl.innerHTML='<span class="ph">왼쪽에서 학생을 고르고 자료를 올린 뒤 편지를 만들면, 이 자리에 손편지가 나타나요.</span>';$("#pvCount").textContent="";}who.innerHTML=st.teacher?esc(st.teacher):'<span class="ph">선생님 이름</span>';}
   function buildWatermark(){var line="이음편지";var one="";for(var i=0;i<8;i++)one+='<div>'+esc(line)+'</div>';$("#wmRow").innerHTML=one;}
 
