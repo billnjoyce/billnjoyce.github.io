@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#FBFAF7"/>
+<title>POD Studio · 원고 PDF를 교보 POD 규격으로 — 출시 알림 신청</title>
+<meta name="description" content="원고 PDF를 올리면 교보문고 바로출판 POD 내지 규격으로 자동 변환합니다. 판형 변환, 재단여백, 판권지, 규격 검증까지. 출시 알림을 신청하세요."/>
+<meta property="og:title" content="POD Studio · 원고 PDF를 교보 POD 규격으로"/>
+<meta property="og:description" content="판형 변환, 재단여백 3mm, 판권지 자동 생성, 규격 자가검증. 원고는 브라우저 밖으로 나가지 않습니다."/>
+<meta property="og:type" content="website"/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YX94DTPHCC"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YX94DTPHCC');</script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+<style>
+:root{
+  --paper:#FBFAF7;
+  --paper-2:#F4F2EC;
+  --ink:#16141F;
+  --ink-2:#5A5568;
+  --ink-3:#918C9E;
+  --rule:#E4E1D8;
+  --violet:#5B4FE9;
+  --violet-d:#463BD1;
+  --violet-soft:#EEEBFF;
+  --trim:#FF3D71;
+  --ok:#12B76A;
+  --err:#E5484D;
+  --font:'Pretendard',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",Roboto,sans-serif;
+  --serif:'Gowun Batang',serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --ppm:1.42;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;font-family:var(--font);background:var(--paper);color:var(--ink-2);
+  font-size:16px;line-height:1.65;letter-spacing:-.011em;word-break:keep-all;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{color:var(--ink);margin:0;letter-spacing:-.03em;line-height:1.22}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2.5px solid var(--violet);outline-offset:3px;border-radius:4px}
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+/* ---------- nav ---------- */
+.nav{padding:22px 0;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--ink);letter-spacing:-.03em;font-size:17px}
+.logo i{
+  width:30px;height:30px;border-radius:8px;display:block;position:relative;
+  background:linear-gradient(150deg,var(--violet),#8C7DFF);
+}
+.logo i::after{
+  content:"";position:absolute;left:7px;top:6px;right:7px;bottom:6px;
+  border:1.5px solid rgba(255,255,255,.85);border-radius:2px;
+}
+.nav-note{font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.02em}
+
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;padding:56px 0 88px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--violet-d);
+  background:var(--violet-soft);padding:6px 12px;border-radius:999px;margin-bottom:22px;
+}
+.eyebrow b{width:6px;height:6px;border-radius:50%;background:var(--violet);display:block}
+h1{font-size:clamp(30px,4.4vw,46px);font-weight:800}
+h1 em{font-family:var(--serif);font-style:normal;font-weight:700;color:var(--violet-d)}
+.lede{margin-top:20px;font-size:17px;max-width:34em;color:var(--ink-2)}
+
+/* ---------- form ---------- */
+.form{margin-top:32px;max-width:440px}
+.row{display:flex;gap:9px}
+.field{
+  flex:1;background:#fff;border:1.5px solid var(--rule);border-radius:12px;
+  padding:14px 16px;font-size:15.5px;font-family:inherit;color:var(--ink);
+  transition:border-color .15s,box-shadow .15s;min-width:0;
+}
+.field::placeholder{color:var(--ink-3)}
+.field:focus{outline:none;border-color:var(--violet);box-shadow:0 0 0 3.5px rgba(91,79,233,.14)}
+.submit{
+  background:var(--ink);color:#fff;border:0;border-radius:12px;padding:14px 22px;
+  font-family:inherit;font-size:15.5px;font-weight:700;cursor:pointer;white-space:nowrap;
+  transition:background .15s,transform .1s;
+}
+.submit:hover{background:var(--violet-d)}
+.submit:active{transform:translateY(1px)}
+.submit:disabled{opacity:.5;cursor:default;transform:none}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.fine{margin-top:11px;font-size:13px;color:var(--ink-3);line-height:1.55}
+.fine a{text-decoration:underline;text-underline-offset:2px}
+.msg{margin-top:12px;font-size:14.5px;font-weight:600;display:none}
+.msg.show{display:block}
+.msg.err{color:var(--err)}
+.done{
+  display:none;background:#fff;border:1.5px solid var(--rule);border-left:4px solid var(--ok);
+  border-radius:12px;padding:20px 22px;max-width:440px;margin-top:32px;
+}
+.done.show{display:block}
+.done h3{font-size:17px;margin-bottom:6px}
+.done p{font-size:14.5px;color:var(--ink-2)}
+
+/* ---------- paper visual (signature) ---------- */
+.stage{display:flex;flex-direction:column;align-items:center;gap:26px}
+.paper-area{height:400px;display:grid;place-items:center;width:100%}
+.paper{
+  position:relative;background:#fff;border:1px solid var(--rule);
+  box-shadow:0 18px 44px rgba(40,32,80,.13),0 2px 6px rgba(40,32,80,.06);
+  transition:width .55s cubic-bezier(.4,.05,.2,1),height .55s cubic-bezier(.4,.05,.2,1);
+  display:flex;flex-direction:column;justify-content:flex-start;
+  padding:11% 12%;gap:9px;
+}
+.paper::before{
+  content:"";position:absolute;inset:7%;border:1px dashed rgba(91,79,233,.42);pointer-events:none;
+}
+.mark{position:absolute;width:15px;height:15px;pointer-events:none}
+.mark::before,.mark::after{content:"";position:absolute;background:var(--trim)}
+.mark::before{width:15px;height:1.5px}
+.mark::after{width:1.5px;height:15px}
+.m-tl{top:-9px;left:-9px}
+.m-tr{top:-9px;right:-9px}.m-tr::before{right:0}.m-tr::after{right:0}
+.m-bl{bottom:-9px;left:-9px}.m-bl::before{bottom:0}.m-bl::after{bottom:0}
+.m-br{bottom:-9px;right:-9px}.m-br::before{bottom:0;right:0}.m-br::after{bottom:0;right:0}
+.tl{height:5px;border-radius:2px;background:rgba(22,20,31,.11)}
+.tl.h{height:9px;background:rgba(22,20,31,.2);margin-bottom:6px}
+.readout{
+  font-family:var(--mono);font-size:12.5px;color:var(--ink-3);letter-spacing:.04em;
+  display:flex;align-items:center;gap:10px;
+}
+.readout b{color:var(--ink);font-weight:600}
+.readout u{
+  text-decoration:none;color:var(--trim);font-size:11px;
+  border:1px solid rgba(255,61,113,.35);border-radius:4px;padding:1px 6px;
+}
+.sizes{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
+.size{
+  font-family:var(--mono);font-size:12.5px;letter-spacing:.02em;
+  padding:7px 13px;border-radius:999px;border:1.5px solid var(--rule);
+  background:#fff;color:var(--ink-2);cursor:pointer;transition:.15s;
+}
+.size:hover{border-color:var(--violet);color:var(--violet-d)}
+.size[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* ---------- features ---------- */
+.feat{border-top:1px solid var(--rule);padding:72px 0}
+.feat h2{font-size:clamp(23px,3vw,30px);font-weight:800;margin-bottom:8px}
+.feat > .wrap > p.sub{color:var(--ink-3);font-size:15.5px;margin-bottom:44px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:16px;overflow:hidden}
+.cell{background:var(--paper);padding:30px 28px}
+.cell .tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--violet-d);text-transform:uppercase;display:block;margin-bottom:12px}
+.cell h3{font-size:18.5px;font-weight:700;margin-bottom:9px}
+.cell p{font-size:15px;color:var(--ink-2)}
+
+/* ---------- privacy strip ---------- */
+.strip{background:var(--ink);color:#CFCBDD;padding:44px 0}
+.strip .wrap{display:flex;gap:26px;align-items:flex-start}
+.strip .key{
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:#8C7DFF;
+  text-transform:uppercase;white-space:nowrap;padding-top:5px;
+}
+.strip h3{color:#fff;font-size:20px;font-weight:700;margin-bottom:9px}
+.strip p{font-size:15px;max-width:60ch}
+
+/* ---------- closing ---------- */
+.close{padding:76px 0;text-align:center;border-top:1px solid var(--rule)}
+.close h2{font-size:clamp(23px,3vw,30px);font-weight:800;margin-bottom:12px}
+.close p{color:var(--ink-2);margin-bottom:28px}
+.close .form{margin:0 auto}
+.close .done{margin:0 auto}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--rule);padding:28px 0 44px;font-size:13.5px;color:var(--ink-3)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a:hover{color:var(--violet-d)}
+footer nav{display:flex;gap:18px}
+
+@media (max-width:900px){
+  :root{--ppm:1.06}
+  .hero{grid-template-columns:1fr;gap:44px;padding:34px 0 64px}
+  .paper-area{height:300px;order:-1}
+  .grid{grid-template-columns:1fr}
+  .strip .wrap{flex-direction:column;gap:12px}
+  .strip .key{padding-top:0}
+}
+@media (max-width:460px){
+  .row{flex-direction:column}
+  .submit{width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="nav">
+    <div class="logo"><i></i>POD Studio</div>
+    <span class="nav-note">출시 준비 중</span>
+  </div>
+</div>
+
+<header class="wrap hero">
+  <div>
+    <span class="eyebrow"><b></b>사전 예약</span>
+    <h1>원고 PDF를 올리면,<br><em>교보 POD 규격</em>은<br>알아서 맞춥니다</h1>
+    <p class="lede">판형 변환부터 재단여백, 판권지, 최종 규격 검증까지 자동으로. 검수에서 반려되지 않는 내지 PDF를 만들어 바로 업로드하세요.</p>
+
+    <form class="form" id="f1" novalidate>
+      <div class="row">
+        <input class="field" type="email" name="email" placeholder="이메일 주소" autocomplete="email" required aria-label="이메일 주소">
+        <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="submit" type="submit">출시 알림 받기</button>
+      </div>
+      <p class="fine">출시되면 딱 한 번 안내 메일을 보내드립니다. 광고는 보내지 않고, 언제든 수신을 중단할 수 있어요.</p>
+      <p class="msg" role="alert"></p>
+    </form>
+
+    <div class="done">
+      <h3>등록했습니다</h3>
+      <p>출시되면 이 주소로 가장 먼저 알려드릴게요.</p>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="paper-area">
+      <div class="paper" id="paper">
+        <span class="mark m-tl"></span><span class="mark m-tr"></span>
+        <span class="mark m-bl"></span><span class="mark m-br"></span>
+        <div class="tl h" style="width:72%"></div>
+        <div class="tl" style="width:100%"></div>
+        <div class="tl" style="width:96%"></div>
+        <div class="tl" style="width:99%"></div>
+        <div class="tl" style="width:88%"></div>
+        <div class="tl" style="width:97%"></div>
+        <div class="tl" style="width:61%"></div>
+      </div>
+    </div>
+    <p class="readout"><b id="ro-name">신국판</b> <span id="ro-size">152 × 225 mm</span> <u>재단 3mm</u></p>
+    <div class="sizes" id="sizes"></div>
+  </div>
+</header>
+
+<section class="feat">
+  <div class="wrap">
+    <h2>핵심만 자동으로</h2>
+    <p class="sub">규격 때문에 반려되는 흔한 이유 네 가지를 처리합니다.</p>
+    <div class="grid">
+      <div class="cell">
+        <span class="tag">판형</span>
+        <h3>원하는 판형으로 다시 짜기</h3>
+        <p>원고의 현재 크기를 자동으로 감지하고, 고른 판형에 맞춰 전 페이지를 변환합니다. 이미 규격에 맞는 원고는 원본 그대로 두고, 넘치는 부분만 재단선 안쪽으로 줄여 글자가 잘리지 않게 합니다.</p>
+      </div>
+      <div class="cell">
+        <span class="tag">여백</span>
+        <h3>재단여백 3mm와 안전영역</h3>
+        <p>최근 강화된 교보 여백 검수 기준을 그대로 반영했습니다. 상하좌우 재단여백까지 색과 이미지로 꽉 채우고, 로고와 글자는 안전영역 안쪽에 배치해 잘려나가지 않도록 보호합니다.</p>
+      </div>
+      <div class="cell">
+        <span class="tag">판권</span>
+        <h3>판권지 자동 생성</h3>
+        <p>교보 공식 판권 양식 그대로. 책 제목과 지은이, 발행일만 넣으면 본문 앞이나 뒤에 자동으로 붙습니다. 글꼴과 위치도 고를 수 있습니다.</p>
+      </div>
+      <div class="cell">
+        <span class="tag">검증</span>
+        <h3>추출 직전 규격 자가검증</h3>
+        <p>완성된 PDF의 실제 페이지 크기를 다시 읽어 교보 규격과 대조합니다. 전 페이지 일치 여부를 리포트로 확인한 뒤 안심하고 올리세요.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="strip">
+  <div class="wrap">
+    <span class="key">Local only</span>
+    <div>
+      <h3>원고는 내 컴퓨터 밖으로 나가지 않습니다</h3>
+      <p>원고 PDF와 이미지는 서버에 업로드되지 않고 브라우저 안에서만 처리됩니다. 변환과 추출도 전부 사용자의 기기에서 이뤄지기 때문에, 아직 공개하지 않은 원고도 걱정 없이 변환할 수 있습니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="close">
+  <div class="wrap">
+    <h2>출시하면 알려드릴게요</h2>
+    <p>이메일만 남겨두시면 준비되는 대로 안내드립니다.</p>
+
+    <form class="form" id="f2" novalidate>
+      <div class="row">
+        <input class="field" type="email" name="email" placeholder="이메일 주소" autocomplete="email" required aria-label="이메일 주소">
+        <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="submit" type="submit">출시 알림 받기</button>
+      </div>
+      <p class="msg" role="alert"></p>
+    </form>
+
+    <div class="done">
+      <h3>등록했습니다</h3>
+      <p>출시되면 이 주소로 가장 먼저 알려드릴게요.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 POD Studio</span>
+    <nav>
+      <a href="ko/terms.html">이용약관</a>
+      <a href="ko/privacy.html">개인정보처리방침</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+/* ---------------- Firebase ---------------- */
+var firebaseConfig={apiKey:"AIzaSyBS2lq8G5AAL41hYDFxG2NX-VfYWZl8aAA",authDomain:"carfund-f5102.firebaseapp.com",databaseURL:"https://carfund-f5102.firebaseio.com",projectId:"carfund-f5102",storageBucket:"carfund-f5102.appspot.com",messagingSenderId:"694883881246",appId:"1:694883881246:web:cc610160ee1bf5f35f390f",measurementId:"G-YX94DTPHCC"};
+firebase.initializeApp(firebaseConfig);
+var db=firebase.database();
+
+/* ---------------- 판형 switcher ---------------- */
+var FORMATS=[
+  {id:"46",   name:"46판",   w:127, h:188},
+  {id:"a5",   name:"A5",     w:148, h:210},
+  {id:"sg",   name:"신국판", w:152, h:225},
+  {id:"cr",   name:"크라운판", w:176, h:248}
+];
+var paper=document.getElementById('paper'),
+    roName=document.getElementById('ro-name'),
+    roSize=document.getElementById('ro-size'),
+    sizesEl=document.getElementById('sizes');
+
+function ppm(){return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--ppm'))||1.42;}
+
+function apply(f){
+  var k=ppm();
+  paper.style.width=(f.w*k)+'px';
+  paper.style.height=(f.h*k)+'px';
+  roName.textContent=f.name;
+  roSize.textContent=f.w+' × '+f.h+' mm';
+  Array.prototype.forEach.call(sizesEl.children,function(b){
+    b.setAttribute('aria-pressed', b.dataset.id===f.id ? 'true':'false');
+  });
+}
+
+FORMATS.forEach(function(f){
+  var b=document.createElement('button');
+  b.type='button'; b.className='size'; b.dataset.id=f.id;
+  b.textContent=f.name; b.setAttribute('aria-pressed','false');
+  b.addEventListener('click',function(){apply(f);});
+  sizesEl.appendChild(b);
+});
+apply(FORMATS[2]);
+window.addEventListener('resize',function(){
+  var cur=FORMATS.filter(function(f){return f.name===roName.textContent;})[0]||FORMATS[2];
+  apply(cur);
+});
+
+/* ---------------- waitlist ---------------- */
+var EMAIL=/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+
+function bind(formId){
+  var form=document.getElementById(formId);
+  var input=form.querySelector('input[name=email]');
+  var trap=form.querySelector('input[name=company]');
+  var btn=form.querySelector('.submit');
+  var msg=form.querySelector('.msg');
+  var done=form.parentNode.querySelector('.done');
+
+  function say(text,isErr){
+    msg.textContent=text;
+    msg.className='msg show'+(isErr?' err':'');
+  }
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(trap.value){return;}                       // 봇 차단
+
+    var email=input.value.trim().toLowerCase();
+    if(!EMAIL.test(email)){
+      say('이메일 주소를 다시 확인해 주세요.',true);
+      input.focus();
+      return;
+    }
+
+    btn.disabled=true;
+    btn.textContent='등록 중…';
+    msg.className='msg';
+
+    db.ref('podstudio/waitlist').push({
+      email:email,
+      ts:firebase.database.ServerValue.TIMESTAMP,
+      source:formId,
+      ref:document.referrer||'direct',
+      lang:navigator.language||''
+    }).then(function(){
+      form.style.display='none';
+      done.classList.add('show');
+      if(window.gtag){gtag('event','waitlist_signup',{source:formId});}
+    }).catch(function(err){
+      console.error(err);
+      btn.disabled=false;
+      btn.textContent='출시 알림 받기';
+      say('등록에 실패했습니다. 잠시 후 다시 시도해 주세요.',true);
+    });
+  });
+}
+bind('f1');
+bind('f2');
+</script>
+</body>
+</html>
