@@ -53,7 +53,9 @@ p{margin:0}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:2.5px solid var(--violet);outline-offset:3px;border-radius:4px}
 
-.wrap{max-width:1080px;margin:0 auto;padding:0 var(--pad);width:100%}
+.wrap{max-width:1080px;margin:0 auto;width:100%;
+  padding-left:max(var(--pad),env(safe-area-inset-left));
+  padding-right:max(var(--pad),env(safe-area-inset-right));}
 
 /* ---------- nav ---------- */
 .nav{padding:20px 0;display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -62,10 +64,11 @@ a{color:inherit;text-decoration:none}
 .nav-note{font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.02em}
 
 /* ---------- hero ---------- */
-.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;padding:52px 0 84px}
+.hero{padding:52px 0 84px}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
 .eyebrow{
   display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--violet-d);
+  letter-spacing:.02em;color:var(--violet-d);font-weight:600;
   background:var(--violet-soft);padding:6px 12px;border-radius:999px;margin-bottom:20px;
 }
 .eyebrow b{width:6px;height:6px;border-radius:50%;background:var(--violet);display:block}
@@ -170,9 +173,15 @@ footer a:hover{color:var(--violet-d)}
 footer nav{display:flex;gap:18px}
 
 /* ---------- responsive ---------- */
+.dbg{display:none;margin-top:14px;background:#FFF3F4;border:1px solid #F5C3C6;border-radius:10px;
+  padding:12px 14px;font-family:var(--mono);font-size:11.5px;line-height:1.7;color:#8B2C30;
+  word-break:break-all;text-align:left;white-space:pre-wrap}
+.dbg.show{display:block}
+
 @media (max-width:940px){
   :root{--ppm:1.18}
-  .hero{grid-template-columns:1fr;gap:40px;padding:30px 0 60px}
+  .hero{padding:30px 0 60px}
+  .hero-grid{grid-template-columns:1fr;gap:40px}
   .paper-area{height:330px}
   .grid{grid-template-columns:1fr}
   .strip .wrap{flex-direction:column;gap:10px}
@@ -184,7 +193,8 @@ footer nav{display:flex;gap:18px}
   body{font-size:15.5px}
   .nav{padding:16px 0}
   .nav-note{display:none}
-  .hero{padding:22px 0 48px;gap:34px}
+  .hero{padding:22px 0 48px}
+  .hero-grid{gap:34px}
   .paper-area{height:270px}
   .feat,.close{padding:52px 0}
   .feat .sub{margin-bottom:28px}
@@ -227,7 +237,8 @@ footer nav{display:flex;gap:18px}
   </div>
 </div>
 
-<header class="wrap hero">
+<header class="hero">
+  <div class="wrap hero-grid">
   <div>
     <span class="eyebrow"><b></b>사전 예약</span>
     <h1>원고 PDF를 올리면,<br><em>교보 POD 규격</em>은<br>알아서 맞춥니다</h1>
@@ -241,6 +252,7 @@ footer nav{display:flex;gap:18px}
       </div>
       <p class="fine">출시되면 딱 한 번 안내 메일을 보내드립니다. 광고는 보내지 않고, 언제든 수신을 중단할 수 있어요.</p>
       <p class="msg" role="alert"></p>
+      <pre class="dbg"></pre>
     </form>
 
     <div class="done">
@@ -265,6 +277,7 @@ footer nav{display:flex;gap:18px}
     </div>
     <p class="readout"><b id="ro-name">신국판</b> <span id="ro-size">152 × 225 mm</span> <u>재단 3mm</u></p>
     <div class="sizes" id="sizes"></div>
+  </div>
   </div>
 </header>
 
@@ -413,6 +426,7 @@ footer nav{display:flex;gap:18px}
         <button class="submit" type="submit">출시 알림 받기</button>
       </div>
       <p class="msg" role="alert"></p>
+      <pre class="dbg"></pre>
     </form>
 
     <div class="done">
@@ -510,7 +524,9 @@ function bind(formId){
   var trap=form.querySelector('input[name=company]');
   var btn=form.querySelector('.submit');
   var msg=form.querySelector('.msg');
+  var dbg=form.querySelector('.dbg');
   var done=form.parentNode.querySelector('.done');
+  var DEBUG=/[?&]debug=1/.test(location.search);
 
   function say(t,isErr){msg.textContent=t;msg.className='msg show'+(isErr?' err':'');}
 
@@ -553,6 +569,15 @@ function bind(formId){
           'color:#E5484D;font-weight:bold;font-size:13px');
       }else{
         say('등록에 실패했습니다. 잠시 후 다시 시도해 주세요.',true);
+      }
+
+      if(DEBUG){
+        dbg.textContent=
+          'code : '+(code||'(없음)')+'\n'+
+          'msg  : '+((err&&err.message)||'-')+'\n'+
+          'dbURL: '+firebaseConfig.databaseURL+'\n'+
+          'path : podstudio/waitlist';
+        dbg.className='dbg show';
       }
     });
   });
