@@ -540,12 +540,12 @@ function bind(formId){
 
     btn.disabled=true;btn.textContent='등록 중…';msg.className='msg';
 
-    withTimeout(db.ref('podstudio/waitlist').push({
+    withTimeout(db.ref('apps/config/podstudio/waitlist').push({
       email:email,
       ts:firebase.database.ServerValue.TIMESTAMP,
       source:formId,
-      ref:document.referrer||'direct',
-      lang:navigator.language||''
+      ref:(document.referrer||'direct').slice(0,200),
+      lang:(navigator.language||'').slice(0,12)
     }),9000).then(function(){
       form.style.display='none';
       done.classList.add('show');
@@ -576,7 +576,7 @@ function bind(formId){
           'code : '+(code||'(없음)')+'\n'+
           'msg  : '+((err&&err.message)||'-')+'\n'+
           'dbURL: '+firebaseConfig.databaseURL+'\n'+
-          'path : podstudio/waitlist';
+          'path : apps/config/podstudio/waitlist';
         dbg.className='dbg show';
       }
     });
