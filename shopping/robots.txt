@@ -1,0 +1,18 @@
+# 오늘 최저가 쇼핑 — robots.txt
+# https://joycestudios.kr/shopping/
+
+User-agent: *
+Allow: /shopping/
+Allow: /shopping/ranking
+Allow: /shopping/terms
+
+# 개인화 페이지는 색인 제외 (유저별 로컬 데이터라 검색 결과에 의미 없음)
+Disallow: /shopping/favorites
+Disallow: /shopping/history
+Disallow: /shopping/settings
+Disallow: /shopping/gacha
+
+# 자산 파일 크롤링 허용 (구글 렌더링에 필요)
+Allow: /shopping/assets/
+
+Sitemap: https://joycestudios.kr/shopping/sitemap.xml
