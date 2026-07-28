@@ -2937,35 +2937,116 @@ $('#viewMembership')&&$('#viewMembership').addEventListener('click',function(){i
 // 원고의 '잉크 영역'(글자·이미지·선 + 페이지번호 포함) 감지 → 빈 여백만큼 축소율 개선
 // 여러 페이지를 샘플링해 합집합을 구하고, 전 페이지에 동일 배치를 적용(일관성 유지)
 // 원고에 이미 페이지 번호가 있는지 자동 감지 (하단 영역의 '숫자만 있는 짧은 텍스트')
-async function detectPageNumbers(dataUrl){
+// 원고의 페이지 번호를 정밀 분석:
+//  - '고립된 숫자'(옆에 다른 글자 없음 + 좌우 가장자리)만 페이지 번호로 인정 → 본문/꼬리말 숫자 오인 방지
+//  - 각 번호의 좌/우 위치를 파악해 교보(퍼플) 좌우 규칙 위반 여부를 판정
+//  반환: {has, mode, viol, sample:{fontSizePt,colorRgb,yFromBottomPt,side}}
+// ============ 범용 페이지 furniture(번호·머리말·꼬리말) 분석 엔진 ============
+// 반복성 기반: 패턴/형식에 의존하지 않고 "페이지마다 +1 증가하는 숫자"=번호,
+// "여러 페이지 같은 위치에 반복되는 텍스트"=머리말/꼬리말 로 판정.
+async function analyzePageFurniture(dataUrl){
   try{
-    if(!window.pdfjsLib)return {has:false};
+    if(!window.pdfjsLib)return {ok:false};
     var raw=atob(dataUrl.split(',')[1]);var arr=new Uint8Array(raw.length);
     for(var i=0;i<raw.length;i++)arr[i]=raw.charCodeAt(i);
     var pdf=await pdfjsLib.getDocument({data:arr}).promise;
-    var N=pdf.numPages, idxs=[], MAXS=Math.min(12,N);
-    for(var k=0;k<MAXS;k++){var v=Math.max(1,Math.round((k+1)*N/(MAXS+1)));if(idxs.indexOf(v)<0)idxs.push(v);}
-    var hits=0,checked=0;
-    for(var j=0;j<idxs.length;j++){
-      var page=await pdf.getPage(idxs[j]);
-      var vp=page.getViewport({scale:1});
+    var N=pdf.numPages;
+    var slotNums={}, slotTxts={}, sizeAt={}, W=0,H=0;
+    function slotOf(cx,cy){
+      var xz=(cx<W*0.33)?'L':((cx>W*0.67)?'R':'C');
+      var yz=(cy<H*0.15)?'T':((cy>H*0.85)?'B':null);
+      return yz?(xz+yz):null;
+    }
+    // ★ 연속 페이지를 스캔해야 홀/짝 좌우 규칙을 검증할 수 있음
+    //   (건너뛰기 스캔은 홀수만 보게 돼 위반을 못 잡음)
+    //   앞부분에 판권/속표지가 있을 수 있으니 여러 구간을 연속으로 샘플
+    var scanIdx=[];
+    var blocks=[[0, Math.min(N,20)]];                 // 앞 20p 연속
+    if(N>40) blocks.push([Math.floor(N/2), Math.min(N,Math.floor(N/2)+12)]); // 중간 12p
+    if(N>24) blocks.push([Math.max(0,N-12), N]);      // 뒤 12p
+    blocks.forEach(function(b){ for(var p=b[0];p<b[1];p++) if(scanIdx.indexOf(p)<0)scanIdx.push(p); });
+    for(var qi=0; qi<scanIdx.length; qi++){
+      var pi=scanIdx[qi];
+      var page=await pdf.getPage(pi+1);
+      var vp=page.getViewport({scale:1}); W=vp.width; H=vp.height;
       var tc=await page.getTextContent();
-      checked++;
-      var found=false;
       for(var t=0;t<tc.items.length;t++){
-        var it=tc.items[t];var s=(it.str||'').trim();
-        if(!s||s.length>5)continue;
-        if(!/^[-·\s]*\d{1,4}[-·\s]*$/.test(s))continue;   // 숫자(장식 포함)만
-        var ty=it.transform&&it.transform[5];              // PDF 좌표(bottom-left)
-        if(ty==null)continue;
-        if(ty < vp.height*0.14){ found=true; break; }      // 하단 14% 이내
+        var it=tc.items[t];var txt=(it.str||'').trim();if(!txt||!it.transform)continue;
+        var x=it.transform[4], yb=it.transform[5];
+        var w=it.width||0, h=it.height||8;
+        var cyTop=H-(yb+h/2);                    // top 기준 y
+        var sl=slotOf(x+w/2, cyTop);
+        if(!sl)continue;
+        if(/^\d{1,4}$/.test(txt)){
+          (slotNums[sl]=slotNums[sl]||[]).push({pi:pi,n:parseInt(txt,10),x0:x,x1:x+w,yb:yb,h:h});
+          sizeAt[sl]=h;
+        }else if(txt.length>=2){
+          (slotTxts[sl]=slotTxts[sl]||[]).push({pi:pi,s:txt,x0:x,x1:x+w,yb:yb,h:h});
+        }
       }
-      if(found)hits++;
       if(page.cleanup)page.cleanup();
     }
-    return {has:(checked>0 && hits/checked>=0.5), hits:hits, checked:checked};
-  }catch(e){console.warn('pn detect fail',e);return {has:false};}
+    var cnt=scanIdx.length;
+    // 1) 페이지번호 슬롯: 증가비율 높고 오프셋(n-pi) 일정
+    var numSlot=null,numInfo=null,bestScore=0;
+    for(var sl in slotNums){
+      var arrn=slotNums[sl]; if(arrn.length<Math.max(3,cnt*0.4))continue;
+      arrn.sort(function(a,b){return a.pi-b.pi;});
+      var inc=0; for(var k=1;k<arrn.length;k++) if(arrn[k].n>arrn[k-1].n)inc++;
+      var incR=inc/(arrn.length-1);
+      var offs={}; arrn.forEach(function(o){var d=o.n-o.pi;offs[d]=(offs[d]||0)+1;});
+      var bestOff=0,bestOffC=0; for(var d in offs) if(offs[d]>bestOffC){bestOffC=offs[d];bestOff=parseInt(d,10);}
+      var offR=bestOffC/arrn.length;
+      var score=incR*0.5+offR*0.5;
+      if(incR>0.8 && offR>0.6 && score>bestScore){
+        bestScore=score; numSlot=sl;
+        // 대표 y(bottom, pt) — 중앙값 성격으로 첫 유효값 사용
+        var ybs=arrn.map(function(o){return o.yb;}).sort(function(a,b){return a-b;});
+        var medYb=ybs[Math.floor(ybs.length/2)]||0;
+        numInfo={arr:arrn, off:bestOff, sizePt:sizeAt[sl]||9, incR:incR, offR:offR, yb:medYb};
+      }
+    }
+    // 번호 슬롯의 좌/우 및 규칙 위반 측정 (offset로 실제 책 페이지 추정)
+    var pnHas=!!numSlot, pnViol=0, pnSide=null;
+    if(numSlot){
+      pnSide=numSlot.charAt(0);   // L/C/R
+      var v=0,tot=0;
+      numInfo.arr.forEach(function(o){
+        var bookPage=o.pi+1;              // 원고 물리순서
+        var isOdd=(bookPage%2===1);
+        var cx=(o.x0+o.x1)/2;
+        var side=(cx>W/2)?'R':((cx<W*0.33)?'L':'C');
+        if(side==='C')return;             // 가운데 정렬은 위반 아님
+        var expect=isOdd?'R':'L';
+        tot++; if(side!==expect)v++;
+      });
+      pnViol=tot?v/tot:0;
+    }
+    // 2) 러닝(머리말/꼬리말) 슬롯: 같은 텍스트 반복
+    var runners=[];
+    for(var sl2 in slotTxts){
+      var arrt=slotTxts[sl2]; if(arrt.length<cnt*0.4)continue;
+      var freq={}; arrt.forEach(function(o){freq[o.s]=(freq[o.s]||0)+1;});
+      var top=null,topc=0; for(var kk in freq) if(freq[kk]>topc){topc=freq[kk];top=kk;}
+      if(topc>=cnt*0.4){
+        runners.push({slot:sl2, side:sl2.charAt(0), vpos:sl2.charAt(1)});
+      }
+    }
+    return {ok:true, W:W,H:H, N:N,
+      pnHas:pnHas, pnSlot:numSlot, pnSide:pnSide, pnViol:pnViol,
+      pnSizePt:(numInfo?numInfo.sizePt:9), pnOff:(numInfo?numInfo.off:1),
+      pnYb:(numInfo?numInfo.yb:0),
+      runners:runners};
+  }catch(e){console.warn('furniture analyze fail',e);return {ok:false};}
 }
+// 하위호환 래퍼(기존 호출부 대비)
+async function detectPageNumbers(dataUrl){
+  var a=await analyzePageFurniture(dataUrl);
+  if(!a.ok)return {has:false,viol:0,violRate:0};
+  return {has:a.pnHas, viol:0, violRate:a.pnViol, sampleSizePt:a.pnSizePt, sampleYPt:(a.pnYb||0),
+          _full:a};
+}
+
 async function detectInkBox(dataUrl,onProg){
   try{
     if(!window.pdfjsLib)return null;
@@ -3008,6 +3089,66 @@ async function detectInkBox(dataUrl,onProg){
     return box;
   }catch(e){console.warn('ink detect fail',e);return null;}
 }
+// 특정 페이지 하단에서 '꼬리말 텍스트'(번호 제외)와 스타일을 추출
+async function extractFooter(dataUrl, pageNo){
+  try{
+    if(!window.pdfjsLib)return null;
+    var raw=atob(dataUrl.split(',')[1]);var arr=new Uint8Array(raw.length);
+    for(var i=0;i<raw.length;i++)arr[i]=raw.charCodeAt(i);
+    var pdf=await pdfjsLib.getDocument({data:arr}).promise;
+    var page=await pdf.getPage(pageNo);
+    var vp=page.getViewport({scale:1});var W=vp.width,H=vp.height;
+    var tc=await page.getTextContent();
+    var x0=1e9,x1=-1e9,y0=1e9,y1=-1e9,cnt=0,sz=7.5;
+    for(var t=0;t<tc.items.length;t++){
+      var it=tc.items[t];var txt=(it.str||'').trim();
+      if(!it.transform)continue;
+      var y=it.transform[5];if(y>H*0.12)continue;         // 하단만
+      var x=it.transform[4];var w=it.width||0;var cx=x+w/2;
+      // 번호(가장자리 고립 숫자) 제외
+      if(/^\d{1,4}$/.test(txt) && (cx<W*0.16||cx>W*0.84))continue;
+      if(!txt)continue;
+      var h=it.height||8;
+      if(x<x0)x0=x; if(x+w>x1)x1=x+w;
+      if(y<y0)y0=y; if(y+h>y1)y1=y+h;
+      sz=h;cnt++;
+    }
+    if(page.cleanup)page.cleanup();
+    if(!cnt)return null;
+    // pdf.js는 bottom-left 원점. 이미지 크롭용으로 top 기준 y도 반환.
+    return {x0:x0,x1:x1,yb0:y0,yb1:y1, W:W,H:H, sizePt:sz, wpt:(x1-x0), hpt:(y1-y0)};
+  }catch(e){console.warn('footer extract fail',e);return null;}
+}
+// 특정 페이지의 지정 영역(pt, bottom-left)을 고해상 이미지로 크롭 → PNG dataURL
+async function cropRegionPng(dataUrl, pageNo, x0,yb0,x1,yb1, scale){
+  try{
+    if(!window.pdfjsLib)return null;
+    var raw=atob(dataUrl.split(',')[1]);var arr=new Uint8Array(raw.length);
+    for(var i=0;i<raw.length;i++)arr[i]=raw.charCodeAt(i);
+    var pdf=await pdfjsLib.getDocument({data:arr}).promise;
+    var page=await pdf.getPage(pageNo);
+    var SC=scale||4;
+    var vp=page.getViewport({scale:SC});
+    var full=document.createElement('canvas');
+    full.width=Math.ceil(vp.width);full.height=Math.ceil(vp.height);
+    var fx=full.getContext('2d');
+    fx.fillStyle='#fff';fx.fillRect(0,0,full.width,full.height);
+    await page.render({canvasContext:fx,viewport:vp}).promise;
+    // bottom-left(pt) → canvas top-left(px)
+    var pad=1.5*SC;
+    var cx0=Math.max(0,Math.floor(x0*SC-pad));
+    var cw=Math.ceil((x1-x0)*SC+pad*2);
+    var ctop=Math.max(0,Math.floor((full.height) - (yb1*SC) - pad));
+    var ch=Math.ceil((yb1-yb0)*SC+pad*2);
+    var crop=document.createElement('canvas');
+    crop.width=cw;crop.height=ch;
+    crop.getContext('2d').drawImage(full,cx0,ctop,cw,ch,0,0,cw,ch);
+    if(page.cleanup)page.cleanup();
+    return {dataUrl:crop.toDataURL('image/png'), wpt:(x1-x0)+3, hpt:(yb1-yb0)+3};
+  }catch(e){console.warn('crop fail',e);return null;}
+}
+
+
 async function runExport(isTest){
   if(!isTest && !isPremiumActive() && !canReexport()){
     var _ok=await useCredit();          // 서버 값 재확인
@@ -3055,18 +3196,38 @@ async function runExport(isTest){
         var idxs=userDoc.getPageIndices();
         var embedded=await merged.embedPdf(userDoc,idxs);
 
-        // 페이지 번호: 원고를 분석해 자동 판단 (있으면 그대로 / 없으면 자동 삽입)
+        // 페이지 번호: 원고를 분석해 자동 판단
+        //   ① 번호 없음        → 새로 삽입(add)
+        //   ② 번호 있고 규칙 OK → 그대로(none)
+        //   ③ 번호 있으나 좌우규칙 위반 → 원본 가리고 규칙대로 다시 그림(fix)
         setGenStep(1,'페이지 번호 확인');
         var pnDet=await detectPageNumbers(st.innerPdf);
-        var pnMode=pnDet.has?'none':'add';        // 자동
-        var pnAuto=pnDet.has;                      // 리포트용
+        var furn=(pnDet._full||{});
+        var pnMode;
+        if(!pnDet.has){
+          pnMode='add';                                  // 번호 없음 → 새로 삽입
+        }else if(furn.pnSide==='C'){
+          pnMode='none';                                 // 가운데 정렬 = 규칙 위반 아님 → 유지
+        }else if(pnDet.violRate>=0.25){
+          pnMode='fix';                                  // 좌우 규칙 위반 → 교정
+        }else{
+          pnMode='none';                                 // 이미 규칙 준수 → 유지
+        }
+        var pnAuto=(pnMode==='none');
+        var pnFixed=(pnMode==='fix');
+        // 러닝(머리말/꼬리말) 중 '한쪽 고정'이라 짝수에서 좌우 교정이 필요한 것만 추림
+        var runFix=[];
+        if(pnMode==='fix' && furn.runners){
+          furn.runners.forEach(function(r){ if(r.side==='L'||r.side==='R') runFix.push(r); });
+        }
         var pnFont=null;
-        if(pnMode==='add'){
+        if(pnMode==='add'||pnMode==='fix'){
           try{pnFont=await merged.embedFont(PDFLib.StandardFonts.Helvetica);}catch(e){pnFont=null;}
         }
-        var PN_BASE=9.5;                 // 기준 글자 크기(pt) — 축소율에 따라 조정됨
-        var PN_MIN=7.0, PN_MAX=11.0;     // 시인성 하한 / 규격 상한
-        var PN_GAP=5;                    // 본문과 번호 사이 최소 간격(pt)
+        var PN_BASE=9.5;
+        var PN_MIN=7.0, PN_MAX=11.0;
+        var PN_GAP=5;
+        if(pnMode==='fix' && pnDet.sampleSizePt) PN_BASE=Math.max(PN_MIN,Math.min(PN_MAX,pnDet.sampleSizePt));
         var pnSize=PN_BASE;
         var pnStart=1;
         var pnSkip=0;
@@ -3078,7 +3239,8 @@ async function runExport(isTest){
         var s=1, useInk=false, band=0, fitH=safeH;
 
         function solveFit(pnPt){
-          var b=(pnFont?(pnPt+PN_GAP):0);
+          // 'fix'는 원본 번호 위치를 그대로 쓰므로 별도 띠(band)를 만들지 않음(본문 100% 유지)
+          var b=(pnFont && pnMode==='add')?(pnPt+PN_GAP):0;
           var fh=safeH-b;
           var sI=Math.min(safeW/contentW, fh/contentH, 1);
           var sP=Math.min(safeW/ew0, fh/eh0, 1);
@@ -3121,23 +3283,58 @@ async function runExport(isTest){
           var pg2=merged.addPage([pageW,pageH]);
           pg2.drawPage(ep,{x:x,y:y,width:dW,height:dH});
 
-          // ── 페이지 번호 자동 삽입 (좌=짝수 / 우=홀수, 바깥쪽 정렬) ──
-          if(pnFont && ei>=pnSkip){
+          // ── 페이지 번호 처리 ──
+          if(pnMode==='fix'){
+            var stripPt=Math.max((pnDet.sampleYPt||8)+(pnDet.sampleSizePt||8)+4, 16);
+            var stripH=stripPt*s;
+            var stripY=y;
+            var isCover=(ei===0);
+            var pageNoInBook=ei+1;
+            var isEven=(pageNoInBook%2===0);
+            if(isCover){
+              // 표지: 하단 번호/꼬리말 제거
+              pg2.drawRectangle({x:x, y:stripY, width:ew*s, height:stripH+3, color:PDFLib.rgb(1,1,1)});
+            }else if(isEven){
+              // 짝수: 하단 띠 덮고 → 번호=왼쪽(다시 그림), 꼬리말=원본 이미지 그대로 오른쪽에 붙임
+              pg2.drawRectangle({x:x, y:stripY, width:ew*s, height:stripH+3, color:PDFLib.rgb(1,1,1)});
+              var pnPt=(pnDet.sampleSizePt||8);
+              var yBaseline=stripY + (pnDet.sampleYPt||6)*s;
+              // 번호(왼쪽)
+              if(pnFont){
+                var numTxt=String(pageNoInBook);
+                pg2.drawText(numTxt,{x:safeL+8*PT, y:yBaseline, size:pnPt*s, font:pnFont, color:PDFLib.rgb(0.32,0.34,0.38)});
+              }
+              // 꼬리말: 원본 영역을 '이미지로 잘라' 그대로 오른쪽에 붙임 (폰트 100% 동일)
+              var fb=await extractFooter(st.innerPdf, pageNoInBook);
+              if(fb && fb.x1>fb.x0){
+                var crop=await cropRegionPng(st.innerPdf, pageNoInBook, fb.x0, fb.yb0, fb.x1, fb.yb1, 4);
+                if(crop){
+                  var pngB=await (await fetch(crop.dataUrl)).arrayBuffer();
+                  var fimg=await merged.embedPng(pngB);
+                  var drawW=crop.wpt*s;                       // 원본 크기 그대로 축소
+                  var drawH=crop.hpt*s;
+                  var rx=pageW-(safeL+8*PT)-drawW;            // 우측 정렬(바깥 여백 기준)
+                  // 세로: 원본 꼬리말 y위치 유지
+                  var fy=stripY + (fb.yb0)*s;
+                  if(rx<safeL)rx=safeL;
+                  pg2.drawImage(fimg,{x:rx, y:fy, width:drawW, height:drawH});
+                }
+              }
+            }
+            // 홀수: 원본 그대로(번호=오른쪽/꼬리말=왼쪽, 규칙 준수)
+          }else if(pnFont && ei>=pnSkip){
+            // add 모드: 번호 없는 원고 → 새로 삽입
             var num=pnStart+(ei-pnSkip);
             if(num>0){
               var txt=String(num);
               var tw=pnFont.widthOfTextAtSize(txt,pnSize);
-              var isOdd=(num%2===1);                    // 홀수 = 오른쪽 페이지
-              var mx=safeL+8*PT;                        // 바깥 여백 기준
-              var px2;
-              if(isOdd) px2=pageW-mx-tw;                // 오른쪽(홀수) → 우측 정렬
-              else      px2=mx;                         // 왼쪽(짝수) → 좌측 정렬
-              // ★ 규격(안전영역) 밖으로 절대 나가지 않게 클램프
+              var isOdd=(num%2===1);
+              var mx=safeL+8*PT;
+              var px2=isOdd?(pageW-mx-tw):mx;
               var minX=safeL, maxX=pageW-safeL-tw;
-              if(px2<minX)px2=minX;
-              if(px2>maxX)px2=maxX;
-              var py=safeT+3;                           // 안전영역 하단 안쪽
-              var maxY=safeT+band-pnSize;               // 번호 띠를 벗어나지 않게
+              if(px2<minX)px2=minX; if(px2>maxX)px2=maxX;
+              var py=safeT+3;
+              var maxY=safeT+band-pnSize;
               if(maxY>safeT && py>maxY)py=maxY;
               if(py<safeT)py=safeT;
               pg2.drawText(txt,{x:px2,y:py,size:pnSize,font:pnFont,color:PDFLib.rgb(0.15,0.15,0.15)});
@@ -3146,7 +3343,7 @@ async function runExport(isTest){
         }
         var minScale=s;
         if(st.copyPos==='back')await copyrightPageExact();
-        fitReport={total:embedded.length,shrunk:shrunk,kept:kept,minScale:minScale,useInk:useInk,pn:(pnFont?embedded.length-pnSkip:0),pnKept:pnAuto};
+        fitReport={total:embedded.length,shrunk:shrunk,kept:kept,minScale:minScale,useInk:useInk,pn:(pnFont?embedded.length-pnSkip:0),pnKept:pnAuto,pnFixed:pnFixed,pnViol:(pnDet&&pnDet.viol)||0};
         var mergedBytes=await merged.save();
         innerPdfBlob=new Blob([mergedBytes],{type:'application/pdf'});
       }catch(mergeErr){
@@ -3276,7 +3473,8 @@ function setGenDone(report,fit,fname){
     var pct=Math.round(fit.minScale*100);
     if(fit.shrunk===0){f='<div style="color:#12B76A;font-weight:800;margin:10px 0 4px">✔ 글자 크기 100% 원본 유지</div><div style="font-size:13px;line-height:1.8">원고가 규격 안에 들어와 <b>축소 없이 원본 그대로</b> 변환했어요.</div>';}
     else{f='<div style="color:'+(pct>=90?'#12B76A':'#B54708')+';font-weight:800;margin:10px 0 4px">✔ 글자 크기 '+pct+'% 유지</div><div style="font-size:13px;line-height:1.8">규격에 맞추기 위해 '+pct+'%로 조정했어요.'+(fit.useInk?' <b>여백을 제외한 본문 기준</b>으로 배치해 글자를 최대한 크게 유지했습니다.':'')+(pct<85?'<br><span style="color:#B54708">더 큰 판형(크라운판·B5)을 고르면 글자가 더 커져요.</span>':'')+'</div>';}
-    if(fit.pnKept)f+='<div style="font-size:13px;line-height:1.8;margin-top:6px;color:#12B76A;font-weight:700">✔ 원고에 페이지 번호가 있어 그대로 유지했어요</div>';
+    if(fit.pnFixed)f+='<div style="font-size:13px;line-height:1.8;margin-top:6px;color:#B54708;font-weight:700">✔ 페이지 번호 좌우 규칙을 교보 기준으로 교정했어요<br><span style="font-weight:500;color:#8B6D3A">홀수=오른쪽 / 짝수=왼쪽으로 번호를 맞추고, 꼬리말(책 제목)은 반대쪽으로 재배치했습니다. 첫 표지 번호는 제거했어요 (검수 통과 기준).</span></div>';
+    else if(fit.pnKept)f+='<div style="font-size:13px;line-height:1.8;margin-top:6px;color:#12B76A;font-weight:700">✔ 원고 페이지 번호가 이미 좌우 규칙에 맞아 그대로 유지했어요</div>';
     else if(fit.pn>0)f+='<div style="font-size:13px;line-height:1.8;margin-top:6px;color:#12B76A;font-weight:700">✔ 페이지 번호가 없어 '+fit.pn+'쪽에 자동으로 넣었어요 (홀수=오른쪽 / 짝수=왼쪽)</div>';
     v+='<div style="text-align:left;background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:6px">'+f+'</div>';
   }
