@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>중국어 여행 — 하나도 몰라도 괜찮습니다</title>
+<meta name="description" content="발음부터 실전 회화까지 600문장. 중국어를 하나도 모르는 상태에서 시작해 중국에서 혼자 먹고 타고 자고 살 수 있게. 기본 300문장 무료, 오프라인 지원.">
+<meta name="theme-color" content="#E23D2E">
+<meta property="og:title" content="중국어 여행 — 하나도 몰라도 괜찮습니다">
+<meta property="og:description" content="발음부터 실전 회화까지 600문장. 기본 300문장 무료.">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://www.joycestudios.kr/ct/ko/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --v:#E23D2E; --vd:#B4231C; --g:#F2B33D; --ink:#17120F; --soft:#5D5249;
+  --faint:#9B9088; --paper:#FBF6F1; --mist:#EDE5DB; --jade:#1F8A70; --card:#fff;
+  --r-l:28px; --r-m:20px; --r-s:14px;
+  --kr:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;
+  --cn:"Noto Serif SC",serif;
+  --max:1180px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--kr);background:var(--paper);color:var(--ink);
+  line-height:1.75;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+section{position:relative}
+
+/* ---------- 등장 애니메이션 ---------- */
+.rv{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.rv.on{opacity:1;transform:none}
+.rv[data-d="1"]{transition-delay:.09s}
+.rv[data-d="2"]{transition-delay:.18s}
+.rv[data-d="3"]{transition-delay:.27s}
+.rv[data-d="4"]{transition-delay:.36s}
+.rv[data-d="5"]{transition-delay:.45s}
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1!important;transform:none!important;transition:none!important}
+  *{animation:none!important}
+  html{scroll-behavior:auto}
+}
+
+/* ---------- 헤더 ---------- */
+header{
+  position:fixed;inset:0 0 auto;z-index:100;
+  padding:16px 0;transition:background .35s,box-shadow .35s,padding .35s;
+}
+header.stuck{background:rgba(251,246,241,.86);backdrop-filter:blur(18px);
+  box-shadow:0 1px 0 rgba(23,18,15,.07);padding:10px 0}
+.nav{display:flex;align-items:center;gap:14px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:17px;letter-spacing:-.02em}
+.logo .mark{
+  width:34px;height:34px;border-radius:10px;background:var(--v);
+  display:grid;place-items:center;color:#fff;font-family:var(--cn);font-size:19px;
+  box-shadow:0 4px 14px rgba(226,61,46,.34)
+}
+.nav .sp{flex:1}
+.nav a.lnk{font-size:14px;font-weight:600;color:var(--soft);padding:8px 10px;border-radius:9px;transition:.2s}
+.nav a.lnk:hover{color:var(--v);background:rgba(226,61,46,.07)}
+@media(max-width:760px){.nav a.lnk{display:none}}
+.btn-sm{
+  background:var(--ink);color:#fff;font-size:13.5px;font-weight:700;
+  padding:10px 18px;border-radius:100px;transition:.25s;white-space:nowrap
+}
+.btn-sm:hover{background:var(--v);transform:translateY(-2px);box-shadow:0 8px 22px rgba(226,61,46,.32)}
+
+/* ---------- 히어로 ---------- */
+.hero{padding:150px 0 90px;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:44px;text-align:center}}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;
+  color:var(--vd);background:rgba(226,61,46,.1);padding:8px 15px;border-radius:100px;
+  margin-bottom:22px
+}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:var(--v);animation:blink 2.2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.75)}}
+h1{font-size:clamp(38px,6.2vw,66px);font-weight:900;line-height:1.14;letter-spacing:-.04em}
+h1 .em{color:var(--v);position:relative;display:inline-block}
+h1 .em::after{
+  content:"";position:absolute;left:0;bottom:.1em;height:.16em;width:100%;
+  background:var(--g);opacity:.4;border-radius:4px;transform-origin:left;
+  transform:scaleX(0);animation:swipe 1s .7s cubic-bezier(.16,1,.3,1) forwards
+}
+@keyframes swipe{to{transform:scaleX(1)}}
+.lede{font-size:clamp(15px,1.7vw,18px);color:var(--soft);margin-top:22px;max-width:520px}
+@media(max-width:900px){.lede{margin-inline:auto}}
+.cta{display:flex;gap:14px;align-items:center;margin-top:34px;flex-wrap:wrap}
+@media(max-width:900px){.cta{justify-content:center}}
+.appstore{transition:transform .3s cubic-bezier(.16,1,.3,1),filter .3s}
+.appstore:hover{transform:translateY(-4px) scale(1.03);filter:drop-shadow(0 12px 26px rgba(0,0,0,.26))}
+.appstore img{height:56px;width:auto}
+.free{font-size:13px;font-weight:700;color:var(--jade);background:rgba(31,138,112,.11);
+  padding:9px 15px;border-radius:100px}
+.stats{display:flex;gap:30px;margin-top:40px;flex-wrap:wrap}
+@media(max-width:900px){.stats{justify-content:center;gap:24px}}
+.stat b{display:block;font-size:26px;font-weight:900;color:var(--v);letter-spacing:-.03em}
+.stat span{font-size:12.5px;color:var(--faint)}
+
+/* 히어로 폰 */
+.phones{position:relative;height:560px;display:flex;justify-content:center;align-items:center}
+@media(max-width:900px){.phones{height:470px}}
+.ph{
+  position:absolute;border-radius:38px;overflow:hidden;background:#241C18;
+  border:8px solid #241C18;box-shadow:0 32px 70px rgba(60,20,14,.3);
+  animation:float 7s ease-in-out infinite
+}
+.ph img{width:100%;height:100%;object-fit:cover;object-position:top}
+.ph.a{width:252px;height:520px;z-index:3}
+.ph.b{width:210px;height:435px;left:calc(50% - 232px);z-index:2;opacity:.94;animation-delay:.9s}
+.ph.c{width:210px;height:435px;left:calc(50% + 22px);z-index:2;opacity:.94;animation-delay:1.8s}
+@media(max-width:900px){
+  .ph.a{width:210px;height:434px}
+  .ph.b,.ph.c{width:168px;height:348px}
+  .ph.b{left:calc(50% - 190px)}.ph.c{left:calc(50% + 22px)}
+}
+@media(max-width:560px){.ph.b,.ph.c{display:none}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+.blob{
+  position:absolute;border-radius:50%;filter:blur(70px);opacity:.34;z-index:-1;
+  animation:drift 15s ease-in-out infinite
+}
+.blob.r{width:420px;height:420px;background:var(--v);top:-40px;right:-60px}
+.blob.g{width:340px;height:340px;background:var(--g);bottom:-40px;left:-40px;animation-delay:4s}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(28px,-24px) scale(1.08)}66%{transform:translate(-22px,20px) scale(.94)}}
+
+/* ---------- 섹션 공통 ---------- */
+.sec{padding:100px 0}
+.sec.tint{background:linear-gradient(180deg,#fff 0%,var(--paper) 100%)}
+.eyebrow{font-size:11.5px;font-weight:900;letter-spacing:.2em;color:var(--v);margin-bottom:14px}
+h2{font-size:clamp(28px,4vw,44px);font-weight:900;line-height:1.24;letter-spacing:-.035em}
+.sub{font-size:clamp(14.5px,1.6vw,17px);color:var(--soft);margin-top:16px;max-width:640px}
+.center{text-align:center}.center .sub{margin-inline:auto}
+
+/* ---------- 문제 제기 ---------- */
+.prob{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:50px}
+@media(max-width:820px){.prob{grid-template-columns:1fr}}
+.prob-card{
+  background:var(--card);border:1px solid var(--mist);border-radius:var(--r-l);
+  padding:32px 28px;transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s,border-color .4s
+}
+.prob-card:hover{transform:translateY(-8px);box-shadow:0 22px 48px rgba(60,20,14,.1);border-color:rgba(226,61,46,.3)}
+.prob-card .q{font-family:var(--cn);font-size:30px;color:var(--v);font-weight:700;margin-bottom:14px}
+.prob-card h3{font-size:18px;font-weight:800;margin-bottom:9px;letter-spacing:-.02em}
+.prob-card p{font-size:14px;color:var(--soft)}
+
+/* ---------- 기능 ---------- */
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;margin-top:80px}
+.feat:nth-child(even) .feat-txt{order:2}
+@media(max-width:900px){.feat,.feat:nth-child(even) .feat-txt{grid-template-columns:1fr;order:0;gap:34px}}
+.feat h3{font-size:clamp(23px,3vw,32px);font-weight:900;letter-spacing:-.03em;line-height:1.3}
+.feat p{font-size:15.5px;color:var(--soft);margin-top:16px}
+.chip{display:inline-block;font-size:11.5px;font-weight:900;letter-spacing:.14em;
+  color:var(--v);background:rgba(226,61,46,.1);padding:7px 13px;border-radius:100px;margin-bottom:16px}
+.shot{
+  border-radius:34px;overflow:hidden;border:8px solid #241C18;background:#241C18;
+  box-shadow:0 26px 60px rgba(60,20,14,.22);max-width:300px;margin:0 auto;
+  transition:transform .5s cubic-bezier(.16,1,.3,1)
+}
+.shot:hover{transform:translateY(-10px) rotate(-1deg)}
+.shot img{width:100%}
+
+/* 화자 구분 데모 */
+.demo{background:var(--card);border:1px solid var(--mist);border-radius:var(--r-m);padding:16px;margin-top:22px}
+.line{display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--mist)}
+.line:last-child{border:0}
+.bar{width:4px;height:38px;border-radius:3px;flex:none}
+.bar.me{background:var(--v)}.bar.lo{background:var(--g)}
+.line .cn{font-family:var(--cn);font-size:18px;font-weight:700}
+.line .ko{font-size:12.5px;color:var(--faint)}
+.line .who{margin-left:auto;font-size:11px;font-weight:800;color:var(--faint);white-space:nowrap}
+
+/* 성조 데모 */
+.tones{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:24px}
+.tone{background:var(--card);border:1px solid var(--mist);border-radius:var(--r-s);
+  padding:16px 8px;text-align:center;transition:.35s;cursor:default}
+.tone:hover{transform:translateY(-6px);border-color:var(--g);box-shadow:0 14px 30px rgba(242,179,61,.2)}
+.tone svg{display:block;margin:0 auto 8px}
+.tone .cn{font-family:var(--cn);font-size:27px;font-weight:700}
+.tone .py{font-size:13px;font-weight:800;color:var(--v)}
+.tone .mn{font-size:11px;color:var(--faint)}
+.tone svg path{stroke-dasharray:60;stroke-dashoffset:60;animation:draw 1.4s cubic-bezier(.16,1,.3,1) forwards}
+.tone:nth-child(2) svg path{animation-delay:.15s}
+.tone:nth-child(3) svg path{animation-delay:.3s}
+.tone:nth-child(4) svg path{animation-delay:.45s}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+/* ---------- 콘텐츠 구성 ---------- */
+.packs{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:16px;margin-top:52px}
+@media(max-width:1000px){.packs{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.packs{grid-template-columns:1fr}}
+.pack{
+  background:var(--card);border:1px solid var(--mist);border-radius:var(--r-l);padding:28px 24px;
+  transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s;display:flex;flex-direction:column
+}
+.pack:hover{transform:translateY(-8px);box-shadow:0 22px 48px rgba(60,20,14,.11)}
+.pack.free{background:var(--ink);border-color:var(--ink);color:#fff}
+.pack.free .n,.pack.free h3{color:#fff}
+.pack.free p,.pack.free li{color:#B5A99E}
+.pack .tag{font-size:11px;font-weight:900;letter-spacing:.13em;color:var(--v);margin-bottom:10px}
+.pack.free .tag{color:var(--g)}
+.pack h3{font-size:19px;font-weight:900;letter-spacing:-.02em}
+.pack .n{font-size:34px;font-weight:900;color:var(--v);letter-spacing:-.04em;margin:8px 0 4px}
+.pack .n small{font-size:14px;font-weight:700}
+.pack p{font-size:13.5px;color:var(--soft);margin-bottom:14px}
+.pack ul{list-style:none;font-size:13px;color:var(--soft);margin-top:auto}
+.pack li{padding:5px 0 5px 15px;position:relative}
+.pack li::before{content:"";position:absolute;left:0;top:13px;width:5px;height:5px;
+  border-radius:50%;background:var(--v)}
+.pack.free li::before{background:var(--g)}
+.pack .price{margin-top:16px;font-size:14px;font-weight:900;color:var(--v)}
+.pack.free .price{color:var(--g)}
+
+/* ---------- 커리큘럼 ---------- */
+.curr{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:11px;margin-top:44px}
+.lsn{background:var(--card);border:1px solid var(--mist);border-radius:var(--r-s);padding:16px 15px;
+  transition:.35s;position:relative;overflow:hidden}
+.lsn:hover{border-color:var(--v);transform:translateY(-5px)}
+.lsn::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--v);
+  transform:scaleY(0);transform-origin:bottom;transition:transform .35s}
+.lsn:hover::before{transform:scaleY(1)}
+.lsn .no{font-size:10.5px;font-weight:900;color:var(--faint);letter-spacing:.1em}
+.lsn .ti{font-size:14px;font-weight:800;margin-top:5px;letter-spacing:-.02em}
+
+/* ---------- 통계 띠 ---------- */
+.band{background:var(--ink);color:#fff;padding:76px 0;position:relative;overflow:hidden}
+.band::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;
+  background:var(--v);filter:blur(120px);opacity:.28;top:-180px;right:-120px}
+.band-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;position:relative}
+@media(max-width:760px){.band-grid{grid-template-columns:1fr 1fr;gap:34px}}
+.band .stat b{color:var(--g);font-size:clamp(30px,4.4vw,46px)}
+.band .stat span{color:#9B9088;font-size:13px}
+
+/* ---------- 후기/신뢰 ---------- */
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
+@media(max-width:820px){.trust{grid-template-columns:1fr}}
+.tc{background:var(--card);border:1px solid var(--mist);border-radius:var(--r-l);padding:30px 26px;
+  transition:.4s}
+.tc:hover{transform:translateY(-6px);box-shadow:0 20px 42px rgba(60,20,14,.09)}
+.tc .ico{width:44px;height:44px;border-radius:13px;background:rgba(226,61,46,.1);
+  display:grid;place-items:center;font-family:var(--cn);font-size:21px;color:var(--v);margin-bottom:16px}
+.tc h3{font-size:17px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+.tc p{font-size:13.5px;color:var(--soft)}
+
+/* ---------- FAQ ---------- */
+.faq{max-width:760px;margin:44px auto 0}
+details{background:var(--card);border:1px solid var(--mist);border-radius:var(--r-m);
+  margin-bottom:10px;overflow:hidden;transition:border-color .3s}
+details[open]{border-color:rgba(226,61,46,.32)}
+summary{padding:20px 24px;font-size:15.5px;font-weight:700;cursor:pointer;list-style:none;
+  display:flex;align-items:center;gap:14px;transition:color .25s}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";margin-left:auto;font-size:20px;font-weight:400;color:var(--faint);
+  transition:transform .3s}
+details[open] summary::after{transform:rotate(45deg);color:var(--v)}
+summary:hover{color:var(--v)}
+details p{padding:0 24px 22px;font-size:14px;color:var(--soft)}
+
+/* ---------- 마무리 CTA ---------- */
+.final{background:linear-gradient(150deg,var(--v),var(--vd));color:#fff;padding:100px 0;
+  text-align:center;position:relative;overflow:hidden}
+.final::after{content:"";position:absolute;width:640px;height:640px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.16);bottom:-380px;left:50%;transform:translateX(-50%);
+  animation:pulse 5s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:translateX(-50%) scale(1);opacity:.5}50%{transform:translateX(-50%) scale(1.1);opacity:.18}}
+.final h2{color:#fff;position:relative}
+.final p{color:rgba(255,255,255,.85);margin-top:18px;font-size:16px;position:relative}
+.final .cta{justify-content:center;position:relative;margin-top:36px}
+
+/* ---------- 푸터 ---------- */
+footer{background:var(--ink);color:#8D8078;padding:56px 0 44px;font-size:13px}
+.f-top{display:flex;gap:26px;flex-wrap:wrap;align-items:center;margin-bottom:26px}
+.f-top .logo{color:#fff}
+.f-links{display:flex;gap:20px;flex-wrap:wrap;margin-left:auto}
+.f-links a{color:#8D8078;transition:color .25s}
+.f-links a:hover{color:var(--g)}
+.f-bot{border-top:1px solid #2A211C;padding-top:24px;line-height:1.9}
+
+/* ---------- 스크롤 진행 바 ---------- */
+.prog{position:fixed;top:0;left:0;height:3px;background:var(--v);z-index:200;width:0;
+  transition:width .1s linear}
+</style>
+</head>
+<body>
+
+<div class="prog" id="prog"></div>
+
+<header id="hd">
+  <div class="wrap nav">
+    <a href="#" class="logo"><span class="mark">中</span>중국어 여행</a>
+    <span class="sp"></span>
+    <a href="#why" class="lnk">왜 이 앱인가</a>
+    <a href="#content" class="lnk">콘텐츠</a>
+    <a href="#basics" class="lnk">기초 이론</a>
+    <a href="#faq" class="lnk">자주 묻는 질문</a>
+    <a href="https://apps.apple.com/kr/app/id387839696" class="btn-sm">무료로 받기</a>
+  </div>
+</header>
+
+<!-- ══════════ 히어로 ══════════ -->
+<section class="hero">
+  <div class="blob r"></div><div class="blob g"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <div class="badge rv on"><span class="dot"></span>2010 교육 카테고리 1위 · 15년 만의 리뉴얼</div>
+      <h1>중국어 하나도<br>몰라도 <span class="em">괜찮습니다</span></h1>
+      <p class="lede">발음 하나 모르는 상태에서 시작해, 중국에서 혼자 먹고 타고 자고 살 수 있는 만큼만 정확하게 담았습니다. 여행에서 실제로 벌어지는 순서 그대로 600문장.</p>
+      <div class="cta">
+        <a class="appstore" href="https://apps.apple.com/kr/app/id387839696" aria-label="App Store에서 다운로드">
+          <img src="assets/appstore-badge-ko.svg" alt="App Store에서 다운로드" width="180" height="60"
+               onerror="this.onerror=null;this.src='https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/ko-kr'">
+        </a>
+        <span class="free">기본 300문장 무료 · 광고 없음</span>
+      </div>
+      <div class="stats">
+        <div class="stat rv" data-d="1"><b>600</b><span>문장 · 전 문장 음성</span></div>
+        <div class="stat rv" data-d="2"><b>12과</b><span>기초 이론</span></div>
+        <div class="stat rv" data-d="3"><b>100%</b><span>오프라인 재생</span></div>
+      </div>
+    </div>
+    <div class="phones">
+      <div class="ph b"><img src="shots/02.png" alt="상황별 회화 목록 화면" loading="lazy"></div>
+      <div class="ph c"><img src="shots/05.png" alt="기초 이론 화면" loading="lazy"></div>
+      <div class="ph a"><img src="shots/01.png" alt="중국어 여행 홈 화면"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 문제 제기 ══════════ -->
+<section class="sec tint" id="why">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow rv">WHY</div>
+      <h2 class="rv" data-d="1">중국에서 무너지는 건<br>말을 못 해서가 아닙니다</h2>
+      <p class="sub rv" data-d="2">준비한 문장은 나옵니다. 문제는 그다음입니다. 상대가 뭐라고 답하는지 못 알아들으면 거기서 대화가 끝납니다.</p>
+    </div>
+    <div class="prob">
+      <div class="prob-card rv" data-d="1">
+        <div class="q">几位？</div>
+        <h3>"몇 분이세요?"</h3>
+        <p>식당에 들어가면 가장 먼저 듣는 말입니다. 이걸 못 알아들으면 준비한 주문 문장을 꺼낼 기회조차 없습니다.</p>
+      </div>
+      <div class="prob-card rv" data-d="2">
+        <div class="q">扫我还是我扫你？</div>
+        <h3>"제가 찍나요, 찍어드리나요?"</h3>
+        <p>현금이 통하지 않는 나라입니다. QR 결제 앞에서 매번 나오는 이 한마디를 모르면 계산대에서 멈춥니다.</p>
+      </div>
+      <div class="prob-card rv" data-d="3">
+        <div class="q">需要预约吗？</div>
+        <h3>"예약하셨어요?"</h3>
+        <p>주요 관광지가 전부 사전 예약제로 바뀌었습니다. 십 년 전 교재로 준비하면 입구에서 돌아섭니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 기능 ══════════ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow rv">FEATURES</div>
+      <h2 class="rv" data-d="1">그래서 이렇게 만들었습니다</h2>
+    </div>
+
+    <div class="feat">
+      <div class="feat-txt rv">
+        <span class="chip">화자 구분</span>
+        <h3>상대가 할 말까지<br>담았습니다</h3>
+        <p>모든 문장을 <b>내가 할 말(빨강)</b>과 <b>상대가 할 말(노랑)</b>로 나눠 표시합니다. 노란 막대 문장은 외울 필요 없이 귀에만 익혀 두면 됩니다. 이 구분 하나가 대화가 끊기는 순간을 막아 줍니다.</p>
+        <div class="demo">
+          <div class="line"><span class="bar lo"></span><div><div class="cn">几位？</div><div class="ko">몇 분이세요?</div></div><span class="who">상대</span></div>
+          <div class="line"><span class="bar me"></span><div><div class="cn">两个人</div><div class="ko">두 명이요</div></div><span class="who">나</span></div>
+          <div class="line"><span class="bar me"></span><div><div class="cn">不要香菜</div><div class="ko">고수 빼주세요</div></div><span class="who">나</span></div>
+        </div>
+      </div>
+      <div class="rv" data-d="2"><div class="shot"><img src="shots/02.png" alt="화자가 색으로 구분된 문장 목록" loading="lazy"></div></div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-txt rv">
+        <span class="chip">성조 시각화</span>
+        <h3>성조를 눈으로<br>따라 그리세요</h3>
+        <p>병음 위에 부호만 찍는 대신, 음의 높낮이를 곡선으로 그렸습니다. 평평하게, 올려서, 내렸다 올려서, 뚝 떨어뜨려서. 읽는 순간 어떻게 소리 내야 하는지 손가락으로 따라 그릴 수 있습니다.</p>
+        <div class="tones">
+          <div class="tone"><svg width="46" height="26" viewBox="0 0 46 26"><path d="M6 8 H40" stroke="#F2B33D" stroke-width="3.4" stroke-linecap="round" fill="none"/></svg><div class="cn">妈</div><div class="py">mā</div><div class="mn">엄마</div></div>
+          <div class="tone"><svg width="46" height="26" viewBox="0 0 46 26"><path d="M6 21 L40 6" stroke="#F2B33D" stroke-width="3.4" stroke-linecap="round" fill="none"/></svg><div class="cn">麻</div><div class="py">má</div><div class="mn">삼베</div></div>
+          <div class="tone"><svg width="46" height="26" viewBox="0 0 46 26"><path d="M6 8 Q23 25 40 7" stroke="#F2B33D" stroke-width="3.4" stroke-linecap="round" fill="none"/></svg><div class="cn">马</div><div class="py">mǎ</div><div class="mn">말</div></div>
+          <div class="tone"><svg width="46" height="26" viewBox="0 0 46 26"><path d="M6 6 L40 21" stroke="#F2B33D" stroke-width="3.4" stroke-linecap="round" fill="none"/></svg><div class="cn">骂</div><div class="py">mà</div><div class="mn">꾸짖다</div></div>
+        </div>
+      </div>
+      <div class="rv" data-d="2"><div class="shot"><img src="shots/03.png" alt="성조 곡선이 표시된 문장 상세 화면" loading="lazy"></div></div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-txt rv">
+        <span class="chip">보여주기 모드</span>
+        <h3>말이 안 통하면<br>화면을 보여 주세요</h3>
+        <p>발음이 안 되거나 시끄러운 곳에서는 말보다 화면이 빠릅니다. 어느 문장에서든 한 번만 누르면 한자가 전체 화면으로 커지고, 밝기가 최대로 올라가며, 화면이 꺼지지 않습니다. 그대로 상대에게 내밀면 됩니다.</p>
+      </div>
+      <div class="rv" data-d="2"><div class="shot"><img src="shots/04.png" alt="한자를 크게 표시하는 보여주기 모드" loading="lazy"></div></div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-txt rv">
+        <span class="chip">오프라인</span>
+        <h3>비행기 안에서도<br>그대로 열립니다</h3>
+        <p>기본 300문장의 음성이 앱에 내장되어 있습니다. 로밍이 끊긴 골목에서도, 데이터가 안 터지는 지하철에서도 똑같이 작동합니다. 여행 중에 안 되는 앱은 아무 소용이 없기 때문입니다.</p>
+      </div>
+      <div class="rv" data-d="2"><div class="shot"><img src="shots/01.png" alt="홈 화면" loading="lazy"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 숫자 띠 ══════════ -->
+<section class="band">
+  <div class="wrap band-grid">
+    <div class="stat rv"><b>600</b><span>전체 문장</span></div>
+    <div class="stat rv" data-d="1"><b>300</b><span>무료 문장</span></div>
+    <div class="stat rv" data-d="2"><b>12과</b><span>기초 이론</span></div>
+    <div class="stat rv" data-d="3"><b>0원</b><span>기본 이용료</span></div>
+  </div>
+</section>
+
+<!-- ══════════ 콘텐츠 구성 ══════════ -->
+<section class="sec" id="content">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow rv">CONTENTS</div>
+      <h2 class="rv" data-d="1">필요한 만큼만<br>고르세요</h2>
+      <p class="sub rv" data-d="2">기본 300문장은 계속 무료입니다. 추가 팩은 한 번 결제하면 영구 이용이고, 구독이 아니라 자동 갱신되지 않습니다.</p>
+    </div>
+    <div class="packs">
+      <div class="pack free rv">
+        <div class="tag">기본 패키지</div>
+        <h3>설치하면 바로</h3>
+        <div class="n" style="color:#F2B33D">300<small>문장</small></div>
+        <p>기초 이론과 생존 회화 전부</p>
+        <ul>
+          <li>기초 이론 12과</li>
+          <li>발음 학습 100항목</li>
+          <li>소통 복구 SOS 10문장</li>
+          <li>식당 · 교통 · 숙소 · 쇼핑</li>
+          <li>공항 · 길찾기 · 위급 상황</li>
+        </ul>
+        <div class="price">무료</div>
+      </div>
+      <div class="pack rv" data-d="1">
+        <div class="tag">추가 팩</div>
+        <h3>여행 심화</h3>
+        <div class="n">100<small>문장</small></div>
+        <p>자유여행이 길어질 때</p>
+        <ul><li>고속철 예매 · 발권</li><li>예약제 관광지</li><li>호텔 문제 해결</li><li>택시 기사와의 대화</li></ul>
+        <div class="price">₩1,500</div>
+      </div>
+      <div class="pack rv" data-d="2">
+        <div class="tag">추가 팩</div>
+        <h3>디지털 차이나</h3>
+        <div class="n">100<small>문장</small></div>
+        <p>지금의 중국을 살아가려면</p>
+        <ul><li>알리페이 · 위챗페이</li><li>배달앱 · 차량 호출</li><li>유심 개통 · 실명 등록</li><li>온라인 쇼핑 · 택배</li></ul>
+        <div class="price">₩1,500</div>
+      </div>
+      <div class="pack rv" data-d="3">
+        <div class="tag">추가 팩</div>
+        <h3>비즈니스 롱스테이</h3>
+        <div class="n">100<small>문장</small></div>
+        <p>출장과 체류를 위해</p>
+        <ul><li>명함 · 미팅 · 협상</li><li>회식 자리 예절</li><li>병원 접수 · 증상 설명</li><li>임대 계약 · 비자 연장</li></ul>
+        <div class="price">₩1,500</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 기초 이론 ══════════ -->
+<section class="sec tint" id="basics">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow rv">BASICS</div>
+      <h2 class="rv" data-d="1">한 시간이면<br>언어의 뼈대가 잡힙니다</h2>
+      <p class="sub rv" data-d="2">성모 21개와 운모 36개를 무작정 외우게 하지 않습니다. 왜 성조가 존재하는지, 왜 b를 된소리로 내야 하는지부터 설명합니다.</p>
+    </div>
+    <div class="curr">
+      <div class="lsn rv"><div class="no">01</div><div class="ti">중국어라는 언어</div></div>
+      <div class="lsn rv" data-d="1"><div class="no">02</div><div class="ti">한자와 한국 한자음</div></div>
+      <div class="lsn rv" data-d="2"><div class="no">03</div><div class="ti">병음의 구조</div></div>
+      <div class="lsn rv" data-d="3"><div class="no">04</div><div class="ti">성조 — 4성과 음높이</div></div>
+      <div class="lsn rv"><div class="no">05</div><div class="ti">성모 · 무기음과 유기음</div></div>
+      <div class="lsn rv" data-d="1"><div class="no">06</div><div class="ti">성모 21개 조음 위치</div></div>
+      <div class="lsn rv" data-d="2"><div class="no">07</div><div class="ti">운모 · 기본 모음 6개</div></div>
+      <div class="lsn rv" data-d="3"><div class="no">08</div><div class="ti">운모 · 복운모와 비운모</div></div>
+      <div class="lsn rv"><div class="no">09</div><div class="ti">병음 표기의 함정</div></div>
+      <div class="lsn rv" data-d="1"><div class="no">10</div><div class="ti">변조와 얼화</div></div>
+      <div class="lsn rv" data-d="2"><div class="no">11</div><div class="ti">문법 첫걸음</div></div>
+      <div class="lsn rv" data-d="3"><div class="no">12</div><div class="ti">한국인이 조심할 열 가지</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 신뢰 ══════════ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow rv">TRUST</div>
+      <h2 class="rv" data-d="1">한국인을 위해<br>다시 설계했습니다</h2>
+    </div>
+    <div class="trust">
+      <div class="tc rv">
+        <div class="ico">山</div>
+        <h3>한국 한자음이 지름길입니다</h3>
+        <p>받침 ㄴ은 -n, ㅇ은 -ng로 규칙 대응합니다. 山(산)은 shān, 上(상)은 shàng. 외국인이 평생 헷갈리는 구분을 우리는 이미 아는 한자음으로 풉니다.</p>
+      </div>
+      <div class="tc rv" data-d="1">
+        <div class="ico">是</div>
+        <h3>발음 클리닉</h3>
+        <p>是(shì)와 四(sì)를 똑같이 발음하고 계셨다면, 그것만 고쳐도 통하는 정도가 달라집니다. 한국인이 반드시 틀리는 지점만 모았습니다.</p>
+      </div>
+      <div class="tc rv" data-d="2">
+        <div class="ico">码</div>
+        <h3>지금의 중국</h3>
+        <p>환전과 우편을 빼고 QR 결제와 배달앱을 넣었습니다. 십 년 전 교재에는 없는, 오늘 중국에서 실제로 막히는 문장들입니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FAQ ══════════ -->
+<section class="sec tint" id="faq">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow rv">FAQ</div>
+      <h2 class="rv" data-d="1">자주 묻는 질문</h2>
+    </div>
+    <div class="faq">
+      <details class="rv"><summary>정말 중국어를 하나도 몰라도 되나요?</summary>
+        <p>네. 그 상태를 기준으로 설계했습니다. 알파벳처럼 생긴 병음이 무엇인지, 성조가 왜 있는지부터 시작합니다. 급하시면 기초를 건너뛰고 SOS 10문장과 식당·교통부터 보셔도 됩니다.</p></details>
+      <details class="rv"><summary>무료로 어디까지 쓸 수 있나요?</summary>
+        <p>기초 이론 12과와 발음 학습 100항목, 그리고 생존 회화 200문장까지 총 300문장이 전부 무료입니다. 광고도 없습니다. 추가 팩은 필요하실 때만 고르시면 됩니다.</p></details>
+      <details class="rv"><summary>인터넷이 안 되는 곳에서도 쓸 수 있나요?</summary>
+        <p>기본 300문장의 음성이 앱에 내장되어 있어 비행기 안이나 로밍이 끊긴 곳에서도 그대로 재생됩니다. 여행 중에 작동하지 않으면 의미가 없다고 봤습니다.</p></details>
+      <details class="rv"><summary>추가 팩은 구독인가요?</summary>
+        <p>아닙니다. 한 번 결제하면 영구 이용이며 자동 갱신되지 않습니다. 기기를 바꾸거나 앱을 다시 설치해도 같은 Apple 계정이면 복원됩니다.</p></details>
+      <details class="rv"><summary>결제했는데 콘텐츠가 열리지 않아요.</summary>
+        <p>먼저 설정 화면의 <b>구매 복원</b>을 눌러 주세요. 대부분 이걸로 해결됩니다. 그래도 안 되면 설정 ▸ 결제 문의 정보에서 내용을 복사해 보내 주시면 결제 기록을 확인해 바로 처리해 드립니다.</p></details>
+      <details class="rv"><summary>중국어 여행, 예전에 쓰던 그 앱인가요?</summary>
+        <p>맞습니다. 2010년 App Store 교육 카테고리 1위에 올랐던 그 앱입니다. 15년이 지나 중국이 완전히 달라졌기에 콘텐츠와 앱을 처음부터 다시 만들었습니다.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 마무리 ══════════ -->
+<section class="final">
+  <div class="wrap">
+    <h2 class="rv">출발 전에<br>딱 300문장이면 됩니다</h2>
+    <p class="rv" data-d="1">지금 받아 두시면 비행기 안에서도 열립니다.</p>
+    <div class="cta rv" data-d="2">
+      <a class="appstore" href="https://apps.apple.com/kr/app/id387839696" aria-label="App Store에서 다운로드">
+        <img src="assets/appstore-badge-ko.svg" alt="App Store에서 다운로드" width="180" height="60"
+               style="filter:drop-shadow(0 8px 20px rgba(0,0,0,.3))">
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-top">
+      <a href="#" class="logo"><span class="mark">中</span>중국어 여행</a>
+      <nav class="f-links">
+        <a href="https://www.joycestudios.kr/ct/ko/terms.html">이용약관</a>
+        <a href="https://www.joycestudios.kr/ct/ko/privacy.html">개인정보 처리방침</a>
+        <a href="https://apps.apple.com/kr/app/id387839696">App Store</a>
+        <a href="mailto:support@joycestudios.kr">문의</a>
+      </nav>
+    </div>
+    <div class="f-bot">
+      Joyce Studios · 중국어 여행 2.0<br>
+      App Store 및 Apple 로고는 Apple Inc.의 상표입니다.<br>
+      © 2026 Joyce Studios. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script>
+// 스크롤 등장
+const io = new IntersectionObserver((es) => {
+  es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+// 헤더 고정 + 진행 바
+const hd = document.getElementById('hd'), prog = document.getElementById('prog');
+let tick = false;
+function onScroll() {
+  const y = window.scrollY;
+  hd.classList.toggle('stuck', y > 20);
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+  tick = false;
+}
+window.addEventListener('scroll', () => { if (!tick) { requestAnimationFrame(onScroll); tick = true; } }, { passive: true });
+onScroll();
+
+// 숫자 카운트업
+const nums = document.querySelectorAll('.band .stat b');
+const io2 = new IntersectionObserver((es) => {
+  es.forEach(e => {
+    if (!e.isIntersecting) return;
+    io2.unobserve(e.target);
+    const raw = e.target.textContent;
+    const m = raw.match(/^(\d+)(.*)$/);
+    if (!m) return;
+    const end = parseInt(m[1], 10), suffix = m[2];
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let s = null;
+    const step = (t) => {
+      if (!s) s = t;
+      const p = Math.min((t - s) / 1300, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      e.target.textContent = Math.round(end * eased) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+}, { threshold: 0.6 });
+nums.forEach(n => io2.observe(n));
+
+// 히어로 폰 시차 효과 (데스크톱만)
+if (window.innerWidth > 900 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const phones = document.querySelectorAll('.ph');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > 700) return;
+    phones.forEach((p, i) => {
+      p.style.translate = '0 ' + (y * (i === 2 ? -0.05 : 0.045)) + 'px';
+    });
+  }, { passive: true });
+}
+</script>
+</body>
+</html>
