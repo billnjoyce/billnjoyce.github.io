@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#FBF6EE">
+<title>고등학교 한자 · 이용약관 및 결제·환불 정책, 개인정보처리방침</title>
+<style>
+  :root{
+    --brand:#B5342A; --brand-2:#CE4436; --brand-dark:#8C231B;
+    --brand-soft:rgba(181,52,42,0.10); --brand-line:rgba(181,52,42,0.26);
+    --accent:#CE4436; --accent-soft:rgba(206,68,54,0.10); --accent-line:rgba(206,68,54,0.30);
+    --gold:#B98A2F; --gold-soft:rgba(185,138,47,0.12); --gold-line:rgba(185,138,47,0.34);
+    --bg:#FBF6EE; --bg-soft:#FFFFFF; --bg-soft2:#F4EDE0; --line:#EAE3D5;
+    --ink:#241C16; --ink-soft:#4C463C; --ink-faint:#8B8273;
+    --radius:16px; --maxw:880px;
+    --font:'Pretendard',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI","Noto Sans KR",Roboto,sans-serif;
+  }
+  @font-face{font-family:'Pretendard';font-weight:800;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-ExtraBold.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Medium.woff2') format('woff2');}
+  @font-face{font-family:'Pretendard';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--bg);}
+  body{font-family:var(--font);color:var(--ink-soft);background:var(--bg);line-height:1.78;margin:0;font-size:16px;font-weight:400;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 28px) 20px 80px;}
+  header.doc{padding:8px 0 24px;border-bottom:3px solid var(--brand);margin-bottom:8px;}
+  .brand{display:inline-flex;align-items:center;gap:11px;margin-bottom:18px;}
+  .brand .mk{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;box-shadow:0 8px 20px rgba(181,52,42,0.35);}
+  .brand .nm{font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.5px;}
+  .brand .nm b{color:var(--brand);}
+  header.doc .kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--brand);background:var(--brand-soft);border:1px solid var(--brand-line);padding:5px 12px;border-radius:999px;margin-bottom:14px;}
+  header.doc h1{font-size:27px;line-height:1.35;margin:0 0 14px;letter-spacing:-.02em;color:var(--ink);font-weight:800;}
+  .meta{color:var(--ink-faint);font-size:13.5px;line-height:1.95;margin:0;}
+  .meta b{color:var(--ink-soft);}
+  .box{background:var(--bg-soft);border:1px solid var(--line);border-left:4px solid var(--brand);padding:16px 18px;border-radius:var(--radius);margin:20px 0;font-size:14.5px;color:var(--ink-soft);box-shadow:0 2px 10px rgba(60,50,30,0.04);}
+  .box b{color:var(--ink);}
+  .notice{background:var(--accent-soft);border:1px solid var(--accent-line);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#95291F;}
+  .warn{background:var(--gold-soft);border:1px solid var(--gold-line);border-left:4px solid var(--gold);padding:14px 16px;border-radius:12px;margin:16px 0;font-size:14px;color:#7E5E1E;}
+  .contact{background:var(--gold-soft);border:1px solid var(--gold-line);border-left:4px solid var(--gold);padding:16px 18px;border-radius:var(--radius);font-size:14.5px;line-height:1.95;color:var(--ink-soft);}
+  .contact b{color:var(--ink);}
+  nav.toc{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin:26px 0 10px;box-shadow:0 2px 10px rgba(60,50,30,0.04);}
+  nav.toc h2{font-size:16px;margin:0 0 14px;color:var(--ink);border:0;padding:0;font-weight:800;}
+  nav.toc .toc-part{font-size:13px;font-weight:700;color:var(--brand);margin:16px 0 8px;letter-spacing:.02em;}
+  nav.toc .toc-part:first-of-type{margin-top:0;}
+  nav.toc ol{list-style:none;margin:0;padding:0;columns:2;column-gap:26px;}
+  nav.toc ol li{margin:0 0 6px;font-size:13.5px;break-inside:avoid;padding-left:0;}
+  nav.toc ol li::before{display:none;}
+  nav.toc a{color:var(--ink-faint);text-decoration:none;transition:color .15s;}
+  nav.toc a:hover{color:var(--brand);text-decoration:underline;}
+  .part{margin:54px 0 8px;padding:20px 22px;background:linear-gradient(135deg,var(--brand-dark) 0%,var(--brand-2) 100%);color:#fff;border-radius:var(--radius);box-shadow:0 12px 30px rgba(181,52,42,0.26);}
+  .part .num{font-size:12px;font-weight:700;opacity:.9;letter-spacing:.1em;}
+  .part h2{color:#fff;border:0;margin:4px 0 0;padding:0;font-size:21px;font-weight:800;}
+  h2.chapter{font-size:18px;color:var(--ink);margin:40px 0 6px;padding-bottom:9px;border-bottom:1px solid var(--line);font-weight:800;letter-spacing:-.3px;}
+  h3{font-size:16px;color:var(--ink);margin:26px 0 6px;scroll-margin-top:16px;font-weight:700;letter-spacing:-.2px;}
+  h3 .anum{color:var(--brand);font-weight:800;margin-right:5px;}
+  p{margin:8px 0;color:var(--ink-soft);font-size:15px;}
+  article.terms p,article.terms li{font-size:14.5px;}
+  ul{margin:8px 0 12px;padding-left:4px;list-style:none;}
+  li{position:relative;padding-left:18px;margin-bottom:7px;color:var(--ink-soft);font-size:14.5px;}
+  li::before{content:'';position:absolute;left:3px;top:11px;width:5px;height:5px;border-radius:50%;background:var(--brand);opacity:.85;}
+  b,strong{color:var(--ink);font-weight:700;}
+  table.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;background:var(--bg-soft);}
+  table.tbl th,table.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;}
+  table.tbl th{background:var(--bg-soft2);color:var(--ink);font-weight:700;white-space:nowrap;}
+  table.tbl td{color:var(--ink-soft);}
+  table.tbl tr:nth-child(even) td{background:rgba(181,52,42,0.025);}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .totop{display:inline-block;font-size:12.5px;color:var(--brand);text-decoration:none;margin-top:10px;}
+  footer.doc{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-faint);line-height:1.9;}
+  footer.doc b{color:var(--ink-soft);}
+  footer.doc p{color:var(--ink-faint);}
+  @media (max-width:640px){body{font-size:15.5px;}.wrap{padding:calc(env(safe-area-inset-top,0px) + 20px) 16px 64px;}header.doc h1{font-size:22px;}nav.toc ol{columns:1;}.part h2{font-size:18px;}h2.chapter{font-size:16.5px;}h3{font-size:15px;}}
+</style>
+</head><body>
+<div class="wrap">
+<header class="doc">
+  <div class="brand">
+    <span class="mk">
+      <svg width="24" height="24" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="18" y="18" width="84" height="84" rx="16" fill="#FBF6EE"/>
+        <rect x="27" y="27" width="66" height="66" rx="9" stroke="#B5342A" stroke-width="5" fill="none"/>
+        <line x1="42" y1="42" x2="78" y2="42" stroke="#B5342A" stroke-width="7" stroke-linecap="round"/>
+        <line x1="60" y1="34" x2="60" y2="52" stroke="#B5342A" stroke-width="7" stroke-linecap="round"/>
+        <rect x="45" y="60" width="30" height="24" rx="4" stroke="#B5342A" stroke-width="6" fill="none"/>
+      </svg>
+    </span>
+    <span class="nm">고등학교 <b>한자</b></span>
+  </div>
+  <span class="kicker">LEGAL · 이용약관 · 결제/환불 · 개인정보</span>
+  <h1>고등학교 한자<br>이용약관 및 결제·환불 정책, 개인정보처리방침</h1>
+  <p class="meta">
+    <b>운영사</b> · Joyce Studios (이하 "회사")<br>
+    <b>최종 개정일</b> · 2026년 8월 22일<br>
+    <b>시행일</b> · 2026년 8월 22일
+  </p>
+</header>
+
+<div class="box">
+  본 문서는 「고등학교 한자」 미니앱의 <b>서비스 이용약관</b>, <b>유료 상품 및 환불 정책</b>,
+  <b>개인정보처리방침</b>을 하나로 모은 통합 문서입니다.
+  유료 상품(한자 2급 마스터 · 한자 1급 마스터)을 구매하시기 전에는 <b>제2부</b>를 반드시 확인해 주세요.
+</div>
+
+<nav class="toc">
+  <h2>📑 목차</h2>
+  <div class="toc-part">제1부 · 서비스 이용약관</div>
+  <ol>
+    <li><a href="#a1">제1조 목적</a></li>
+    <li><a href="#a2">제2조 용어의 정의</a></li>
+    <li><a href="#a3">제3조 약관의 효력 및 변경</a></li>
+    <li><a href="#a4">제4조 약관 외 준칙</a></li>
+    <li><a href="#a5">제5조 플랫폼 및 운영 주체</a></li>
+    <li><a href="#a6">제6조 서비스의 성격</a></li>
+    <li><a href="#a7">제7조 서비스 제공 내용</a></li>
+    <li><a href="#a8">제8조 서비스 이용계약의 성립</a></li>
+    <li><a href="#a9">제9조 회원 비가입 이용과 토스 로그인</a></li>
+    <li><a href="#a10">제10조 서비스의 변경·중단</a></li>
+    <li><a href="#a11">제11조 이용자의 의무</a></li>
+    <li><a href="#a12">제12조 이용 제한 및 차단</a></li>
+    <li><a href="#a13">제13조 학습 콘텐츠의 구성</a></li>
+    <li><a href="#a14">제14조 콘텐츠의 저작권</a></li>
+    <li><a href="#a15">제15조 훈·음 표기의 정확성</a></li>
+    <li><a href="#a16">제16조 학습 성과의 비보장</a></li>
+    <li><a href="#a17">제17조 학습 기록의 저장</a></li>
+    <li><a href="#a18">제18조 유료 상품의 구매 및 복원</a></li>
+    <li><a href="#a19">제19조 광고의 게재</a></li>
+    <li><a href="#a20">제20조 개인정보의 보호</a></li>
+    <li><a href="#a21">제21조 회사의 면책</a></li>
+    <li><a href="#a22">제22조 손해배상</a></li>
+    <li><a href="#a23">제23조 문의 및 분쟁 해결</a></li>
+    <li><a href="#a24">제24조 준거법 및 관할</a></li>
+  </ol>
+  <div class="toc-part">제2부 · 유료 상품 및 환불 정책</div>
+  <ol>
+    <li><a href="#b1">1. 판매하는 유료 상품</a></li>
+    <li><a href="#b2">2. 결제 수단 및 결제 시점</a></li>
+    <li><a href="#b3">3. 구매 전 체험 기회 제공</a></li>
+    <li><a href="#b4">4. 청약철회(구매 취소)</a></li>
+    <li><a href="#b5">5. 청약철회가 제한되지 않는 경우</a></li>
+    <li><a href="#b6">6. 환불 절차</a></li>
+    <li><a href="#b7">7. 결제됐으나 미지급된 경우</a></li>
+    <li><a href="#b8">8. 미성년자의 결제</a></li>
+    <li><a href="#b9">9. 구매 내역의 복원</a></li>
+    <li><a href="#b10">10. 서비스 종료 시의 처리</a></li>
+    <li><a href="#b11">11. 사업자 정보</a></li>
+    <li><a href="#b12">12. 분쟁 해결</a></li>
+  </ol>
+  <div class="toc-part">제3부 · 개인정보처리방침</div>
+  <ol>
+    <li><a href="#c1">1. 수집하는 정보와 수집 방법</a></li>
+    <li><a href="#c2">2. 토스 로그인으로 받는 정보</a></li>
+    <li><a href="#c3">3. 개인정보의 이용 목적</a></li>
+    <li><a href="#c4">4. 보유 및 이용 기간</a></li>
+    <li><a href="#c5">5. 개인정보의 제3자 제공</a></li>
+    <li><a href="#c6">6. 개인정보 처리의 위탁</a></li>
+    <li><a href="#c7">7. 이용자의 권리</a></li>
+    <li><a href="#c8">8. 안전성 확보 조치</a></li>
+    <li><a href="#c9">9. 만 14세 미만 아동</a></li>
+    <li><a href="#c10">10. 보호책임자 및 문의</a></li>
+    <li><a href="#c11">11. 처리방침의 변경</a></li>
+  </ol>
+</nav>
+<div class="part"><div class="num">PART 01</div><h2>서비스 이용약관</h2></div>
+<article class="terms">
+
+<h2 class="chapter">제1장 총칙</h2>
+
+<h3 id="a1"><span class="anum">제1조</span>(목적)</h3>
+<p>본 약관은 Joyce Studios(이하 "회사")가 앱인토스(Apps in Toss) 플랫폼을 통해 제공하는 한자 학습 미니앱 「고등학교 한자」(이하 "서비스")의 이용과 관련하여 회사와 이용자 간의 권리·의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.</p>
+
+<h3 id="a2"><span class="anum">제2조</span>(용어의 정의)</h3>
+<ul>
+  <li><b>"서비스"</b>란 회사가 제공하는 한자 학습 콘텐츠와 이에 부수하는 모든 기능 일체를 말합니다.</li>
+  <li><b>"이용자"</b>란 본 약관에 따라 서비스를 이용하는 자를 말합니다.</li>
+  <li><b>"학습 콘텐츠"</b>란 서비스가 제공하는 한자, 훈(뜻)·음, 부수, 획수, 대표 한자어, 퀴즈 문항 등 학습 자료 일체를 말합니다.</li>
+  <li><b>"무료 콘텐츠"</b>란 별도의 결제 없이 이용할 수 있는 고등학교 한자 900자 학습 콘텐츠를 말합니다.</li>
+  <li><b>"유료 상품"</b>이란 인앱결제를 통해 구매하여야 이용할 수 있는 콘텐츠(한자 2급 마스터, 한자 1급 마스터 등)를 말합니다.</li>
+  <li><b>"인앱결제"</b>란 앱인토스 및 앱마켓(구글 플레이, 애플 앱스토어)이 제공하는 결제 수단을 통한 결제를 말합니다.</li>
+  <li><b>"학습 기록"</b>이란 이용자의 진도, 정답·오답 이력, 마스터 현황 등 서비스 이용 과정에서 생성되는 데이터를 말합니다.</li>
+  <li><b>"구매 복원"</b>이란 이미 결제한 유료 상품의 이용 권한을 재설치·기기 변경 후에 다시 부여받는 절차를 말합니다.</li>
+</ul>
+
+<h3 id="a3"><span class="anum">제3조</span>(약관의 효력 및 변경)</h3>
+<ul>
+  <li>본 약관은 서비스 내 또는 본 페이지에 게시함으로써 효력이 발생합니다.</li>
+  <li>회사는 관련 법령을 위배하지 않는 범위에서 본 약관을 개정할 수 있으며, 개정 시 적용일자 및 개정 사유를 명시하여 적용일 7일 전부터 공지합니다. 다만 이용자에게 불리한 변경의 경우에는 적용일 30일 전부터 공지합니다.</li>
+  <li>이용자가 개정 약관 적용일 이후에도 서비스를 계속 이용하는 경우 개정 약관에 동의한 것으로 봅니다. 동의하지 않는 경우 서비스 이용을 중단할 수 있습니다.</li>
+</ul>
+
+<h3 id="a4"><span class="anum">제4조</span>(약관 외 준칙)</h3>
+<p>본 약관에 명시되지 않은 사항은 「전자상거래 등에서의 소비자보호에 관한 법률」, 「콘텐츠산업진흥법」, 「개인정보 보호법」, 「약관의 규제에 관한 법률」 등 관계 법령 및 상관례에 따릅니다.</p>
+
+<h3 id="a5"><span class="anum">제5조</span>(플랫폼 및 운영 주체)</h3>
+<ul>
+  <li>본 서비스는 토스 앱 내 앱인토스 플랫폼을 통해 제공되는 미니앱입니다.</li>
+  <li>서비스의 기획·개발·운영 주체는 회사이며, 학습 콘텐츠 및 서비스 내용에 관한 책임은 회사에 있습니다.</li>
+  <li>앱인토스 플랫폼 자체의 장애, 정책 변경, 결제 시스템 운영에 관한 사항은 해당 플랫폼 사업자의 정책에 따릅니다.</li>
+</ul>
+
+<h2 class="chapter">제2장 서비스의 제공</h2>
+
+<h3 id="a6"><span class="anum">제6조</span>(서비스의 성격)</h3>
+<ul>
+  <li>본 서비스는 한자 학습을 돕는 <b>학습 보조 서비스</b>로서, 교육기관이나 자격검정기관이 아닙니다.</li>
+  <li>본 서비스는 특정 시험의 주관·시행 기관과 공식적인 제휴·보증·후원 관계에 있지 않습니다.</li>
+</ul>
+
+<h3 id="a7"><span class="anum">제7조</span>(서비스 제공 내용)</h3>
+<ul>
+  <li>한자 학습 콘텐츠(훈·음, 부수, 획수, 대표 한자어) 제공</li>
+  <li>단계별 학습, 퀴즈, 오답 노트, 최종 테스트 등 학습 도구 제공</li>
+  <li>학습 진도 및 기록의 저장·조회</li>
+  <li>유료 상품의 판매 및 콘텐츠 제공</li>
+  <li>그 밖에 회사가 추가로 개발하거나 제휴를 통해 제공하는 서비스</li>
+</ul>
+
+<h3 id="a8"><span class="anum">제8조</span>(서비스 이용계약의 성립)</h3>
+<ul>
+  <li>서비스 이용계약은 이용자가 본 약관에 동의하고 서비스를 이용하기 시작한 시점에 성립합니다.</li>
+  <li>유료 상품에 관한 계약은 이용자가 결제를 완료하고 회사가 해당 콘텐츠의 이용 권한을 부여한 시점에 성립합니다.</li>
+</ul>
+
+<h3 id="a9"><span class="anum">제9조</span>(회원 비가입 이용과 토스 로그인)</h3>
+<ul>
+  <li>본 서비스는 별도의 회원가입 절차 없이 이용할 수 있습니다.</li>
+  <li>다만 유료 상품의 구매 내역을 안전하게 보관하고 기기 변경·재설치 시 복원하기 위해서는 토스 로그인 연동이 필요합니다.</li>
+  <li>토스 로그인을 하지 않은 상태에서 구매한 경우, 구매 내역은 기기 식별값을 기준으로 임시 보관되며 앱 삭제·기기 변경 시 복원이 어려울 수 있습니다.</li>
+</ul>
+<div class="warn">구매하신 상품을 기기 변경 후에도 안전하게 이용하시려면 <b>토스 로그인</b>을 권장드립니다.</div>
+
+<h3 id="a10"><span class="anum">제10조</span>(서비스의 변경·중단)</h3>
+<ul>
+  <li>회사는 시스템 점검·보수·교체, 설비 장애, 통신 두절 등의 사유가 발생한 경우 서비스 제공을 일시적으로 중단할 수 있습니다.</li>
+  <li>회사는 상당한 이유가 있는 경우 서비스의 내용을 변경하거나 일부를 종료할 수 있으며, 이 경우 사전에 서비스 내에 공지합니다.</li>
+  <li>유료 상품의 제공을 종료하는 경우 회사는 관련 법령 및 제2부 제10항에 따라 필요한 조치를 취합니다.</li>
+  <li>천재지변, 앱마켓 또는 플랫폼의 정책 변경 등 회사가 통제할 수 없는 사유로 서비스가 중단되는 경우 사전 공지 없이 중단할 수 있으며 이를 사후에 공지합니다.</li>
+</ul>
+
+<h2 class="chapter">제3장 이용자의 의무</h2>
+
+<h3 id="a11"><span class="anum">제11조</span>(이용자의 의무)</h3>
+<p>이용자는 다음 각 호의 행위를 하여서는 안 됩니다.</p>
+<ul>
+  <li>서비스를 부정한 방법으로 이용하거나 결제 시스템을 우회·조작하는 행위</li>
+  <li>앱을 역공학·디컴파일·수정하여 유료 콘텐츠의 잠금을 무단으로 해제하는 행위</li>
+  <li>서비스의 콘텐츠를 회사의 사전 동의 없이 복제·배포·전송·출판·판매하는 행위</li>
+  <li>타인의 결제 수단이나 계정을 무단으로 사용하는 행위</li>
+  <li>서비스의 안정적 운영을 방해하는 행위</li>
+  <li>그 밖에 관련 법령에 위반되는 행위</li>
+</ul>
+
+<h3 id="a12"><span class="anum">제12조</span>(이용 제한 및 차단)</h3>
+<ul>
+  <li>회사는 이용자가 제11조를 위반한 경우 사전 통지 후 서비스 이용을 제한할 수 있습니다. 다만 긴급한 사유가 있는 경우에는 조치 후 통지할 수 있습니다.</li>
+  <li>부정한 방법으로 유료 콘텐츠를 이용한 사실이 확인된 경우, 회사는 해당 이용 권한을 회수할 수 있습니다.</li>
+  <li>이용자는 이용 제한 조치에 대해 이의가 있는 경우 제23조의 연락처를 통해 이의를 제기할 수 있으며, 회사는 그 사유가 정당하다고 인정되면 즉시 이용을 재개합니다.</li>
+</ul>
+
+<h2 class="chapter">제4장 콘텐츠</h2>
+
+<h3 id="a13"><span class="anum">제13조</span>(학습 콘텐츠의 구성)</h3>
+<ul>
+  <li>무료 콘텐츠는 고등학교 한자 900자로 구성되며, 단계별 학습·퀴즈·오답 노트 기능을 제공합니다.</li>
+  <li>유료 상품은 어문회 2급 한자 311자, 1급 한자 387자를 각각 제공하며, 50자 단위의 단계 학습과 최종 테스트로 구성됩니다.</li>
+  <li>콘텐츠의 구성과 수록 자수는 서비스 개선에 따라 변경될 수 있으며, 변경 시 서비스 내에 공지합니다.</li>
+</ul>
+
+<h3 id="a14"><span class="anum">제14조</span>(콘텐츠의 저작권)</h3>
+<ul>
+  <li>서비스가 제공하는 콘텐츠(학습 데이터, 문제, 화면 디자인, 문구 등)에 대한 저작권은 회사에 귀속됩니다.</li>
+  <li>이용자는 구매한 유료 상품을 개인적인 학습 목적으로만 이용할 수 있으며, 이를 제3자에게 양도·대여·판매할 수 없습니다.</li>
+  <li>한자 및 한자어의 훈·음 등 사실 정보 자체에는 저작권이 발생하지 않으나, 이를 선별·배열·편집한 결과물에 대해서는 회사의 권리가 인정됩니다.</li>
+</ul>
+
+<h3 id="a15"><span class="anum">제15조</span>(훈·음 표기의 정확성)</h3>
+<ul>
+  <li>학습 콘텐츠는 정확성을 기하여 제작되었으나, 한자의 훈·음 표기는 자료와 사전에 따라 달리 표기될 수 있습니다.</li>
+  <li>회사는 통용되는 표기를 기준으로 콘텐츠를 구성하며, 오류가 확인된 경우 지체 없이 수정합니다.</li>
+  <li>오류를 발견하신 경우 제23조의 연락처로 알려 주시면 검토 후 반영합니다.</li>
+</ul>
+
+<h3 id="a16"><span class="anum">제16조</span>(학습 성과의 비보장)</h3>
+<p>회사는 서비스를 통해 제공되는 학습 콘텐츠가 특정 시험의 합격이나 특정 수준의 학습 성과를 보장하지 않습니다. 학습 성과는 이용자의 학습 시간, 방법, 개인차 등에 따라 달라질 수 있습니다.</p>
+
+<h3 id="a17"><span class="anum">제17조</span>(학습 기록의 저장)</h3>
+<ul>
+  <li>학습 기록은 원칙적으로 이용자의 기기에 저장됩니다.</li>
+  <li>기기를 변경하거나 앱을 삭제한 경우 기기에 저장된 학습 기록은 복구되지 않을 수 있습니다.</li>
+  <li>유료 상품의 구매 내역은 학습 기록과 별도로 회사의 서버에 보관되며, 제18조에 따라 복원할 수 있습니다.</li>
+</ul>
+<div class="notice"><b>학습 진도</b>는 기기에 저장되지만, <b>구매한 상품의 이용 권한</b>은 서버에 보관되어 복원할 수 있습니다.</div>
+
+<h2 class="chapter">제5장 유료 상품 및 광고</h2>
+
+<h3 id="a18"><span class="anum">제18조</span>(유료 상품의 구매 및 복원)</h3>
+<ul>
+  <li>유료 상품은 앱인토스 인앱결제를 통해 구매합니다.</li>
+  <li>유료 상품은 비소모성 상품으로, 한 번 구매하면 서비스가 제공되는 동안 계속 이용할 수 있습니다.</li>
+  <li>구매 내역은 토스 로그인으로 확인되는 이용자 식별값을 기준으로 보관되므로, 앱을 다시 설치하거나 기기를 변경한 경우에도 동일한 토스 계정으로 로그인한 뒤 "구매 복원"을 실행하면 이용 권한이 복원됩니다.</li>
+  <li>결제·환불에 관한 구체적인 사항은 <b>제2부 유료 상품 및 환불 정책</b>에서 정합니다.</li>
+</ul>
+
+<h3 id="a19"><span class="anum">제19조</span>(광고의 게재)</h3>
+<ul>
+  <li>회사는 서비스 운영을 위해 서비스 화면에 광고를 게재할 수 있습니다.</li>
+  <li>유료 상품의 구매는 해당 콘텐츠의 이용 권한을 부여하는 것이며, 별도로 명시하지 않는 한 <b>광고 제거를 포함하지 않습니다</b>.</li>
+  <li>이용자가 광고주의 판촉 활동에 참여하거나 거래한 결과에 대해서는 회사가 책임지지 않습니다.</li>
+</ul>
+
+<h2 class="chapter">제6장 책임 및 기타</h2>
+
+<h3 id="a20"><span class="anum">제20조</span>(개인정보의 보호)</h3>
+<p>회사는 관련 법령이 정하는 바에 따라 이용자의 개인정보를 보호합니다. 개인정보의 처리에 관한 구체적인 사항은 <b>제3부 개인정보처리방침</b>에서 정합니다.</p>
+
+<h3 id="a21"><span class="anum">제21조</span>(회사의 면책)</h3>
+<ul>
+  <li>회사는 천재지변, 이에 준하는 불가항력, 앱마켓 또는 플랫폼의 장애로 인해 서비스를 제공할 수 없는 경우 그 책임이 면제됩니다.</li>
+  <li>회사는 이용자의 귀책사유로 인한 서비스 이용 장애에 대해서는 책임지지 않습니다.</li>
+  <li>회사는 서비스를 통해 제공되는 학습 콘텐츠가 특정 시험의 합격이나 특정 학습 성과를 보장하지 않습니다.</li>
+  <li>본 조의 규정은 회사의 고의 또는 중대한 과실로 인한 손해에는 적용되지 않습니다.</li>
+</ul>
+
+<h3 id="a22"><span class="anum">제22조</span>(손해배상)</h3>
+<ul>
+  <li>회사 또는 이용자가 본 약관을 위반하여 상대방에게 손해를 입힌 경우 그 손해를 배상할 책임이 있습니다.</li>
+  <li>회사가 유료 상품과 관련하여 이용자에게 배상할 책임이 있는 경우, 관련 법령에 특별한 규정이 없는 한 그 배상 범위는 해당 이용자가 회사에 지급한 결제 금액을 한도로 합니다. 다만 회사의 고의 또는 중대한 과실이 있는 경우에는 그러하지 아니합니다.</li>
+</ul>
+
+<h3 id="a23"><span class="anum">제23조</span>(문의 및 분쟁 해결)</h3>
+<div class="contact">
+  <b>문의 이메일</b> · ibillkim@gmail.com<br>
+  <b>응대 시간</b> · 평일 10:00 ~ 17:00 (주말·공휴일 제외)
+</div>
+<ul>
+  <li>이용자는 위 연락처를 통해 의견이나 불만을 제기할 수 있으며, 회사는 접수일로부터 영업일 기준 3일 이내에 처리 결과 또는 처리 일정을 안내합니다.</li>
+  <li>회사와 이용자 간 분쟁이 원만히 해결되지 않는 경우, 이용자는 한국소비자원 또는 공정거래위원회 등 관련 기관에 분쟁 조정을 신청할 수 있습니다.</li>
+  <li>콘텐츠 관련 분쟁의 경우 「콘텐츠산업진흥법」에 따른 콘텐츠분쟁조정위원회에 조정을 신청할 수 있습니다.</li>
+</ul>
+
+<h3 id="a24"><span class="anum">제24조</span>(준거법 및 관할)</h3>
+<ul>
+  <li>본 약관과 서비스 이용에 관하여는 대한민국 법령을 적용합니다.</li>
+  <li>서비스 이용과 관련하여 회사와 이용자 사이에 분쟁이 발생한 경우, 관할은 「민사소송법」이 정하는 바에 따릅니다.</li>
+</ul>
+
+<h2 class="chapter">부칙</h2>
+<p>본 약관은 2026년 8월 22일부터 시행합니다.</p>
+<a class="totop" href="#">↑ 목차로 돌아가기</a>
+</article>
+<div class="part"><div class="num">PART 02</div><h2>유료 상품 및 환불 정책</h2></div>
+<article class="terms">
+
+<div class="box">
+  본 정책은 「전자상거래 등에서의 소비자보호에 관한 법률」(이하 "전자상거래법")과
+  「콘텐츠산업진흥법」 제28조에 따른 「콘텐츠이용자보호지침」에 따라 작성되었습니다.
+  본 정책에서 정하지 않은 사항은 관련 법령 및 제1부 서비스 이용약관을 따릅니다.
+</div>
+
+<h3 id="b1"><span class="anum">1.</span>판매하는 유료 상품</h3>
+<p>현재 서비스에서 판매하는 상품은 다음과 같습니다. 모든 상품은 <b>비소모성 디지털 콘텐츠</b>입니다.</p>
+<div class="tbl-scroll">
+<table class="tbl">
+  <thead><tr><th>상품명</th><th>가격(VAT 포함)</th><th>제공 내용</th><th>유형</th></tr></thead>
+  <tbody>
+    <tr><td>한자 2급 마스터</td><td>1,650원</td><td>어문회 2급 한자 311자 · 7단계 · 최종 테스트 50문항</td><td>비소모성</td></tr>
+    <tr><td>한자 1급 마스터</td><td>1,650원</td><td>어문회 1급 한자 387자 · 8단계 · 최종 테스트 50문항</td><td>비소모성</td></tr>
+  </tbody>
+</table>
+</div>
+<ul>
+  <li>비소모성 상품이므로 한 번 구매하면 추가 결제 없이 계속 이용할 수 있습니다.</li>
+  <li>정기 결제(구독) 상품이 아니므로 <b>자동으로 재결제되지 않습니다</b>.</li>
+  <li>구매한 콘텐츠는 서비스가 제공되는 동안 이용할 수 있습니다.</li>
+</ul>
+
+<h3 id="b2"><span class="anum">2.</span>결제 수단 및 결제 시점</h3>
+<ul>
+  <li>결제는 앱인토스 인앱결제를 통해 이루어지며, 실제 결제는 앱마켓(구글 플레이 또는 애플 앱스토어)의 결제 시스템으로 처리됩니다.</li>
+  <li>결제 금액은 결제 시점에 상품 화면에 표시된 금액이며, 부가가치세가 포함된 금액입니다.</li>
+  <li>결제가 승인되면 즉시 해당 콘텐츠의 이용 권한이 부여됩니다.</li>
+  <li>결제 수단, 결제 취소, 영수증 발급 등 결제 처리 자체에 관한 사항은 앱마켓의 정책을 따릅니다.</li>
+</ul>
+
+<h3 id="b3"><span class="anum">3.</span>구매 전 체험 기회 제공</h3>
+<p>회사는 이용자가 상품의 성격을 충분히 확인한 뒤 구매를 결정할 수 있도록, <b>고등학교 한자 900자 학습 콘텐츠를 무료로 제공</b>합니다.</p>
+<p>무료 콘텐츠는 유료 상품과 동일한 학습 방식(카드 학습, 퀴즈, 오답 노트, 단계별 진행)으로 구성되어 있으므로, 구매 전에 서비스의 구성과 사용 방식을 미리 확인하실 수 있습니다.</p>
+<div class="warn">전자상거래법 제17조 제6항 단서 및 같은 법 시행령 제21조의2에 따라, 청약철회가 제한되는 디지털 콘텐츠에 대해 이용자의 권리 행사가 방해받지 않도록 <b>무료 체험 콘텐츠</b>를 제공하고 있습니다.</div>
+
+<h3 id="b4"><span class="anum">4.</span>청약철회(구매 취소)</h3>
+<p>이용자는 다음 기준에 따라 청약철회를 할 수 있습니다.</p>
+<ul>
+  <li>이용자는 결제일 또는 콘텐츠를 제공받은 날부터 <b>7일 이내</b>에 청약철회를 할 수 있습니다. (전자상거래법 제17조 제1항)</li>
+  <li>다만 전자상거래법 제17조 제2항 제5호에 따라, <b>디지털 콘텐츠의 제공이 개시된 경우에는 청약철회가 제한</b>됩니다.</li>
+  <li>본 서비스의 유료 상품은 결제 즉시 콘텐츠 전체의 잠금이 해제되어 제공이 개시되므로, 콘텐츠를 열람한 이후에는 원칙적으로 청약철회가 제한됩니다.</li>
+  <li>단, 결제 후 콘텐츠를 <b>전혀 열람하지 않은 경우</b>에는 7일 이내에 청약철회를 요청하실 수 있습니다.</li>
+</ul>
+<div class="notice"><b>⚠️ 중요</b> · 구매한 콘텐츠를 열람하면 청약철회가 제한될 수 있습니다. 구매 전에 무료 900자 콘텐츠로 서비스를 충분히 체험해 보시기를 권합니다.</div>
+
+<h3 id="b5"><span class="anum">5.</span>청약철회가 제한되지 않는 경우</h3>
+<p>다음의 경우에는 콘텐츠를 이용하였더라도 청약철회 또는 환불을 요청하실 수 있습니다.</p>
+<ul>
+  <li>콘텐츠의 내용이 표시·광고한 내용과 현저히 다른 경우 — 콘텐츠를 제공받은 날부터 <b>3개월 이내</b>, 그 사실을 알았거나 알 수 있었던 날부터 <b>30일 이내</b> (전자상거래법 제17조 제3항)</li>
+  <li>콘텐츠에 중대한 오류나 하자가 있어 정상적으로 이용할 수 없는 경우</li>
+  <li>결제는 완료되었으나 회사의 귀책사유로 콘텐츠가 제공되지 않은 경우</li>
+  <li>서비스 장애로 상당 기간 콘텐츠를 이용할 수 없었던 경우</li>
+  <li>미성년자가 법정대리인의 동의 없이 결제한 경우 (제8항 참조)</li>
+</ul>
+
+<h3 id="b6"><span class="anum">6.</span>환불 절차</h3>
+<ul>
+  <li>인앱결제로 이루어진 결제의 <b>환불 처리 권한은 앱마켓(구글 플레이·애플 앱스토어)</b>에 있습니다. 따라서 환불은 원칙적으로 결제하신 앱마켓을 통해 신청하셔야 합니다.</li>
+  <li>앱마켓을 통한 환불 신청 방법을 모르시거나 처리가 어려운 경우, 아래 문의처로 연락 주시면 회사가 확인 후 필요한 절차를 안내해 드립니다.</li>
+  <li>회사가 환불 사유를 확인하고 환불이 필요하다고 인정한 경우, 회사는 지체 없이 앱마켓에 환불 처리를 요청하거나 그에 준하는 조치를 취합니다.</li>
+  <li>환불이 확정된 경우 대금의 환급은 전자상거래법 제18조 제2항에 따라 <b>청약철회일부터 3영업일 이내</b>에 처리하며, 실제 계좌 또는 카드사 반영 시점은 결제 수단에 따라 달라질 수 있습니다.</li>
+  <li>환불이 완료되면 해당 상품의 이용 권한은 회수됩니다.</li>
+</ul>
+<div class="contact">
+  <b>환불 문의</b> · ibillkim@gmail.com<br>
+  <b>응대 시간</b> · 평일 10:00 ~ 17:00 (주말·공휴일 제외)
+</div>
+
+<h3 id="b7"><span class="anum">7.</span>결제는 되었으나 상품이 지급되지 않은 경우</h3>
+<p>네트워크 오류 등으로 결제가 완료되었음에도 상품이 지급되지 않는 경우가 드물게 발생할 수 있습니다. 이 경우 다음 순서로 해결하실 수 있습니다.</p>
+<ul>
+  <li><b>①</b> 앱을 완전히 종료한 뒤 다시 실행합니다. 앱은 실행 시 미지급된 결제 건을 자동으로 확인하여 지급을 완료합니다.</li>
+  <li><b>②</b> 자동으로 해결되지 않으면, 상품 상세 화면 아래의 <b>"구매 복원"</b>을 눌러 주세요.</li>
+  <li><b>③</b> 그래도 해결되지 않으면 결제 일시와 주문번호(확인 가능한 경우)를 첨부하여 위 문의처로 연락해 주세요. 회사는 결제 내역을 확인한 뒤 상품을 지급하거나 환불해 드립니다.</li>
+</ul>
+<div class="notice">결제 기록은 회사 서버에 보관되므로, 지급되지 않은 결제 건은 확인 후 <b>반드시 처리해 드립니다</b>.</div>
+
+<h3 id="b8"><span class="anum">8.</span>미성년자의 결제</h3>
+<ul>
+  <li>만 19세 미만의 미성년자가 법정대리인의 동의 없이 결제한 경우, 본인 또는 법정대리인은 「민법」에 따라 그 결제를 취소할 수 있습니다.</li>
+  <li>다만 미성년자가 법정대리인이 처분을 허락한 재산으로 결제한 경우이거나, 미성년자가 성년자로 믿게 하기 위하여 속임수를 쓴 경우에는 취소가 제한될 수 있습니다.</li>
+  <li>결제 취소를 요청하실 때에는 법정대리인임을 확인할 수 있는 자료와 결제 내역을 함께 보내 주시기 바랍니다.</li>
+  <li>결제 수단의 명의자와 실제 이용자가 다른 경우에도 위 기준을 준용합니다.</li>
+</ul>
+
+<h3 id="b9"><span class="anum">9.</span>구매 내역의 복원</h3>
+<ul>
+  <li>유료 상품은 비소모성 상품이므로, 앱을 삭제하거나 기기를 변경하여도 <b>다시 구매하실 필요가 없습니다</b>.</li>
+  <li>구매 시 사용하신 것과 동일한 토스 계정으로 로그인한 뒤 상품 상세 화면의 "구매 복원"을 실행하면 이용 권한이 복원됩니다.</li>
+  <li>토스 로그인을 하지 않은 상태에서 구매하신 경우, 같은 기기에서는 복원되지만 기기를 변경하면 복원이 어려울 수 있습니다. 이 경우 문의처로 연락 주시면 결제 내역을 확인하여 처리해 드립니다.</li>
+</ul>
+
+<h3 id="b10"><span class="anum">10.</span>서비스 종료 시의 처리</h3>
+<ul>
+  <li>회사가 서비스를 종료하는 경우 <b>최소 30일 전</b>에 서비스 내에 공지합니다.</li>
+  <li>서비스 종료 시점을 기준으로 구매한 지 얼마 지나지 않은 이용자에 대해서는, 「콘텐츠이용자보호지침」의 취지에 따라 잔여 이용 기회를 고려한 환불 등 합리적인 보상 조치를 검토합니다.</li>
+  <li>구체적인 보상 기준은 종료 공지 시 함께 안내합니다.</li>
+</ul>
+
+<h3 id="b11"><span class="anum">11.</span>사업자 정보</h3>
+<div class="tbl-scroll">
+<table class="tbl">
+  <tbody>
+    <tr><th>상호</th><td>Joyce Studios</td></tr>
+    <tr><th>대표자</th><td>김정훈</td></tr>
+    <tr><th>사업자등록번호</th><td>292-07-01534</td></tr>
+    <tr><th>통신판매업 신고번호</th><td>2026-서울서초-2288</td></tr>
+    <tr><th>사업장 주소</th><td>서울특별시 서초구 서운로 13, 지하1동 126-자82호(서초동, 중앙로얄오피스텔)</td></tr>
+    <tr><th>이메일</th><td>ibillkim@gmail.com</td></tr>
+    <tr><th>응대 시간</th><td>평일 10:00 ~ 17:00 (주말·공휴일 제외)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="b12"><span class="anum">12.</span>분쟁 해결</h3>
+<p>결제·환불과 관련하여 회사와 원만히 해결되지 않는 분쟁이 발생한 경우, 이용자는 다음 기관에 조정을 신청할 수 있습니다.</p>
+<ul>
+  <li>한국소비자원 (www.kca.go.kr · 국번없이 1372)</li>
+  <li>공정거래위원회 (www.ftc.go.kr)</li>
+  <li>콘텐츠분쟁조정위원회 (www.kcdrc.kr)</li>
+</ul>
+<a class="totop" href="#">↑ 목차로 돌아가기</a>
+</article>
+<div class="part"><div class="num">PART 03</div><h2>개인정보처리방침</h2></div>
+<article class="terms">
+
+<p>Joyce Studios(이하 "회사")는 「개인정보 보호법」 등 관련 법령을 준수하며, 이용자의 개인정보를 보호하기 위해 다음과 같이 개인정보처리방침을 수립·공개합니다.</p>
+<div class="box">본 서비스는 <b>이름·연락처 등 이용자를 직접 식별하는 정보를 수집하지 않습니다.</b> 서비스 제공에 필요한 최소한의 정보만 처리합니다.</div>
+
+<h3 id="c1"><span class="anum">1.</span>수집하는 정보와 수집 방법</h3>
+<div class="tbl-scroll">
+<table class="tbl">
+  <thead><tr><th>구분</th><th>항목</th><th>이용 목적</th></tr></thead>
+  <tbody>
+    <tr><th>기기 식별값</th><td>앱이 자동 생성하는 임의의 식별자(UUID)</td><td>학습 기록·구매 내역 구분</td></tr>
+    <tr><th>토스 이용자 식별값</th><td>토스 로그인 시 발급되는 userKey</td><td>구매 내역 보관 및 기기 변경 시 복원</td></tr>
+    <tr><th>결제 정보</th><td>주문번호, 상품 식별자, 결제 상태, 결제 일시</td><td>구매 확인 및 이용 권한 부여</td></tr>
+    <tr><th>서비스 이용 기록</th><td>앱 실행 일시, 앱 버전, 학습·구매 이벤트 기록</td><td>통계 분석 및 서비스 개선</td></tr>
+  </tbody>
+</table>
+</div>
+<ul>
+  <li><b>수집 방법</b> · 앱 이용 과정에서 자동으로 생성되거나, 이용자가 토스 로그인 또는 결제를 진행할 때 수집됩니다.</li>
+  <li>회사는 <b>카드번호 등 결제 수단 정보를 수집하지 않습니다.</b> 결제 수단 정보는 앱마켓에서 처리합니다.</li>
+</ul>
+
+<h3 id="c2"><span class="anum">2.</span>토스 로그인으로 받는 정보</h3>
+<ul>
+  <li>회사는 토스 로그인을 통해 <b>이용자 식별값(userKey)</b>을 제공받습니다.</li>
+  <li>userKey는 본 앱에서만 사용되는 식별값으로, 다른 앱에서는 다른 값이 발급됩니다.</li>
+  <li>회사는 구매 내역의 보관과 복원에 필요한 범위를 넘어 <b>이름·연락처·생년월일 등의 정보를 수집·이용하지 않습니다.</b></li>
+  <li>이용자는 토스 앱의 [설정 → 인증 및 보안 → 토스로 로그인한 서비스]에서 언제든지 본 서비스와의 로그인 연결을 해제할 수 있습니다.</li>
+</ul>
+
+<h3 id="c3"><span class="anum">3.</span>개인정보의 이용 목적</h3>
+<ul>
+  <li>유료 상품의 구매 확인 및 이용 권한 부여</li>
+  <li>기기 변경·재설치 시 구매 내역 복원</li>
+  <li>결제 오류 및 미지급 건의 확인과 처리</li>
+  <li>부정 결제 및 부정 이용의 방지</li>
+  <li>서비스 개선을 위한 이용 통계 분석</li>
+  <li>이용자 문의에 대한 응대</li>
+</ul>
+
+<h3 id="c4"><span class="anum">4.</span>보유 및 이용 기간</h3>
+<div class="tbl-scroll">
+<table class="tbl">
+  <thead><tr><th>구분</th><th>보유 기간</th><th>근거</th></tr></thead>
+  <tbody>
+    <tr><td>대금 결제 및 재화 공급에 관한 기록</td><td>5년</td><td>전자상거래법</td></tr>
+    <tr><td>소비자 불만 또는 분쟁 처리에 관한 기록</td><td>3년</td><td>전자상거래법</td></tr>
+    <tr><td>계약 또는 청약철회 등에 관한 기록</td><td>5년</td><td>전자상거래법</td></tr>
+    <tr><td>기기 식별값 및 이용 통계</td><td>수집일로부터 1년 또는 목적 달성 시까지</td><td>이용 목적 달성</td></tr>
+    <tr><td>학습 기록</td><td>이용자 기기에 저장 · 앱 삭제 시 함께 삭제</td><td>—</td></tr>
+  </tbody>
+</table>
+</div>
+<p>보유 기간이 지난 정보는 지체 없이 파기합니다. 전자적 파일 형태의 정보는 복구할 수 없는 방법으로 삭제합니다.</p>
+
+<h3 id="c5"><span class="anum">5.</span>개인정보의 제3자 제공</h3>
+<p>회사는 이용자의 개인정보를 제3자에게 제공하지 않습니다. 다만 법령에 따라 수사기관 등이 적법한 절차에 따라 요구하는 경우에는 예외로 합니다.</p>
+
+<h3 id="c6"><span class="anum">6.</span>개인정보 처리의 위탁</h3>
+<p>회사는 안정적인 서비스 제공을 위해 다음과 같이 처리 업무를 위탁하고 있습니다.</p>
+<div class="tbl-scroll">
+<table class="tbl">
+  <thead><tr><th>수탁자</th><th>위탁 업무</th></tr></thead>
+  <tbody>
+    <tr><td>Google LLC (Firebase)</td><td>데이터 보관 및 서버 기능 제공</td></tr>
+    <tr><td>비바리퍼블리카 (토스 · 앱인토스)</td><td>인앱결제 처리 및 이용자 인증</td></tr>
+    <tr><td>앱마켓 사업자 (Google Play · Apple App Store)</td><td>결제 및 환불 처리</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="c7"><span class="anum">7.</span>이용자의 권리</h3>
+<ul>
+  <li>이용자는 자신의 정보에 대한 <b>열람·정정·삭제·처리 정지</b>를 요구할 수 있습니다.</li>
+  <li>요청은 아래 문의처로 접수하실 수 있으며, 회사는 지체 없이 처리합니다.</li>
+  <li>다만 법령에 따라 보존 의무가 있는 결제 기록 등은 삭제가 제한될 수 있습니다.</li>
+  <li>앱을 삭제하면 기기에 저장된 학습 기록은 즉시 삭제됩니다.</li>
+</ul>
+
+<h3 id="c8"><span class="anum">8.</span>개인정보의 안전성 확보 조치</h3>
+<ul>
+  <li>결제 및 인증 통신은 암호화된 채널(HTTPS)로 전송합니다.</li>
+  <li>서버 간 결제 검증 통신에는 상호 인증서(mTLS)를 적용합니다.</li>
+  <li>결제 처리에 필요한 비밀값은 별도의 보안 저장소에 보관합니다.</li>
+  <li>개인정보에 접근할 수 있는 권한을 최소한의 인원으로 제한합니다.</li>
+</ul>
+
+<h3 id="c9"><span class="anum">9.</span>만 14세 미만 아동의 개인정보</h3>
+<p>회사는 만 14세 미만 아동의 개인정보를 수집할 때 법정대리인의 동의가 필요한 경우 관련 법령을 준수합니다. 본 서비스는 이름·연락처 등 직접적인 개인 식별 정보를 수집하지 않습니다.</p>
+
+<h3 id="c10"><span class="anum">10.</span>개인정보 보호책임자 및 문의</h3>
+<div class="contact">
+  <b>개인정보 보호책임자</b> · 김정훈<br>
+  <b>문의 이메일</b> · ibillkim@gmail.com<br>
+  <b>응대 시간</b> · 평일 10:00 ~ 17:00 (주말·공휴일 제외)
+</div>
+<p>개인정보 침해로 인한 상담이 필요한 경우 아래 기관에 문의하실 수 있습니다.</p>
+<ul>
+  <li>개인정보침해신고센터 (privacy.kisa.or.kr · 국번없이 118)</li>
+  <li>개인정보 분쟁조정위원회 (www.kopico.go.kr · 1833-6972)</li>
+  <li>대검찰청 사이버수사과 (www.spo.go.kr · 국번없이 1301)</li>
+  <li>경찰청 사이버수사국 (ecrm.police.go.kr · 국번없이 182)</li>
+</ul>
+
+<h3 id="c11"><span class="anum">11.</span>처리방침의 변경</h3>
+<p>본 개인정보처리방침이 변경되는 경우 변경 사항과 시행일을 서비스 내에 공지합니다. 이용자에게 중대한 영향을 미치는 변경은 시행일 30일 전에 공지합니다.</p>
+
+<h2 class="chapter">시행일</h2>
+<p>본 개인정보처리방침은 2026년 8월 22일부터 적용됩니다.</p>
+<a class="totop" href="#">↑ 목차로 돌아가기</a>
+</article>
+
+<footer class="doc">
+  <p>본 문서는 「고등학교 한자」 서비스의 이용약관, 유료 상품 및 환불 정책, 개인정보처리방침입니다.<br>
+  운영사 : Joyce Studios · 대표자 : 김정훈 · 사업자등록번호 : 292-07-01534<br>
+  통신판매업 신고번호 : 2026-서울서초-2288<br>
+  주소 : 서울특별시 서초구 서운로 13, 지하1동 126-자82호(서초동, 중앙로얄오피스텔)<br>
+  문의 : ibillkim@gmail.com · 응대 시간 : 평일 10:00 ~ 17:00<br>
+  최종 개정일 : 2026년 8월 22일 · 시행일 : 2026년 8월 22일</p>
+  <p style="margin-top:10px;">※ 본 문서에 언급된 토스, 앱인토스(Apps in Toss), Google, Firebase, Apple 등 각 명칭은 각 사의 상표 또는 서비스명이며, 식별 목적으로만 사용되었습니다. 본 서비스는 위 각 사·기관과의 공식 제휴·보증·후원 관계를 표방하지 않습니다.</p>
+</footer>
+
+</div>
+</body>
+</html>
