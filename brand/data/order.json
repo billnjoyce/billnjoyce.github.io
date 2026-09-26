@@ -1,0 +1,23 @@
+{
+  "_help": "products 배열의 순서가 사이트 전체(홈·전체상품·추천순)에 그대로 반영됩니다. 순서를 바꾸려면 id 줄을 위아래로 옮기세요. 숨기려면 hidden 배열로 옮기세요.",
+  "products": [
+    "justdo",
+    "appintoss-playbook",
+    "ai-survival",
+    "rent-20h",
+    "repfit",
+    "toss-50",
+    "insta-prompts",
+    "deploy-guide",
+    "iap-pack",
+    "job-prompts-200",
+    "ledger",
+    "outsourcing",
+    "ieum-letter",
+    "pod-studio",
+    "appintoss-checklist",
+    "store-promptpack"
+  ],
+  "featured": ["justdo", "appintoss-playbook", "rent-20h", "toss-50", "iap-pack", "store-promptpack"],
+  "hidden": []
+}

@@ -1,0 +1,8 @@
+[
+  { "id": "grow", "label": "실행력·성장", "icon": "🔥", "desc": "미루는 습관을 구조로 끊는 법", "accent": "#ff6b3d" },
+  { "id": "toss", "label": "토스 미니앱", "icon": "📱", "desc": "앱인토스 입점부터 양산·수익화까지", "accent": "#3b82f6" },
+  { "id": "dev", "label": "개발·출시", "icon": "🚀", "desc": "배포, 결제, 스토어 심사를 막힘없이", "accent": "#8b5cf6" },
+  { "id": "ai", "label": "AI·프롬프트", "icon": "🤖", "desc": "복붙으로 바로 쓰는 실무 프롬프트와 관점", "accent": "#10b981" },
+  { "id": "work", "label": "실무·프리랜서", "icon": "💼", "desc": "견적, 계약, 정산, 가계까지 문서로 해결", "accent": "#f59e0b" },
+  { "id": "service", "label": "서비스·앱", "icon": "✨", "desc": "직접 만들어 운영하는 앱과 웹서비스", "accent": "#ec4899" }
+]

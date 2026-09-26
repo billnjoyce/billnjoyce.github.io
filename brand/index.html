@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Joyce Studios — 실행하는 사람들을 위한 플레이북 & 도구</title>
+<meta name="description" content="2008년부터 모바일 앱을 만들어온 개발자의 전자책, 프롬프트 팩, 템플릿, 서비스를 한곳에서.">
+<meta name="theme-color" content="#0b0d17">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script>try{var t=localStorage.getItem('bk-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="glow" id="glow" aria-hidden="true"></div>
+<div class="bg-orbs" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<header class="nav" id="nav">
+  <div class="nav-left"><button class="icon-btn back-btn" id="backBtn" aria-label="이전 페이지로" title="이전 페이지로" hidden>←</button><a class="brand" href="#/" id="brand"></a></div>
+  <nav class="nav-links" id="navLinks" aria-label="주요 메뉴"></nav>
+  <div class="nav-actions">
+    <button class="icon-btn" id="themeBtn" aria-label="테마 전환" title="테마 전환">◐</button>
+    <button class="icon-btn menu-btn" id="menuBtn" aria-label="메뉴 열기" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main id="app" tabindex="-1"><div class="boot">불러오는 중…</div></main>
+
+<footer class="footer" id="footer"></footer>
+<div class="buybar" id="buybar" hidden></div>
+<button class="totop" id="toTop" aria-label="맨 위로">↑</button>
+
+<script src="data/bundle.js" onerror="void 0"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
