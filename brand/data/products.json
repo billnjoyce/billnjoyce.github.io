@@ -375,7 +375,7 @@
     "cover": { "kicker": "50 IN 50", "title": "미니앱\n50개" },
     "level": "입문~중급",
     "tags": ["toss", "income", "beginner", "nocode", "book", "ai"],
-    "price": { "label": "15,000원~", "note": "크몽 · 래피드 12,000원 · Gumroad $10" },
+    "price": { "label": "15,000원~", "note": "크몽 · Gumroad $10" },
     "badges": ["88p 본문", "부록 30여 종", "2026.09 개정판"],
     "format": "PDF 전자책",
     "pages": "본문 88쪽 (총 124쪽)",
@@ -429,13 +429,12 @@
     "faq": [
       { "q": "코딩을 전혀 몰라도 정말 만들 수 있나요?", "a": "네. 코드를 직접 쓰는 대신 AI에게 정확히 요청하는 방법을 배웁니다. 필요한 것은 코딩 실력이 아니라 무엇을 만들지 정하고 결과를 확인하는 판단력입니다." },
       { "q": "무엇을 준비해야 하나요?", "a": "AI 도구(Claude), 앱인토스 콘솔 계정, 아이디어 하나면 시작할 수 있고 초기 비용이 거의 들지 않습니다." },
-      { "q": "어느 판매처가 좋은가요?", "a": "내용은 동일합니다. 크몽, 교보문고, 래피드(12,000원), Gumroad($10) 중 결제 편의에 맞춰 고르세요. 교보문고는 도서 형태와 가격을 상품 페이지에서 확인해 주세요." }
+      { "q": "어느 판매처가 좋은가요?", "a": "내용은 동일합니다. 크몽, 교보문고, Gumroad($10) 중 결제 편의에 맞춰 고르세요. 교보문고는 도서 형태와 가격을 상품 페이지에서 확인해 주세요." }
     ],
     "links": [
       { "label": "크몽에서 구매", "platform": "크몽", "url": "https://kmong.com/self-marketing/788915/SAMd0HIfor", "primary": true },
       { "label": "교보문고에서 보기", "platform": "교보문고", "url": "https://product.kyobobook.co.kr/detail/S000220517104" },
-      { "label": "전자책 (Gumroad $10)", "platform": "Gumroad", "url": "https://billkin.gumroad.com/l/qyemw" },
-      { "label": "래피드에서 구매 (12,000원)", "platform": "래피드", "url": "https://www.latpeed.com/products/dksbm" }
+      { "label": "전자책 (Gumroad $10)", "platform": "Gumroad", "url": "https://billkin.gumroad.com/l/qyemw" }
     ],
     "related": ["rent-20h", "appintoss-playbook", "appintoss-checklist"]
   },
