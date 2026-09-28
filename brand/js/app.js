@@ -382,6 +382,7 @@
     app.innerHTML = out;
     app.classList.remove('pg'); void app.offsetWidth; app.classList.add('pg');
     document.title = title;
+    if (typeof gtag === 'function') gtag('event', 'page_view', { page_title: title, page_location: location.href, page_path: '/' + path.replace(/^\/+/, '') });
     setActive(path);
     $('#navLinks').classList.remove('open'); $('#menuBtn').setAttribute('aria-expanded', 'false');
     if (r.anchor && $('#' + r.anchor)) { setTimeout(function () { $('#' + r.anchor).scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60); }
