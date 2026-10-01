@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>계정 및 데이터 삭제 요청 — 병팔이</title>
+<meta name="description" content="병팔이(Bottle Blast) 계정과 관련 데이터의 삭제를 요청하는 방법입니다.">
+<meta name="robots" content="index,follow">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#FFD86A;--ink:#F2EDF8;--soft:#B9AECB;--faint:#7C7090;
+--bg:#0B0518;--panel:#170C2B;--line:#2C1E45;--mint:#8EFF6D;--coral:#FF8A6E}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Noto Sans KR",-apple-system,sans-serif;background:var(--bg);
+color:var(--ink);line-height:1.9;-webkit-text-size-adjust:100%}
+.wrap{max-width:780px;margin:0 auto;padding:0 22px}
+header{background:rgba(11,5,24,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);padding:16px 0;position:sticky;top:0;z-index:10}
+.nav{display:flex;align-items:center;gap:12px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:900;font-size:16px;
+letter-spacing:-.02em;color:var(--ink);text-decoration:none}
+.logo .mark{width:31px;height:31px;border-radius:10px;
+background:linear-gradient(180deg,#FFE58A,#F0B840);display:grid;
+place-items:center;font-size:17px;border:2px solid #000}
+.nav .sp{flex:1}
+.nav a.b{font-size:12.5px;font-weight:700;color:var(--soft);text-decoration:none;
+padding:7px 13px;border-radius:9px;border:1px solid var(--line);background:var(--panel)}
+main{padding:48px 0 90px}
+h1{font-size:clamp(26px,5vw,35px);font-weight:900;letter-spacing:-.035em;margin-bottom:10px}
+.meta{font-size:13px;color:var(--faint);padding-bottom:24px;
+border-bottom:2px solid var(--gold);margin-bottom:32px}
+h2{font-size:18.5px;font-weight:800;letter-spacing:-.02em;margin:38px 0 12px;
+padding-top:22px;border-top:1px solid var(--line);color:var(--gold)}
+h2:first-of-type{border:0;padding-top:0;margin-top:0}
+h3{font-size:15px;font-weight:800;margin:20px 0 8px;color:var(--ink)}
+p{font-size:14.5px;color:var(--soft);margin-bottom:13px}
+ol,ul{margin:0 0 15px 20px;font-size:14.5px;color:var(--soft)}
+li{margin-bottom:7px}
+.hero{background:var(--panel);border:1px solid var(--line);border-radius:18px;
+padding:24px;margin-bottom:32px}
+.hero h3{font-size:16px;font-weight:900;margin:0 0 12px;letter-spacing:-.02em;color:var(--gold)}
+.hero ul{margin:0 0 0 18px}
+.key{background:rgba(255,216,106,.09);border-left:3px solid var(--gold);
+border-radius:12px;padding:16px 19px;margin:18px 0;font-size:14px}
+.mint{background:rgba(142,255,109,.08);border-left:3px solid var(--mint);
+border-radius:12px;padding:16px 19px;margin:18px 0;font-size:14px}
+.coral{background:rgba(255,138,110,.09);border-left:3px solid var(--coral);
+border-radius:12px;padding:16px 19px;margin:18px 0;font-size:14px}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px;
+border:1px solid var(--line);border-radius:14px;overflow:hidden}
+th{background:#241038;color:var(--gold);text-align:left;padding:11px 13px;
+font-size:12px;font-weight:800}
+td{padding:11px 13px;border-top:1px solid var(--line);color:var(--soft);vertical-align:top}
+td:first-child{font-weight:700;color:var(--ink)}
+tbody tr:nth-child(even){background:rgba(255,255,255,.02)}
+a{color:var(--gold)}
+b{color:var(--ink)}
+.mail{display:inline-block;background:linear-gradient(180deg,#FFE58A,#F0B840);
+color:#1A0E05;font-weight:900;font-size:15px;text-decoration:none;
+padding:13px 24px;border-radius:13px;border:2px solid #000;margin:6px 0 2px}
+.steps{counter-reset:s;list-style:none;margin-left:0}
+.steps li{counter-increment:s;position:relative;padding-left:38px;margin-bottom:12px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:2px;
+width:26px;height:26px;border-radius:9px;background:var(--panel);
+border:1px solid var(--line);color:var(--gold);font-weight:900;font-size:13px;
+display:grid;place-items:center;line-height:1}
+footer{background:#070311;color:var(--faint);font-size:12.5px;padding:32px 0;line-height:1.9;
+border-top:1px solid var(--line)}
+footer a{color:var(--faint)}footer a:hover{color:var(--gold)}
+.flinks{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+@media(max-width:600px){table{font-size:12.5px}td,th{padding:9px 9px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="https://www.joycestudios.kr/sb/ko/" class="logo"><span class="mark">🍾</span>병팔이</a>
+    <span class="sp"></span>
+    <a href="https://www.joycestudios.kr/sb/ko/privacy.html" class="b">개인정보 처리방침</a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <h1>계정 및 데이터 삭제 요청</h1>
+  <div class="meta">
+    병팔이 (Bottle Blast) · Joyce Studios<br>
+    Google Play <code>com.joycestudios.sb2</code> · 원스토어 <code>com.joycestudios.sb</code>
+  </div>
+
+  <div class="hero">
+    <h3>두 가지 방법이 있습니다</h3>
+    <ul>
+      <li><b>게임 안에서</b> — 설정 ▸ 계정 탈퇴 (가장 빠릅니다)</li>
+      <li><b>이메일로</b> — 게임을 이미 지우셨거나 로그인할 수 없는 경우</li>
+    </ul>
+  </div>
+
+  <h2>1. 게임 안에서 삭제하기</h2>
+  <ol class="steps">
+    <li>병팔이를 실행하고 삭제하실 계정으로 로그인합니다.</li>
+    <li>하단 <b>설정</b> 탭을 엽니다.</li>
+    <li><b>👤 계정</b> 항목에서 <b>계정 탈퇴</b>를 누릅니다.</li>
+    <li>안내를 확인하고 <b>탈퇴하기</b>를 누르면 접수됩니다.</li>
+  </ol>
+  <p>로그인하지 않고 플레이하신 경우에는 계정이 만들어지지 않습니다. 이때는 기기에서 게임을 삭제하시면 모든 기록이 함께 사라집니다.</p>
+
+  <h2>2. 이메일로 요청하기</h2>
+  <p>게임을 이미 삭제하셨거나 로그인이 되지 않는 경우, 아래 주소로 요청해 주세요.</p>
+  <p><a class="mail" href="mailto:ibillkim@gmail.com?subject=%5B%EB%B3%91%ED%8C%94%EC%9D%B4%5D%20%EA%B3%84%EC%A0%95%20%EC%82%AD%EC%A0%9C%20%EC%9A%94%EC%B2%AD">ibillkim@gmail.com 으로 삭제 요청</a></p>
+  <p>본인 확인을 위해 아래 내용을 적어 주시기 바랍니다.</p>
+  <ul>
+    <li>가입하신 <b>로그인 방식</b> (Google 또는 Apple)</li>
+    <li>가입에 사용하신 <b>이메일 주소</b></li>
+    <li>게임 내 <b>닉네임</b></li>
+  </ul>
+  <p>영업일 기준 10일 이내에 처리하고 결과를 회신해 드립니다.</p>
+
+  <h2>3. 삭제되는 데이터</h2>
+  <p>탈퇴하시면 아래 데이터가 모두 삭제됩니다.</p>
+  <table>
+    <thead><tr><th>구분</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td>계정 정보</td><td>이름, 이메일 주소, 사용자 ID, 로그인 연결 정보</td></tr>
+      <tr><td>게임 진행</td><td>스테이지 기록, 병 도감, 보유 재화, 병공장, 이야기 진행</td></tr>
+      <tr><td>소셜 기록</td><td>닉네임, 랭킹 기록, 친구 목록, 대전 전적</td></tr>
+      <tr><td>기기 정보</td><td>푸시 알림 토큰, 접속 기록</td></tr>
+      <tr><td>문의 내역</td><td>1:1 문의로 주고받은 내용</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. 삭제 절차와 기간</h2>
+  <table>
+    <thead><tr><th>시점</th><th>처리 내용</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>신청 즉시</td>
+        <td>로그아웃 처리<br>
+        모든 데이터를 <b>별도의 보관 영역</b>으로 이동<br>
+        랭킹 · 친구 목록 · 대전 매칭에서 즉시 제외</td>
+      </tr>
+      <tr>
+        <td>신청 후 7일간</td>
+        <td>보관 영역에서만 유지 (다른 이용자에게 보이지 않습니다)<br>
+        이 기간 중에는 <b>철회하여 복원 가능</b></td>
+      </tr>
+      <tr>
+        <td>7일 경과 후</td>
+        <td>보관 중인 데이터 <b>완전 삭제</b><br>
+        인증 계정(Firebase) 삭제<br>
+        이후 복구할 수 없습니다</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="key">
+    <b>왜 7일을 두나요</b> — 실수로 탈퇴를 누르거나 마음이 바뀌는 경우가 실제로 많습니다.
+    되돌릴 수 있게 유예를 두되, 그 기간에도 다른 이용자에게는 보이지 않도록 데이터를 분리해 보관합니다.
+  </div>
+
+  <div class="mint">
+    <b>유예 없이 바로 지우고 싶으신 경우</b> —
+    <a href="mailto:ibillkim@gmail.com">ibillkim@gmail.com</a>로 말씀해 주시면
+    본인 확인 후 즉시 삭제해 드립니다.
+  </div>
+
+  <h2>5. 삭제되지 않고 보관되는 데이터</h2>
+  <p>아래 기록은 관계 법령에 따라 보존 의무가 있어, 삭제를 요청하셔도 해당 기간 동안 보관됩니다. 이 기록은 다른 목적으로 이용하지 않으며 별도의 영역에 분리해 보관하고, 기간이 지나면 지체 없이 파기합니다.</p>
+  <table>
+    <thead><tr><th>항목</th><th>근거</th><th>기간</th></tr></thead>
+    <tbody>
+      <tr><td>계약 · 청약철회 · 대금 결제 기록</td><td>전자상거래법</td><td>5년</td></tr>
+      <tr><td>소비자 불만 및 분쟁 처리 기록</td><td>소비자보호법</td><td>3년</td></tr>
+    </tbody>
+  </table>
+
+  <div class="coral">
+    <b>구매하신 상품은 환불되지 않습니다.</b>
+    탈퇴는 계정과 데이터를 지우는 것이고 결제 취소와는 별개입니다.
+    환불이 필요하시면 탈퇴하기 <b>전에</b> Google Play 또는 원스토어 고객센터로 요청해 주세요.
+  </div>
+
+  <h2>6. 문의</h2>
+  <p>
+    Joyce Studios · <a href="mailto:ibillkim@gmail.com">ibillkim@gmail.com</a><br>
+    자세한 내용은 <a href="https://www.joycestudios.kr/sb/ko/privacy.html">개인정보 처리방침</a>을 확인해 주세요.
+  </p>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="flinks">
+      <a href="https://www.joycestudios.kr/sb/ko/">병팔이</a>
+      <a href="https://www.joycestudios.kr/sb/ko/terms.html">이용약관</a>
+      <a href="https://www.joycestudios.kr/sb/ko/privacy.html">개인정보 처리방침</a>
+      <a href="mailto:ibillkim@gmail.com">문의</a>
+    </div>
+    © 2026 Joyce Studios. All rights reserved.
+  </div>
+</footer>
+
+</body>
+</html>
