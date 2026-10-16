@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RepFit — Editor Brief</title>
+<meta name="description" content="Two companion iOS apps for the same gym floor, built by one developer in Seoul.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A0A0C;
+    --panel:#141418;
+    --rule:#26262E;
+    --text:#F2F2F4;
+    --dim:#8A8A96;
+    --violet:#6E5BF6;
+    --violet-lt:#9B7BFF;
+    --amber:#F5A623;
+    --amber-lt:#FFC24B;
+    --measure:68ch;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--ink);color:var(--text);
+    font:400 17px/1.6 Archivo,system-ui,sans-serif;
+    letter-spacing:-0.005em;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+  a{color:inherit}
+
+  /* ── masthead ─────────────────────────────────────────── */
+  .top{padding:56px 0 0;font-size:14px;color:var(--dim)}
+  .top b{color:var(--text);font-weight:600}
+
+  h1{
+    font-weight:800;font-size:clamp(42px,8.2vw,92px);line-height:0.94;
+    letter-spacing:-0.035em;margin:28px 0 0;
+  }
+  .lede{margin:26px 0 0;max-width:46ch;font-size:clamp(17px,2.1vw,21px);color:var(--dim)}
+  .lede strong{color:var(--text);font-weight:500}
+
+  /* ── the chains: the one bold move ────────────────────── */
+  .chains{margin:64px 0 0;border-top:1px solid var(--rule);padding-top:40px}
+  .chain{
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-size:clamp(14px,2.5vw,24px);font-weight:700;line-height:1.5;
+    letter-spacing:-0.02em;margin:0 0 18px;
+    display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .5em;
+  }
+  .chain:last-child{margin-bottom:0}
+  .chain .op{color:var(--dim);font-weight:400}
+  .chain.v .hit{color:var(--violet-lt)}
+  .chain.a .hit{color:var(--amber-lt)}
+  .chain-note{
+    font-family:Archivo,sans-serif;font-size:14px;font-weight:400;
+    color:var(--dim);letter-spacing:0;flex-basis:100%;margin-top:2px;
+  }
+
+  /* ── the two apps, meeting ────────────────────────────── */
+  .pair{
+    margin:72px 0 0;display:grid;gap:28px;
+    grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
+  }
+  .app{background:var(--panel);border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+  .app.v{border-top:3px solid var(--violet)}
+  .app.a{border-top:3px solid var(--amber)}
+  .app img{display:block;width:100%;height:auto;border-bottom:1px solid var(--rule)}
+  .app-body{padding:26px 24px 28px}
+  .app h2{margin:0;font-size:25px;font-weight:800;letter-spacing:-0.02em}
+  .app .who{margin:5px 0 0;font-size:15px;color:var(--dim)}
+  .app ul{margin:20px 0 0;padding:0;list-style:none}
+  .app li{
+    position:relative;padding:0 0 0 20px;margin:0 0 13px;font-size:15.5px;line-height:1.55;
+  }
+  .app li:last-child{margin-bottom:0}
+  .app li::before{
+    content:"";position:absolute;left:0;top:.62em;width:9px;height:1.5px;
+  }
+  .app.v li::before{background:var(--violet)}
+  .app.a li::before{background:var(--amber)}
+  .app li b{font-weight:600}
+
+  /* ── plain facts ──────────────────────────────────────── */
+  .facts{margin:72px 0 0;border-top:1px solid var(--rule);padding-top:40px}
+  h3{font-size:14px;font-weight:600;color:var(--dim);margin:0 0 22px;letter-spacing:0}
+  dl{margin:0;display:grid;grid-template-columns:minmax(150px,210px) 1fr;gap:0}
+  dt{
+    padding:14px 0;border-top:1px solid var(--rule);
+    font-size:15px;font-weight:600;color:var(--dim);
+  }
+  dd{
+    padding:14px 0;border-top:1px solid var(--rule);margin:0;
+    font-size:15.5px;max-width:var(--measure);
+  }
+  dl > dt:first-of-type, dl > dt:first-of-type + dd{border-top:0}
+
+  .tail{
+    margin:72px 0 0;border-top:1px solid var(--rule);padding:40px 0 72px;
+    display:flex;flex-wrap:wrap;gap:34px 56px;align-items:flex-start;
+  }
+  .tail div{min-width:200px}
+  .tail p{margin:6px 0 0;font-size:15.5px;color:var(--dim);max-width:34ch}
+  .tail a{color:var(--violet-lt);text-decoration:none;border-bottom:1px solid rgba(155,123,255,.35)}
+  .tail a:hover{border-bottom-color:var(--violet-lt)}
+  .tail a:focus-visible{outline:2px solid var(--violet-lt);outline-offset:3px;border-radius:2px}
+
+  @media (max-width:620px){
+    dl{grid-template-columns:1fr}
+    dd{border-top:0;padding-top:0;padding-bottom:16px}
+    dt{padding-bottom:4px}
+    dl > dt:first-of-type + dd{border-top:0}
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .chain{animation:rise .5s ease-out both}
+    .chain:nth-child(2){animation-delay:.09s}
+    @keyframes rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <p class="top"><b>Editor brief</b> for App Store Editorial — updated October 2026</p>
+
+  <h1>Two apps,<br>one gym floor</h1>
+
+  <p class="lede">One for the person lifting. One for the person coaching them.
+  <strong>Both written by one developer in Seoul, in Korean and English from the first line of code.</strong></p>
+
+  <!-- The product idea of both apps is an expression that explains itself.
+       So the page states each one as an expression. -->
+  <section class="chains" aria-label="What each app computes">
+    <p class="chain v">
+      <span>60kg × 12</span><span class="op">→</span><span>top of rep range</span><span class="op">→</span><span class="hit">+2.5kg</span>
+      <span class="chain-note">RepFit.ai shows the lifter why the weight is the weight — in their own logged sets.</span>
+    </p>
+    <p class="chain a">
+      <span>base</span><span class="op">+</span><span>commission</span><span class="op">−</span><span>clawback</span><span class="op">=</span><span class="hit">take-home</span>
+      <span class="chain-note">RepFit Coach tells the trainer what actually lands in their account this month.</span>
+    </p>
+  </section>
+
+  <section class="pair">
+    <article class="app v">
+      <img src="hero-repfitai.jpg" alt="RepFit.ai showing the reasoning chain behind a prescribed weight" width="1600" height="686">
+      <div class="app-body">
+        <h2>RepFit.ai</h2>
+        <p class="who">For the lifter · version 1.3</p>
+        <ul>
+          <li><b>Why this weight.</b> Tap the prescribed load and the chain unfolds: last set, verdict, decision. No language model — the logic is deterministic double progression, which is exactly why it can be shown.</li>
+          <li><b>One-tap override.</b> Good / Normal / Rough. Sleep and stress move strength and no log can see them, so the coach adjusts instead of arguing.</li>
+          <li><b>Rest on the Lock Screen.</b> A Live Activity carries the countdown and the next set's numbers, so the phone stays in a pocket between sets. Workouts write to Apple Health.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="app a">
+      <img src="hero-repfitcoach.jpg" alt="RepFit Coach showing this month's take-home broken into base, commission and clawback" width="1600" height="686">
+      <div class="app-body">
+        <h2>RepFit Coach</h2>
+        <p class="who">For the trainer · version 1.4</p>
+        <ul>
+          <li><b>The payslip, before it arrives.</b> Enter each gym's deal as the contract reads — base, rate, incentive ladder — and see take-home broken into its three parts.</li>
+          <li><b>Counted in sessions, not days.</b> Korean PT sells in 10, 20 and 50-session packages, and the renewal conversation happens at session 7 of 10. The engine was rebuilt around that.</li>
+          <li><b>Nothing on the Home Screen that shouldn't be.</b> The widget shows classes left and take-home, and deliberately no member names — a trainer's phone is visible to whoever stands beside them.</li>
+        </ul>
+      </div>
+    </article>
+  </section>
+
+  <section class="facts">
+    <h3>Things an editor may want to check</h3>
+    <dl>
+      <dt>Accessibility</dt>
+      <dd>Rebuilt in these releases. Every hard-coded font size scales with Dynamic Type through UIFontMetrics; icon-only controls, the workout heatmap and the charts carry VoiceOver labels; colour-only status indicators were replaced with symbols; Reduce Motion is honoured. Accessibility Nutrition Labels are declared in App Store Connect.</dd>
+
+      <dt>Localization</dt>
+      <dd>Korean and English throughout, written together rather than translated. RepFit Coach models a market structure English-language trainer apps do not: session packages and gym commission ladders.</dd>
+
+      <dt>Platform adoption</dt>
+      <dd>ActivityKit (rest timer), WidgetKit (Home Screen and Lock Screen), HealthKit (write-only — the apps never request read access), App Intents for Shortcuts and Siri, Swift Charts, StoreKit 2.</dd>
+
+      <dt>Privacy</dt>
+      <dd>Both apps work fully without an account. Health data is written, never read, never leaves the device, and is never used for advertising. The widget App Group carries a handful of numbers and no personal identifiers.</dd>
+
+      <dt>Made by</dt>
+      <dd>One person, in Seoul. Design, engineering, copy and both localizations.</dd>
+    </dl>
+  </section>
+
+  <section class="tail">
+    <div>
+      <h3>Apps</h3>
+      <p><a href="https://apps.apple.com/app/id6780178904">RepFit.ai on the App Store</a></p>
+      <p><a href="https://apps.apple.com/app/id6787320858">RepFit Coach on the App Store</a></p>
+    </div>
+    <div>
+      <h3>Assets &amp; contact</h3>
+      <p>Screenshots, icons and header artwork available on request, along with a TestFlight build for either app.</p>
+      <p><a href="mailto:ibillkim@gmail.com">ibillkim@gmail.com</a></p>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>
