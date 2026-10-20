@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /hanjan/app/
+Sitemap: https://joycestudios.kr/hanjan/sitemap.xml
