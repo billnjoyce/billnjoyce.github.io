@@ -1,1 +1,0 @@
-const n=new Map;function c(e){const t=n.get(e);return t?{v:t.v,fresh:a=>Date.now()-t.at<a}:null}function s(e,t){n.set(e,{at:Date.now(),v:t})}function o(e){for(const t of[...n.keys()])t.startsWith(e)&&n.delete(t)}export{s as a,o as b,c};
