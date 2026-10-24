@@ -1,0 +1,12 @@
+# Apache: /hanjan/ 아래 모든 경로를 index.html 로 (새로고침 404 방지)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /hanjan/
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /hanjan/index.html [L]
+</IfModule>
+<IfModule mod_headers.c>
+  <FilesMatch "index\.html$">Header set Cache-Control "no-cache"</FilesMatch>
+</IfModule>

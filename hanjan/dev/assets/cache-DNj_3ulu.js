@@ -1,0 +1,1 @@
+const n=new Map;function c(e){const t=n.get(e);return t?{v:t.v,fresh:s=>Date.now()-t.at<s}:null}function o(e,t){n.set(e,{at:Date.now(),v:t})}function r(e){for(const t of[...n.keys()])t.startsWith(e)&&n.delete(t)}const u={},a={v:0},f=()=>(a.v=Math.max(Date.now(),a.v+1),a.v);export{o as a,r as b,c,a as d,f as n,u as t};
