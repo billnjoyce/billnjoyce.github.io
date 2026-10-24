@@ -1,0 +1,1 @@
+import{j as i}from"./index-BN9UCMqn.js";function t({dist:r,busy:e}){return r<=0&&!e?null:i.jsx("div",{className:"ptr","aria-live":"polite",children:i.jsx("span",{children:e?"새로 불러오는 중…":r>=35?"놓으면 새로고침":"아래로 당겨 새로고침"})})}export{t as P};
