@@ -1,0 +1,1 @@
+import{U as p,r as l}from"./index-Z1FE2RUi.js";function S(t,e){const[c,r]=p(),o=c.get(t)??e,n=l.useCallback(a=>r(u=>{const s=new URLSearchParams(u);return a===e?s.delete(t):s.set(t,a),s},{replace:!0}),[t,e,r]);return[o,n]}export{S as u};
