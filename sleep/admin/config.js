@@ -1,0 +1,1 @@
+window.ADMIN_CONFIG = { apiKey: "AIzaSyDvQ-CLAZ11NXLGGJTnT6xMB37UEf6MQkY" };
