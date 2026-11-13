@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sleep Frequency</title>
+<meta name="description" content="Sleep Frequency: ocean, rain, music and gem frequencies that guide you into deep sleep.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a night-sky page. Aurora glow behind a hero with a phone, then calm alternating feature rows, a store band, footer. */
+:root{
+  --bg:#070a22; --bg2:#0d1236; --ink:#eef0ff; --mute:#a3a9d6; --gold:#e9c27a; --teal:#5fd8c0; --indigo:#7a8cff;
+  --line:rgba(160,170,255,.16); --card:rgba(255,255,255,.045);
+  --display:"Cormorant Garamond","Noto Sans KR",Georgia,serif;
+  --body:"Plus Jakarta Sans","Noto Sans KR",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;color-scheme:dark;overflow-x:clip}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html[lang=ko] body{word-break:keep-all}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:8px}
+.wrap{width:min(1120px,100% - 40px);margin-inline:auto}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.12;text-wrap:balance;letter-spacing:.005em}
+html[lang=ko] h1,html[lang=ko] h2,html[lang=ko] h3{font-family:"Noto Sans KR",var(--display);font-weight:500;letter-spacing:-.01em;line-height:1.28}
+
+/* sky */
+.sky{position:fixed;inset:0;z-index:-1;background:
+  radial-gradient(900px 600px at 80% -5%,rgba(122,140,255,.28),transparent 60%),
+  radial-gradient(700px 520px at 5% 25%,rgba(95,216,192,.14),transparent 60%),
+  radial-gradient(800px 600px at 60% 95%,rgba(233,194,122,.10),transparent 60%),
+  linear-gradient(180deg,var(--bg),var(--bg2) 60%,var(--bg))}
+.stars{position:fixed;inset:0;z-index:-1;opacity:.7;
+  background-image:radial-gradient(1.2px 1.2px at 12% 20%,#fff,transparent),radial-gradient(1px 1px at 33% 70%,#cfd6ff,transparent),radial-gradient(1.4px 1.4px at 55% 12%,#fff,transparent),radial-gradient(1px 1px at 78% 55%,#cfd6ff,transparent),radial-gradient(1.2px 1.2px at 90% 85%,#fff,transparent),radial-gradient(1px 1px at 22% 90%,#fff,transparent),radial-gradient(1px 1px at 68% 30%,#fff,transparent),radial-gradient(1.3px 1.3px at 45% 45%,#e9ecff,transparent);
+  animation:tw 7s ease-in-out infinite alternate}
+@keyframes tw{from{opacity:.35}to{opacity:.85}}
+
+/* nav */
+nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(7,10,34,.62);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:22px;font-weight:600}
+html[lang=ko] .brand{font-family:"Noto Sans KR",sans-serif;font-size:18px;font-weight:500}
+.brand svg{width:28px;height:28px}
+.links{display:flex;gap:28px;font-size:14.5px;color:var(--mute)}
+.links a:hover{color:var(--ink)}
+.right{display:flex;align-items:center;gap:12px}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--card)}
+.lang button{font:inherit;font-size:13px;border:0;background:none;color:var(--mute);padding:5px 12px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed=true]{background:linear-gradient(135deg,#f3d493,#d9a94f);color:#241a05;font-weight:600}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:999px;font-weight:600;font-size:14.5px;border:1px solid transparent;cursor:pointer;font-family:inherit;transition:transform .2s,box-shadow .2s}
+.btn.gold{background:linear-gradient(135deg,#f6dc9f,#d9a94f);color:#241a05;box-shadow:0 8px 28px -8px rgba(233,194,122,.55)}
+.btn.gold:hover{transform:translateY(-2px)}
+.btn.ghost{border-color:var(--line);background:var(--card);color:var(--ink)}
+.btn.ghost:hover{border-color:rgba(160,170,255,.4)}
+
+/* hero */
+.hero{padding:72px 0 40px}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:20px}
+html[lang=ko] .eyebrow{letter-spacing:.06em}
+.eyebrow i{width:26px;height:1px;background:var(--teal)}
+h1{font-size:clamp(44px,6.4vw,78px)}
+html[lang=ko] h1{font-size:clamp(36px,5.2vw,62px)}
+h1 em{font-style:italic;background:linear-gradient(120deg,#f6dc9f,#e9c27a 40%,#9fb0ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+html[lang=ko] h1 em{font-style:normal}
+.lead{margin-top:22px;max-width:520px;font-size:18px;color:var(--mute);font-weight:300}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.mini{display:flex;gap:28px;margin-top:38px;flex-wrap:wrap}
+.mini b{display:block;font-family:var(--display);font-size:34px;color:var(--gold);font-weight:600;line-height:1}
+html[lang=ko] .mini b{font-family:var(--body);font-size:28px}
+.mini span{font-size:13px;color:var(--mute)}
+
+/* phone */
+.stage{position:relative;display:grid;place-items:center;min-height:560px}
+.glow{position:absolute;width:min(420px,100%);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(122,140,255,.45),transparent 65%);filter:blur(30px);animation:breathe 8s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(1.14);opacity:.75}}
+.phone{position:relative;width:clamp(230px,26vw,290px);aspect-ratio:390/844;border-radius:42px;padding:11px;background:linear-gradient(145deg,#3a4170,#12163a);box-shadow:0 40px 80px -20px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.1) inset}
+.phone .scr{position:relative;border-radius:34px;overflow:hidden;width:100%;height:100%;background:#0a0e2c}
+.phone .scr:before{content:"9:41";position:absolute;z-index:2;top:3.2%;left:9%;font:600 clamp(9px,1.05vw,12px)/1 var(--body);color:#fff;letter-spacing:.02em}
+.phone .scr:after{content:"";position:absolute;z-index:2;bottom:1.6%;left:50%;width:34%;height:4px;border-radius:4px;background:rgba(255,255,255,.55);transform:translateX(-50%)}
+.phone .isl{position:absolute;z-index:3;top:1.8%;left:50%;width:28%;height:2.6%;border-radius:20px;background:#000;transform:translateX(-50%)}
+.phone img{width:100%;height:100%;object-fit:cover}
+.phone.float{animation:fl 9s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-12px)}}
+.phone.side{position:absolute;width:clamp(150px,17vw,200px);opacity:.92}
+.phone.side.l{left:-2%;bottom:2%;transform:rotate(-7deg)}
+.phone.side.r{right:-2%;top:2%;transform:rotate(7deg)}
+
+/* sections */
+section{padding:84px 0}
+.head{max-width:640px;margin-bottom:44px}
+.head h2{font-size:clamp(32px,4.4vw,50px)}
+html[lang=ko] .head h2{font-size:clamp(26px,3.6vw,40px)}
+.head p{margin-top:14px;color:var(--mute);font-size:17px;font-weight:300}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{padding:28px;border:1px solid var(--line);border-radius:24px;background:var(--card);transition:transform .25s,border-color .25s}
+.card:hover{transform:translateY(-4px);border-color:rgba(233,194,122,.4)}
+.ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;margin-bottom:18px;background:linear-gradient(135deg,rgba(122,140,255,.3),rgba(95,216,192,.2));border:1px solid var(--line)}
+.ic svg{width:24px;height:24px;stroke:var(--ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.card h3{font-size:24px;margin-bottom:8px}
+html[lang=ko] .card h3{font-size:19px}
+.card p{color:var(--mute);font-size:15px;font-weight:300}
+
+.row{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.row.rev .txt{order:2}
+.row .pic{display:grid;place-items:center;position:relative}
+.row .pic .glow{width:min(340px,100%)}
+.checks{list-style:none;margin-top:22px;display:grid;gap:12px}
+.checks li{display:flex;gap:12px;color:var(--mute);font-size:15.5px}
+.checks li:before{content:"";flex:none;width:8px;height:8px;margin-top:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.tags span{font-size:13px;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--mute)}
+
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.step{padding:28px;border-radius:24px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.05),transparent)}
+.step:before{counter-increment:s;content:"0" counter(s);font-family:var(--display);font-size:40px;color:var(--gold)}
+.step h3{font-size:22px;margin:6px 0}
+html[lang=ko] .step h3{font-size:18px}
+.step p{color:var(--mute);font-size:15px;font-weight:300}
+
+/* stores */
+.stores{border:1px solid var(--line);border-radius:36px;padding:64px 32px;text-align:center;background:radial-gradient(600px 300px at 50% 0,rgba(233,194,122,.16),transparent 70%),var(--card)}
+.stores h2{font-size:clamp(32px,4.4vw,50px)}
+html[lang=ko] .stores h2{font-size:clamp(26px,3.6vw,40px)}
+.stores p{color:var(--mute);margin:12px auto 34px;max-width:520px}
+.badges{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+.badge{display:flex;align-items:center;gap:12px;min-width:200px;padding:10px 20px 10px 16px;border-radius:14px;background:#000;border:1px solid #8b8fa8;text-align:left;transition:transform .2s,border-color .2s}
+a.badge:hover{transform:translateY(-3px);border-color:#fff}
+.badge svg{width:32px;height:32px;flex:none}
+.badge small{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#d5d8ee;line-height:1.2}
+.badge strong{display:block;font-size:20px;font-weight:600;line-height:1.2;color:#fff;font-family:var(--body)}
+.badge.off{opacity:.55;cursor:not-allowed;position:relative}
+.badge.off em{position:absolute;top:-10px;right:-8px;font-style:normal;font-size:11px;font-weight:600;background:linear-gradient(135deg,#f6dc9f,#d9a94f);color:#241a05;padding:3px 10px;border-radius:999px}
+
+footer{padding:40px 0 56px;border-top:1px solid var(--line);color:var(--mute);font-size:14px}
+.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+.foot nav{all:unset;display:flex;gap:22px}
+.foot a:hover{color:var(--ink)}
+
+@media (max-width:900px){
+  .links{display:none}
+  .hero{padding-top:44px}
+  .hero-grid,.row{grid-template-columns:1fr;gap:36px}
+  .row.rev .txt{order:0}
+  .stage{min-height:480px}
+  .grid3,.steps{grid-template-columns:1fr}
+  section{padding:60px 0}
+  .btn.nav-cta{display:none}
+}
+@media (max-width:480px){
+  .phone.side{display:none}
+  .badge{min-width:0;width:100%;max-width:300px}
+  .stores{padding:48px 18px;border-radius:28px}
+  .cta .btn{flex:1 1 100%;justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="sky"></div><div class="stars"></div>
+
+<nav><div class="wrap nav-in">
+  <a class="brand" href="#top" aria-label="Sleep Frequency">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9fb0ff"/><stop offset="1" stop-color="#5fd8c0"/></linearGradient></defs><path d="M16 2 28 11 24 27H8L4 11Z" fill="none" stroke="url(#lg)" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 11h24M16 2l-4 9 4 16 4-16z" fill="none" stroke="url(#lg)" stroke-width="1.2" stroke-linejoin="round" opacity=".8"/></svg>
+    <span data-t="brand">Sleep Frequency</span>
+  </a>
+  <div class="links"><a href="#features" data-t="n1">Features</a><a href="#gems" data-t="n2">Gem frequencies</a><a href="#how" data-t="n3">How it works</a><a href="#download" data-t="n4">Download</a></div>
+  <div class="right">
+    <div class="lang" role="group" aria-label="Language"><button id="b-en" type="button" aria-pressed="true">EN</button><button id="b-ko" type="button" aria-pressed="false">한국어</button></div>
+    <a class="btn gold nav-cta" href="#download" data-t="getApp">Get the app</a>
+  </div>
+</div></nav>
+
+<main id="top">
+<header class="hero"><div class="wrap hero-grid">
+  <div>
+    <div class="eyebrow"><i></i><span data-t="eyebrow">Sleeping like a gem tonight</span></div>
+    <h1 data-h="h1">Drift into <em>deeper sleep</em>, tonight.</h1>
+    <p class="lead" data-t="lead">Ocean waves, rain, soft music and gem frequencies, layered into a mix that fits you. One touch and the sleep timer takes over.</p>
+    <div class="cta"><a class="btn gold" href="#download" data-t="cta1">Download free</a><a class="btn ghost" href="#features" data-t="cta2">See what's inside</a></div>
+    <div class="mini">
+      <div><b>68</b><span data-t="m1">sounds &amp; music</span></div>
+      <div><b>3</b><span data-t="m2">layers at once</span></div>
+      <div><b>10</b><span data-t="m3">languages</span></div>
+    </div>
+  </div>
+  <div class="stage">
+    <div class="glow"></div>
+    <div class="phone side l"><div class="scr"><i class="isl"></i><img data-img="gems" alt="" loading="lazy"></div></div>
+    <div class="phone side r"><div class="scr"><i class="isl"></i><img data-img="freq" alt="" loading="lazy"></div></div>
+    <div class="phone float"><div class="scr"><i class="isl"></i><img data-img="home" data-alt="shot1" alt="Sleep Frequency home screen"></div></div>
+  </div>
+</div></header>
+
+<section id="features"><div class="wrap">
+  <div class="head"><h2 data-t="f_h">Everything you need to fall asleep</h2><p data-t="f_p">Built around one idea: make the minutes before sleep calm, simple and yours.</p></div>
+  <div class="grid3">
+    <article class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/><path d="M3 18c2-4 4-4 6 0s4 4 6 0 4-4 6 0" opacity=".5"/></svg></div><h3 data-t="c1h">Natural sounds</h3><p data-t="c1p">Rain, ocean waves, forest, campfire, wind and more, recorded to loop without a seam.</p></article>
+    <article class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></div><h3 data-t="c2h">Calming music</h3><p data-t="c2p">Slow, gentle pieces that sit under the sounds without pulling you awake.</p></article>
+    <article class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3 20 9l-3 12H7L4 9z"/><path d="M4 9h16"/></svg></div><h3 data-t="c3h">Gem frequencies</h3><p data-t="c3p">Tuned tones inspired by gems, from 432 Hz warmth to delta-wave depth.</p></article>
+    <article class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="3" rx="1.5"/><rect x="4" y="11" width="16" height="3" rx="1.5"/><rect x="4" y="16" width="16" height="3" rx="1.5"/></svg></div><h3 data-t="c4h">Layer and save mixes</h3><p data-t="c4p">Blend up to three sounds, set each level, and keep your favourite mixes for later.</p></article>
+    <article class="card"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg></div><h3 data-t="c5h">Sleep timer</h3><p data-t="c5p">Choose 15 minutes to 8 hours. Sound fades out so nothing wakes you at the end.</p></article>
+    <article class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M20 14A8 8 0 0 1 10 4a8 8 0 1 0 10 10z"/></svg></div><h3 data-t="c6h">Sleep mode</h3><p data-t="c6p">A dark, quiet screen with one touch to start, built for the bed.</p></article>
+  </div>
+</div></section>
+
+<section id="gems"><div class="wrap row">
+  <div class="txt">
+    <div class="eyebrow"><i></i><span data-t="g_e">Premium</span></div>
+    <h2 style="font-size:clamp(30px,4vw,46px)" data-t="g_h">Sleep journeys, guided by frequency</h2>
+    <p style="margin-top:14px;color:var(--mute);font-weight:300;font-size:17px" data-t="g_p">A journey moves through brain-wave bands for you, so you do not have to pick anything once you lie down.</p>
+    <ul class="checks"><li data-t="g1">Alpha to theta to delta, timed from 20 minutes to 2 hours</li><li data-t="g2">32 premium sounds and the full gem collection</li><li data-t="g3">No ads, timers up to 8 hours, unlimited saved mixes</li></ul>
+    <div class="tags"><span>432 Hz</span><span>Alpha</span><span>Theta</span><span>Delta</span></div>
+  </div>
+  <div class="pic"><div class="glow"></div><div class="phone float"><div class="scr"><i class="isl"></i><img data-img="freq" data-alt="shot2" alt="Frequency journeys" loading="lazy"></div></div></div>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <div class="head"><h2 data-t="h_h">Three touches to sleep</h2><p data-t="h_p">No setup, no account.</p></div>
+  <div class="steps">
+    <div class="step"><h3 data-t="s1h">Pick a sound</h3><p data-t="s1p">Tap rain, waves or a gem frequency. Tap more to layer them.</p></div>
+    <div class="step"><h3 data-t="s2h">Set the timer</h3><p data-t="s2p">Choose how long it plays, then lower the volume to taste.</p></div>
+    <div class="step"><h3 data-t="s3h">Close your eyes</h3><p data-t="s3p">Switch on sleep mode and let the sound fade out on its own.</p></div>
+  </div>
+</div></section>
+
+<section id="download"><div class="wrap"><div class="stores">
+  <h2 data-t="d_h">Get Sleep Frequency</h2>
+  <p data-t="d_p">Free to download. Premium is optional, with a 7-day trial.</p>
+  <div class="badges">
+    <a class="badge" id="play" href="https://play.google.com/store/apps/details?id=com.joycestudios.sleep" target="_blank" rel="noopener" aria-label="Get it on Google Play">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 3.5v25l13.5-12.5z" fill="#00d7fe"/><path d="m5 3.5 17 9.7-3.5 3.3z" fill="#00f076"/><path d="m5 28.5 17-9.7-3.5-3.3z" fill="#ff3a44"/><path d="m22 13.2 5 2.8-5 2.8-3.5-2.3z" fill="#ffd500"/></svg>
+      <span><small data-t="b_get">Get it on</small><strong>Google Play</strong></span>
+    </a>
+    <a class="badge" id="one" href="https://m.onestore.co.kr/v2/ko-kr/app/0001000958" target="_blank" rel="noopener" aria-label="Download on ONE store">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="8" fill="#e8132b"/><text x="16" y="21.5" text-anchor="middle" font-family="Arial,sans-serif" font-weight="800" font-size="15" fill="#fff">ONE</text></svg>
+      <span><small data-t="b_get2">Download on</small><strong>ONE store</strong></span>
+    </a>
+    <div class="badge off" aria-disabled="true">
+      <em data-t="soon">Coming soon</em>
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path fill="#fff" d="M16 10.2c1.6-1.1 3.8-.9 5.2.3-1.700 1-2.400 3.100-1.200 5 .9 1.300 2.300 1.600 2.300 1.600-.5 2.800-2.700 6.600-5 6.600-1.200 0-1.500-.7-2.800-.7s-1.700.7-2.800.7c-2.400 0-5.500-4.500-5.500-8.500 0-3.400 2.400-5.300 4.600-5.300 1.300 0 2.200.8 3.200.8z"/><path fill="#fff" d="M17.400 5.200c.1 1.500-1 2.900-2.500 3.300-.2-1.400.8-3 2.500-3.300z"/></svg>
+      <span><small data-t="b_app">Download on the</small><strong>App Store</strong></span>
+    </div>
+  </div>
+</div></div></section>
+</main>
+
+<footer><div class="wrap foot">
+  <span>© 2026 Joyce Studios. <span data-t="rights">All rights reserved.</span></span>
+  <nav><a href="#features" data-t="n1">Features</a><a href="#download" data-t="n4">Download</a></nav>
+</div></footer>
+
+<script>
+/* Language: ?lang= > saved choice > device language (ko) > English */
+var T={
+en:{brand:"Sleep Frequency",n1:"Features",n2:"Gem frequencies",n3:"How it works",n4:"Download",getApp:"Get the app",eyebrow:"Sleeping like a gem tonight",
+h1:"One touch to drift into <em>deep sleep</em>.",lead:"Ocean waves, rain, soft music and gem frequencies, layered into a mix that fits you. One touch and the sleep timer takes over.",
+cta1:"Download free",cta2:"See what's inside",m1:"sounds & music",m2:"layers at once",m3:"languages",shot1:"Sleep Frequency home screen",shot2:"Frequency journeys",
+f_h:"Everything you need to fall asleep",f_p:"Built around one idea: make the minutes before sleep calm, simple and yours.",
+c1h:"Natural sounds",c1p:"Rain, ocean waves, forest, campfire, wind and more, recorded to loop without a seam.",
+c2h:"Calming music",c2p:"Slow, gentle pieces that sit under the sounds without pulling you awake.",
+c3h:"Gem frequencies",c3p:"Tuned tones inspired by gems, from 432 Hz warmth to delta-wave depth.",
+c4h:"Layer and save mixes",c4p:"Blend up to three sounds, set each level, and keep your favourite mixes for later.",
+c5h:"Sleep timer",c5p:"Choose 15 minutes to 8 hours. Sound fades out so nothing wakes you at the end.",
+c6h:"Sleep mode",c6p:"A dark, quiet screen with one touch to start, built for the bed.",
+g_e:"Premium",g_h:"Sleep journeys, guided by frequency",g_p:"A journey moves through brain-wave bands for you, so you do not have to pick anything once you lie down.",
+g1:"Alpha to theta to delta, timed from 20 minutes to 2 hours",g2:"32 premium sounds and the full gem collection",g3:"No ads, timers up to 8 hours, unlimited saved mixes",
+h_h:"Three touches to sleep",h_p:"No setup, no account.",s1h:"Pick a sound",s1p:"Tap rain, waves or a gem frequency. Tap more to layer them.",
+s2h:"Set the timer",s2p:"Choose how long it plays, then lower the volume to taste.",s3h:"Close your eyes",s3p:"Switch on sleep mode and let the sound fade out on its own.",
+d_h:"Get Sleep Frequency",d_p:"Free to download. Premium is optional, with a 7-day trial.",b_get:"Get it on",b_get2:"Download on",b_app:"Download on the",soon:"Coming soon",rights:"All rights reserved."},
+ko:{brand:"수면 주파수",n1:"기능",n2:"보석 주파수",n3:"사용 방법",n4:"다운로드",getApp:"앱 받기",eyebrow:"오늘 밤도 보석처럼 깊게",
+h1:"한 번의 터치로 <em>깊은 잠 속으로</em>",lead:"파도, 빗소리, 잔잔한 음악, 보석 주파수를 나만의 조합으로 겹쳐 보세요. 한 번의 터치 후에는 수면 타이머가 알아서 이어갑니다.",
+cta1:"무료로 받기",cta2:"기능 살펴보기",m1:"사운드 & 음악",m2:"동시 레이어",m3:"지원 언어",shot1:"수면 주파수 홈 화면",shot2:"주파수 수면 여정",
+f_h:"잠드는 데 필요한 모든 것",f_p:"잠들기 전 몇 분을 차분하고 간단하게, 나답게 만드는 것에 집중했습니다.",
+c1h:"자연의 소리",c1p:"빗소리, 파도, 숲, 모닥불, 바람 등을 끊김 없이 이어지는 반복 재생으로 담았습니다.",
+c2h:"편안한 음악",c2p:"소리 아래에서 잔잔히 흐르며 잠을 깨우지 않는 느린 곡들입니다.",
+c3h:"보석 주파수",c3p:"보석에서 영감을 받은 음으로, 432Hz의 따뜻함부터 델타파의 깊이까지 담았습니다.",
+c4h:"겹쳐서 저장하는 믹스",c4p:"최대 3가지 사운드를 섞고 볼륨을 맞춘 뒤, 마음에 드는 믹스를 저장해 두세요.",
+c5h:"수면 타이머",c5p:"15분부터 8시간까지 선택하세요. 끝날 때 소리가 서서히 줄어 잠을 방해하지 않습니다.",
+c6h:"수면 모드",c6p:"어둡고 조용한 화면에서 한 번의 터치로 시작합니다. 침대에서 쓰기 좋게 만들었습니다.",
+g_e:"프리미엄",g_h:"주파수가 이끄는 수면 여정",g_p:"여정이 뇌파 대역을 따라 알아서 이어지므로, 누운 뒤에는 아무것도 고를 필요가 없습니다.",
+g1:"알파에서 세타, 델타까지 20분~2시간 구성",g2:"프리미엄 사운드 32종과 전체 보석 컬렉션",g3:"광고 없음, 최대 8시간 타이머, 믹스 무제한 저장",
+h_h:"세 번의 터치로 잠들기",h_p:"설정도, 가입도 필요 없습니다.",s1h:"사운드 고르기",s1p:"빗소리, 파도, 보석 주파수를 탭하세요. 더 탭하면 겹쳐집니다.",
+s2h:"타이머 맞추기",s2p:"재생 시간을 고르고 볼륨을 취향에 맞게 낮추세요.",s3h:"눈 감기",s3p:"수면 모드를 켜면 소리가 스스로 서서히 사라집니다.",
+d_h:"수면 주파수 받기",d_p:"무료로 다운로드하세요. 프리미엄은 선택이며 7일 무료 체험이 있습니다.",b_get:"다운로드",b_get2:"다운로드",b_app:"다운로드",soon:"준비 중",rights:"모든 권리 보유."}};
+
+function pick(){
+  var q="";try{q=new URLSearchParams(location.search).get("lang")||""}catch(e){}
+  if(q==="ko"||q==="en")return q;
+  try{var s=localStorage.getItem("sf.lang");if(s==="ko"||s==="en")return s}catch(e){}
+  var l=((navigator.languages&&navigator.languages[0])||navigator.language||"en").toLowerCase();
+  return l.indexOf("ko")===0?"ko":"en";
+}
+function apply(l,save){
+  var d=T[l];document.documentElement.lang=l;
+  document.querySelectorAll("[data-t]").forEach(function(e){var v=d[e.getAttribute("data-t")];if(v!=null)e.textContent=v});
+  document.querySelectorAll("[data-h]").forEach(function(e){e.innerHTML=d[e.getAttribute("data-h")]});
+  document.querySelectorAll("[data-img]").forEach(function(e){e.src="img/"+e.getAttribute("data-img")+"_"+l+".webp";var a=e.getAttribute("data-alt");if(a)e.alt=d[a]});
+  document.getElementById("b-en").setAttribute("aria-pressed",l==="en");
+  document.getElementById("b-ko").setAttribute("aria-pressed",l==="ko");
+  document.title=d.brand;
+  if(save){try{localStorage.setItem("sf.lang",l)}catch(e){}}
+}
+document.getElementById("b-en").onclick=function(){apply("en",1)};
+document.getElementById("b-ko").onclick=function(){apply("ko",1)};
+apply(pick(),0);
+</script>
+</body>
+</html>

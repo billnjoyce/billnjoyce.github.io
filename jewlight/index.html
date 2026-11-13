@@ -3,58 +3,116 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>JewLight - Support, Privacy and Terms</title>
-<meta name="description" content="JewLight support, privacy policy and terms of service.">
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#0A0716">
+<script>(function(){try{var q=new URLSearchParams(location.search).get('lang'),s=localStorage.getItem('jl_site_lang'),n=(navigator.languages&&navigator.languages[0])||navigator.language||'en';var l=(q==='ko'||q==='en')?q:(s||(/^ko/i.test(n)?'ko':'en'));document.documentElement.lang=l}catch(e){}})()</script>
+<title>JewLight – Turn your phone into a glowing gem flashlight</title>
+<meta name="description" content="JewLight turns your phone's flashlight into a glowing 3D gem. 12 gems, 7 light modes, SOS & Morse, Android widget. Free on Google Play and ONE store.">
+<meta name="theme-color" content="#07050F">
 <link rel="canonical" href="https://joycestudios.kr/jewlight/">
-<style>
-:root{color-scheme:dark;--bg:#0A0716;--panel:#14102A;--line:#2A2347;--ink:#F3EEFF;--dim:#B9B0D6;--faint:#8A82AB;--gold:#E8C766;--gl:#F7E6B0}
-*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
-body{margin:0;background:radial-gradient(1200px 600px at 50% -10%,#241a4d 0,var(--bg) 60%) fixed;background-color:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans","Noto Sans KR","Noto Sans JP","Noto Sans SC",Arial,sans-serif}
-a{color:var(--gl)}a:hover{color:#fff}
-header.top{position:sticky;top:0;z-index:5;background:rgba(10,7,22,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.bar{max-width:820px;margin:0 auto;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.brand{font-weight:700;letter-spacing:.14em;color:var(--gl);text-decoration:none;font-size:15px}
-.bar nav{display:flex;gap:14px;font-size:14px}
-.bar .sp{flex:1}
-label.lang{font-size:13px;color:var(--dim);display:flex;align-items:center;gap:8px}
-select{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:15px;max-width:60vw}
-main{max-width:820px;margin:0 auto;padding:24px 16px 64px}
-article{margin:0}
-.js article[hidden]{display:none}
-h1{font-size:28px;line-height:1.25;margin:8px 0 4px;color:var(--gl)}
-.meta{color:var(--dim);font-size:14px;margin:0 0 20px}
-.toc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 18px;margin:0 0 28px}
-.toc ol{margin:0;padding-inline-start:1.4em;columns:1;font-size:14.5px}
-.toc li{margin:2px 0}
-section{margin:0 0 26px;scroll-margin-top:84px}
-h2{font-size:18px;line-height:1.4;margin:0 0 8px;color:var(--gold)}
-p{margin:0 0 10px;overflow-wrap:anywhere}
-ul{margin:0 0 10px;padding-inline-start:1.3em}li{margin:0 0 6px;overflow-wrap:anywhere}
-footer{max-width:820px;margin:0 auto;padding:0 16px 40px;color:var(--faint);font-size:13px}
-.cards{display:grid;gap:14px;margin:24px 0}
-.card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;text-decoration:none;color:var(--ink)}
-.card b{display:block;color:var(--gl);font-size:18px;margin-bottom:4px}.card span{color:var(--dim);font-size:14px}
-@media(min-width:700px){.toc ol{columns:2}.cards{grid-template-columns:1fr 1fr}}
-@media print{header.top{display:none}body{background:#fff;color:#000}h1,h2{color:#000}}
-</style>
+<link rel="alternate" hreflang="en" href="https://joycestudios.kr/jewlight/?lang=en">
+<link rel="alternate" hreflang="ko" href="https://joycestudios.kr/jewlight/?lang=ko">
+<link rel="alternate" hreflang="x-default" href="https://joycestudios.kr/jewlight/">
+<meta property="og:type" content="website"><meta property="og:title" content="JewLight – Gem Flashlight">
+<meta property="og:description" content="Tap a gem. Let there be light. 12 gems · 7 light modes · SOS & Morse.">
+<meta property="og:image" content="https://joycestudios.kr/jewlight/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/poppins-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="top"><div class="bar"><a class="brand" href="index.html">JEWLIGHT</a><span class="sp"></span></div></header>
-<main>
-<h1>JewLight</h1>
-<p class="meta">A flashlight that shines like a jewel, even in the dark.</p>
-<div class="cards">
-<a class="card" href="privacy.html"><b>Privacy Policy &middot; 개인정보처리방침</b><span>20 languages</span></a>
-<a class="card" href="terms.html"><b>Terms of Service &middot; 이용약관</b><span>20 languages</span></a>
+<div class="spot"></div>
+<nav class="top" id="nav"><div class="wrap nb">
+<a class="brand" href="#top"><img src="assets/icon-192.png" alt="" width="34" height="34">JEWLIGHT</a>
+<div class="links"><a href="#features" data-t="n_feat"></a><a href="#gems" data-t="n_gems"></a><a href="#shots" data-t="n_shots"></a><a href="#plans" data-t="n_plans"></a><a href="#faq" data-t="n_faq"></a></div>
+<div class="lang" role="group" aria-label="Language"><button data-l="en">EN</button><button data-l="ko">한국어</button></div>
+<a class="dl-sm" href="#download" data-t="n_dl"></a>
+</div></nav>
+
+<header class="hero" id="top">
+<canvas id="stars" aria-hidden="true"></canvas>
+<div class="wrap hg">
+<div>
+<span class="eyebrow">✦ <span data-t="eyebrow"></span></span>
+<h1><span data-t="h1a"></span><br><span class="gold serif" data-t="h1b"></span></h1>
+<p class="lead" data-t="lead"></p>
+<div class="badges" data-badges></div>
+<p class="hint" data-t="hint"></p>
 </div>
-<section><h2>Support &middot; 문의</h2>
-<p>Joyce Studios &middot; <a href="mailto:ibillkim@gmail.com">ibillkim@gmail.com</a></p>
-<p>Subscriptions are billed and managed by Apple: Settings &gt; your name &gt; Subscriptions. Restore Purchases is available inside the app (Settings and the Pro screen).</p>
-<p>Apple standard EULA: <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">apple.com/legal/internet-services/itunes/dev/stdeula</a></p>
+<div>
+<div class="stage" id="stage"><div class="ring"></div>
+<button class="gem" id="gemBtn" aria-label="Light the gem"><img class="g" id="gimg" alt="" width="520" height="520"></button>
+<span class="tap" data-t="tap"></span></div>
+<div class="gname"><b id="gn"></b><span class="rar" id="gr"></span><span id="gs"></span></div>
+<div class="pick" id="pick"></div>
+</div>
+</div>
+</header>
+
+<section class="stats"><div class="wrap"><div class="sg rv">
+<div><b class="gold">12</b><span data-t="s1"></span></div>
+<div><b class="gold">7</b><span data-t="s2"></span></div>
+<div><b class="gold">20</b><span data-t="s3"></span></div>
+<div><b class="gold">360°</b><span data-t="s4"></span></div>
+</div></div></section>
+
+<section id="features"><div class="wrap">
+<div class="sh rv"><span class="eyebrow" data-t="f_eb"></span><h2 data-t="f_h"></h2><p data-t="f_p"></p></div>
+<div class="fg">
+<div class="card rv"><div class="ic">💡</div><h3 data-t="c1h"></h3><p data-t="c1p"></p></div>
+<div class="card rv"><div class="ic">✨</div><h3 data-t="c2h"></h3><p data-t="c2p"></p></div>
+<div class="card rv"><div class="ic">🔄</div><h3 data-t="c3h"></h3><p data-t="c3p"></p></div>
+<div class="card rv"><div class="ic">🌙</div><h3 data-t="c4h"></h3><p data-t="c4p"></p></div>
+<div class="card rv"><div class="ic">📱</div><h3 data-t="c5h"></h3><p data-t="c5p"></p></div>
+<div class="card rv"><div class="ic">🆘</div><h3 data-t="c6h"></h3><p data-t="c6p"></p></div>
+</div></div></section>
+
+<section class="gal" id="gems"><div class="wrap">
+<div class="sh rv"><span class="eyebrow" data-t="g_eb"></span><h2 data-t="g_h"></h2><p data-t="g_p"></p></div>
+<div class="gg" id="gg"></div>
+</div></section>
+
+<section id="shots"><div class="wrap sh rv"><span class="eyebrow" data-t="sh_eb"></span><h2 data-t="sh_h"></h2><p data-t="sh_p"></p></div>
+<div class="rail-w"><div class="rail" id="rail"></div>
+<div class="nav2"><button id="prev" aria-label="Previous">‹</button><button id="next" aria-label="Next">›</button></div></div>
 </section>
-</main>
-<footer>&copy; Joyce Studios</footer>
-</body>
-</html>
+
+<section id="modes" class="gal"><div class="wrap">
+<div class="sh rv"><span class="eyebrow" data-t="m_eb"></span><h2 data-t="m_h"></h2><p data-t="m_p"></p></div>
+<div class="mg rv">
+<div class="mode"><div class="beam"><u></u></div><b data-t="m1"></b><span data-t="m1d"></span></div>
+<div class="mode"><div class="beam slow"><u></u></div><b data-t="m2"></b><span data-t="m2d"></span></div>
+<div class="mode"><div class="beam med"><u></u></div><b data-t="m3"></b><span data-t="m3d"></span></div>
+<div class="mode"><div class="beam fast"><u></u></div><b data-t="m4"></b><span data-t="m4d"></span></div>
+<div class="mode"><div class="beam sos"><u></u><u></u><u></u><u></u><u></u><u></u><u></u><u></u><u></u></div><b>SOS</b><span data-t="m5d"></span></div>
+<div class="mode"><div class="beam sos"><u></u><u></u><u></u><u></u><u></u><u></u><u></u><u></u><u></u></div><b data-t="m6"></b><span data-t="m6d"></span></div>
+<div class="mode"><div class="beam"><u></u><u></u><u></u></div><b data-t="m7"></b><span data-t="m7d"></span></div>
+<div class="mode"><div class="beam slow"><u></u></div><b data-t="m8"></b><span data-t="m8d"></span></div>
+</div></div></section>
+
+<section id="plans"><div class="wrap">
+<div class="sh rv"><span class="eyebrow" data-t="p_eb"></span><h2 data-t="p_h"></h2><p data-t="p_p"></p></div>
+<div class="pg">
+<div class="plan rv"><h3 data-t="pf"></h3><p data-t="pfd"></p><ul><li data-t="pf1"></li><li data-t="pf2"></li><li data-t="pf3"></li><li data-t="pf4"></li></ul></div>
+<div class="plan pro rv"><h3 class="gold" data-t="pp"></h3><p data-t="ppd"></p><ul><li data-t="pp1"></li><li data-t="pp2"></li><li data-t="pp3"></li><li data-t="pp4"></li></ul></div>
+</div></div></section>
+
+<section id="faq" class="gal"><div class="wrap">
+<div class="sh rv"><span class="eyebrow" data-t="q_eb"></span><h2 data-t="q_h"></h2></div>
+<div class="faq rv">
+<details><summary data-t="q1"></summary><p data-t="a1"></p></details>
+<details><summary data-t="q2"></summary><p data-t="a2"></p></details>
+<details><summary data-t="q3"></summary><p data-t="a3"></p></details>
+<details><summary data-t="q4"></summary><p data-t="a4"></p></details>
+<details><summary data-t="q5"></summary><p data-t="a5"></p></details>
+<details><summary data-t="q6"></summary><p data-t="a6"></p></details>
+</div></div></section>
+
+<section class="cta" id="download"><div class="wrap">
+<div class="ctab rv"><div><h2 data-t="d_h"></h2><p data-t="d_p"></p><div class="badges" data-badges></div></div>
+<div class="qr"><img src="assets/qr-play.png" alt="QR code for Google Play" width="150" height="150"><span data-t="qr"></span></div></div>
+</div></section>
+
+<footer><div class="wrap fb"><span>© <span id="yr">2026</span> Joyce Studios. <span data-t="rights"></span></span>
+<nav><a href="privacy.html" data-t="f_priv"></a><a href="terms.html" data-t="f_terms"></a><a href="support.html" data-t="f_sup"></a><a href="mailto:ibillkim@gmail.com">ibillkim@gmail.com</a></nav></div></footer>
+<script src="gems.js"></script><script src="site.js"></script>
+</body></html>
