@@ -28,7 +28,8 @@ body{font-family:var(--font);color:var(--tx2);background:#040506;overflow-x:hidd
 .grain{position:fixed;inset:0;z-index:6;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
 a{color:inherit;text-decoration:none;}
 
-.contact{position:fixed;top:16px;right:18px;z-index:40;font-size:12.5px;font-weight:500;color:var(--tx2);
+.topbtns{position:fixed;top:16px;right:18px;z-index:40;display:flex;align-items:center;gap:8px}
+.contact{position:static;font-size:12.5px;font-weight:500;color:var(--tx2);
   border:1px solid var(--bd);padding:8px 14px;border-radius:10px;background:rgba(8,9,11,.5);backdrop-filter:blur(8px);transition:.15s;}
 .contact:hover{color:var(--tx);border-color:rgba(255,255,255,.24);background:rgba(20,22,26,.6);}
 
@@ -107,6 +108,13 @@ footer .cp{max-width:1100px;margin:16px auto 0;padding:0 24px;font-size:11.5px;c
 #live .badge{font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px;flex:none}
 #live .badge.i{background:#e8eeff;color:var(--blue)}
 #live .badge.d{background:#dff7ee;color:#0b8a63}
+#live .badge.u{background:#f1e8ff;color:#7a3fd1}
+#live .badge.s{background:#fff1d6;color:#a86500}
+#live .approw.hide{display:none}
+#live .noapp{color:var(--ink3);font-size:12.5px;text-align:center;padding:18px 0}
+#live .approw .n{text-align:right;line-height:1.35}
+#live .panel,#live .card{contain:layout paint}
+html.live-open .stage,html.live-open #wall{visibility:hidden}
 #live .ago{font-size:11.5px;color:var(--ink3);flex:none;font-variant-numeric:tabular-nums}
 #live .apps{display:flex;flex-direction:column;gap:8px;max-height:290px;overflow:auto}
 #live .approw{display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer;padding:4px;border-radius:10px;border:1px solid transparent}
@@ -136,7 +144,6 @@ footer .cp{max-width:1100px;margin:16px auto 0;padding:0 24px;font-size:11.5px;c
 #live #feed::-webkit-scrollbar-thumb,#live .apps::-webkit-scrollbar-thumb{background:#cfd4ea;border-radius:3px}
 #live .approw .rk{width:18px;flex:none;text-align:center;font-size:11.5px;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums}
 #live .approw:nth-child(-n+3) .rk{color:var(--blue)}
-#live .approw .n{white-space:nowrap}
 @media(max-width:980px){
 #live main{display:flex;flex-direction:column;text-align:center}
 #live .left{display:contents}
@@ -187,12 +194,12 @@ footer .cp{max-width:1100px;margin:16px auto 0;padding:0 24px;font-size:11.5px;c
 #live .ic2 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:0}
 
 /* ===== LIVE 버튼 + 전체화면 Live 화면 ===== */
-.live-btn{position:fixed;top:16px;right:124px;z-index:40;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;letter-spacing:.06em;color:#fff;
+.live-btn{position:static;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;letter-spacing:.06em;color:#fff;
   background:linear-gradient(180deg,#ff3b4d,#e11d2e);padding:8px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.22);box-shadow:0 6px 20px -6px rgba(239,43,61,.7);transition:.15s;}
 .live-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px -6px rgba(239,43,61,.9);}
 .live-btn i{width:8px;height:8px;border-radius:50%;background:#fff;animation:livepulse 1.4s infinite;}
 @keyframes livepulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.7)}80%,100%{box-shadow:0 0 0 8px rgba(255,255,255,0)}}
-@media(max-width:420px){.live-btn{right:100px;padding:8px 11px}}
+@media(max-width:420px){.topbtns{top:12px;right:12px;gap:6px}.live-btn{padding:8px 11px}.contact{padding:8px 11px}}
 #live{position:fixed;inset:0;z-index:60;display:none;overflow:auto;background:#f8f9fe;color:#14172b;font-family:var(--font);-webkit-font-smoothing:antialiased;word-break:keep-all}
 #live.on{display:block}
 html.live-open,html.live-open body{overflow:hidden}
@@ -202,8 +209,8 @@ html.live-open,html.live-open body{overflow:hidden}
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
-<a class="live-btn" href="#live" aria-label="실시간 설치 현황 보기"><i></i>LIVE</a>
-<a class="contact" href="mailto:ibillkim@gmail.com?subject=%5BJoyce%20Studios%5D%20%EB%AC%B8%EC%9D%98">문의하기</a>
+<div class="topbtns"><a class="live-btn" href="#live" aria-label="실시간 설치 현황 보기"><i></i>LIVE</a>
+<a class="contact" href="mailto:ibillkim@gmail.com?subject=%5BJoyce%20Studios%5D%20%EB%AC%B8%EC%9D%98">문의하기</a></div>
 
 <section class="stage">
   <div class="wall" id="wall" aria-hidden="true"></div>
@@ -310,8 +317,9 @@ var dirty=false;
 window.addEventListener('resize',function(){ dirty=true; });
 window.addEventListener('orientationchange',function(){ dirty=true; });
 // 경계 없는 연속 이동: 전역 시계로 위치 산출 → 재빌드해도 부드럽게 이어지고 절대 깜빡이지 않음
-var last=null, elapsed=0;
+var last=null, elapsed=0, homeRun=true;
 function frame(now){
+  if(document.documentElement.classList.contains('live-open')){ homeRun=false; last=null; return; }   // Live 화면 뒤에서는 홈 애니메이션 정지(발열 절감)
   if(last===null) last=now;
   var dt=now-last; last=now;
   if(dt>100) dt=16; // 탭 복귀 등 큰 점프 무시
@@ -328,6 +336,7 @@ function frame(now){
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
+window.addEventListener('livetoggle',function(){ if(!document.documentElement.classList.contains('live-open') && !homeRun){ homeRun=true; last=null; requestAnimationFrame(frame); } });
 </script>
 <script>
 (function () {
@@ -350,7 +359,11 @@ var CC = {}; COUNTRIES.forEach(function(c){CC[c[0]]=c;});
 var cv=$('globe'), ctx=cv.getContext('2d'), W=0,H=0,R=0,DPR=1;
 var rotLon=127*Math.PI/180, rotLat=24*Math.PI/180, vLon=0.0035, dragging=false, lastX=0, lastY=0, idleUntil=0;
 var pulses=[], bubbles=[];
-function resize(){var r=cv.getBoundingClientRect();DPR=Math.min(window.devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=W*DPR;cv.height=H*DPR;R=Math.min(W,H)*0.40;}
+var bgCv=null;
+function resize(){var r=cv.getBoundingClientRect();if(!r.width)return;DPR=Math.min(window.devicePixelRatio||1,window.innerWidth<981?1.5:2);W=r.width;H=r.height;cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);R=Math.min(W,H)*0.40;buildBg();}
+function buildBg(){bgCv=document.createElement('canvas');bgCv.width=cv.width;bgCv.height=cv.height;var x=bgCv.getContext('2d');x.setTransform(DPR,0,0,DPR,0,0);var cx=W/2,cy=H/2;
+ var g=x.createRadialGradient(cx,cy,R*0.96,cx,cy,R*1.22);g.addColorStop(0,'rgba(90,120,255,.16)');g.addColorStop(1,'rgba(90,120,255,0)');x.fillStyle=g;x.beginPath();x.arc(cx,cy,R*1.22,0,7);x.fill();
+ var sg=x.createRadialGradient(cx-R*0.35,cy-R*0.4,R*0.1,cx,cy,R);sg.addColorStop(0,'#ffffff');sg.addColorStop(1,'#e4e9fb');x.fillStyle=sg;x.beginPath();x.arc(cx,cy,R,0,7);x.fill();x.strokeStyle='#d5dcf5';x.lineWidth=1;x.stroke();}
 window.addEventListener('resize',resize);
 cv.addEventListener('pointerdown',function(e){dragging=true;lastX=e.clientX;lastY=e.clientY;cv.setPointerCapture(e.pointerId);});
 cv.addEventListener('pointermove',function(e){if(!dragging)return;var dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;rotLon+=dx/R*0.9;rotLat=Math.max(-1.2,Math.min(1.2,rotLat+dy/R*0.9));idleUntil=performance.now()+2500;});
@@ -366,29 +379,25 @@ function proj(latDeg,lonDeg){
   return [W/2+x*R, H/2-y2*R, z2];
 }
 
-var LANDPTS=[]; LAND.forEach(function(r){r[1].forEach(function(lo){LANDPTS.push([r[0],lo]);});});
+var LN=0; LAND.forEach(function(r){LN+=r[1].length;});
+var LBX=new Float32Array(LN),LBY=new Float32Array(LN),LBZ=new Float32Array(LN); (function(){var k=0;LAND.forEach(function(r){var la=r[0]*Math.PI/180,cl=Math.cos(la),sl=Math.sin(la);r[1].forEach(function(lo){var l=lo*Math.PI/180;LBX[k]=cl*Math.sin(l);LBY[k]=sl;LBZ[k]=cl*Math.cos(l);k++;});});})();
+var NB=6, BX=[],BY=[],BN=new Int32Array(NB),BCOL=[]; for(var q=0;q<NB;q++){BX.push(new Float32Array(LN));BY.push(new Float32Array(LN));BCOL.push('rgba(120,134,185,'+(0.25+0.75*Math.pow((q+0.5)/NB,0.6)).toFixed(3)+')');}
 
 function drawGlobe(now){
-  ctx.setTransform(DPR,0,0,DPR,0,0); ctx.clearRect(0,0,W,H);
-  var cx=W/2, cy=H/2;
-  /* 은은한 바깥 광채 */
-  var g=ctx.createRadialGradient(cx,cy,R*0.96,cx,cy,R*1.22);
-  g.addColorStop(0,'rgba(90,120,255,.16)'); g.addColorStop(1,'rgba(90,120,255,0)');
-  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,R*1.22,0,7); ctx.fill();
-  /* 구체 */
-  var sg=ctx.createRadialGradient(cx-R*0.35,cy-R*0.4,R*0.1,cx,cy,R);
-  sg.addColorStop(0,'#ffffff'); sg.addColorStop(1,'#e4e9fb');
-  ctx.fillStyle=sg; ctx.beginPath(); ctx.arc(cx,cy,R,0,7); ctx.fill();
-  ctx.strokeStyle='#d5dcf5'; ctx.lineWidth=1; ctx.stroke();
-  /* 육지 점 */
-  var i,p,sz=Math.max(1.3,R/200);
-  for(i=0;i<LANDPTS.length;i++){
-    p=proj(LANDPTS[i][0],LANDPTS[i][1]);
-    if(p[2]<=0) continue;
-    var a=0.25+0.75*Math.pow(p[2],0.6);
-    ctx.fillStyle='rgba(120,134,185,'+a.toFixed(3)+')';
-    ctx.fillRect(p[0]-sz/2,p[1]-sz/2,sz,sz);
+  ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height);
+  if(bgCv) ctx.drawImage(bgCv,0,0);
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  var cx=W/2, cy=H/2, i,p,sz=Math.max(1.3,R/200);
+  var c0=Math.cos(rotLon),s0=Math.sin(rotLon),cr=Math.cos(rotLat),sr=Math.sin(rotLat),q;
+  for(q=0;q<NB;q++)BN[q]=0;
+  for(i=0;i<LN;i++){
+    var bx=LBX[i],by=LBY[i],bz=LBZ[i];
+    var x=bx*c0-bz*s0, z=bz*c0+bx*s0;
+    var z2=by*sr+z*cr; if(z2<=0) continue;
+    var y2=by*cr-z*sr, bi=(z2*NB)|0; if(bi>=NB)bi=NB-1;
+    var n=BN[bi]++; BX[bi][n]=cx+x*R-sz/2; BY[bi][n]=cy-y2*R-sz/2;
   }
+  for(q=0;q<NB;q++){ if(!BN[q])continue; ctx.fillStyle=BCOL[q]; ctx.beginPath(); var xs=BX[q],ys=BY[q]; for(i=0;i<BN[q];i++) ctx.rect(xs[i],ys[i],sz,sz); ctx.fill(); }
   /* 펄스 링 */
   for(i=pulses.length-1;i>=0;i--){
     var pu=pulses[i], age=(now-pu.t0)/pu.life;
@@ -408,9 +417,8 @@ function drawGlobe(now){
     var rise=ag*26, op=ag<0.12?ag/0.12:(ag>0.75?(1-ag)/0.25:1), s=26;
     var bx=p[0], by=p[1]-14-rise;
     ctx.save(); ctx.globalAlpha=op;
-    ctx.shadowColor='rgba(30,50,120,.28)'; ctx.shadowBlur=10; ctx.shadowOffsetY=3;
+    ctx.fillStyle='rgba(30,50,120,.16)'; rr(bx-s/2-3,by-s/2-1,s+6,s+6,9); ctx.fill();
     ctx.fillStyle='#fff'; rr(bx-s/2-3,by-s/2-3,s+6,s+6,9); ctx.fill();
-    ctx.shadowColor='transparent';
     drawAppIcon(b.app,bx-s/2,by-s/2,s);
     ctx.fillStyle='#fff'; ctx.beginPath(); ctx.moveTo(bx-5,by+s/2+2); ctx.lineTo(bx+5,by+s/2+2); ctx.lineTo(bx,by+s/2+8); ctx.fill();
     ctx.restore();
@@ -438,8 +446,14 @@ var CONFIG = {
 };
 var KNOWN_PF = ['ios', 'android', 'toss', 'web'];
 var PF_LABEL = { ios: 'iOS', android: 'Android', toss: '토스', web: '웹', unknown: '기타' };
-var METRICS = ['installs', 'dau'];
+var METRICS = ['installs', 'dau'];            /* 과거 합계(baseline)용 */
+var LIVE_KINDS = ['installs', 'dau', 'updates', 'sales'];   /* 오늘 실시간 구독용 */
+var CNT = { installs: 'iT', dau: 'dT', updates: 'uT', sales: 'sT' };
+var KIND_LABEL = { installs: '설치', dau: 'DAU', updates: '업데이트', sales: '매출' }, KIND_CLS = { installs: 'i', dau: 'd', updates: 'u', sales: 's' };
+var W_SC = { dau: 2, installs: 1.5, updates: 1, sales: 1.5 };   /* 콘솔(_appScore)과 같은 가중치 */
 
+var tcache = {};
+function setT(id, v) { if (tcache[id] !== v) { tcache[id] = v; $(id).textContent = v; } }
 function $(id) { return document.getElementById(id); }
 function fmt(n) { return Math.round(n).toLocaleString('ko-KR'); }
 function pickW(arr, wi) { var t = 0, i; for (i = 0; i < arr.length; i++) t += wi(arr[i]); var r = Math.random() * t; for (i = 0; i < arr.length; i++) { r -= wi(arr[i]); if (r <= 0) return arr[i]; } return arr[arr.length - 1]; }
@@ -449,6 +463,7 @@ function dateKey(ms) { var d = new Date(ms + CONFIG.TZ_OFFSET_HOURS * 3600e3); r
 function addDays(key, n) { var p = key.split('-'); var t = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2] + n)); return t.getUTCFullYear() + '-' + ('0' + (t.getUTCMonth() + 1)).slice(-2) + '-' + ('0' + t.getUTCDate()).slice(-2); }
 var VALID = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 function validDate(k) { if (!VALID.test(k)) return false; var y = +k.slice(0, 4), m = +k.slice(5, 7), d = +k.slice(8, 10); return y >= 2000 && y <= new Date().getFullYear() + 1 && m >= 1 && m <= 12 && d >= 1 && d <= 31; }
+function deepTs(v, depth) { var t = leafTs(v); if (t != null) return t; if (v && typeof v === 'object' && (depth || 0) < 4) { var m = null, k, x; for (k in v) { x = deepTs(v[k], (depth || 0) + 1); if (x != null && (m == null || x > m)) m = x; } return m; } return null; }
 function leafTs(v) { if (typeof v === 'number' && v > 1e11) return v; if (typeof v === 'string' && /^\d{12,}$/.test(v)) return +v; return null; }
 
 /* ---------- 기록 해석 (콘솔의 countByPlatform 과 동일한 규칙) ----------
@@ -458,7 +473,7 @@ function eachVersion(vnode, pf, out) {
   if (typeof vnode !== 'object') { out.push({ pf: pf, id: 'x', ts: leafTs(vnode) }); return; }
   for (var ver in vnode) {
     var idn = vnode[ver]; if (idn == null) continue;
-    if (typeof idn === 'object') { for (var id in idn) out.push({ pf: pf, id: ver + '/' + id, ts: leafTs(idn[id]) }); }
+    if (typeof idn === 'object') { for (var id in idn) out.push({ pf: pf, id: ver + '/' + id, ts: deepTs(idn[id]) }); }
     else out.push({ pf: pf, id: ver, ts: leafTs(idn) });
   }
 }
@@ -533,6 +548,7 @@ function listApps() {
 function metricKey(m) { return m + (CONFIG.BUILD === 'dev' ? '-dev' : ''); }
 
 /* ---------- 상태 ---------- */
+var DENIED = {};   /* 읽기 권한이 없는 지표(예: updates/sales 규칙 미허용) — 한 번 거부되면 다시 요청하지 않음 */
 var S = { apps: [], today: '', evI: [], evD: [], seen: {}, got: {}, base: null, baseProg: '', baseWarn: '', lastOk: 0, mode: '', bf: null, unsubs: [], replayK: 0, todayI: 0, todayD: 0 };
 var disp = {}; ['totalInstall', 'totalDau', 'todayInstall', 'todayDau', 'minInstall', 'minDau', 'avgInstall', 'avgDau'].forEach(function (k) { disp[k] = null; });
 function appById(id) { for (var i = 0; i < S.apps.length; i++) if (S.apps[i].id === id) return S.apps[i]; return null; }
@@ -570,14 +586,14 @@ var feedEl = $('feed'), feedN = 0;
 function ago(t) { var s = Math.max(0, Math.round((Date.now() - t) / 1000)); return s < 5 ? '방금' : s < 60 ? s + '초 전' : s < 3600 ? Math.floor(s / 60) + '분 전' : Math.floor(s / 3600) + '시간 전'; }
 function addFeed(ev, a) {
   var c = CC[ev.cc] || COUNTRIES[0], li = document.createElement('li');
-  li.innerHTML = iconTag(a) + '<span class="t"><b>' + esc(a.name) + '</b> <em>· ' + PF_LABEL[ev.pf] + (ev.pf === 'toss' ? '' : '') + '</em></span><span class="badge ' + (ev.kind === 'installs' ? 'i' : 'd') + '">' + (ev.kind === 'installs' ? '설치' : 'DAU') + '</span><span class="ago" data-t="' + ev.ts + '"></span>';
+  li.innerHTML = iconTag(a) + '<span class="t"><b>' + esc(a.name) + '</b> <em>· ' + PF_LABEL[ev.pf] + (ev.pf === 'toss' ? '' : '') + '</em></span><span class="badge ' + KIND_CLS[ev.kind] + '">' + KIND_LABEL[ev.kind] + '</span><span class="ago" data-t="' + ev.ts + '"></span>';
   feedEl.insertBefore(li, feedEl.firstChild);
-  while (feedEl.children.length > 60) feedEl.removeChild(feedEl.lastChild);
-  feedN++; $('feedCnt').textContent = '오늘 ' + fmt(S.todayI + S.todayD) + '건';
+  while (feedEl.children.length > 40) feedEl.removeChild(feedEl.lastChild);
+  feedN++; var tot = 0; S.apps.forEach(function (x) { tot += (x.iT || 0) + (x.dT || 0) + (x.uT || 0) + (x.sT || 0); }); setT('feedCnt', '오늘 ' + fmt(tot) + '건');
 }
 function showEvent(ev, a, pulse) {
   var now = performance.now(), c = CC[ev.cc] || COUNTRIES[0], isI = ev.kind === 'installs';
-  if (pulse && a.on) {
+  if (pulse && a.on && (ev.kind === 'installs' || ev.kind === 'dau')) {
     var lat = c[2] + randn() * 2.6, lon = c[3] + randn() * 3;
     pulses.push({ lat: lat, lon: lon, t0: now, life: isI ? 2400 : 1800, col: isI ? 'rgba(59,108,255,A)' : 'rgba(18,184,134,A)', big: isI });
     if (isI) bubbles.push({ lat: lat, lon: lon, t0: now, life: 2600, app: a });
@@ -591,7 +607,7 @@ function recalcToday() { var i = 0, d = 0; S.apps.forEach(function (a) { i += a.
 function ingest(a, kind, node) {
   var key = a.id + '|' + kind, first = !S.got[key]; S.got[key] = 1;
   var leaves = walkLeaves(node), seen = S.seen[key] || (S.seen[key] = {}), now = Date.now(), fresh = [];
-  if (kind === 'installs') a.iT = leaves.length; else a.dT = leaves.length;
+  a[CNT[kind]] = leaves.length;
   leaves.forEach(function (l) {
     var k = l.pf + '|' + l.id; if (seen[k]) return; seen[k] = 1;
     var ts = l.ts; if (ts == null || ts > now + 60000) ts = now;
@@ -602,7 +618,7 @@ function ingest(a, kind, node) {
   fresh.sort(function (x, y) { return x.ts - y.ts; });
   var recentCut = now - CONFIG.RECENT_MIN * 60000;
   fresh.forEach(function (ev) {
-    (ev.kind === 'installs' ? S.evI : S.evD).push(ev.ts);
+    if (ev.kind === 'installs') S.evI.push(ev.ts); else if (ev.kind === 'dau') S.evD.push(ev.ts);
     if (first) {
       if (ev.ts < recentCut) return;
       var d = ev.ts >= now - 180000 ? (S.replayK++ % 12) * 350 : -1;
@@ -610,13 +626,15 @@ function ingest(a, kind, node) {
     } else setTimeout(function () { showEvent(ev, a, true); }, Math.random() * 600);
   });
   S.evI = S.evI.filter(function (t) { return t > now - 3600e3; }); S.evD = S.evD.filter(function (t) { return t > now - 3600e3; });
-  S.lastOk = now; updateApps(); refreshStatus();
+  S.lastOk = now; scheduleRefresh();
 }
+var refT = 0;
+function scheduleRefresh() { if (refT) return; refT = setTimeout(function () { refT = 0; updateApps(); refreshStatus(); }, 400); }
 var DEBUG = /[?&]debug/.test(location.search);
 function refreshStatus() {
-  var m = S.mode === 'ws' ? '실시간 연결(즉시 반영)' : S.mode === 'poll' ? CONFIG.FALLBACK_POLL_MS / 1000 + '초마다 갱신' : '연결 중';
-  var dbg = DEBUG ? ' · [진단] 방식=' + (S.mode || '-') + ' 앱=' + S.apps.length + ' 수신=' + Object.keys(S.got).length + '/' + S.apps.length * 2 + ' 오늘=' + S.today + ' baseline=' + (S.bf ? S.bf.thru : '없음') + ' root="' + ROOT + '"' + (S.sdkErr ? ' SDK오류=' + S.sdkErr : '') : '';
-  setUpdated(m + (S.lastOk ? ' · ' + new Date(S.lastOk).toLocaleTimeString('ko-KR') : '') + (S.baseProg ? ' · ' + S.baseProg : '') + dbg);
+  var den = Object.keys(DENIED).map(function (k) { return KIND_LABEL[k]; }).join('·'); var m = S.mode === 'ws' ? '실시간 연결(즉시 반영)' : S.mode === 'poll' ? CONFIG.FALLBACK_POLL_MS / 1000 + '초마다 갱신' : '연결 중';
+  var dbg = DEBUG ? ' · [진단] 방식=' + (S.mode || '-') + ' 앱=' + S.apps.length + ' 수신=' + Object.keys(S.got).length + '/' + S.apps.length * LIVE_KINDS.length + ' 오늘=' + S.today + ' baseline=' + (S.bf ? S.bf.thru : '없음') + ' root="' + ROOT + '"' + (S.sdkErr ? ' SDK오류=' + S.sdkErr : '') : '';
+  setUpdated(m + (den ? ' · ' + den + ' 읽기 권한 없음(규칙 확인)' : '') + (S.lastOk ? ' · ' + new Date(S.lastOk).toLocaleTimeString('ko-KR') : '') + (S.baseProg ? ' · ' + S.baseProg : '') + dbg);
 }
 
 /* 1) Firebase SDK 웹소켓: 한 연결로 모든 앱의 '오늘' 노드를 구독 → 최초 1회 + 이후 변경분만 전송 */
@@ -633,9 +651,10 @@ function initSdk() {
 function subscribeToday() {
   unsubscribeAll(); if (!OPEN) return;
   var day = S.today;
-  S.apps.forEach(function (a) { METRICS.forEach(function (kind) {
+  S.apps.forEach(function (a) { LIVE_KINDS.forEach(function (kind) {
+    if (DENIED[kind]) return;
     var q = SDK.query(SDK.ref(SDK.db, ROOT + a.id + '/' + metricKey(kind)), SDK.orderByKey(), SDK.equalTo(day));
-    S.unsubs.push(SDK.onValue(q, function (snap) { var v = snap.val(); ingest(a, kind, v && v[day] ? v[day] : null); }, function (err) { setUpdated('읽기 오류 — ' + (err && err.message || err) + ' (Firebase 규칙에서 로그인 사용자 읽기 허용 여부 확인)'); }));
+    S.unsubs.push(SDK.onValue(q, function (snap) { var v = snap.val(); ingest(a, kind, v && v[day] ? v[day] : null); }, function (err) { if (kind === 'updates' || kind === 'sales') { DENIED[kind] = 1; refreshStatus(); return; } setUpdated('읽기 오류 — ' + (err && err.message || err) + ' (Firebase 규칙에서 로그인 사용자 읽기 허용 여부 확인)'); }));
   }); });
 }
 function unsubscribeAll() { S.unsubs.forEach(function (f) { try { f(); } catch (e) {} }); S.unsubs = []; }
@@ -643,8 +662,9 @@ function unsubscribeAll() { S.unsubs.forEach(function (f) { try { f(); } catch (
 /* 2) 폴백: SDK 를 못 불러올 때만 — REST 로 30초마다 오늘 노드 조회 */
 function pollOnce() {
   var day = S.today, qs = 'orderBy=%22%24key%22&startAt=%22' + day + '%22&endAt=%22' + day + '%22';
-  return Promise.all(S.apps.map(function (a) { return Promise.all(METRICS.map(function (kind) {
-    return dbGet(ROOT + a.id + '/' + metricKey(kind), qs).then(function (j) { ingest(a, kind, j && j[day] ? j[day] : null); });
+  return Promise.all(S.apps.map(function (a) { return Promise.all(LIVE_KINDS.map(function (kind) {
+    if (DENIED[kind]) return null;
+    return dbGet(ROOT + a.id + '/' + metricKey(kind), qs).then(function (j) { ingest(a, kind, j && j[day] ? j[day] : null); }, function (e) { if ((kind === 'updates' || kind === 'sales') && /권한/.test(e && e.message)) { DENIED[kind] = 1; return; } throw e; });
   })); }));
 }
 var pollTimer = null, pollFails = 0;
@@ -671,7 +691,7 @@ document.addEventListener('visibilitychange', function () {
 setInterval(function () {
   var d = dateKey(Date.now()); if (!OPEN || !S.today || d === S.today) return;
   if (S.base) { S.base.perDay[S.today] = { installs: S.todayI, dau: S.todayD }; S.base.tot.installs += S.todayI; S.base.tot.dau += S.todayD; }
-  S.today = d; S.seen = {}; S.got = {}; S.apps.forEach(function (a) { a.iT = 0; a.dT = 0; }); recalcToday();
+  S.today = d; S.seen = {}; S.got = {}; S.apps.forEach(function (a) { a.iT = 0; a.dT = 0; a.uT = 0; a.sT = 0; }); recalcToday();
   if (S.mode === 'ws') subscribeToday();
 }, 30000);
 
@@ -744,8 +764,9 @@ function avg30(kind) {
 
 /* ---------- 앱별 패널 ---------- */
 var appsEl = $('apps'), appRows = {};
+var noApp = document.createElement('div'); noApp.className = 'noapp'; noApp.textContent = '오늘 아직 활동이 있는 앱이 없어요';
 function buildApps() {
-  orderKey = ''; appsEl.innerHTML = ''; appRows = {};
+  orderKey = ''; appsEl.innerHTML = ''; appsEl.appendChild(noApp); appRows = {};
   S.apps.forEach(function (a) {
     var d = document.createElement('div'); d.className = 'approw';
     d.innerHTML = '<span class="rk"></span>' + iconTag(a) + '<div class="nm"><div>' + esc(a.name) + '</div><div class="bar"><span></span></div></div><div class="n">0</div>';
@@ -756,25 +777,33 @@ function buildApps() {
 /* 인기 점수: 오늘 DAU + 설치×3 (설치는 신규 유입이라 가중). 매출(sales) 데이터는 DB에 없어 제외.
    점수가 같으면 최근 7일 가중치 없이 이름순. 순서는 3초에 한 번만 바꿔 줄이 계속 튀지 않게 함 */
 var lastSort = 0, orderKey = '';
-function score(a) { return (a.dT || 0) + (a.iT || 0) * 3; }
+function score(a) { return (a.dT || 0) * W_SC.dau + (a.iT || 0) * W_SC.installs + (a.uT || 0) * W_SC.updates + (a.sT || 0) * W_SC.sales; }
 function updateApps() {
   var mx = 1; S.apps.forEach(function (a) { var v = score(a); if (v > mx) mx = v; });
   var now = Date.now();
-  if (now - lastSort > 3000 || !orderKey) {
+  var vis = false; S.apps.forEach(function (a) { var r = appRows[a.id]; if ((score(a) > 0) === !!r.hid) vis = true; });   /* 0↔활동 전환 시 즉시 반영 */
+  if (vis || now - lastSort > 3000 || !orderKey) {
     lastSort = now;
-    var order = S.apps.slice().sort(function (x, y) { return (score(y) - score(x)) || String(x.name).localeCompare(String(y.name), 'ko'); });
+    var order = S.apps.map(function (a, i) { a.idx = i; return a; }).sort(function (x, y) { return (score(y) - score(x)) || (x.idx - y.idx); });   /* 오늘 활동 없는 앱은 맨 아래(원래 순서) */
     var key = order.map(function (a) { return a.id; }).join('|');
-    if (key !== orderKey) { orderKey = key; order.forEach(function (a, i) { appsEl.appendChild(appRows[a.id].el); }); }
-    order.forEach(function (a, i) { appRows[a.id].rk.textContent = i + 1; });
+    if (key !== orderKey) { orderKey = key; order.forEach(function (a) { appsEl.appendChild(appRows[a.id].el); }); }
+    var shown = 0; order.forEach(function (a) { var r = appRows[a.id], on = score(a) > 0; r.hid = !on; r.el.classList.toggle('hide', !on); if (on) { shown++; if (r.rkv !== shown) { r.rkv = shown; r.rk.textContent = shown; } } });
+    noApp.style.display = shown ? 'none' : '';
   }
-  S.apps.forEach(function (a) { var r = appRows[a.id]; r.n.innerHTML = '설치 <b>' + fmt(a.iT || 0) + '</b> · DAU <b>' + fmt(a.dT || 0) + '</b>'; r.bar.style.width = (score(a) / mx * 100) + '%'; });
+  S.apps.forEach(function (a) {
+    var r = appRows[a.id], t = 'DAU <b>' + fmt(a.dT || 0) + '</b> · 설치 <b>' + fmt(a.iT || 0) + '</b>';
+    if (a.uT) t += ' · 업데이트 <b>' + fmt(a.uT) + '</b>'; if (a.sT) t += ' · 매출 <b>' + fmt(a.sT) + '</b>';
+    if (r.txt !== t) { r.txt = t; r.n.innerHTML = t; }
+    var w = (score(a) / mx * 100).toFixed(1); if (r.w !== w) { r.w = w; r.bar.style.width = w + '%'; }
+  });
 }
-function setUpdated(t) { $('updated').textContent = t; }
+function setUpdated(t) { setT('updated', t); }
 
 /* ---------- 숫자 ---------- */
 function countSince(arr, ms) { var c = Date.now() - ms, n = 0; for (var i = 0; i < arr.length; i++) if (arr[i] > c) n++; return n; }
 function ease(cur, t, k) { if (cur == null) return t; var d = t - cur; if (Math.abs(d) < 0.05) return t; return cur + d * k; }
 var lastTxt = 0;
+var lastAgo = 0;
 function updateNumbers(now) {
   var b = S.base, t = {
     totalInstall: b ? b.tot.installs + S.todayI : null, totalDau: b ? b.tot.dau + S.todayD : null,
@@ -782,18 +811,18 @@ function updateNumbers(now) {
     todayInstall: S.todayI, todayDau: S.todayD, minInstall: countSince(S.evI, 60000), minDau: countSince(S.evD, 60000)
   };
   for (var k in t) disp[k] = t[k] == null ? null : ease(disp[k], t[k], 0.15);
-  if (now - lastTxt < 80) return; lastTxt = now;
+  if (now - lastTxt < 150) return; lastTxt = now;
   function f(v) { return v == null ? '…' : fmt(v); }
-  $('c_totalInstall').textContent = f(disp.totalInstall); $('c_totalDau').textContent = f(disp.totalDau);
-  $('c_avgInstall').textContent = disp.avgInstall == null ? '…' : (Math.round(disp.avgInstall * 10) / 10).toLocaleString('ko-KR') + ' 설치';
-  $('c_avgDau').textContent = disp.avgDau == null ? '…' : (Math.round(disp.avgDau * 10) / 10).toLocaleString('ko-KR') + ' DAU';
-  $('c_todayInstall').textContent = fmt(disp.todayInstall || 0); $('c_todayDau').textContent = fmt(disp.todayDau || 0);
-  $('c_minInstall').textContent = fmt(disp.minInstall || 0); $('c_minDau').textContent = fmt(disp.minDau || 0);
-  $('c_minISub').textContent = '10분 평균 ' + (countSince(S.evI, 600000) / 10).toFixed(1) + '/분';
-  $('c_minDSub').textContent = '10분 평균 ' + (countSince(S.evD, 600000) / 10).toFixed(1) + '/분';
+  setT('c_totalInstall', f(disp.totalInstall)); setT('c_totalDau', f(disp.totalDau));
+  setT('c_avgInstall', disp.avgInstall == null ? '…' : (Math.round(disp.avgInstall * 10) / 10).toLocaleString('ko-KR') + ' 설치');
+  setT('c_avgDau', disp.avgDau == null ? '…' : (Math.round(disp.avgDau * 10) / 10).toLocaleString('ko-KR') + ' DAU');
+  setT('c_todayInstall', fmt(disp.todayInstall || 0)); setT('c_todayDau', fmt(disp.todayDau || 0));
+  setT('c_minInstall', fmt(disp.minInstall || 0)); setT('c_minDau', fmt(disp.minDau || 0));
+  setT('c_minISub', '10분 평균 ' + (countSince(S.evI, 600000) / 10).toFixed(1) + '/분');
+  setT('c_minDSub', '10분 평균 ' + (countSince(S.evD, 600000) / 10).toFixed(1) + '/분');
   var d = new Date(Date.now() + CONFIG.TZ_OFFSET_HOURS * 3600e3), lbl = (d.getUTCMonth() + 1) + '월 ' + d.getUTCDate() + '일 기준';
-  $('c_dayLbl').textContent = lbl; $('c_dayLbl2').textContent = lbl;
-  var els = feedEl.querySelectorAll('.ago'); for (var i = 0; i < els.length; i++) els[i].textContent = ago(+els[i].getAttribute('data-t'));
+  setT('c_dayLbl', lbl); setT('c_dayLbl2', lbl);
+  if (now - lastAgo > 1000) { lastAgo = now; var els = feedEl.querySelectorAll('.ago'); for (var i = 0; i < els.length; i++) { var tx = ago(+els[i].getAttribute('data-t')); if (els[i].textContent !== tx) els[i].textContent = tx; } }
   if (S.base && S.baseProg === '' && S.lastOk) { /* 합계 준비 완료 */ }
 }
 
@@ -810,7 +839,7 @@ function start() {
       throw e;
     });
   }).then(function (apps) {
-    S.apps = apps.map(function (a) { a.on = true; a.iT = 0; a.dT = 0; a.icon = a.icon || ''; loadIcon(a); return a; });
+    S.apps = apps.map(function (a) { a.on = true; a.iT = 0; a.dT = 0; a.uT = 0; a.sT = 0; a.icon = a.icon || ''; loadIcon(a); return a; });
     S.today = dateKey(Date.now());
     buildApps(); updateApps();
     return Promise.all([startLive(), prepareBase().catch(function (e) { warn('과거 집계 실패 — ' + (e && e.message || e)); })]);
@@ -824,22 +853,27 @@ function resumeLive() {
   if (S.mode === 'ws' && SDK) { try { SDK.goOnline(SDK.db); } catch (e) {} subscribeToday(); }
   else if (S.mode === 'poll') pollLoop();
 }
+var MOBILE = window.matchMedia && window.matchMedia('(max-width:980px), (pointer:coarse)').matches;
+var FRAME_MS = MOBILE ? 33 : 22, gVisible = true, lastDraw = 0;
+if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { gVisible = es[es.length - 1].isIntersecting; }).observe($('globe'));
 function frame(now) {
   if (!OPEN) return;
-  var dt = Math.min(50, now - lastT); lastT = now;
-  if (!dragging && now > idleUntil) rotLon += vLon * dt / 16;
-  updateNumbers(now); drawGlobe(now);
   rafId = requestAnimationFrame(frame);
+  if (!dragging && now - lastDraw < FRAME_MS - 2) return;      // 30fps(모바일)/45fps(PC)로 제한 — 발열 절감
+  var dt = Math.min(60, now - lastT); lastT = now; lastDraw = now;
+  if (!dragging && now > idleUntil) rotLon += vLon * dt / 16;
+  updateNumbers(now);
+  if (gVisible) drawGlobe(now);                                 // 지구본이 화면 밖이면 그리지 않음
 }
 function openLive() {
   if (OPEN) return; OPEN = true;
-  $('live').classList.add('on'); document.documentElement.classList.add('live-open');
+  $('live').classList.add('on'); document.documentElement.classList.add('live-open'); window.dispatchEvent(new Event('livetoggle'));
   resize(); lastT = performance.now(); rafId = requestAnimationFrame(frame);
   if (!started) { started = true; start(); } else resumeLive();
 }
 function closeLive() {
   if (!OPEN) return; OPEN = false;
-  $('live').classList.remove('on'); document.documentElement.classList.remove('live-open');
+  $('live').classList.remove('on'); document.documentElement.classList.remove('live-open'); window.dispatchEvent(new Event('livetoggle'));
   cancelAnimationFrame(rafId); pauseLive();
 }
 function syncHash() { if (location.hash === '#live') openLive(); else closeLive(); }
