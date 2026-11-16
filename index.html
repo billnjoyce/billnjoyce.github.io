@@ -217,6 +217,14 @@ html.live-open,html.live-open body{overflow:hidden}
 #live .gstage{touch-action:none}
 #live{overscroll-behavior:contain}
 @media(max-width:980px){#live .right{padding:0 28px}#live .right .gstage{width:100%;max-width:520px}}
+
+/* 앱별 오늘 수치: 이름은 줄바꿈으로 전부 보이고, 수치는 이름 아래에 */
+#live .approw{align-items:flex-start;padding:6px 4px}
+#live .approw .rk{margin-top:7px}
+#live .approw .nm{white-space:normal;overflow:visible;text-overflow:clip;min-width:0}
+#live .approw .an{font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+#live .approw .n{max-width:none;text-align:left;font-size:12px;line-height:1.45;color:var(--ink2);margin-top:2px;overflow-wrap:anywhere}
+#live .approw .bar{margin-top:6px}
 /* ===== 다크 테마 ===== */
 #live{--bg:#05070d;--ink:#eef1fb;--ink2:#aab1c9;--ink3:#707895;--line:rgba(255,255,255,.09);--card:rgba(255,255,255,.04);--blue:#5b8dff;--green:#2fd4a0;color-scheme:dark;color:var(--ink);background:radial-gradient(1100px 720px at 76% 42%,#0c1535 0%,#05070d 62%) #05070d}
 #live nav a:hover{background:rgba(255,255,255,.07)}
@@ -537,7 +545,11 @@ function addDays(key, n) { var p = key.split('-'); var t = new Date(Date.UTC(+p[
 var VALID = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 function validDate(k) { if (!VALID.test(k)) return false; var y = +k.slice(0, 4), m = +k.slice(5, 7), d = +k.slice(8, 10); return y >= 2000 && y <= new Date().getFullYear() + 1 && m >= 1 && m <= 12 && d >= 1 && d <= 31; }
 function deepTs(v, depth) { var t = leafTs(v); if (t != null) return t; if (v && typeof v === 'object' && (depth || 0) < 4) { var m = null, k, x; for (k in v) { x = deepTs(v[k], (depth || 0) + 1); if (x != null && (m == null || x > m)) m = x; } return m; } return null; }
-function leafTs(v) { if (typeof v === 'number' && v > 1e11) return v; if (typeof v === 'string' && /^\d{12,}$/.test(v)) return +v; return null; }
+function leafTs(v) {
+  if (typeof v === 'number') { if (v > 1e11 && v < 4e12) return v; if (v > 1e9 && v < 4e9) return v * 1000; return null; }   /* 밀리초 / 초 */
+  if (typeof v === 'string') { if (/^\d{12,13}$/.test(v)) return +v; if (/^\d{10}$/.test(v)) return +v * 1000; if (/^\d{4}-\d\d-\d\dT/.test(v)) { var t = Date.parse(v); return isNaN(t) ? null : t; } }
+  return null;
+}
 
 /* ---------- 기록 해석 (콘솔의 countByPlatform 과 동일한 규칙) ----------
    {플랫폼}/{버전}/{기기id} = 타임스탬프   또는   (구버전) {버전}/{기기id} = 타임스탬프 */
@@ -686,12 +698,12 @@ function iconTag(a) {
 
 /* ---------- 이벤트 → 화면 ---------- */
 var feedEl = $('feed'), feedN = 0;
-function ago(t) { var s = Math.max(0, Math.round((Date.now() - t) / 1000)); return s < 5 ? '방금' : s < 60 ? s + '초 전' : s < 3600 ? Math.floor(s / 60) + '분 전' : Math.floor(s / 3600) + '시간 전'; }
-function hms(ts) { var d = new Date(ts + CONFIG.TZ_OFFSET_HOURS * 3600e3), p = function (n) { return ('0' + n).slice(-2); }; return p(d.getUTCHours()) + ':' + p(d.getUTCMinutes()) + ':' + p(d.getUTCSeconds()); }
+function ago(t) { if (!t) return '오늘';  var s = Math.max(0, Math.round((Date.now() - t) / 1000)); return s < 5 ? '방금' : s < 60 ? s + '초 전' : s < 3600 ? Math.floor(s / 60) + '분 전' : Math.floor(s / 3600) + '시간 전'; }
+function hms(ts) { if (!ts) return '시각 미확인';  var d = new Date(ts + CONFIG.TZ_OFFSET_HOURS * 3600e3), p = function (n) { return ('0' + n).slice(-2); }; return p(d.getUTCHours()) + ':' + p(d.getUTCMinutes()) + ':' + p(d.getUTCSeconds()); }
 function addFeed(ev, a) {
   var li = document.createElement('li');
   li.setAttribute('data-ts', ev.ts); li.style.setProperty('--g', KCOL[ev.kind]);
-  if (Date.now() - ev.ts < 20000) li.className = 'fresh';
+  if (ev.ts && Date.now() - ev.ts < 20000) li.className = 'fresh';
   li.innerHTML = iconTag(a) + '<span class="t"><b>' + esc(a.name) + '</b> <em>· ' + PF_LABEL[ev.pf] + '</em></span><span class="badge ' + KIND_CLS[ev.kind] + '">' + KIND_LABEL[ev.kind] + '</span><span class="agow"><span class="ago" data-t="' + ev.ts + '">' + ago(ev.ts) + '</span><small>' + hms(ev.ts) + '</small></span>';
   var ref = feedEl.firstChild; while (ref && +ref.getAttribute('data-ts') > ev.ts) ref = ref.nextSibling;   /* 항상 시간 내림차순 */
   feedEl.insertBefore(li, ref);
@@ -701,7 +713,7 @@ function addFeed(ev, a) {
 }
 function showEvent(ev, a, pulse) {
   var now = performance.now(), g = ev.geo;
-  MARKS.push({ lat: g.lat, lon: g.lon, app: a, kind: ev.kind, ts: ev.ts }); if (MARKS.length > 220) MARKS.shift();
+  if (ev.ts) MARKS.push({ lat: g.lat, lon: g.lon, app: a, kind: ev.kind, ts: ev.ts }); if (MARKS.length > 220) MARKS.shift();
   if (pulse && a.on) {
     var big = ev.kind === 'installs' || ev.kind === 'sales';
     pulses.push({ lat: g.lat, lon: g.lon, t0: now, life: big ? 3000 : 2200, rgb: KCOL[ev.kind], big: big });
@@ -719,7 +731,9 @@ function ingest(a, kind, node) {
   a[CNT[kind]] = leaves.length;
   leaves.forEach(function (l) {
     var k = l.pf + '|' + l.id; if (seen[k]) return; seen[k] = 1;
-    var ts = l.ts; if (ts == null || ts > now + 60000) ts = now;
+    var ts = l.ts;
+    if (ts == null) ts = first ? 0 : now;      /* 시각을 알 수 없는 기존 기록은 0(=시각 미확인)으로 두고, '방금'처럼 꾸며 보여주지 않음 */
+    else if (ts > now + 60000) ts = now;
     if (!first && ts < now - 5 * 60000) ts = now;            // 늦게 도착한 기록은 '지금' 으로 취급
     fresh.push({ ts: ts, kind: kind, app: a.id, pf: l.pf, geo: pickGeo(a.id + '|' + l.pf + '|' + l.id, l.pf, a.name, ts) });
   });
@@ -727,8 +741,9 @@ function ingest(a, kind, node) {
   fresh.sort(function (x, y) { return x.ts - y.ts; });
   var recentCut = now - CONFIG.RECENT_MIN * 60000;
   fresh.forEach(function (ev) {
-    if (ev.kind === 'installs') S.evI.push(ev.ts); else if (ev.kind === 'dau') S.evD.push(ev.ts);
+    if (!ev.ts) { /* 시각 미확인: 분당 집계 제외 */ } else if (ev.kind === 'installs') S.evI.push(ev.ts); else if (ev.kind === 'dau') S.evD.push(ev.ts);
     if (first) {
+      if (ev.ts === 0) { showEvent(ev, a, false); return; }
       if (ev.ts < recentCut) return;
       var d = ev.ts >= now - 180000 ? (S.replayK++ % 12) * 350 : -1;
       setTimeout(function () { showEvent(ev, a, d >= 0); }, Math.max(0, d));
@@ -954,7 +969,7 @@ function buildApps() {
   orderKey = ''; appsEl.innerHTML = ''; appsEl.appendChild(noApp); appRows = {};
   S.apps.forEach(function (a) {
     var d = document.createElement('div'); d.className = 'approw';
-    d.innerHTML = '<span class="rk"></span>' + iconTag(a) + '<div class="nm"><div>' + esc(a.name) + '</div><div class="bar"><span></span></div></div><div class="n">0</div>';
+    d.innerHTML = '<span class="rk"></span>' + iconTag(a) + '<div class="nm"><div class="an">' + esc(a.name) + '</div><div class="n">0</div><div class="bar"><span></span></div></div>';
     d.onclick = function () { a.on = !a.on; d.classList.toggle('off', !a.on); };
     appsEl.appendChild(d); appRows[a.id] = { rk: d.querySelector('.rk'), bar: d.querySelector('.bar span'), n: d.querySelector('.n'), el: d };
   });
