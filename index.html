@@ -743,7 +743,7 @@ function ingest(a, kind, node) {
   fresh.forEach(function (ev) {
     if (!ev.ts) { /* 시각 미확인: 분당 집계 제외 */ } else if (ev.kind === 'installs') S.evI.push(ev.ts); else if (ev.kind === 'dau') S.evD.push(ev.ts);
     if (first) {
-      if (ev.ts === 0) { showEvent(ev, a, false); return; }
+      if (ev.ts === 0) return;          /* 시각을 모르는 기존 기록은 개수에만 반영, 실시간 활동 목록에는 올리지 않음 */
       if (ev.ts < recentCut) return;
       var d = ev.ts >= now - 180000 ? (S.replayK++ % 12) * 350 : -1;
       setTimeout(function () { showEvent(ev, a, d >= 0); }, Math.max(0, d));
