@@ -291,7 +291,7 @@ html.live-open,html.live-open body{overflow:hidden}
   </section>
   <section class="right">
     <div class="gstage"><canvas id="globe"></canvas></div>
-    <div class="hint">지구본을 드래그해서 돌려보세요 · 최근 1시간 이벤트가 앱 아이콘으로 표시돼요</div>
+    <div class="hint">지구본을 드래그해서 돌려보세요</div>
   </section>
 </main>
 </div>
@@ -584,7 +584,7 @@ function dbGet(path, qs, retry) {
   }).then(function (r) {
     if (r.status === 401 && !retry) { Auth.reset(); return dbGet(path, qs, true); }
     if (r.status === 401 || r.status === 403) throw new Error('읽기 권한 없음(' + r.status + ') → Realtime Database 규칙의 ".read" 를 확인하세요');
-    if (!r.ok) throw new Error('HTTP ' + r.status);
+    if (!r.ok) return r.text().then(function (t) { throw new Error('HTTP ' + r.status + ' · ' + path + ' · ' + String(t).slice(0, 110)); });
     return r.json();
   });
 }
@@ -616,7 +616,7 @@ function metricKey(m) { return m + (CONFIG.BUILD === 'dev' ? '-dev' : ''); }
 
 /* ---------- 상태 ---------- */
 var DENIED = {};   /* 읽기 권한이 없는 지표(예: updates/sales 규칙 미허용) — 한 번 거부되면 다시 요청하지 않음 */
-var S = { et: {}, tx: {}, sleeping: false, apps: [], today: '', evI: [], evD: [], seen: {}, got: {}, base: null, baseProg: '', baseWarn: '', lastOk: 0, mode: '', bf: null, unsubs: [], replayK: 0, todayI: 0, todayD: 0 };
+var S = { nodeErr: {}, nodeErrN: 0, failInfo: [], et: {}, tx: {}, sleeping: false, apps: [], today: '', evI: [], evD: [], seen: {}, got: {}, base: null, baseProg: '', baseWarn: '', lastOk: 0, mode: '', bf: null, unsubs: [], replayK: 0, todayI: 0, todayD: 0 };
 var disp = {}; ['totalInstall', 'totalDau', 'todayInstall', 'todayDau', 'minInstall', 'minDau', 'avgInstall', 'avgDau'].forEach(function (k) { disp[k] = null; });
 function appById(id) { for (var i = 0; i < S.apps.length; i++) if (S.apps[i].id === id) return S.apps[i]; return null; }
 
@@ -731,7 +731,7 @@ var refT = 0;
 function scheduleRefresh() { if (refT) return; refT = setTimeout(function () { refT = 0; updateApps(); refreshStatus(); }, 400); }
 var DEBUG = /[?&]debug/.test(location.search);
 function refreshStatus() {
-  var den = Object.keys(DENIED).map(function (k) { return KIND_LABEL[k]; }).join('·'); var m = S.mode === 'ws' ? '실시간 연결(즉시 반영)' : S.mode === 'poll' ? '절약 모드 ' + CONFIG.FALLBACK_POLL_MS / 1000 + '초마다 갱신' + (S.sdkErr ? ' (실시간 연결 실패: ' + S.sdkErr + ')' : '') : '연결 중';
+  var den = Object.keys(DENIED).map(function (k) { return KIND_LABEL[k]; }).join('·'); var m = S.mode === 'ws' ? '실시간 연결(즉시 반영)' : S.mode === 'poll' ? '절약 모드 ' + CONFIG.FALLBACK_POLL_MS / 1000 + '초마다 갱신' + (S.sdkErr ? ' (실시간 연결 실패: ' + S.sdkErr + ')' : '') + (Object.keys(S.nodeErr).length ? ' · 일부 읽기 오류 ' + Object.keys(S.nodeErr).length + '건: ' + S.nodeErr[Object.keys(S.nodeErr)[0]] : '') : '연결 중';
   var dbg = DEBUG ? ' · [진단] 방식=' + (S.mode || '-') + ' 앱=' + S.apps.length + ' 수신=' + Object.keys(S.got).length + '/' + S.apps.length * LIVE_KINDS.length + ' 오늘=' + S.today + ' baseline=' + (S.bf ? S.bf.thru : '없음') + ' root="' + ROOT + '"' + (S.sdkErr ? ' SDK오류=' + S.sdkErr : '') : '';
   setUpdated(m + (den ? ' · ' + den + ' 읽기 권한 없음(규칙 확인)' : '') + (S.lastOk ? ' · ' + new Date(S.lastOk).toLocaleTimeString('ko-KR') : '') + (S.baseProg ? ' · ' + S.baseProg : '') + dbg);
 }
@@ -757,7 +757,7 @@ function subscribeToday() {
   S.apps.forEach(function (a) { LIVE_KINDS.forEach(function (kind) {
     if (DENIED[kind]) return;
     var q = SDK.query(SDK.ref(SDK.db, ROOT + a.id + '/' + metricKey(kind)), SDK.orderByKey(), SDK.equalTo(day));
-    S.unsubs.push(SDK.onValue(q, function (snap) { var v = snap.val(); ingest(a, kind, v && v[day] ? v[day] : null); }, function (err) { if (kind === 'updates' || kind === 'sales') { DENIED[kind] = 1; refreshStatus(); return; } setUpdated('읽기 오류 — ' + (err && err.message || err) + ' (Firebase 규칙에서 로그인 사용자 읽기 허용 여부 확인)'); }));
+    S.unsubs.push(SDK.onValue(q, function (snap) { var v = snap.val(); ingest(a, kind, v && v[day] ? v[day] : null); }, function (err) { if (kind === 'updates' || kind === 'sales') { DENIED[kind] = 1; refreshStatus(); return; } S.nodeErr[a.id + '|' + kind] = 'HTTP · ' + ROOT + a.id + '/' + metricKey(kind) + ' · ' + String(err && err.message || err).slice(0, 100); refreshStatus(); }));
   }); });
 }
 function unsubscribeAll() { S.unsubs.forEach(function (f) { try { f(); } catch (e) {} }); S.unsubs = []; }
@@ -775,7 +775,7 @@ function dbPoll(path, qs, retry) {
     if (r.status === 304) return null;                                      /* 바뀐 게 없음: 본문 0바이트 */
     if (r.status === 401 && !retry) { Auth.reset(); return dbPoll(path, qs, true); }
     if (r.status === 401 || r.status === 403) throw new Error('읽기 권한 없음(' + r.status + ') → Realtime Database 규칙의 ".read" 를 확인하세요');
-    if (!r.ok) throw new Error('HTTP ' + r.status);
+    if (!r.ok) return r.text().then(function (t) { throw new Error('HTTP ' + r.status + ' · ' + path + ' · ' + String(t).slice(0, 110)); });
     var et = r.headers.get('ETag');
     return r.text().then(function (txt) { if (et) S.et[key] = et; if (S.tx[key] === txt) return null; S.tx[key] = txt; return { j: JSON.parse(txt) }; });
   }, function (e) {
@@ -787,7 +787,7 @@ function pollOnce() {
   var day = S.today, qs = 'orderBy=%22%24key%22&startAt=%22' + day + '%22&endAt=%22' + day + '%22';
   return Promise.all(S.apps.map(function (a) { return Promise.all(LIVE_KINDS.map(function (kind) {
     if (DENIED[kind]) return null;
-    return dbPoll(ROOT + a.id + '/' + metricKey(kind), qs).then(function (res) { if (res) ingest(a, kind, res.j && res.j[day] ? res.j[day] : null); else if (!S.got[a.id + '|' + kind]) ingest(a, kind, null); }, function (e) { if ((kind === 'updates' || kind === 'sales') && /권한/.test(e && e.message)) { DENIED[kind] = 1; return; } throw e; });
+    return dbPoll(ROOT + a.id + '/' + metricKey(kind), qs).then(function (res) { delete S.nodeErr[a.id + '|' + kind]; if (res) ingest(a, kind, res.j && res.j[day] ? res.j[day] : null); else if (!S.got[a.id + '|' + kind]) ingest(a, kind, null); }, function (e) { if ((kind === 'updates' || kind === 'sales') && /권한/.test(e && e.message)) { DENIED[kind] = 1; return; } S.nodeErr[a.id + '|' + kind] = String(e && e.message || e); S.nodeErrN++; });
   })); }));
 }
 var pollTimer = null, pollFails = 0;
@@ -848,11 +848,19 @@ function loadBaselineFile() {
 }
 function readRange(from, to, perDay, onStep) {
   var jobs = [], qs = 'orderBy=%22%24key%22&startAt=%22' + from + '%22&endAt=%22' + to + '%22';
+  S.failInfo = [];
   S.apps.forEach(function (a) { METRICS.forEach(function (kind) {
-    jobs.push(dbGet(ROOT + a.id + '/' + metricKey(kind), from ? qs : '').then(function (j) {
-      if (j && typeof j === 'object') for (var d in j) { if (!validDate(d) || d >= S.today || (from && (d < from || d > to))) continue; var n = countNode(j[d]); if (!n) continue; (perDay[d] || (perDay[d] = { installs: 0, dau: 0 }))[kind] += n; }
-      return 0;
-    }).catch(function () { return 1; }).then(function (f) { onStep(f); return f; }));
+    var path = ROOT + a.id + '/' + metricKey(kind);
+    function one(retry) {
+      return dbGet(path, from ? qs : '').then(function (j) {
+        if (j && typeof j === 'object') for (var d in j) { if (!validDate(d) || d >= S.today || (from && (d < from || d > to))) continue; var n = countNode(j[d]); if (!n) continue; (perDay[d] || (perDay[d] = { installs: 0, dau: 0 }))[kind] += n; }
+        return 0;
+      }).catch(function (e) {
+        if (retry) return new Promise(function (r) { setTimeout(r, 900); }).then(function () { return one(false); });   /* 일시 오류는 한 번 더 시도 */
+        S.failInfo.push(String(e && e.message || e)); return 1;
+      });
+    }
+    jobs.push(one(true).then(function (f) { onStep(f); return f; }));
   }); });
   return Promise.all(jobs).then(function (fs) { return fs.reduce(function (x, y) { return x + y; }, 0); });
 }
@@ -1051,21 +1059,21 @@ function setupBake() {
   b.onclick = function () {
     b.disabled = true; var perDay = {}, n = 0, tot = S.apps.length * METRICS.length;
     readRange('', '', perDay, function () { n++; b.textContent = '전체 기록 읽는 중 ' + n + '/' + tot; }).then(function (fail) {
-      if (fail) throw new Error('일부 읽기 실패(' + fail + '건) — 다시 시도하세요');
+      var skipped = fail ? (S.failInfo || []).slice() : [];   /* 끝까지 읽지 못한 칸은 제외하고 나머지로 완성 (같은 칸은 방문자도 못 읽으므로 화면과 일치) */
       var up = Promise.resolve(), first = Object.keys(perDay).sort()[0], lastFz = addDays(S.today, -2);
       if (CONFIG.SHARED_BASELINE && first) { var jobs = []; for (var x = first; x <= lastFz; x = addDays(x, 1)) (function (d) { var v = perDay[d] || { installs: 0, dau: 0 }; jobs.push(dbPut('livebase/perDay/' + d, { installs: v.installs, dau: v.dau })); })(x); up = Promise.all(jobs); }
-      return up.then(function () { return finishBake(perDay, b); });
+      return up.then(function () { return finishBake(perDay, b, skipped); });
     }).catch(function (e) { b.disabled = false; b.textContent = '실패: ' + (e && e.message || e); });
   };
 }
-function finishBake(perDay, b) {
+function finishBake(perDay, b, skipped) {
   {
       var out = { v: 1, builtAt: new Date().toISOString(), build: CONFIG.BUILD, root: ROOT.replace(/\/$/, ''), thru: addDays(S.today, -1), apps: S.apps.map(function (a) { return { id: a.id, name: a.name, iconUrl: a.iconUrl, color: a.color }; }), perDay: perDay };
       return fetch(location.href.split('#')[0].split('?')[0], { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (html) {
         var json = JSON.stringify(out).replace(/</g, '\\u003c'), re = /(<script type="application\/json" id="liveBaseline">)[\s\S]*?(<\/script>)/;
         if (!re.test(html)) throw new Error('index.html 에서 기준 데이터 칸을 찾지 못했습니다');
         var a = document.createElement('a'); a.id = 'lvBakeDl'; a.className = 'lv-sleep'; a.style.cssText = 'display:block;left:16px;bottom:70px;transform:none;text-decoration:none'; a.href = URL.createObjectURL(new Blob([html.replace(re, function (m, p1, p2) { return p1 + json + p2; })], { type: 'text/html' })); a.download = 'index.html'; a.textContent = '▼ 여기를 눌러 index.html 받기 (' + Object.keys(perDay).length + '일치)'; $('live').appendChild(a);
-        b.textContent = '완료 — 공용 칸을 채웠습니다. 아래 버튼으로 index.html 을 받으세요 (선택)';
+        b.textContent = '완료 — 공용 칸을 채웠습니다' + (skipped.length ? ' (읽지 못해 제외한 칸 ' + skipped.length + '곳: ' + skipped.map(function (s) { return s.split(' · ').slice(1, 3).join(' '); }).join(', ').slice(0, 200) + ')' : '') + '. 아래 버튼으로 index.html 을 받으세요 (선택)';
       });
   }
 }
