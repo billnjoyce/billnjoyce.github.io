@@ -111,6 +111,10 @@ footer .cp{max-width:1100px;margin:16px auto 0;padding:0 24px;font-size:11.5px;c
 #live .badge.u{background:#f1e8ff;color:#7a3fd1}
 #live .badge.s{background:#fff1d6;color:#a86500}
 #live .approw.hide{display:none}
+#live .agow{display:flex;flex-direction:column;align-items:flex-end;flex:none;line-height:1.25}
+#live .agow small{font-size:10px;color:var(--ink3);font-variant-numeric:tabular-nums}
+#live main,#live main>*,#live .left,#live .lists,#live .grid,#live .panel,#live .card{min-width:0;max-width:100%}
+#live .approw .n{max-width:58%;overflow-wrap:anywhere}
 #live .noapp{color:var(--ink3);font-size:12.5px;text-align:center;padding:18px 0}
 #live .approw .n{text-align:right;line-height:1.35}
 #live .panel,#live .card{contain:layout paint}
@@ -584,9 +588,10 @@ function iconTag(a) {
 /* ---------- 이벤트 → 화면 ---------- */
 var feedEl = $('feed'), feedN = 0;
 function ago(t) { var s = Math.max(0, Math.round((Date.now() - t) / 1000)); return s < 5 ? '방금' : s < 60 ? s + '초 전' : s < 3600 ? Math.floor(s / 60) + '분 전' : Math.floor(s / 3600) + '시간 전'; }
+function hms(ts) { var d = new Date(ts + CONFIG.TZ_OFFSET_HOURS * 3600e3), p = function (n) { return ('0' + n).slice(-2); }; return p(d.getUTCHours()) + ':' + p(d.getUTCMinutes()) + ':' + p(d.getUTCSeconds()); }
 function addFeed(ev, a) {
   var c = CC[ev.cc] || COUNTRIES[0], li = document.createElement('li');
-  li.innerHTML = iconTag(a) + '<span class="t"><b>' + esc(a.name) + '</b> <em>· ' + PF_LABEL[ev.pf] + (ev.pf === 'toss' ? '' : '') + '</em></span><span class="badge ' + KIND_CLS[ev.kind] + '">' + KIND_LABEL[ev.kind] + '</span><span class="ago" data-t="' + ev.ts + '"></span>';
+  li.innerHTML = iconTag(a) + '<span class="t"><b>' + esc(a.name) + '</b> <em>· ' + PF_LABEL[ev.pf] + (ev.pf === 'toss' ? '' : '') + '</em></span><span class="badge ' + KIND_CLS[ev.kind] + '">' + KIND_LABEL[ev.kind] + '</span><span class="agow"><span class="ago" data-t="' + ev.ts + '">' + ago(ev.ts) + '</span><small>' + hms(ev.ts) + '</small></span>';
   feedEl.insertBefore(li, feedEl.firstChild);
   while (feedEl.children.length > 40) feedEl.removeChild(feedEl.lastChild);
   feedN++; var tot = 0; S.apps.forEach(function (x) { tot += (x.iT || 0) + (x.dT || 0) + (x.uT || 0) + (x.sT || 0); }); setT('feedCnt', '오늘 ' + fmt(tot) + '건');
@@ -839,6 +844,7 @@ function start() {
       throw e;
     });
   }).then(function (apps) {
+    var seenId = {}; apps = apps.filter(function (a) { if (!a || !a.id || seenId[a.id]) return false; seenId[a.id] = 1; return true; });
     S.apps = apps.map(function (a) { a.on = true; a.iT = 0; a.dT = 0; a.uT = 0; a.sT = 0; a.icon = a.icon || ''; loadIcon(a); return a; });
     S.today = dateKey(Date.now());
     buildApps(); updateApps();
