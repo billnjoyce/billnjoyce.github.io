@@ -129,6 +129,31 @@ footer .cp{max-width:1100px;margin:16px auto 0;padding:0 24px;font-size:11.5px;c
 #live nav a:not(.on){display:none}
 #live footer{padding:16px}}
 @media(prefers-reduced-motion:reduce){#live,#live *{animation:none!important}}
+
+/* 스크롤 영역 + 순위 + 모바일 */
+#live #feed,#live .apps{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#cfd4ea transparent;padding-right:4px}
+#live #feed::-webkit-scrollbar,#live .apps::-webkit-scrollbar{width:6px}
+#live #feed::-webkit-scrollbar-thumb,#live .apps::-webkit-scrollbar-thumb{background:#cfd4ea;border-radius:3px}
+#live .approw .rk{width:18px;flex:none;text-align:center;font-size:11.5px;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums}
+#live .approw:nth-child(-n+3) .rk{color:var(--blue)}
+#live .approw .n{white-space:nowrap}
+@media(max-width:980px){
+#live main{display:flex;flex-direction:column;text-align:center}
+#live .left{display:contents}
+#live .left>.tag{order:0;align-self:center}#live .left>h1{order:1}#live .left>.grid{order:2;width:100%}
+#live .right{order:3;width:100%}
+#live .lists{order:4;width:100%;grid-template-columns:1fr}
+#live .status{order:5;justify-content:center;flex-wrap:wrap}
+#live .panel{overflow:hidden}
+#live #feed,#live .apps{max-height:min(340px,46vh)}
+#live .right .gstage{width:min(100%,520px)}}
+@media(max-width:560px){
+#live .card{padding:10px 12px}
+#live .card .v{font-size:22px}
+#live .approw{gap:8px;font-size:12.5px}
+#live .approw .n{font-size:11.5px}
+#live #feed li{font-size:12.5px}
+#live .left h1{font-size:19px}}
 #live .left{text-align:left}
 #live .left .headline{align-items:flex-start;margin-top:12px}
 #live .left h1{font-size:clamp(19px,1.9vw,26px);margin:8px 0 0;white-space:nowrap}
@@ -147,7 +172,7 @@ footer .cp{max-width:1100px;margin:16px auto 0;padding:0 24px;font-size:11.5px;c
 #live .lists{display:grid;grid-template-rows:1fr 1fr;gap:8px;flex:1;min-height:0;margin-top:8px}
 #live .panel{min-height:0;display:flex;flex-direction:column;overflow:hidden;padding:10px 14px}
 #live .panel h3{margin-bottom:4px}
-#live #feed,#live .apps{max-height:none;flex:1;min-height:0;overflow:hidden}
+#live #feed,#live .apps{max-height:none;flex:1;min-height:0;overflow-y:auto}
 #live #feed li{padding:5px 2px}
 #live .approw{padding:2px 4px}
 #live .right .gstage{position:absolute;inset:0 0 18px 0;width:auto;aspect-ratio:auto;margin:0}}
@@ -218,7 +243,7 @@ html.live-open,html.live-open body{overflow:hidden}
     </div>
     <div class="lists">
       <div class="panel"><h3>실시간 활동 <small id="feedCnt"></small></h3><ul id="feed"></ul></div>
-      <div class="panel"><h3>앱별 오늘 설치 <small>오늘 · 클릭: 지구본 표시/숨김</small></h3><div class="apps" id="apps"></div></div>
+      <div class="panel"><h3>앱별 오늘 수치 <small>인기순 · 클릭: 지구본 표시/숨김</small></h3><div class="apps" id="apps"></div></div>
     </div>
     <div class="status">
       <span><i style="background:var(--blue)"></i>설치</span>
@@ -407,7 +432,7 @@ var CONFIG = {
   ROOTS:   ['', 'jsapps'],      // info 를 찾는 경로 (콘솔과 동일: 루트 → jsapps)
   BUILD:   'appstore',          // 'appstore' = 실서비스, 'dev' = 개발 빌드
   TZ_OFFSET_HOURS: 9, TZ_LABEL: '한국시간(KST)',
-  FALLBACK_POLL_MS: 30000,      // 웹소켓을 못 쓸 때만 사용하는 폴링 주기
+  FALLBACK_POLL_MS: 1000,       // 웹소켓을 못 쓸 때만 사용하는 폴링 주기(1초)
   HIDDEN_OFFLINE_MS: 120000,    // 탭이 2분 이상 숨겨지면 연결을 끊어 비용·동시접속 절약
   RECENT_MIN: 10                // 접속 직후 피드에 보여줄 최근 구간(분)
 };
@@ -547,7 +572,7 @@ function addFeed(ev, a) {
   var c = CC[ev.cc] || COUNTRIES[0], li = document.createElement('li');
   li.innerHTML = iconTag(a) + '<span class="t"><b>' + esc(a.name) + '</b> <em>· ' + PF_LABEL[ev.pf] + (ev.pf === 'toss' ? '' : '') + '</em></span><span class="badge ' + (ev.kind === 'installs' ? 'i' : 'd') + '">' + (ev.kind === 'installs' ? '설치' : 'DAU') + '</span><span class="ago" data-t="' + ev.ts + '"></span>';
   feedEl.insertBefore(li, feedEl.firstChild);
-  while (feedEl.children.length > 9) feedEl.removeChild(feedEl.lastChild);
+  while (feedEl.children.length > 60) feedEl.removeChild(feedEl.lastChild);
   feedN++; $('feedCnt').textContent = '오늘 ' + fmt(S.todayI + S.todayD) + '건';
 }
 function showEvent(ev, a, pulse) {
@@ -587,9 +612,11 @@ function ingest(a, kind, node) {
   S.evI = S.evI.filter(function (t) { return t > now - 3600e3; }); S.evD = S.evD.filter(function (t) { return t > now - 3600e3; });
   S.lastOk = now; updateApps(); refreshStatus();
 }
+var DEBUG = /[?&]debug/.test(location.search);
 function refreshStatus() {
-  var m = S.mode === 'ws' ? '실시간 연결' : S.mode === 'poll' ? CONFIG.FALLBACK_POLL_MS / 1000 + '초마다 갱신' : '연결 중';
-  setUpdated(m + (S.lastOk ? ' · ' + new Date(S.lastOk).toLocaleTimeString('ko-KR') : '') + (S.baseProg ? ' · ' + S.baseProg : '') + (S.baseWarn ? ' · ' + S.baseWarn : ''));
+  var m = S.mode === 'ws' ? '실시간 연결(즉시 반영)' : S.mode === 'poll' ? CONFIG.FALLBACK_POLL_MS / 1000 + '초마다 갱신' : '연결 중';
+  var dbg = DEBUG ? ' · [진단] 방식=' + (S.mode || '-') + ' 앱=' + S.apps.length + ' 수신=' + Object.keys(S.got).length + '/' + S.apps.length * 2 + ' 오늘=' + S.today + ' baseline=' + (S.bf ? S.bf.thru : '없음') + ' root="' + ROOT + '"' + (S.sdkErr ? ' SDK오류=' + S.sdkErr : '') : '';
+  setUpdated(m + (S.lastOk ? ' · ' + new Date(S.lastOk).toLocaleTimeString('ko-KR') : '') + (S.baseProg ? ' · ' + S.baseProg : '') + dbg);
 }
 
 /* 1) Firebase SDK 웹소켓: 한 연결로 모든 앱의 '오늘' 노드를 구독 → 최초 1회 + 이후 변경분만 전송 */
@@ -608,7 +635,7 @@ function subscribeToday() {
   var day = S.today;
   S.apps.forEach(function (a) { METRICS.forEach(function (kind) {
     var q = SDK.query(SDK.ref(SDK.db, ROOT + a.id + '/' + metricKey(kind)), SDK.orderByKey(), SDK.equalTo(day));
-    S.unsubs.push(SDK.onValue(q, function (snap) { var v = snap.val(); ingest(a, kind, v && v[day] ? v[day] : null); }, function (err) { setUpdated('읽기 오류 — ' + (err && err.message || err)); }));
+    S.unsubs.push(SDK.onValue(q, function (snap) { var v = snap.val(); ingest(a, kind, v && v[day] ? v[day] : null); }, function (err) { setUpdated('읽기 오류 — ' + (err && err.message || err) + ' (Firebase 규칙에서 로그인 사용자 읽기 허용 여부 확인)'); }));
   }); });
 }
 function unsubscribeAll() { S.unsubs.forEach(function (f) { try { f(); } catch (e) {} }); S.unsubs = []; }
@@ -628,7 +655,7 @@ function pollLoop() {
 }
 function startLive() {
   return initSdk().then(function () { S.mode = 'ws'; subscribeToday(); }).catch(function (e) {
-    console.warn('[live] SDK 사용 불가 → REST 폴링으로 전환:', e && e.message || e); S.mode = 'poll'; return Auth.get().then(pollLoop);
+    console.warn('[live] SDK 사용 불가 → REST 폴링으로 전환:', e && e.message || e); S.sdkErr = String(e && e.message || e); S.mode = 'poll'; return Auth.get().then(pollLoop);
   });
 }
 /* 탭이 숨겨지면 잠시 후 연결을 끊고, 돌아오면 다시 연결 (연결 유지 비용·동시접속 한도 절약) */
@@ -685,10 +712,14 @@ function prepareBase() {
       /* ② 없는 날짜만 직접 읽고, 확정된 날(이틀 이상 지난 날)은 공용 칸에 저장 → 다음 방문자는 읽지 않아도 됨 */
       var got = {}, mFrom = missing[0];
       return readRange(mFrom, yday, got, prog).then(function (fail) {
-        var freezeTo = addDays(today, -2), saves = [];
+        var freezeTo = addDays(today, -2), saves = [], gotSum = 0, k2;
+        for (k2 in got) gotSum += (got[k2].installs || 0) + (got[k2].dau || 0);
+        var recent = 0, ri = 0; for (var i = 1; i <= 60; i++) { var bv = perDay[addDays(bf.thru, 1 - i)]; if (bv) { recent += bv.dau; ri++; } }
+        var suspicious = missing.length >= 5 && gotSum === 0 && recent / 60 > 3;   // 평소엔 매일 기록이 있는데 갭이 통째로 0 → 경로/권한 문제일 가능성
+        if (suspicious) warn('빠진 기간 데이터가 전부 0 → 공용 칸에 저장하지 않음 (경로/권한 확인)');
         missing.forEach(function (day) {
           var v = got[day] || { installs: 0, dau: 0 }; perDay[day] = v;
-          if (!fail && day <= freezeTo) saves.push(dbPut('livebase/perDay/' + day, { installs: v.installs, dau: v.dau }));
+          if (!fail && !suspicious && day <= freezeTo) saves.push(dbPut('livebase/perDay/' + day, { installs: v.installs, dau: v.dau }));
         });
         S.base = { perDay: perDay, tot: sumPerDay(perDay) };
         if (fail) warn('일부 집계 실패 ' + fail + '건'); else try { localStorage.setItem('joyce_live_gap_v3', JSON.stringify({ thru: bf.thru, day: today, build: CONFIG.BUILD, perDay: pick(perDay, from) })); } catch (e) {}
@@ -714,18 +745,29 @@ function avg30(kind) {
 /* ---------- 앱별 패널 ---------- */
 var appsEl = $('apps'), appRows = {};
 function buildApps() {
-  appsEl.innerHTML = ''; appRows = {};
+  orderKey = ''; appsEl.innerHTML = ''; appRows = {};
   S.apps.forEach(function (a) {
     var d = document.createElement('div'); d.className = 'approw';
-    d.innerHTML = iconTag(a) + '<div class="nm"><div>' + esc(a.name) + '</div><div class="bar"><span></span></div></div><div class="n">0</div>';
+    d.innerHTML = '<span class="rk"></span>' + iconTag(a) + '<div class="nm"><div>' + esc(a.name) + '</div><div class="bar"><span></span></div></div><div class="n">0</div>';
     d.onclick = function () { a.on = !a.on; d.classList.toggle('off', !a.on); };
-    appsEl.appendChild(d); appRows[a.id] = { bar: d.querySelector('.bar span'), n: d.querySelector('.n'), el: d };
+    appsEl.appendChild(d); appRows[a.id] = { rk: d.querySelector('.rk'), bar: d.querySelector('.bar span'), n: d.querySelector('.n'), el: d };
   });
 }
+/* 인기 점수: 오늘 DAU + 설치×3 (설치는 신규 유입이라 가중). 매출(sales) 데이터는 DB에 없어 제외.
+   점수가 같으면 최근 7일 가중치 없이 이름순. 순서는 3초에 한 번만 바꿔 줄이 계속 튀지 않게 함 */
+var lastSort = 0, orderKey = '';
+function score(a) { return (a.dT || 0) + (a.iT || 0) * 3; }
 function updateApps() {
-  var mx = 1; S.apps.forEach(function (a) { var v = (a.iT || 0) + (a.dT || 0); if (v > mx) mx = v; });
-  var order = S.apps.slice().sort(function (x, y) { return ((y.iT || 0) + (y.dT || 0)) - ((x.iT || 0) + (x.dT || 0)); });
-  order.forEach(function (a) { var r = appRows[a.id]; appsEl.appendChild(r.el); r.n.innerHTML = '설치 <b>' + fmt(a.iT || 0) + '</b> · DAU <b>' + fmt(a.dT || 0) + '</b>'; r.bar.style.width = (((a.iT || 0) + (a.dT || 0)) / mx * 100) + '%'; });
+  var mx = 1; S.apps.forEach(function (a) { var v = score(a); if (v > mx) mx = v; });
+  var now = Date.now();
+  if (now - lastSort > 3000 || !orderKey) {
+    lastSort = now;
+    var order = S.apps.slice().sort(function (x, y) { return (score(y) - score(x)) || String(x.name).localeCompare(String(y.name), 'ko'); });
+    var key = order.map(function (a) { return a.id; }).join('|');
+    if (key !== orderKey) { orderKey = key; order.forEach(function (a, i) { appsEl.appendChild(appRows[a.id].el); }); }
+    order.forEach(function (a, i) { appRows[a.id].rk.textContent = i + 1; });
+  }
+  S.apps.forEach(function (a) { var r = appRows[a.id]; r.n.innerHTML = '설치 <b>' + fmt(a.iT || 0) + '</b> · DAU <b>' + fmt(a.dT || 0) + '</b>'; r.bar.style.width = (score(a) / mx * 100) + '%'; });
 }
 function setUpdated(t) { $('updated').textContent = t; }
 
@@ -761,9 +803,12 @@ function start() {
   $('geoNote').textContent = '※ 지구본 위치는 앱이 국가를 기록하지 않아 참고용 분포입니다 (토스는 한국).';
   setUpdated('불러오는 중…');
   loadBaselineFile().then(function (bf) {
-    S.bf = bf; if (bf) ROOT = bf.root || '';
-    if (bf && bf.apps && bf.apps.length) return bf.apps;      // 앱 목록·아이콘 주소도 내장 → DB 읽기 0
-    return Auth.get().then(listApps);
+    S.bf = bf;
+    /* 데이터가 루트에 있는지 jsapps/ 아래에 있는지는 콘솔과 똑같이 info 를 찾아 실행 시 자동 판정 */
+    return Auth.get().then(listApps).catch(function (e) {
+      if (bf && bf.apps && bf.apps.length) { warn('info 읽기 실패 → 내장 앱 목록 사용: ' + (e && e.message || e)); ROOT = ''; return bf.apps; }
+      throw e;
+    });
   }).then(function (apps) {
     S.apps = apps.map(function (a) { a.on = true; a.iT = 0; a.dT = 0; a.icon = a.icon || ''; loadIcon(a); return a; });
     S.today = dateKey(Date.now());
