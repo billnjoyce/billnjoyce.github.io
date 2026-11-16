@@ -210,6 +210,32 @@ html.live-open .stage,html.live-open #wall{visibility:hidden}
 html.live-open,html.live-open body{overflow:hidden}
 #live header a.homebtn{cursor:pointer}
 
+
+/* ===== 다크 테마 ===== */
+#live{--bg:#05070d;--ink:#eef1fb;--ink2:#aab1c9;--ink3:#707895;--line:rgba(255,255,255,.09);--card:rgba(255,255,255,.04);--blue:#5b8dff;--green:#2fd4a0;color-scheme:dark;color:var(--ink);background:radial-gradient(1100px 720px at 76% 42%,#0c1535 0%,#05070d 62%) #05070d}
+#live nav a:hover{background:rgba(255,255,255,.07)}
+#live .panel,#live .card{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border-color:var(--line);backdrop-filter:none}
+#live .card .v,#live .approw .n b{color:#fff}
+#live .card .v{text-shadow:0 0 18px rgba(91,141,255,.25)}
+#live #feed li{border-bottom-color:rgba(255,255,255,.06)}
+#live #feed img,#live .approw img{background:#1a2036}
+#live .badge.i{background:rgba(91,141,255,.16);color:#9db9ff}
+#live .badge.d{background:rgba(47,212,160,.15);color:#63ecc3}
+#live .badge.u{background:rgba(176,107,255,.17);color:#cba2ff}
+#live .badge.s{background:rgba(255,178,62,.17);color:#ffc972}
+#live .approw:hover{background:rgba(255,255,255,.05)}
+#live .approw .bar{background:rgba(255,255,255,.08)}
+#live .approw .bar span{background:linear-gradient(90deg,#4a7bff,#7aa4ff);box-shadow:0 0 10px rgba(91,141,255,.55)}
+#live #feed,#live .apps{scrollbar-color:#2b3556 transparent}
+#live #feed::-webkit-scrollbar-thumb,#live .apps::-webkit-scrollbar-thumb{background:#2b3556}
+#live .lv-sleep{background:#fff;color:#05070d}
+#live .tag{text-shadow:0 0 14px rgba(239,43,61,.6)}
+#live .right .hint{color:#7d86a6}
+#live #feed li{position:relative;overflow:hidden;border-radius:10px;flex:none}
+#live #feed li.fresh{animation:lvin .45s ease,lvglow 5s ease-out}
+#live #feed li.fresh::after{content:'';position:absolute;top:0;bottom:0;left:-45%;width:40%;pointer-events:none;background:linear-gradient(100deg,transparent,rgba(255,255,255,.30),transparent);transform:skewX(-20deg);animation:lvsweep 1.5s ease-out 1 both}
+@keyframes lvglow{0%{background:linear-gradient(90deg,rgba(var(--g),.42),rgba(var(--g),.08));box-shadow:0 0 26px rgba(var(--g),.65),inset 0 0 0 1px rgba(var(--g),.65)}35%{background:linear-gradient(90deg,rgba(var(--g),.26),rgba(var(--g),.04));box-shadow:0 0 16px rgba(var(--g),.35),inset 0 0 0 1px rgba(var(--g),.4)}100%{background:linear-gradient(90deg,rgba(var(--g),0),rgba(var(--g),0));box-shadow:0 0 0 rgba(var(--g),0),inset 0 0 0 1px rgba(var(--g),0)}}
+@keyframes lvsweep{to{left:125%}}
 </style>
 </head>
 <body>
@@ -265,7 +291,7 @@ html.live-open,html.live-open body{overflow:hidden}
   </section>
   <section class="right">
     <div class="gstage"><canvas id="globe"></canvas></div>
-    <div class="hint">지구본을 드래그해서 돌려보세요</div>
+    <div class="hint">지구본을 드래그해서 돌려보세요 · 최근 1시간 이벤트가 앱 아이콘으로 표시돼요</div>
   </section>
 </main>
 </div>
@@ -355,7 +381,13 @@ var COUNTRIES = [
  ['NG','나이지리아',9.1,8.7,1.5],['ZA','남아공',-29.0,24.0,1.2],['AU','호주',-25.3,134.0,2],['CA','캐나다',56.0,-100.0,2],
  ['AR','아르헨티나',-34.0,-64.0,1.5],['CO','콜롬비아',4.6,-74.1,1.3],['ES','스페인',40.4,-3.7,1.8],['IT','이탈리아',42.8,12.5,1.8],
  ['SA','사우디아라비아',24.0,45.0,1.3],['PK','파키스탄',30.0,70.0,1.5],['MY','말레이시아',4.2,102.0,1.2],['TW','대만',23.7,121.0,1.5],
- ['SG','싱가포르',1.35,103.8,0.8],['PL','폴란드',52.0,19.0,1.2],['UA','우크라이나',49.0,32.0,1.0],['CL','칠레',-33.5,-70.6,0.9]
+ ['SG','싱가포르',1.35,103.8,0.8],['PL','폴란드',52.0,19.0,1.2],['UA','우크라이나',49.0,32.0,1.0],['CL','칠레',-33.5,-70.6,0.9],
+ ['CN','중국',34.5,104.0,3],['HK','홍콩',22.3,114.2,0.8],['AE','UAE',24.3,54.4,1.0],['IL','이스라엘',31.5,34.9,0.8],['IR','이란',32.4,53.7,0.9],
+ ['IQ','이라크',33.2,43.7,0.6],['SE','스웨덴',62.0,15.0,0.9],['NO','노르웨이',61.0,9.0,0.7],['FI','핀란드',63.0,26.0,0.6],['NL','네덜란드',52.2,5.3,1.0],
+ ['PT','포르투갈',39.6,-8.0,0.7],['GR','그리스',39.0,22.0,0.6],['RO','루마니아',45.9,25.0,0.6],['CZ','체코',49.8,15.5,0.6],['CH','스위스',46.8,8.2,0.7],
+ ['BD','방글라데시',23.8,90.3,0.9],['LK','스리랑카',7.8,80.7,0.4],['NZ','뉴질랜드',-41.0,172.0,0.8],['PE','페루',-9.2,-75.0,0.8],['VE','베네수엘라',7.0,-66.0,0.5],
+ ['KZ','카자흐스탄',48.0,67.0,0.6],['ET','에티오피아',9.0,39.5,0.5],['GH','가나',7.9,-1.0,0.5],['KE','케냐',0.2,37.9,0.7],['TZ','탄자니아',-6.4,34.9,0.4],
+ ['MA','모로코',31.8,-7.1,0.7],['DZ','알제리',28.0,2.6,0.6],['UY','우루과이',-32.8,-56.0,0.3],['EC','에콰도르',-1.4,-78.4,0.4],['MN','몽골',46.8,103.0,0.3]
 ];
 var CC = {}; COUNTRIES.forEach(function(c){CC[c[0]]=c;});
 
@@ -363,12 +395,18 @@ var CC = {}; COUNTRIES.forEach(function(c){CC[c[0]]=c;});
 /* ---------- 지구본 ---------- */
 var cv=$('globe'), ctx=cv.getContext('2d'), W=0,H=0,R=0,DPR=1;
 var rotLon=127*Math.PI/180, rotLat=24*Math.PI/180, vLon=0.0035, dragging=false, lastX=0, lastY=0, idleUntil=0;
-var pulses=[], bubbles=[];
+var pulses=[], bubbles=[], MARKS=[];
+var GLOWS={};
+function glowSprite(rgb){var s=GLOWS[rgb];if(s)return s;s=document.createElement('canvas');s.width=s.height=96;var x=s.getContext('2d'),gr=x.createRadialGradient(48,48,0,48,48,48);gr.addColorStop(0,'rgba('+rgb+',1)');gr.addColorStop(0.22,'rgba('+rgb+',.55)');gr.addColorStop(0.55,'rgba('+rgb+',.14)');gr.addColorStop(1,'rgba('+rgb+',0)');x.fillStyle=gr;x.fillRect(0,0,96,96);return GLOWS[rgb]=s;}
+var KCOL={installs:'91,141,255',dau:'47,212,160',updates:'176,107,255',sales:'255,178,62'};
+function roundIcon(a){var ok=!!a.imgOk;if(a.rcv&&a.rcvOk===ok)return a.rcv;var s=64,cv2=a.rcv||document.createElement('canvas');cv2.width=cv2.height=s;var x=cv2.getContext('2d');x.clearRect(0,0,s,s);x.save();x.beginPath();x.arc(s/2,s/2,s/2-2,0,7);x.clip();if(ok){x.drawImage(a.img,0,0,s,s);}else{x.fillStyle=a.color||'#5e8bff';x.fillRect(0,0,s,s);x.fillStyle='#fff';x.font='700 30px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(String(a.name).charAt(0),s/2,s/2+2);}x.restore();a.rcv=cv2;a.rcvOk=ok;return cv2;}
 var bgCv=null;
 function resize(){var r=cv.getBoundingClientRect();if(!r.width)return;DPR=Math.min(window.devicePixelRatio||1,window.innerWidth<981?1.5:2);W=r.width;H=r.height;cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);R=Math.min(W,H)*0.40;buildBg();}
 function buildBg(){bgCv=document.createElement('canvas');bgCv.width=cv.width;bgCv.height=cv.height;var x=bgCv.getContext('2d');x.setTransform(DPR,0,0,DPR,0,0);var cx=W/2,cy=H/2;
- var g=x.createRadialGradient(cx,cy,R*0.96,cx,cy,R*1.22);g.addColorStop(0,'rgba(90,120,255,.16)');g.addColorStop(1,'rgba(90,120,255,0)');x.fillStyle=g;x.beginPath();x.arc(cx,cy,R*1.22,0,7);x.fill();
- var sg=x.createRadialGradient(cx-R*0.35,cy-R*0.4,R*0.1,cx,cy,R);sg.addColorStop(0,'#ffffff');sg.addColorStop(1,'#e4e9fb');x.fillStyle=sg;x.beginPath();x.arc(cx,cy,R,0,7);x.fill();x.strokeStyle='#d5dcf5';x.lineWidth=1;x.stroke();}
+ var g=x.createRadialGradient(cx,cy,R*0.9,cx,cy,R*1.35);g.addColorStop(0,'rgba(70,110,255,.30)');g.addColorStop(0.45,'rgba(60,90,230,.10)');g.addColorStop(1,'rgba(60,90,230,0)');x.fillStyle=g;x.beginPath();x.arc(cx,cy,R*1.35,0,7);x.fill();
+ var sg=x.createRadialGradient(cx-R*0.38,cy-R*0.42,R*0.05,cx,cy,R);sg.addColorStop(0,'#1a2a5c');sg.addColorStop(0.55,'#0b1431');sg.addColorStop(1,'#050914');x.fillStyle=sg;x.beginPath();x.arc(cx,cy,R,0,7);x.fill();
+ var rg=x.createRadialGradient(cx,cy,R*0.82,cx,cy,R);rg.addColorStop(0,'rgba(90,130,255,0)');rg.addColorStop(1,'rgba(110,150,255,.34)');x.fillStyle=rg;x.beginPath();x.arc(cx,cy,R,0,7);x.fill();
+ x.strokeStyle='rgba(130,165,255,.45)';x.lineWidth=1;x.beginPath();x.arc(cx,cy,R,0,7);x.stroke();}
 window.addEventListener('resize',resize);
 cv.addEventListener('pointerdown',function(e){dragging=true;lastX=e.clientX;lastY=e.clientY;cv.setPointerCapture(e.pointerId);});
 cv.addEventListener('pointermove',function(e){if(!dragging)return;var dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;rotLon+=dx/R*0.9;rotLat=Math.max(-1.2,Math.min(1.2,rotLat+dy/R*0.9));idleUntil=performance.now()+2500;});
@@ -386,7 +424,7 @@ function proj(latDeg,lonDeg){
 
 var LN=0; LAND.forEach(function(r){LN+=r[1].length;});
 var LBX=new Float32Array(LN),LBY=new Float32Array(LN),LBZ=new Float32Array(LN); (function(){var k=0;LAND.forEach(function(r){var la=r[0]*Math.PI/180,cl=Math.cos(la),sl=Math.sin(la);r[1].forEach(function(lo){var l=lo*Math.PI/180;LBX[k]=cl*Math.sin(l);LBY[k]=sl;LBZ[k]=cl*Math.cos(l);k++;});});})();
-var NB=6, BX=[],BY=[],BN=new Int32Array(NB),BCOL=[]; for(var q=0;q<NB;q++){BX.push(new Float32Array(LN));BY.push(new Float32Array(LN));BCOL.push('rgba(120,134,185,'+(0.25+0.75*Math.pow((q+0.5)/NB,0.6)).toFixed(3)+')');}
+var NB=6, BX=[],BY=[],BN=new Int32Array(NB),BCOL=[]; for(var q=0;q<NB;q++){BX.push(new Float32Array(LN));BY.push(new Float32Array(LN));BCOL.push('rgba(140,170,255,'+(0.10+0.62*Math.pow((q+0.5)/NB,0.7)).toFixed(3)+')');}
 
 function drawGlobe(now){
   ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height);
@@ -403,29 +441,46 @@ function drawGlobe(now){
     var n=BN[bi]++; BX[bi][n]=cx+x*R-sz/2; BY[bi][n]=cy-y2*R-sz/2;
   }
   for(q=0;q<NB;q++){ if(!BN[q])continue; ctx.fillStyle=BCOL[q]; ctx.beginPath(); var xs=BX[q],ys=BY[q]; for(i=0;i<BN[q];i++) ctx.rect(xs[i],ys[i],sz,sz); ctx.fill(); }
-  /* 펄스 링 */
-  for(i=pulses.length-1;i>=0;i--){
-    var pu=pulses[i], age=(now-pu.t0)/pu.life;
-    if(age>=1){pulses.splice(i,1);continue;}
-    p=proj(pu.lat,pu.lon); if(p[2]<=0.02) continue;
-    var rad=(pu.big?5:3)+age*(pu.big?34:22), al=(1-age)*0.8;
-    ctx.strokeStyle=pu.col.replace('A',al.toFixed(3)); ctx.lineWidth=2;
-    ctx.beginPath(); ctx.arc(p[0],p[1],rad,0,7); ctx.stroke();
-    ctx.fillStyle=pu.col.replace('A',(Math.min(1,(1-age)*1.4)).toFixed(3));
-    ctx.beginPath(); ctx.arc(p[0],p[1],pu.big?3.6:2.6,0,7); ctx.fill();
+  /* 최근 1시간 이벤트: 앱 아이콘 둥근 마커 */
+  var nowMs=Date.now(), ms=window.innerWidth<981?19:23, mk;
+  for(i=0;i<MARKS.length;i++){
+    mk=MARKS[i]; if(!mk.app.on) continue;
+    var age=(nowMs-mk.ts)/3600000; if(age>=1) continue;
+    p=proj(mk.lat,mk.lon); if(p[2]<=0.12) continue;
+    var fa=Math.min(1,(p[2]-0.12)*4)*(0.42+0.58*(1-age)), col=KCOL[mk.kind];
+    ctx.globalCompositeOperation='lighter'; ctx.globalAlpha=0.55*fa; ctx.drawImage(glowSprite(col),p[0]-ms*1.1,p[1]-ms*1.1,ms*2.2,ms*2.2);
+    ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=fa;
+    ctx.drawImage(roundIcon(mk.app),p[0]-ms/2,p[1]-ms/2,ms,ms);
+    ctx.strokeStyle='rgba('+col+',.95)'; ctx.lineWidth=1.6; ctx.beginPath(); ctx.arc(p[0],p[1],ms/2,0,7); ctx.stroke();
   }
-  /* 앱 아이콘 말풍선 (설치 이벤트) */
+  ctx.globalAlpha=1;
+  /* 발생 순간: 빛나는 펄스 (덧셈 합성) */
+  ctx.globalCompositeOperation='lighter';
+  for(i=pulses.length-1;i>=0;i--){
+    var pu=pulses[i], ag2=(now-pu.t0)/pu.life;
+    if(ag2>=1){pulses.splice(i,1);continue;}
+    p=proj(pu.lat,pu.lon); if(p[2]<=0.02) continue;
+    var vis=Math.min(1,p[2]*3), k1=1-ag2, flash=ag2<0.18?(1-ag2/0.18):0;
+    var gr=(pu.big?24:17)+ag2*(pu.big?46:28)+flash*14;
+    ctx.globalAlpha=Math.min(1,(Math.pow(k1,1.3)*0.95+flash*0.6))*vis;
+    ctx.drawImage(glowSprite(pu.rgb),p[0]-gr,p[1]-gr,gr*2,gr*2);
+    ctx.globalAlpha=1; ctx.lineWidth=1.8;
+    ctx.strokeStyle='rgba('+pu.rgb+','+(k1*0.9*vis).toFixed(3)+')'; ctx.beginPath(); ctx.arc(p[0],p[1],4+ag2*(pu.big?50:30),0,7); ctx.stroke();
+    if(pu.big&&ag2>0.22){var a2=(ag2-0.22)/0.78; ctx.strokeStyle='rgba('+pu.rgb+','+((1-a2)*0.7*vis).toFixed(3)+')'; ctx.beginPath(); ctx.arc(p[0],p[1],4+a2*40,0,7); ctx.stroke();}
+    ctx.fillStyle='rgba(255,255,255,'+(k1*vis).toFixed(3)+')'; ctx.beginPath(); ctx.arc(p[0],p[1],2.2+k1*2.2,0,7); ctx.fill();
+  }
+  ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
+  /* 앱 아이콘 말풍선 (신규 설치) */
   for(i=bubbles.length-1;i>=0;i--){
     var b=bubbles[i], ag=(now-b.t0)/b.life;
     if(ag>=1){bubbles.splice(i,1);continue;}
     p=proj(b.lat,b.lon); if(p[2]<=0.05) continue;
-    var rise=ag*26, op=ag<0.12?ag/0.12:(ag>0.75?(1-ag)/0.25:1), s=26;
-    var bx=p[0], by=p[1]-14-rise;
+    var rise=ag*26, op=ag<0.12?ag/0.12:(ag>0.75?(1-ag)/0.25:1), s=28;
+    var bx=p[0], by=p[1]-22-rise;
     ctx.save(); ctx.globalAlpha=op;
-    ctx.fillStyle='rgba(30,50,120,.16)'; rr(bx-s/2-3,by-s/2-1,s+6,s+6,9); ctx.fill();
-    ctx.fillStyle='#fff'; rr(bx-s/2-3,by-s/2-3,s+6,s+6,9); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.96)'; rr(bx-s/2-3,by-s/2-3,s+6,s+6,10); ctx.fill();
     drawAppIcon(b.app,bx-s/2,by-s/2,s);
-    ctx.fillStyle='#fff'; ctx.beginPath(); ctx.moveTo(bx-5,by+s/2+2); ctx.lineTo(bx+5,by+s/2+2); ctx.lineTo(bx,by+s/2+8); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.96)'; ctx.beginPath(); ctx.moveTo(bx-5,by+s/2+2); ctx.lineTo(bx+5,by+s/2+2); ctx.lineTo(bx,by+s/2+8); ctx.fill();
     ctx.restore();
   }
 }
@@ -446,10 +501,11 @@ var CONFIG = {
   BUILD:   'appstore',          // 'appstore' = 실서비스, 'dev' = 개발 빌드
   TZ_OFFSET_HOURS: 9, TZ_LABEL: '한국시간(KST)',
   FALLBACK_POLL_MS: 5000,       // 웹소켓을 못 쓸 때만 쓰는 폴링 주기(5초, 바뀐 것만 내려받음)
+  SHARED_BASELINE: true,         // 공용 칸(livebase): 확정된 과거(이틀 전까지) 일별 합계를 첫 방문자가 한 번 저장 → 이후 모든 방문자는 수 KB만 읽음. 읽을 때마다 무작위 표본 검증
   IDLE_SLEEP_MS: 300000,        // 폴링 모드에서 5분간 조작이 없으면 절전(요금 보호)
   SDK_RETRY_MS: 45000,          // 폴링 중에도 45초마다 실시간 연결을 다시 시도
   HIDDEN_OFFLINE_MS: 120000,    // 탭이 2분 이상 숨겨지면 연결을 끊어 비용·동시접속 절약
-  RECENT_MIN: 10                // 접속 직후 피드에 보여줄 최근 구간(분)
+  RECENT_MIN: 60                // 접속 직후 피드에 보여줄 최근 구간(분)
 };
 var KNOWN_PF = ['ios', 'android', 'toss', 'web'];
 var PF_LABEL = { ios: 'iOS', android: 'Android', toss: '토스', web: '웹', unknown: '기타' };
@@ -552,6 +608,10 @@ function listApps() {
     return arr.filter(function (a) { return a && a.appId; }).map(function (a) { return { id: a.appId, name: a.appName || a.appId, iconUrl: a.iconImage || '', icon: '', color: a.iconColor || '#5e8bff' }; });
   });
 }
+function cleanApp(a) {
+  var col = String(a.color || ''), url = String(a.iconUrl || '');
+  return { id: String(a.id).slice(0, 80), name: String(a.name || a.id).slice(0, 40), iconUrl: /^https:\/\/[^\s"'<>]+$/.test(url) ? url : '', icon: '', color: /^#[0-9a-fA-F]{3,8}$/.test(col) ? col : '#5e8bff' };
+}
 function metricKey(m) { return m + (CONFIG.BUILD === 'dev' ? '-dev' : ''); }
 
 /* ---------- 상태 ---------- */
@@ -566,6 +626,32 @@ function pickCC(pf) {
   if (pf === 'toss') return 'KR';
   if (!KRW) { var o = 0; COUNTRIES.forEach(function (c) { if (c[0] !== 'KR') o += c[4]; }); KRW = o * 3; }
   return pickW(COUNTRIES, function (c) { return c[0] === 'KR' ? KRW : c[4]; })[0];
+}
+
+/* 위치: 앱이 국가를 기록하지 않으므로 기기 id 로 '고정된' 가상 위치를 정함(같은 기기는 늘 같은 곳, 육지 위). 토스는 한국 */
+var RAD = { KR: 2.4, US: 13, RU: 14, BR: 10, CN: 11, IN: 8, AU: 11, CA: 12, AR: 7, ID: 7, MX: 7, SA: 6, JP: 3.2, CL: 2, KZ: 9, DZ: 8, EG: 5, NG: 5 }, CAND = {}, NONKR = 0;
+function rngSeed(str) { var h = 2166136261; for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return function () { h += 0x6D2B79F5; var t = Math.imul(h ^ h >>> 15, 1 | h); t ^= t + Math.imul(t ^ t >>> 7, 61 | t); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function landNear(cc) {
+  if (CAND[cc[0]]) return CAND[cc[0]];
+  var rad = RAD[cc[0]] || 4.2, out = [], cs = Math.cos(cc[2] * Math.PI / 180);
+  for (var i = 0; i < LAND.length; i++) { var la = LAND[i][0]; if (Math.abs(la - cc[2]) > rad) continue; var ls = LAND[i][1]; for (var j = 0; j < ls.length; j++) { var dx = (ls[j] - cc[3]) * cs, dy = la - cc[2]; if (dx * dx + dy * dy <= rad * rad) out.push(la, ls[j]); } }
+  return CAND[cc[0]] = out;
+}
+/* 추정 규칙(앱은 위치·언어를 기록하지 않으므로): ① 토스=한국 ② 앱 이름이 한글이면 한국 사용자 비중↑, 영문이면 세계 분산↑
+   ③ 이벤트 시각의 '현지 시각'이 낮~저녁인 나라일수록 가중 (새벽인 나라는 사용자가 적음) */
+function actCurve(ts, lon) { var h = ((ts / 3600000 + lon / 15) % 24 + 24) % 24; return 0.3 + 0.7 * Math.max(0, Math.sin(Math.PI * (h - 5.5) / 18.5)); }
+function pickGeo(seed, pf, appName, ts) {
+  var r = rngSeed(seed), cc = null, i, x, krShare = /[가-힣]/.test(appName || '') ? 0.7 : 0.25, w = [], tot = 0;
+  if (pf === 'toss') cc = CC.KR;
+  else {
+    if (!NONKR) COUNTRIES.forEach(function (k) { if (k[0] !== 'KR') NONKR += k[4]; });
+    for (i = 0; i < COUNTRIES.length; i++) { var k = COUNTRIES[i], base = k[0] === 'KR' ? NONKR * krShare / (1 - krShare) : k[4]; w[i] = base * actCurve(ts || Date.now(), k[3]); tot += w[i]; }
+    x = r() * tot; for (i = 0; i < COUNTRIES.length; i++) { x -= w[i]; if (x <= 0) { cc = COUNTRIES[i]; break; } }
+    if (!cc) cc = CC.KR;
+  }
+  var cand = landNear(cc), lat, lon;
+  if (cand.length) { var q = ((r() * cand.length / 2) | 0) * 2; lat = cand[q] + (r() - .5) * .6; lon = cand[q + 1] + (r() - .5) * .6; } else { lat = cc[2]; lon = cc[3]; }
+  return { cc: cc[0], lat: lat, lon: lon };
 }
 
 /* ---------- 앱 아이콘 ---------- */
@@ -593,18 +679,23 @@ var feedEl = $('feed'), feedN = 0;
 function ago(t) { var s = Math.max(0, Math.round((Date.now() - t) / 1000)); return s < 5 ? '방금' : s < 60 ? s + '초 전' : s < 3600 ? Math.floor(s / 60) + '분 전' : Math.floor(s / 3600) + '시간 전'; }
 function hms(ts) { var d = new Date(ts + CONFIG.TZ_OFFSET_HOURS * 3600e3), p = function (n) { return ('0' + n).slice(-2); }; return p(d.getUTCHours()) + ':' + p(d.getUTCMinutes()) + ':' + p(d.getUTCSeconds()); }
 function addFeed(ev, a) {
-  var c = CC[ev.cc] || COUNTRIES[0], li = document.createElement('li');
-  li.innerHTML = iconTag(a) + '<span class="t"><b>' + esc(a.name) + '</b> <em>· ' + PF_LABEL[ev.pf] + (ev.pf === 'toss' ? '' : '') + '</em></span><span class="badge ' + KIND_CLS[ev.kind] + '">' + KIND_LABEL[ev.kind] + '</span><span class="agow"><span class="ago" data-t="' + ev.ts + '">' + ago(ev.ts) + '</span><small>' + hms(ev.ts) + '</small></span>';
-  feedEl.insertBefore(li, feedEl.firstChild);
+  var li = document.createElement('li');
+  li.setAttribute('data-ts', ev.ts); li.style.setProperty('--g', KCOL[ev.kind]);
+  if (Date.now() - ev.ts < 20000) li.className = 'fresh';
+  li.innerHTML = iconTag(a) + '<span class="t"><b>' + esc(a.name) + '</b> <em>· ' + PF_LABEL[ev.pf] + '</em></span><span class="badge ' + KIND_CLS[ev.kind] + '">' + KIND_LABEL[ev.kind] + '</span><span class="agow"><span class="ago" data-t="' + ev.ts + '">' + ago(ev.ts) + '</span><small>' + hms(ev.ts) + '</small></span>';
+  var ref = feedEl.firstChild; while (ref && +ref.getAttribute('data-ts') > ev.ts) ref = ref.nextSibling;   /* 항상 시간 내림차순 */
+  feedEl.insertBefore(li, ref);
   while (feedEl.children.length > 40) feedEl.removeChild(feedEl.lastChild);
-  feedN++; var tot = 0; S.apps.forEach(function (x) { tot += (x.iT || 0) + (x.dT || 0) + (x.uT || 0) + (x.sT || 0); }); setT('feedCnt', '오늘 ' + fmt(tot) + '건');
+  feedN++;
+  var tot = 0; S.apps.forEach(function (x) { tot += (x.iT || 0) + (x.dT || 0) + (x.uT || 0) + (x.sT || 0); }); setT('feedCnt', '오늘 ' + fmt(tot) + '건');
 }
 function showEvent(ev, a, pulse) {
-  var now = performance.now(), c = CC[ev.cc] || COUNTRIES[0], isI = ev.kind === 'installs';
-  if (pulse && a.on && (ev.kind === 'installs' || ev.kind === 'dau')) {
-    var lat = c[2] + randn() * 2.6, lon = c[3] + randn() * 3;
-    pulses.push({ lat: lat, lon: lon, t0: now, life: isI ? 2400 : 1800, col: isI ? 'rgba(59,108,255,A)' : 'rgba(18,184,134,A)', big: isI });
-    if (isI) bubbles.push({ lat: lat, lon: lon, t0: now, life: 2600, app: a });
+  var now = performance.now(), g = ev.geo;
+  MARKS.push({ lat: g.lat, lon: g.lon, app: a, kind: ev.kind, ts: ev.ts }); if (MARKS.length > 220) MARKS.shift();
+  if (pulse && a.on) {
+    var big = ev.kind === 'installs' || ev.kind === 'sales';
+    pulses.push({ lat: g.lat, lon: g.lon, t0: now, life: big ? 3000 : 2200, rgb: KCOL[ev.kind], big: big });
+    if (ev.kind === 'installs') bubbles.push({ lat: g.lat, lon: g.lon, t0: now, life: 2800, app: a });
   }
   addFeed(ev, a);
 }
@@ -620,7 +711,7 @@ function ingest(a, kind, node) {
     var k = l.pf + '|' + l.id; if (seen[k]) return; seen[k] = 1;
     var ts = l.ts; if (ts == null || ts > now + 60000) ts = now;
     if (!first && ts < now - 5 * 60000) ts = now;            // 늦게 도착한 기록은 '지금' 으로 취급
-    fresh.push({ ts: ts, kind: kind, app: a.id, pf: l.pf, cc: pickCC(l.pf) });
+    fresh.push({ ts: ts, kind: kind, app: a.id, pf: l.pf, geo: pickGeo(a.id + '|' + l.pf + '|' + l.id, l.pf, a.name, ts) });
   });
   recalcToday();
   fresh.sort(function (x, y) { return x.ts - y.ts; });
@@ -766,6 +857,24 @@ function readRange(from, to, perDay, onStep) {
   return Promise.all(jobs).then(function (fs) { return fs.reduce(function (x, y) { return x + y; }, 0); });
 }
 function recentAvg(bf, perDay) { var s = 0, i; for (i = 1; i <= 60; i++) { var bv = perDay[addDays(bf.thru, 1 - i)]; if (bv) s += bv.dau; } return s / 60; }
+/* 공용 칸 검증: 저장된 날짜 중 무작위 1~2일을 실제 DB 에서 직접 읽어 대조. 다르면 공용 칸 전체를 믿지 않음 */
+function validShared(shared, from, today, bf, perDay) {
+  var out = {}, lim = recentAvg(bf, perDay) * 10 + 100;
+  if (shared && typeof shared === 'object') for (var k in shared) { var v = shared[k]; if (validDate(k) && k >= from && k < today && v && typeof v.installs === 'number' && typeof v.dau === 'number' && v.installs >= 0 && v.dau >= 0 && v.installs <= lim && v.dau <= lim * 5) out[k] = v; }
+  return out;
+}
+function auditShared(shared, from, today, bf, perDay) {
+  var ok = validShared(shared, from, today, bf, perDay), days = Object.keys(ok);
+  if (!days.length) return Promise.resolve({ shared: null, ok: true });
+  var picks = [days[(Math.random() * days.length) | 0]]; if (days.length > 3) picks.push(days[(Math.random() * days.length) | 0]);
+  return Promise.all(picks.map(function (day) {
+    var t = {}; return readRange(day, day, t, function () {}).then(function (fail) {
+      if (fail) return true;
+      var a = ok[day], b = t[day] || { installs: 0, dau: 0 };
+      return Math.abs(a.installs - b.installs) <= Math.max(2, b.installs * 0.02) && Math.abs(a.dau - b.dau) <= Math.max(3, b.dau * 0.02);
+    });
+  })).then(function (rs) { var good = rs.every(Boolean); if (!good) warn('공용 집계가 실제 값과 달라 사용하지 않음'); return { shared: good ? ok : null, ok: good }; });
+}
 function prepareBase() {
   var today = S.today, yday = addDays(today, -1), bf = S.bf, perDay, step = 0, total = S.apps.length * METRICS.length;
   function prog(f) { step++; S.baseProg = step < total ? '과거 집계 ' + step + '/' + total : ''; refreshStatus(); }
@@ -776,7 +885,10 @@ function prepareBase() {
     var from = addDays(bf.thru, 1);
     try { var gc = JSON.parse(localStorage.getItem('joyce_live_gap_v3')); if (gc && gc.thru === bf.thru && gc.day === today && gc.build === CONFIG.BUILD) { for (var k in gc.perDay) perDay[k] = gc.perDay[k]; S.base = { perDay: perDay, tot: sumPerDay(perDay) }; return Promise.resolve(); } } catch (e) {}
     /* ① 공용 칸(livebase)에 이미 확정된 날짜가 있으면 그걸 읽는다 (수 KB) */
-    return dbGet('livebase/perDay', 'orderBy=%22%24key%22&startAt=%22' + from + '%22').catch(function () { return null; }).then(function (shared) {
+    return (CONFIG.SHARED_BASELINE ? dbGet('livebase/perDay', 'orderBy=%22%24key%22&startAt=%22' + from + '%22').catch(function () { return null; }) : Promise.resolve(null)).then(function (shared) {
+      return auditShared(shared, from, today, bf, perDay).then(function (r) { return afterShared(r.shared, r.ok); });
+    });
+    function afterShared(shared, allowWrite) {
       var known = {};
       if (shared && typeof shared === 'object') for (var k in shared) { var v = shared[k]; if (validDate(k) && k >= from && k < today && v && typeof v.installs === 'number' && typeof v.dau === 'number' && (v.installs + v.dau > 0 || !bf || recentAvg(bf, perDay) < 3)) { perDay[k] = { installs: v.installs, dau: v.dau }; known[k] = 1; } }
       var missing = []; for (var x = from; x <= yday; x = addDays(x, 1)) if (!known[x]) missing.push(x);
@@ -791,13 +903,13 @@ function prepareBase() {
         if (suspicious) warn('빠진 기간 데이터가 전부 0 → 공용 칸에 저장하지 않음 (경로/권한 확인)');
         missing.forEach(function (day) {
           var v = got[day] || { installs: 0, dau: 0 }; perDay[day] = v;
-          if (!fail && !suspicious && day <= freezeTo) saves.push(dbPut('livebase/perDay/' + day, { installs: v.installs, dau: v.dau }));
+          if (CONFIG.SHARED_BASELINE && allowWrite && !fail && !suspicious && day <= freezeTo) saves.push(dbPut('livebase/perDay/' + day, { installs: v.installs, dau: v.dau }));
         });
         S.base = { perDay: perDay, tot: sumPerDay(perDay) };
         if (fail) warn('일부 집계 실패 ' + fail + '건'); else try { localStorage.setItem('joyce_live_gap_v3', JSON.stringify({ thru: bf.thru, day: today, build: CONFIG.BUILD, perDay: pick(perDay, from) })); } catch (e) {}
         return Promise.all(saves);       // 저장 실패(규칙 미설정 등)는 무시 — 화면은 정상
       });
-    });
+    }
   }
   /* baseline.json 이 없으면: 전체를 한 번 읽어 계산 (브라우저에 하루 캐시) */
   try { var c = JSON.parse(localStorage.getItem('joyce_live_base_v2')); if (c && c.day === today && c.build === CONFIG.BUILD) { S.base = { perDay: c.perDay, tot: sumPerDay(c.perDay) }; return Promise.resolve(); } } catch (e) {}
@@ -881,7 +993,7 @@ function updateNumbers(now) {
 /* ---------- 시작 / 열기·닫기 ---------- */
 var OPEN = false, started = false, rafId = 0, lastT = 0;
 function start() {
-  $('geoNote').textContent = '※ 지구본 위치는 앱이 국가를 기록하지 않아 참고용 분포입니다 (토스는 한국).';
+  $('geoNote').textContent = '※ 지구본 위치는 추정입니다 — 앱이 위치를 기록하지 않아 앱 언어(이름)·이벤트 시각·플랫폼으로 추정한 참고용 분포예요 (토스는 한국).';
   setUpdated('불러오는 중…');
   loadBaselineFile().then(function (bf) {
     S.bf = bf;
@@ -891,12 +1003,12 @@ function start() {
       throw e;
     });
   }).then(function (apps) {
-    var seenId = {}; apps = apps.filter(function (a) { if (!a || !a.id || seenId[a.id]) return false; seenId[a.id] = 1; return true; });
+    var seenId = {}; apps = apps.filter(function (a) { if (!a || !a.id || /[.#$\[\]\/]/.test(a.id) || seenId[a.id]) return false; seenId[a.id] = 1; return true; }).map(cleanApp);
     S.apps = apps.map(function (a) { a.on = true; a.iT = 0; a.dT = 0; a.uT = 0; a.sT = 0; a.icon = a.icon || ''; loadIcon(a); return a; });
     S.today = dateKey(Date.now());
     buildApps(); updateApps();
     return Promise.all([startLive(), prepareBase().catch(function (e) { warn('과거 집계 실패 — ' + (e && e.message || e)); })]);
-  }).then(refreshStatus).catch(function (e) { setUpdated('연결 실패 — ' + (e && e.message || e)); started = false; });
+  }).then(function () { setupBake(); refreshStatus(); }).catch(function (e) { setUpdated('연결 실패 — ' + (e && e.message || e)); started = false; });
 }
 function pauseLive() {            // 화면을 닫으면 DB 연결을 끊어 비용·동시접속을 쓰지 않음
   clearTimeout(pollTimer); clearTimeout(offTimer); unsubscribeAll();
@@ -907,7 +1019,7 @@ function resumeLive() {
   else if (S.mode === 'poll') pollLoop();
 }
 var MOBILE = window.matchMedia && window.matchMedia('(max-width:980px), (pointer:coarse)').matches;
-var FRAME_MS = MOBILE ? 33 : 22, gVisible = true, lastDraw = 0;
+var lastPurge = 0, FRAME_MS = MOBILE ? 33 : 22, gVisible = true, lastDraw = 0;
 if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { gVisible = es[es.length - 1].isIntersecting; }).observe($('globe'));
 function frame(now) {
   if (!OPEN) return;
@@ -916,6 +1028,7 @@ function frame(now) {
   if (!dragging && now - lastDraw < FRAME_MS - 2) return;      // 30fps(모바일)/45fps(PC)로 제한 — 발열 절감
   var dt = Math.min(60, now - lastT); lastT = now; lastDraw = now;
   if (!dragging && now > idleUntil) rotLon += vLon * dt / 16;
+  if (now - lastPurge > 10000) { lastPurge = now; var cut = Date.now() - 3600e3; MARKS = MARKS.filter(function (m) { return m.ts > cut; }); }
   updateNumbers(now);
   if (gVisible) drawGlobe(now);                                 // 지구본이 화면 밖이면 그리지 않음
 }
@@ -929,6 +1042,32 @@ function closeLive() {
   if (!OPEN) return; OPEN = false;
   $('live').classList.remove('on'); document.documentElement.classList.remove('live-open'); window.dispatchEvent(new Event('livetoggle'));
   cancelAnimationFrame(rafId); pauseLive();
+}
+/* ---------- 기준 데이터 갱신 도구 (?bake) — 주인만 쓰는 버튼. 전체 기록을 읽어 새 index.html 을 내려받게 함 ---------- */
+function setupBake() {
+  if (!/[?&]bake\b/.test(location.search) || $('lvBake')) return;
+  var b = document.createElement('button'); b.id = 'lvBake'; b.className = 'lv-sleep'; b.style.display = 'block'; b.style.left = '16px'; b.style.transform = 'none';
+  b.textContent = '기준 데이터 갱신 → 새 index.html 받기'; $('live').appendChild(b);
+  b.onclick = function () {
+    b.disabled = true; var perDay = {}, n = 0, tot = S.apps.length * METRICS.length;
+    readRange('', '', perDay, function () { n++; b.textContent = '전체 기록 읽는 중 ' + n + '/' + tot; }).then(function (fail) {
+      if (fail) throw new Error('일부 읽기 실패(' + fail + '건) — 다시 시도하세요');
+      var up = Promise.resolve(), first = Object.keys(perDay).sort()[0], lastFz = addDays(S.today, -2);
+      if (CONFIG.SHARED_BASELINE && first) { var jobs = []; for (var x = first; x <= lastFz; x = addDays(x, 1)) (function (d) { var v = perDay[d] || { installs: 0, dau: 0 }; jobs.push(dbPut('livebase/perDay/' + d, { installs: v.installs, dau: v.dau })); })(x); up = Promise.all(jobs); }
+      return up.then(function () { return finishBake(perDay, b); });
+    }).catch(function (e) { b.disabled = false; b.textContent = '실패: ' + (e && e.message || e); });
+  };
+}
+function finishBake(perDay, b) {
+  {
+      var out = { v: 1, builtAt: new Date().toISOString(), build: CONFIG.BUILD, root: ROOT.replace(/\/$/, ''), thru: addDays(S.today, -1), apps: S.apps.map(function (a) { return { id: a.id, name: a.name, iconUrl: a.iconUrl, color: a.color }; }), perDay: perDay };
+      return fetch(location.href.split('#')[0].split('?')[0], { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (html) {
+        var json = JSON.stringify(out).replace(/</g, '\\u003c'), re = /(<script type="application\/json" id="liveBaseline">)[\s\S]*?(<\/script>)/;
+        if (!re.test(html)) throw new Error('index.html 에서 기준 데이터 칸을 찾지 못했습니다');
+        var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([html.replace(re, function (m, p1, p2) { return p1 + json + p2; })], { type: 'text/html' })); a.download = 'index.html'; a.click();
+        b.textContent = '완료 — 공용 칸 채움 + 내려받은 index.html 로 교체하세요 (' + Object.keys(perDay).length + '일치)';
+      });
+  }
 }
 function syncHash() { if (location.hash === '#live') openLive(); else closeLive(); }
 window.addEventListener('hashchange', syncHash);
