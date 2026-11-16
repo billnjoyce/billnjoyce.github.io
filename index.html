@@ -115,6 +115,7 @@ footer .cp{max-width:1100px;margin:16px auto 0;padding:0 24px;font-size:11.5px;c
 #live .agow small{font-size:10px;color:var(--ink3);font-variant-numeric:tabular-nums}
 #live main,#live main>*,#live .left,#live .lists,#live .grid,#live .panel,#live .card{min-width:0;max-width:100%}
 #live .approw .n{max-width:58%;overflow-wrap:anywhere}
+#live .lv-sleep{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:70;display:none;background:#14172b;color:#fff;border:0;border-radius:99px;padding:12px 20px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(20,23,43,.35);cursor:pointer}
 #live .noapp{color:var(--ink3);font-size:12.5px;text-align:center;padding:18px 0}
 #live .approw .n{text-align:right;line-height:1.35}
 #live .panel,#live .card{contain:layout paint}
@@ -444,7 +445,9 @@ var CONFIG = {
   ROOTS:   ['', 'jsapps'],      // info 를 찾는 경로 (콘솔과 동일: 루트 → jsapps)
   BUILD:   'appstore',          // 'appstore' = 실서비스, 'dev' = 개발 빌드
   TZ_OFFSET_HOURS: 9, TZ_LABEL: '한국시간(KST)',
-  FALLBACK_POLL_MS: 1000,       // 웹소켓을 못 쓸 때만 사용하는 폴링 주기(1초)
+  FALLBACK_POLL_MS: 5000,       // 웹소켓을 못 쓸 때만 쓰는 폴링 주기(5초, 바뀐 것만 내려받음)
+  IDLE_SLEEP_MS: 300000,        // 폴링 모드에서 5분간 조작이 없으면 절전(요금 보호)
+  SDK_RETRY_MS: 45000,          // 폴링 중에도 45초마다 실시간 연결을 다시 시도
   HIDDEN_OFFLINE_MS: 120000,    // 탭이 2분 이상 숨겨지면 연결을 끊어 비용·동시접속 절약
   RECENT_MIN: 10                // 접속 직후 피드에 보여줄 최근 구간(분)
 };
@@ -553,7 +556,7 @@ function metricKey(m) { return m + (CONFIG.BUILD === 'dev' ? '-dev' : ''); }
 
 /* ---------- 상태 ---------- */
 var DENIED = {};   /* 읽기 권한이 없는 지표(예: updates/sales 규칙 미허용) — 한 번 거부되면 다시 요청하지 않음 */
-var S = { apps: [], today: '', evI: [], evD: [], seen: {}, got: {}, base: null, baseProg: '', baseWarn: '', lastOk: 0, mode: '', bf: null, unsubs: [], replayK: 0, todayI: 0, todayD: 0 };
+var S = { et: {}, tx: {}, sleeping: false, apps: [], today: '', evI: [], evD: [], seen: {}, got: {}, base: null, baseProg: '', baseWarn: '', lastOk: 0, mode: '', bf: null, unsubs: [], replayK: 0, todayI: 0, todayD: 0 };
 var disp = {}; ['totalInstall', 'totalDau', 'todayInstall', 'todayDau', 'minInstall', 'minDau', 'avgInstall', 'avgDau'].forEach(function (k) { disp[k] = null; });
 function appById(id) { for (var i = 0; i < S.apps.length; i++) if (S.apps[i].id === id) return S.apps[i]; return null; }
 
@@ -637,21 +640,25 @@ var refT = 0;
 function scheduleRefresh() { if (refT) return; refT = setTimeout(function () { refT = 0; updateApps(); refreshStatus(); }, 400); }
 var DEBUG = /[?&]debug/.test(location.search);
 function refreshStatus() {
-  var den = Object.keys(DENIED).map(function (k) { return KIND_LABEL[k]; }).join('·'); var m = S.mode === 'ws' ? '실시간 연결(즉시 반영)' : S.mode === 'poll' ? CONFIG.FALLBACK_POLL_MS / 1000 + '초마다 갱신' : '연결 중';
+  var den = Object.keys(DENIED).map(function (k) { return KIND_LABEL[k]; }).join('·'); var m = S.mode === 'ws' ? '실시간 연결(즉시 반영)' : S.mode === 'poll' ? '절약 모드 ' + CONFIG.FALLBACK_POLL_MS / 1000 + '초마다 갱신' + (S.sdkErr ? ' (실시간 연결 실패: ' + S.sdkErr + ')' : '') : '연결 중';
   var dbg = DEBUG ? ' · [진단] 방식=' + (S.mode || '-') + ' 앱=' + S.apps.length + ' 수신=' + Object.keys(S.got).length + '/' + S.apps.length * LIVE_KINDS.length + ' 오늘=' + S.today + ' baseline=' + (S.bf ? S.bf.thru : '없음') + ' root="' + ROOT + '"' + (S.sdkErr ? ' SDK오류=' + S.sdkErr : '') : '';
   setUpdated(m + (den ? ' · ' + den + ' 읽기 권한 없음(규칙 확인)' : '') + (S.lastOk ? ' · ' + new Date(S.lastOk).toLocaleTimeString('ko-KR') : '') + (S.baseProg ? ' · ' + S.baseProg : '') + dbg);
 }
 
 /* 1) Firebase SDK 웹소켓: 한 연결로 모든 앱의 '오늘' 노드를 구독 → 최초 1회 + 이후 변경분만 전송 */
 var SDK = null;
+var sdkP = null;
 function initSdk() {
+  if (sdkP) return sdkP;
   var base = 'https://www.gstatic.com/firebasejs/' + CONFIG.SDK_VER + '/';
   var p = Promise.all([import(base + 'firebase-app.js'), import(base + 'firebase-auth.js'), import(base + 'firebase-database.js')]).then(function (m) {
     var app = m[0].initializeApp({ apiKey: CONFIG.API_KEY, authDomain: CONFIG.AUTH_DOMAIN, databaseURL: CONFIG.DB_URL, projectId: CONFIG.PROJECT_ID });
-    var auth = m[1].getAuth(app);
+    var auth; try { auth = m[1].initializeAuth(app, { persistence: m[1].inMemoryPersistence }); } catch (e) { auth = m[1].getAuth(app); }   /* 저장소(IndexedDB) 문제 회피 */
     return m[1].signInAnonymously(auth).then(function () { SDK = m[2]; SDK.db = m[2].getDatabase(app); });
   });
-  return Promise.race([p, new Promise(function (_, rej) { setTimeout(function () { rej(new Error('SDK 로드 시간 초과')); }, 10000); })]);
+  sdkP = Promise.race([p, new Promise(function (_, rej) { setTimeout(function () { rej(new Error('SDK 로드 시간 초과')); }, 30000); })]);
+  sdkP.catch(function () { sdkP = null; });
+  return sdkP;
 }
 function subscribeToday() {
   unsubscribeAll(); if (!OPEN) return;
@@ -665,24 +672,63 @@ function subscribeToday() {
 function unsubscribeAll() { S.unsubs.forEach(function (f) { try { f(); } catch (e) {} }); S.unsubs = []; }
 
 /* 2) 폴백: SDK 를 못 불러올 때만 — REST 로 30초마다 오늘 노드 조회 */
+var ETAG_OK = true;
+function dbPoll(path, qs, retry) {
+  var key = path + '?' + qs, url = CONFIG.DB_URL + '/' + path + '.json?auth=';
+  return gate(function () {
+    return Auth.get().then(function (t) {
+      var hd = {}; if (ETAG_OK) { hd['X-Firebase-ETag'] = 'true'; if (S.et[key]) hd['If-None-Match'] = S.et[key]; }
+      return fetch(url + t + '&' + qs, { cache: 'no-store', headers: hd });
+    });
+  }).then(function (r) {
+    if (r.status === 304) return null;                                      /* 바뀐 게 없음: 본문 0바이트 */
+    if (r.status === 401 && !retry) { Auth.reset(); return dbPoll(path, qs, true); }
+    if (r.status === 401 || r.status === 403) throw new Error('읽기 권한 없음(' + r.status + ') → Realtime Database 규칙의 ".read" 를 확인하세요');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    var et = r.headers.get('ETag');
+    return r.text().then(function (txt) { if (et) S.et[key] = et; if (S.tx[key] === txt) return null; S.tx[key] = txt; return { j: JSON.parse(txt) }; });
+  }, function (e) {
+    if (ETAG_OK && e instanceof TypeError) { ETAG_OK = false; return dbPoll(path, qs, retry); }   /* 브라우저가 ETag 헤더를 막으면 일반 방식으로 */
+    throw e;
+  });
+}
 function pollOnce() {
   var day = S.today, qs = 'orderBy=%22%24key%22&startAt=%22' + day + '%22&endAt=%22' + day + '%22';
   return Promise.all(S.apps.map(function (a) { return Promise.all(LIVE_KINDS.map(function (kind) {
     if (DENIED[kind]) return null;
-    return dbGet(ROOT + a.id + '/' + metricKey(kind), qs).then(function (j) { ingest(a, kind, j && j[day] ? j[day] : null); }, function (e) { if ((kind === 'updates' || kind === 'sales') && /권한/.test(e && e.message)) { DENIED[kind] = 1; return; } throw e; });
+    return dbPoll(ROOT + a.id + '/' + metricKey(kind), qs).then(function (res) { if (res) ingest(a, kind, res.j && res.j[day] ? res.j[day] : null); else if (!S.got[a.id + '|' + kind]) ingest(a, kind, null); }, function (e) { if ((kind === 'updates' || kind === 'sales') && /권한/.test(e && e.message)) { DENIED[kind] = 1; return; } throw e; });
   })); }));
 }
 var pollTimer = null, pollFails = 0;
 function pollLoop() {
-  clearTimeout(pollTimer); if (!OPEN) return;
+  clearTimeout(pollTimer); if (!OPEN || S.sleeping) return;
   if (document.hidden) { pollTimer = setTimeout(pollLoop, CONFIG.FALLBACK_POLL_MS); return; }
   pollOnce().then(function () { pollFails = 0; }).catch(function (e) { pollFails++; setUpdated('연결 실패 — 재시도 중 (' + pollFails + ') · ' + (e && e.message || e)); }).then(function () { pollTimer = setTimeout(pollLoop, CONFIG.FALLBACK_POLL_MS); });
 }
 function startLive() {
   return initSdk().then(function () { S.mode = 'ws'; subscribeToday(); }).catch(function (e) {
-    console.warn('[live] SDK 사용 불가 → REST 폴링으로 전환:', e && e.message || e); S.sdkErr = String(e && e.message || e); S.mode = 'poll'; return Auth.get().then(pollLoop);
+    console.warn('[live] SDK 사용 불가 → REST 폴링으로 전환:', e && e.message || e); S.sdkErr = String(e && e.message || e); S.mode = 'poll';
+    scheduleSdkRetry(); return Auth.get().then(pollLoop);
   });
 }
+var sdkRetryT = 0;
+function scheduleSdkRetry() {
+  clearTimeout(sdkRetryT);
+  sdkRetryT = setTimeout(function () {
+    if (!OPEN || S.mode !== 'poll') return;
+    initSdk().then(function () { clearTimeout(pollTimer); S.mode = 'ws'; S.sdkErr = ''; S.sleeping = false; subscribeToday(); refreshStatus(); }, function (e) { S.sdkErr = String(e && e.message || e); scheduleSdkRetry(); });
+  }, CONFIG.SDK_RETRY_MS);
+}
+/* 폴링 모드에서만: 오래 조작이 없으면 절전 (웹소켓 모드는 비용이 거의 없어 계속 유지) */
+var lastAct = Date.now(), sleepEl = null;
+['pointerdown', 'keydown', 'wheel', 'touchstart', 'scroll'].forEach(function (ev) { window.addEventListener(ev, function () { lastAct = Date.now(); if (S.sleeping) wakeLive(); }, { passive: true, capture: true }); });
+function sleepLive() {
+  S.sleeping = true; clearTimeout(pollTimer);
+  if (!sleepEl) { sleepEl = document.createElement('button'); sleepEl.className = 'lv-sleep'; sleepEl.textContent = '절전 중 (요금 보호) — 화면을 탭하면 다시 시작'; sleepEl.onclick = wakeLive; $('live').appendChild(sleepEl); }
+  sleepEl.style.display = 'block'; setUpdated('절전 중 — 화면을 탭하면 다시 시작합니다');
+}
+function wakeLive() { if (!S.sleeping) return; S.sleeping = false; lastAct = Date.now(); if (sleepEl) sleepEl.style.display = 'none'; refreshStatus(); if (S.mode === 'poll') pollLoop(); }
+setInterval(function () { if (OPEN && S.mode === 'poll' && !S.sleeping && Date.now() - lastAct > CONFIG.IDLE_SLEEP_MS) sleepLive(); }, 15000);
 /* 탭이 숨겨지면 잠시 후 연결을 끊고, 돌아오면 다시 연결 (연결 유지 비용·동시접속 한도 절약) */
 var offTimer = null;
 document.addEventListener('visibilitychange', function () {
@@ -696,7 +742,7 @@ document.addEventListener('visibilitychange', function () {
 setInterval(function () {
   var d = dateKey(Date.now()); if (!OPEN || !S.today || d === S.today) return;
   if (S.base) { S.base.perDay[S.today] = { installs: S.todayI, dau: S.todayD }; S.base.tot.installs += S.todayI; S.base.tot.dau += S.todayD; }
-  S.today = d; S.seen = {}; S.got = {}; S.apps.forEach(function (a) { a.iT = 0; a.dT = 0; a.uT = 0; a.sT = 0; }); recalcToday();
+  S.today = d; S.et = {}; S.tx = {}; S.seen = {}; S.got = {}; S.apps.forEach(function (a) { a.iT = 0; a.dT = 0; a.uT = 0; a.sT = 0; }); recalcToday();
   if (S.mode === 'ws') subscribeToday();
 }, 30000);
 
@@ -719,6 +765,7 @@ function readRange(from, to, perDay, onStep) {
   }); });
   return Promise.all(jobs).then(function (fs) { return fs.reduce(function (x, y) { return x + y; }, 0); });
 }
+function recentAvg(bf, perDay) { var s = 0, i; for (i = 1; i <= 60; i++) { var bv = perDay[addDays(bf.thru, 1 - i)]; if (bv) s += bv.dau; } return s / 60; }
 function prepareBase() {
   var today = S.today, yday = addDays(today, -1), bf = S.bf, perDay, step = 0, total = S.apps.length * METRICS.length;
   function prog(f) { step++; S.baseProg = step < total ? '과거 집계 ' + step + '/' + total : ''; refreshStatus(); }
@@ -731,7 +778,7 @@ function prepareBase() {
     /* ① 공용 칸(livebase)에 이미 확정된 날짜가 있으면 그걸 읽는다 (수 KB) */
     return dbGet('livebase/perDay', 'orderBy=%22%24key%22&startAt=%22' + from + '%22').catch(function () { return null; }).then(function (shared) {
       var known = {};
-      if (shared && typeof shared === 'object') for (var k in shared) { var v = shared[k]; if (validDate(k) && k >= from && k < today && v && typeof v.installs === 'number' && typeof v.dau === 'number') { perDay[k] = { installs: v.installs, dau: v.dau }; known[k] = 1; } }
+      if (shared && typeof shared === 'object') for (var k in shared) { var v = shared[k]; if (validDate(k) && k >= from && k < today && v && typeof v.installs === 'number' && typeof v.dau === 'number' && (v.installs + v.dau > 0 || !bf || recentAvg(bf, perDay) < 3)) { perDay[k] = { installs: v.installs, dau: v.dau }; known[k] = 1; } }
       var missing = []; for (var x = from; x <= yday; x = addDays(x, 1)) if (!known[x]) missing.push(x);
       if (!missing.length) { S.base = { perDay: perDay, tot: sumPerDay(perDay) }; try { localStorage.setItem('joyce_live_gap_v3', JSON.stringify({ thru: bf.thru, day: today, build: CONFIG.BUILD, perDay: pick(perDay, from) })); } catch (e) {} return; }
       /* ② 없는 날짜만 직접 읽고, 확정된 날(이틀 이상 지난 날)은 공용 칸에 저장 → 다음 방문자는 읽지 않아도 됨 */
@@ -865,6 +912,7 @@ if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { g
 function frame(now) {
   if (!OPEN) return;
   rafId = requestAnimationFrame(frame);
+  if (S.sleeping && now - lastDraw < 1000) return;
   if (!dragging && now - lastDraw < FRAME_MS - 2) return;      // 30fps(모바일)/45fps(PC)로 제한 — 발열 절감
   var dt = Math.min(60, now - lastT); lastT = now; lastDraw = now;
   if (!dragging && now > idleUntil) rotLon += vLon * dt / 16;
